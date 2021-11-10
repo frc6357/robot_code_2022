@@ -4,20 +4,23 @@
 
 package frc.robot.commands;
 
-import frc.robot.subsystems.ExampleSubsystem;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Ports;
+import frc.robot.subsystems.SK22Drive;
 
 /** An example command that uses an example subsystem. */
-public class ExampleCommand extends CommandBase {
-  @SuppressWarnings({"PMD.UnusedPrivateField", "PMD.SingularField"})
-  private final ExampleSubsystem m_subsystem;
+public class DefaultDriveCommand extends CommandBase {
+
+  private final SK22Drive m_subsystem;
+  private Joystick m_joystick = new Joystick(Ports.OIDriverJoystick);
 
   /**
    * Creates a new ExampleCommand.
    *
    * @param subsystem The subsystem used by this command.
    */
-  public ExampleCommand(ExampleSubsystem subsystem) {
+  public DefaultDriveCommand(SK22Drive subsystem) {
     m_subsystem = subsystem;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
@@ -29,7 +32,12 @@ public class ExampleCommand extends CommandBase {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    double leftSpeed = m_joystick.getRawAxis(Ports.OIDriverLeft);
+    double rightSpeed = m_joystick.getRawAxis(Ports.OIDriverRight);
+
+    m_subsystem.setSpeed(leftSpeed, rightSpeed);
+  }
 
   // Called once the command ends or is interrupted.
   @Override
