@@ -31,6 +31,7 @@ public class SK22Drive extends SubsystemBase {
     leftFollower.setNeutralMode(NeutralMode.Brake);
     rightLeader.setNeutralMode(NeutralMode.Brake);
     rightFollower.setNeutralMode(NeutralMode.Brake);
+    leftGroup.setInverted(true);
   }
 
   @Override
