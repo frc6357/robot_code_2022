@@ -9,7 +9,6 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -30,14 +29,13 @@ import frc.robot.utils.MotorEncoder;
  */
 public class SK21Drive extends SKSubsystemBase implements AutoCloseable
 {
-
     private final WPI_TalonFX leftLeader = new WPI_TalonFX(Ports.frontLeftDrive);
     private final WPI_TalonFX leftFollower = new WPI_TalonFX(Ports.backLeftDrive);
     private final MotorEncoder leftMotorEncoder =
             new MotorEncoder(leftLeader, Constants.DriveConstants.kEncoderDistancePerPulse,
                 Constants.DriveConstants.kLeftEncoderReversed);
     private final MotorControllerGroup leftGroup =
-            new MotorControllerGroup((MotorController)leftLeader, (MotorController)leftFollower);
+            new MotorControllerGroup(leftLeader, leftFollower);
 
     private final WPI_TalonFX rightLeader = new WPI_TalonFX(Ports.frontRightDrive);
     private final WPI_TalonFX rightFollower = new WPI_TalonFX(Ports.backRightDrive);
@@ -45,11 +43,11 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
             new MotorEncoder(rightLeader, Constants.DriveConstants.kEncoderDistancePerPulse,
                 Constants.DriveConstants.kRightEncoderReversed);
     private final MotorControllerGroup rightGroup =
-            new MotorControllerGroup((MotorController)rightLeader, (MotorController)rightFollower);
+            new MotorControllerGroup(rightLeader, rightFollower);
 
     private final ADIS16448_IMU gyro = new ADIS16448_IMU();
 
-    private final DifferentialDrive drive = new DifferentialDrive(leftGroup, rightGroup);
+    private final DifferentialDrive drive;
     private final DifferentialDriveOdometry odometry;
 
     private SendableChooser<Boolean> testControlChooser = new SendableChooser<Boolean>();
@@ -73,12 +71,19 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
     {
         resetEncoders();
         gyro.reset();
-        drive.setDeadband(TuningParams.DEADBAND_TURN);
+
         odometry = new DifferentialDriveOdometry(new Rotation2d(gyro.getAngle()));
         leftLeader.setNeutralMode(NeutralMode.Brake);
         leftFollower.setNeutralMode(NeutralMode.Brake);
         rightLeader.setNeutralMode(NeutralMode.Brake);
         rightFollower.setNeutralMode(NeutralMode.Brake);
+
+        // The 2022 version of DifferentialDrive no longer automatically inverts one
+        // side of the robot so we need to do this ourselves.
+        rightGroup.setInverted(true);
+
+        drive = new DifferentialDrive(leftGroup, rightGroup);
+        drive.setDeadband(TuningParams.DEADBAND_TURN);
     }
 
     @Override
