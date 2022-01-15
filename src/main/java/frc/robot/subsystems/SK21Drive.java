@@ -60,7 +60,7 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
     private NetworkTableEntry speedControllerGroupRightEntry;
 
     // TODO: The ADIS16448_IMU class is now in WPILib and some of its methods have changed.
-    // I've replaced getRotation2D() with Rotation2D(getAngle()) but we need to check that this returns
+    // I've replaced getRotation2d() with Rotation2d.fromDegrees(getAngle()) but we need to check that this returns
     // the expected angle. Spec states that getAngle() is CCW positive for the ADIS16448 class which
     // matches the getRotation2d() method in the old class. Unfortunately, it doesn't match the
     // spec for the basic Gyro classes getAngle() method which is CW positive so there may still be
@@ -73,7 +73,7 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
         resetEncoders();
         gyro.reset();
 
-        odometry = new DifferentialDriveOdometry(new Rotation2d(gyro.getAngle()));
+        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(gyro.getAngle()));
         leftLeader.setNeutralMode(NeutralMode.Brake);
         leftFollower.setNeutralMode(NeutralMode.Brake);
         rightLeader.setNeutralMode(NeutralMode.Brake);
@@ -95,7 +95,7 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
         double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
         double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
         // Update the odometry in the periodic block
-        odometry.update(new Rotation2d(gyro.getAngle()), leftEncoderDistanceMeters,
+        odometry.update(Rotation2d.fromDegrees(gyro.getAngle()), leftEncoderDistanceMeters,
             rightEncoderDistanceMeters);
 
         SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
@@ -135,7 +135,7 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
     public void resetOdometry(Pose2d pose)
     {
         resetEncoders();
-        odometry.resetPosition(pose, new Rotation2d(gyro.getAngle()));
+        odometry.resetPosition(pose, Rotation2d.fromDegrees(gyro.getAngle()));
     }
 
     /**
