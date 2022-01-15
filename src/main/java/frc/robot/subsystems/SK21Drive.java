@@ -64,7 +64,8 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
     // the expected angle. Spec states that getAngle() is CCW positive for the ADIS16448 class which
     // matches the getRotation2d() method in the old class. Unfortunately, it doesn't match the
     // spec for the basic Gyro classes getAngle() method which is CW positive so there may still be
-    // some confusion.
+    // some confusion. According to the DifferentialDriveOdometry documentation, angles need to be
+    // provided as CCW positive (see https://docs.wpilib.org/en/stable/docs/software/kinematics-and-odometry/differential-drive-odometry.html)
 
     /** Creates a new SK21Drive. */
     public SK21Drive()
