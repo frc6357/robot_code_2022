@@ -7,7 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Ports;
 
@@ -16,14 +16,14 @@ public class SK22Drive extends SubsystemBase {
   private final WPI_TalonFX leftLeader = new WPI_TalonFX(Ports.frontLeftDrive);
   private final WPI_TalonFX leftFollower = new WPI_TalonFX(Ports.backLeftDrive);
    
-  private final SpeedControllerGroup leftGroup =
-          new SpeedControllerGroup(leftLeader, leftFollower);
+  private final MotorControllerGroup leftGroup =
+          new MotorControllerGroup(leftLeader, leftFollower);
 
   private final WPI_TalonFX rightLeader = new WPI_TalonFX(Ports.frontRightDrive);
   private final WPI_TalonFX rightFollower = new WPI_TalonFX(Ports.backRightDrive);
     
-  private final SpeedControllerGroup rightGroup =
-          new SpeedControllerGroup(rightLeader, rightFollower);
+  private final MotorControllerGroup rightGroup =
+          new MotorControllerGroup(rightLeader, rightFollower);
 
   /** Creates a new ExampleSubsystem. */
   public SK22Drive() {
