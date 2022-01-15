@@ -1,7 +1,5 @@
 package frc.robot;
 
-import edu.wpi.first.wpilibj.util.Color;
-
 /**
  * TuningParams represents Tuning Parameters for the Robot.
  * 
