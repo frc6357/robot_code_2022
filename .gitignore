@@ -3,3 +3,5 @@ build/
 bin/
 .gradle/
 .DS_Store
+users/examples/RamseteExample/simgui-ds.json
+users/examples/RamseteExample/simgui.json

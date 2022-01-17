@@ -16,6 +16,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
@@ -76,6 +77,14 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
+    // Let's time this code to see how long it takes...
+    Timer timer = new Timer();
+    double time;
+    double last_time = 0.0;
+
+    timer.reset();
+    timer.start();
+
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
         new DifferentialDriveVoltageConstraint(
@@ -86,6 +95,10 @@ public class RobotContainer {
             DriveConstants.kDriveKinematics,
             10);
 
+    time = timer.get();
+    System.out.printf("%f (%f) autoVoltageConstraint created.\n", time-last_time, time);
+    last_time = time;
+
     // Create config for trajectory
     TrajectoryConfig config =
         new TrajectoryConfig(
@@ -95,6 +108,10 @@ public class RobotContainer {
             .setKinematics(DriveConstants.kDriveKinematics)
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
+
+    time = timer.get();
+    System.out.printf("%f (%f) TrajectoryConfig created.\n", time-last_time, time);
+    last_time = time;
 
     // An example trajectory to follow.  All units in meters.
     Trajectory exampleTrajectory =
@@ -107,6 +124,10 @@ public class RobotContainer {
             new Pose2d(3, 0, new Rotation2d(0)),
             // Pass config
             config);
+
+    time = timer.get();
+    System.out.printf("%f (%f) exampleTrajectory created.\n", time-last_time, time);
+    last_time = time;
 
     RamseteCommand ramseteCommand =
         new RamseteCommand(
@@ -124,6 +145,10 @@ public class RobotContainer {
             // RamseteCommand passes volts to the callback
             m_robotDrive::tankDriveVolts,
             m_robotDrive);
+
+    time = timer.get();
+    System.out.printf("%f (%f) ramseteCommand created.\n", time-last_time, time);
+    last_time = time;
 
     // Reset odometry to the starting pose of the trajectory.
     m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
