@@ -9,15 +9,11 @@ import static edu.wpi.first.wpilibj.XboxController.Button;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
@@ -26,7 +22,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import java.util.List;
+
+import java.util.Set;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -38,6 +35,11 @@ public class RobotContainer {
   // The robot's subsystems
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
+  private SendableChooser<String> trajectorySelector = new SendableChooser<String>();
+
+  // Trajectory choices available during auto.
+  private final TrajectoryBuilder m_AutoTrajectories = new TrajectoryBuilder("paths");
+
   // The driver's controller
   XboxController m_driverController = new XboxController(OIConstants.kDriverControllerPort);
 
@@ -46,7 +48,20 @@ public class RobotContainer {
     // Configure the button bindings
     configureButtonBindings();
 
-    // Configure default commands
+    // Populate the chooser used to select the desired auto trajectory.
+    Set<String> trajectory_names = m_AutoTrajectories.getTrajectoryNames();
+    for (String name : trajectory_names)
+    {
+        // Print the names of files and directories
+        System.out.printf("  Adding trajectory: %s\n", name);
+        trajectorySelector.addOption(name, name);
+        // This is a hack to ensure that at least one option is selected.
+        // We shouldn't set the default on every iteration, only the first,
+        // but I don't know how to do this cleanly (how do you reference
+        // just the first member of a Set?) so this will do for now.
+        trajectorySelector.setDefaultOption(name, name);
+    }
+
     // Set the default drive command to split-stick arcade drive
     m_robotDrive.setDefaultCommand(
         // A split-stick arcade command, with forward/backward controlled by the left
@@ -77,13 +92,10 @@ public class RobotContainer {
    * @return the command to run in autonomous
    */
   public Command getAutonomousCommand() {
-    // Let's time this code to see how long it takes...
-    Timer timer = new Timer();
-    double time;
-    double last_time = 0.0;
+    var trajectoryChoice = trajectorySelector.getSelected();
+    Trajectory autoTrajectory = m_AutoTrajectories.getTrajectory(trajectoryChoice);
 
-    timer.reset();
-    timer.start();
+    System.out.printf("Chosen auto trajectory is %s\n", trajectoryChoice);
 
     // Create a voltage constraint to ensure we don't accelerate too fast
     var autoVoltageConstraint =
@@ -95,10 +107,6 @@ public class RobotContainer {
             DriveConstants.kDriveKinematics,
             10);
 
-    time = timer.get();
-    System.out.printf("%f (%f) autoVoltageConstraint created.\n", time-last_time, time);
-    last_time = time;
-
     // Create config for trajectory
     TrajectoryConfig config =
         new TrajectoryConfig(
@@ -109,29 +117,9 @@ public class RobotContainer {
             // Apply the voltage constraint
             .addConstraint(autoVoltageConstraint);
 
-    time = timer.get();
-    System.out.printf("%f (%f) TrajectoryConfig created.\n", time-last_time, time);
-    last_time = time;
-
-    // An example trajectory to follow.  All units in meters.
-    Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
-            // Pass config
-            config);
-
-    time = timer.get();
-    System.out.printf("%f (%f) exampleTrajectory created.\n", time-last_time, time);
-    last_time = time;
-
     RamseteCommand ramseteCommand =
         new RamseteCommand(
-            exampleTrajectory,
+            autoTrajectory,
             m_robotDrive::getPose,
             new RamseteController(AutoConstants.kRamseteB, AutoConstants.kRamseteZeta),
             new SimpleMotorFeedforward(
@@ -146,12 +134,8 @@ public class RobotContainer {
             m_robotDrive::tankDriveVolts,
             m_robotDrive);
 
-    time = timer.get();
-    System.out.printf("%f (%f) ramseteCommand created.\n", time-last_time, time);
-    last_time = time;
-
     // Reset odometry to the starting pose of the trajectory.
-    m_robotDrive.resetOdometry(exampleTrajectory.getInitialPose());
+    m_robotDrive.resetOdometry(autoTrajectory.getInitialPose());
 
     // Run path following command, then stop at the end.
     return ramseteCommand.andThen(() -> m_robotDrive.tankDriveVolts(0, 0));
