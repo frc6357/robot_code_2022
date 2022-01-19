@@ -162,7 +162,7 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
     public void tankDriveVolts(double leftVolts, double rightVolts)
     {
         leftGroup.setVoltage(leftVolts);
-        rightGroup.setVoltage(-rightVolts);
+        rightGroup.setVoltage(rightVolts);
         drive.feed();
     }
 
