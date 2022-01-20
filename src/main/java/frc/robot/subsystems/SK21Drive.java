@@ -4,9 +4,10 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import com.kauailabs.navx.frc.AHRS;
+import edu.wpi.first.wpilibj.SPI;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -45,7 +46,7 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
     private final MotorControllerGroup rightGroup =
             new MotorControllerGroup(rightLeader, rightFollower);
 
-    private final ADIS16448_IMU gyro = new ADIS16448_IMU();
+    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
     private final DifferentialDrive drive;
     private final DifferentialDriveOdometry odometry;
