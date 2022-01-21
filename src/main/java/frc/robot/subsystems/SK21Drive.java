@@ -74,7 +74,7 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
         resetEncoders();
         gyro.reset();
 
-        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(gyro.getAngle()));
+        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getHeading()));
         leftLeader.setNeutralMode(NeutralMode.Brake);
         leftFollower.setNeutralMode(NeutralMode.Brake);
         rightLeader.setNeutralMode(NeutralMode.Brake);
@@ -96,14 +96,14 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
         double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
         double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
         // Update the odometry in the periodic block
-        odometry.update(Rotation2d.fromDegrees(gyro.getAngle()), leftEncoderDistanceMeters,
+        odometry.update(Rotation2d.fromDegrees(this.getHeading()), leftEncoderDistanceMeters,
             rightEncoderDistanceMeters);
 
         SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
         SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
         SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
         SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
-        SmartDashboard.putNumber("Gyro Angle", gyro.getAngle());
+        SmartDashboard.putNumber("Gyro Angle", this.getHeading());
     }
 
     /**
@@ -216,7 +216,7 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
      */
     public double getHeading()
     {
-        return gyro.getAngle();
+        return -gyro.getAngle();
     }
 
     /**
