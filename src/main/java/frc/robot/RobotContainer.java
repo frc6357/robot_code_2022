@@ -9,33 +9,26 @@ package frc.robot;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
-//import java.util.Optional;
+
+import edu.wpi.first.cameraserver.CameraServer;
 
 //import com.fasterxml.jackson.core.JsonFactory;
 //import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.XboxController.Button;
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.RamseteController;
-import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -211,29 +204,6 @@ public class RobotContainer
                 }
                 return makeTrajectoryCommand(trajectory, true);
             
-            case DriveSplineCanned:
-                // Create a voltage constraint to ensure we don't accelerate too fast
-                var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
-                    new SimpleMotorFeedforward(DriveConstants.ksVolts, DriveConstants.kvVoltSecondsPerMeter,
-                        DriveConstants.kaVoltSecondsSquaredPerMeter),
-                    DriveConstants.kDriveKinematics, 10);
-                TrajectoryConfig config = new TrajectoryConfig(AutoConstants.kMaxSpeedMetersPerSecond,
-                    AutoConstants.kMaxAccelerationMetersPerSecondSquared)
-                        // Add kinematics to ensure max speed is actually obeyed
-                        .setKinematics(DriveConstants.kDriveKinematics)
-                        // Apply the voltage constraint
-                        .addConstraint(autoVoltageConstraint);
-                // Trajectory cannedTrajectory = TrajectoryGenerator.generateTrajectory(
-                //                 new Pose2d(0, 0, new Rotation2d(0)),
-                //                 List.of(new Translation2d(2, 1), new Translation2d(3, -1)),
-                //                 new Pose2d(5, 0, new Rotation2d(0)), config);
-                Trajectory cannedTrajectory = 
-                TrajectoryGenerator.generateTrajectory(new Pose2d(0, 0, new Rotation2d(0)), 
-                    List.of(new Translation2d(0.5, 0)),
-                    new Pose2d(1, 0, new Rotation2d(0)), config);
-
-                return makeTrajectoryCommand(cannedTrajectory, true);
-            
             // This sequentially runs thorugh the 2 sub-paths of the Drive1mForwardBackward path defined in PathWeaver 
             case Drive1mForwardBackward:
                 
@@ -257,48 +227,6 @@ public class RobotContainer
 
                 // Execute each of the single commands in chronological order
                 return new SequentialCommandGroup(drive1mfCommand, drive1mbCommand);
-            
-            // This sequentially runs thorugh the 4 sub-paths of the Bounce Path defined in PathWeaver  
-            case DriveBounce:
-                
-                // Generate a command for driving the 1st segment Bounce Path trajectory defined by PathWeaver JSON file
-                File bounceSeg1 = new File(splineDirectory + "/Bounce Segment 1.wpilib.json");
-                Trajectory bounceSeg1Trajectory = makeTrajectoryFromJSON(bounceSeg1);
-                if (bounceSeg1Trajectory == null)
-                {
-                    return new DoNothingCommand();
-                }
-                Command driveBounceSeg1 = makeTrajectoryCommand(bounceSeg1Trajectory, true);
-
-                // Generate a command for driving the 2nd segment Bounce Path trajectory defined by PathWeaver JSON file
-                File bounceSeg2 = new File(splineDirectory + "/Bounce Segment 2.wpilib.json");
-                Trajectory bounceSeg2Trajectory = makeTrajectoryFromJSON(bounceSeg2);
-                if (bounceSeg2Trajectory == null) 
-                {
-                    return new DoNothingCommand();
-                }
-                Command driveBounceSeg2 = makeTrajectoryCommand(bounceSeg2Trajectory, false);
-
-                // Generate a command for driving the 3rd segment Bounce Path trajectory defined by PathWeaver JSON file
-                File bounceSeg3 = new File(splineDirectory + "/Bounce Segment 3.wpilib.json");
-                Trajectory bounceSeg3Trajectory = makeTrajectoryFromJSON(bounceSeg3);
-                if (bounceSeg3Trajectory == null)
-                {
-                    return new DoNothingCommand();
-                }
-                Command driveBounceSeg3 = makeTrajectoryCommand(bounceSeg3Trajectory, false);
-                
-                // Generate a command for driving the 4th segment Bounce Path trajectory defined by PathWeaver JSON file
-                File bounceSeg4 = new File(splineDirectory + "/Bounce Segment 4.wpilib.json");
-                Trajectory bounceSeg4Trajectory = makeTrajectoryFromJSON(bounceSeg4);
-                if (bounceSeg4Trajectory == null)
-                {
-                    return new DoNothingCommand();
-                }
-                Command driveBounceSeg4 = makeTrajectoryCommand(bounceSeg4Trajectory, false);
-
-                // Execute each of the single commands in chronological order
-                return new SequentialCommandGroup(driveBounceSeg1, driveBounceSeg2, driveBounceSeg3, driveBounceSeg4);
 
             default:
                 DriverStation.reportError("Uncoded selection from autoSelector chooser!", false);
