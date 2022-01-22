@@ -64,12 +64,8 @@ public class Ports
     ///////////////////////////////
     // Ball Launcher Addresses
     ///////////////////////////////
-    public static final int ballLauncherMotor           = 23; // CAN ID
-    public static final int ballLoaderMotor             = 24; // CAN ID
-    public static final int ballReleaseMotor            = 25; // CAN ID
-
-    public static final int launcherHoodExtend          = 1;  // PCM 1, Output
-    public static final int launcherHoodRetract         = 6;  // PCM 1, Output
+    public static final int ballLauncher1           = 23; // CAN ID
+    public static final int ballLauncher2            = 24; // CAN ID
 
     ///////////////////////////////
     // Climb Addresses
