@@ -94,11 +94,15 @@ public class Ports
     public static final int OIDriverJoystick            = 0;
 
     // Controls set for Arcade Drive - left stick turn, right stick throttle.
-    public static final int OIDriverTurn                = 0;  // Left Joystick X
-    // public static final int OIDriverMove                = 1;  // WingmanWheel Move Axis
-    public static final int OIDriverMove                = 5;  // Right Joystick Y
+    public static final int OIDriverTurn                = 2;  // Z Axis for Extreme 3D Pro
+    public static final int OIDriverMove                = 1;  // Y Axis for Extreme 3D Pro
+
+    // Controls set for Tank Drive
+    public static final int OIDriverLeftJoystick        = 0;
+    public static final int OIDriverRightJoystick       = 1;
+    public static final int OIDriverSpeedAxis           = 1;           
     
-    public static final int OIDriverSlowmode            = 3;  // Right Trigger Axis
+    public static final int OIDriverSlowmode            = 1;  // Right Trigger Axis
 
     public static final int OIOperatorJoystick          = 1;
     public static final int OIOperatorDpad = 0; 

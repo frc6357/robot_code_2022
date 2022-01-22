@@ -153,6 +153,19 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
     }
 
     /**
+     * Drives the robot using tank controls
+     * 
+     * @param leftSpeed
+     *              the speed of the left motors
+     * @param rightSpeed
+     *              the speed of the right motors
+     */
+    public void tankDrive(double leftSpeed, double rightSpeed)
+    {
+        drive.tankDrive(leftSpeed, rightSpeed);
+    }
+
+    /**
      * Controls the left and right sides of the drive directly with voltages.
      * 
      * @param leftVolts

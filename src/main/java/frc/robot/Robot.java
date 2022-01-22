@@ -91,6 +91,7 @@ public class Robot extends TimedRobot
     public void teleopInit() 
     {
         robotContainer.resetDriveSubsystem();
+        robotContainer.resetDriveDefaultCommand();
 
         /*
          * This makes sure that the autonomous stops running when teleop starts running.
