@@ -7,22 +7,22 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.kauailabs.navx.frc.AHRS;
-import edu.wpi.first.wpilibj.SPI;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Ports;
-import frc.robot.TuningParams;
 import frc.robot.utils.MotorEncoder;
 
 /**
@@ -33,16 +33,16 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
     private final WPI_TalonFX leftLeader = new WPI_TalonFX(Ports.frontLeftDrive);
     private final WPI_TalonFX leftFollower = new WPI_TalonFX(Ports.backLeftDrive);
     private final MotorEncoder leftMotorEncoder =
-            new MotorEncoder(leftLeader, Constants.DriveConstants.kEncoderDistancePerPulse,
-                Constants.DriveConstants.kLeftEncoderReversed);
+            new MotorEncoder(leftLeader, Constants.DriveConstants.ENCODER_DISTANCE_PER_PULSE,
+                Constants.DriveConstants.LEFT_ENCODER_REVERSED);
     private final MotorControllerGroup leftGroup =
             new MotorControllerGroup(leftLeader, leftFollower);
 
     private final WPI_TalonFX rightLeader = new WPI_TalonFX(Ports.frontRightDrive);
     private final WPI_TalonFX rightFollower = new WPI_TalonFX(Ports.backRightDrive);
     private final MotorEncoder rightMotorEncoder =
-            new MotorEncoder(rightLeader, Constants.DriveConstants.kEncoderDistancePerPulse,
-                Constants.DriveConstants.kRightEncoderReversed);
+            new MotorEncoder(rightLeader, Constants.DriveConstants.ENCODER_DISTANCE_PER_PULSE,
+                Constants.DriveConstants.RIGHT_ENCODER_REVERSED);
     private final MotorControllerGroup rightGroup =
             new MotorControllerGroup(rightLeader, rightFollower);
 
@@ -85,7 +85,7 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
         rightGroup.setInverted(true);
 
         drive = new DifferentialDrive(leftGroup, rightGroup);
-        drive.setDeadband(TuningParams.DEADBAND_TURN);
+        drive.setDeadband(DriveConstants.DEADBAND_TURN);
     }
 
     @Override

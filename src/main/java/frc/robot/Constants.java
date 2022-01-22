@@ -26,46 +26,64 @@ public final class Constants
      */
     public static final class DriveConstants
     {
-        public static final boolean kLeftEncoderReversed = false;
-        public static final boolean kRightEncoderReversed = true;
+        public static final boolean LEFT_ENCODER_REVERSED   = false;
+        public static final boolean RIGHT_ENCODER_REVERSED  = true;
 
         // TODO: The value here is what we measured from the robot. Check to make sure this works
         // correctly because the drive characterization tool determines the track width automatically
         // and comes up with a rather different value closer to 1.0m.
-        public static final double kTrackwidthMeters = 0.69;
-        public static final DifferentialDriveKinematics kDriveKinematics =
-            new DifferentialDriveKinematics(kTrackwidthMeters);
+        public static final double TRACKWIDTH = 0.69;   // Meters
+        public static final DifferentialDriveKinematics DRIVE_KINEMATICS =
+            new DifferentialDriveKinematics(TRACKWIDTH);
 
-        public static final double kDriveGearReduction = 12.412;
-        public static final int    kEncoderCPR = 2048;
-        public static final double kWheelDiameterMeters = 0.18375;
-        public static final double kEncoderDistancePerPulse =
+        public static final double GEAR_REDUCTION = 12.412;
+        public static final int    ENCODER_CPR = 2048;
+        public static final double WHEEL_DIAMETER = 0.18375;    // Meters
+        public static final double ENCODER_DISTANCE_PER_PULSE =
             // Assumes the encoders are directly mounted on the wheel shafts
-            (kWheelDiameterMeters * Math.PI) / ((double) kEncoderCPR * kDriveGearReduction);
+            (WHEEL_DIAMETER * Math.PI) / ((double) ENCODER_CPR * GEAR_REDUCTION);
 
-    // Data taken from characterization analysis on 03/02/2021
-    public static final double ksVolts = 0.651;
-    public static final double kvVoltSecondsPerMeter = 2.3;
-    public static final double kaVoltSecondsSquaredPerMeter = 0.217;
-    public static final double kPDriveVel = 2.26;
-  }
+        // Data taken from characterization analysis on 01/21/2022
+        public static final double KS_VOLTS = 0.47667;
+        public static final double KV_VOLT_SECONDS_PER_METER = 0.0037589;
+        public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.00043482;
+        public static final double KP_DRIVE_VELOCITY = 2.26;
+
+        public static final double  DEADBAND_TURN = 0.01;
+    }
 
     /**
      * Constants related to the Autonomous operation mode for the Robot.
      */
     public static final class AutoConstants
     {
-        public static final double kMaxSpeedMetersPerSecond = 2;
-        public static final double kMaxAccelerationMetersPerSecondSquared = .50;
+        public static final double MAX_SPEED = 2;   // Meters Per Second
+        public static final double MAX_ACCELERATION = .50;  // Meters Per Seconds Squared
 
         // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
-        public static final double kRamseteB = 2;
-        public static final double kRamseteZeta = 0.7;
+        public static final double RAMSETE_B = 2;
+        public static final double RAMSETE_ZETA = 0.7;
     }
 
-    public static final double kInchesPerMilimetre = 0.0393701;
+    /**
+     * Constants related to Test Mode
+     */
+    public static final class TestConstants
+    {
+        public static final double TEST_DRIVE_STRAIGHT_1        = 100;    //Amount in centimeters
+        public static final double TEST_DRIVE_STRAIGHT_2        = 200;    //Amount in centimeters
+        public static final double TEST_DRIVE_STRAIGHT_3        = 500;    //Amount in centimeters
+
+        public static final double TEST_TURN_1                  = 10;    //Amount of degrees
+        public static final double TEST_TURN_2                  = 30;    //Amount of degrees
+        public static final double TEST_TURN_3                  = 50;    //Amount of degrees
+        public static final double TEST_TURN_4                  = 90;    //Amount of degrees
+        public static final double TEST_TURN_5                  = 180;    //Amount of degrees
+    }
+
+    public static final double INCH_PER_MILLIMETER = 0.0393701;
   
-    public static final String kSplineDirectory = "paths/output";
-    public static final String kSubsystem = "Subsystems.json";
+    public static final String SPLINE_DIRECTORY = "paths/output";
+    public static final String SUBSYSTEM = "Subsystems.json";
 
 }

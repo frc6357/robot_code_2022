@@ -137,7 +137,7 @@ public class RobotContainer
         SmartDashboard.putData("Auto Chooser", autoCommandSelector);
 
         File deployDirectory = Filesystem.getDeployDirectory();
-        File splineDirectory = new File(deployDirectory, Constants.kSplineDirectory);
+        File splineDirectory = new File(deployDirectory, Constants.SPLINE_DIRECTORY);
 
         File[] pathNames = splineDirectory.listFiles();
         for (File pathname : pathNames)
@@ -184,7 +184,7 @@ public class RobotContainer
     public Command getAutonomousCommand()
     {
         File deployDirectory = Filesystem.getDeployDirectory();
-        File splineDirectory = new File(deployDirectory, Constants.kSplineDirectory);
+        File splineDirectory = new File(deployDirectory, Constants.SPLINE_DIRECTORY);
 
         var autoSelector = autoCommandSelector.getSelected();
 
@@ -255,14 +255,14 @@ public class RobotContainer
     {
         RamseteCommand ramseteCommand = new RamseteCommand(trajectory,
                                                            driveSubsystem::getPose,
-                        new RamseteController(AutoConstants.kRamseteB,
-                                              AutoConstants.kRamseteZeta),
-                        new SimpleMotorFeedforward(DriveConstants.ksVolts,
-                                                   DriveConstants.kvVoltSecondsPerMeter,
-                                                   DriveConstants.kaVoltSecondsSquaredPerMeter),
-                                                   DriveConstants.kDriveKinematics, driveSubsystem::getWheelSpeeds,
-                        new PIDController(DriveConstants.kPDriveVel, 0, 0),
-                        new PIDController(DriveConstants.kPDriveVel, 0, 0),
+                        new RamseteController(AutoConstants.RAMSETE_B,
+                                              AutoConstants.RAMSETE_ZETA),
+                        new SimpleMotorFeedforward(DriveConstants.KS_VOLTS,
+                                                   DriveConstants.KV_VOLT_SECONDS_PER_METER,
+                                                   DriveConstants.KA_VOLT_SECONDS_SQUARED_PER_METER),
+                                                   DriveConstants.DRIVE_KINEMATICS, driveSubsystem::getWheelSpeeds,
+                        new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0),
+                        new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0),
                         // RamseteCommand passes volts to the callback
                         driveSubsystem::tankDriveVolts, driveSubsystem);
     
