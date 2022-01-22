@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.DoNothingCommand;
 import frc.robot.subsystems.SK21Drive;
 import frc.robot.utils.FilteredJoystick;
@@ -65,14 +66,20 @@ public class RobotContainer
     };
 
     private SendableChooser<AutoCommands> autoCommandSelector = new SendableChooser<AutoCommands>();
+    private SendableChooser<Command> driveModeSelector = new SendableChooser<Command>();
 
     private SendableChooser<File> splineCommandSelector = new SendableChooser<File>();
 
     // The Robot controllers
-    private final FilteredJoystick driverJoystick = new FilteredJoystick(0);
+    private final FilteredJoystick driverLeftJoystick = new FilteredJoystick(Ports.OIDriverLeftJoystick);
+    private final FilteredJoystick driverRightJoystick = new FilteredJoystick(Ports.OIDriverRightJoystick);
   
     // The robot's subsystems are defined here...
     private final SK21Drive driveSubsystem = new SK21Drive();
+
+    private final DefaultDriveCommand arcadeDrive = new DefaultDriveCommand(driveSubsystem, driverLeftJoystick);
+    private final DefaultTankDriveCommand tankDrive 
+                                    = new DefaultTankDriveCommand(driveSubsystem, driverLeftJoystick, driverRightJoystick);
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -118,11 +125,11 @@ public class RobotContainer
         }
     }
 
-    private void resetDriveDefaultCommand()
+    public void resetDriveDefaultCommand()
     {
          // Configure default commands
          // Set the default drive command to split-stick arcade drive
-         driveSubsystem.setDefaultCommand(new DefaultDriveCommand(driveSubsystem, driverJoystick));
+         driveSubsystem.setDefaultCommand(driveModeSelector.getSelected());
     }
 
     private void configureShuffleboard()
@@ -133,8 +140,12 @@ public class RobotContainer
         autoCommandSelector.addOption("Drive canned path", AutoCommands.DriveSplineCanned);
         autoCommandSelector.addOption("Drive forwards then backwards 1m", AutoCommands.Drive1mForwardBackward);
         autoCommandSelector.addOption("Drive bounce path", AutoCommands.DriveBounce);
+
+        driveModeSelector.setDefaultOption("Arcade Drive", arcadeDrive);
+        driveModeSelector.addOption("Tank Drive", tankDrive);
     
         SmartDashboard.putData("Auto Chooser", autoCommandSelector);
+        SmartDashboard.putData("Drive Mode", driveModeSelector);
 
         File deployDirectory = Filesystem.getDeployDirectory();
         File splineDirectory = new File(deployDirectory, Constants.SPLINE_DIRECTORY);
@@ -161,7 +172,7 @@ public class RobotContainer
         // TODO: Is the following control in the robot driver user interface specification?
         // TODO: Test this implementation to make sure that it works as expected since it's 
         // different from the way we've done this in the past.
-        new JoystickButton(driverJoystick, Button.kRightBumper.value)
+        new JoystickButton(driverLeftJoystick, Ports.OIDriverSlowmode)
             .whenPressed(() -> driveSubsystem.setMaxOutput(0.5))
             .whenReleased(() -> driveSubsystem.setMaxOutput(1));
 
