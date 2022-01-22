@@ -65,7 +65,7 @@ public final class Constants
 
     public static final double kInchesPerMilimetre = 0.0393701;
   
-    public static final String kSplineDirectory = "paths";
+    public static final String kSplineDirectory = "paths/output";
     public static final String kSubsystem = "Subsystems.json";
 
 }
