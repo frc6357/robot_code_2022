@@ -1,10 +1,11 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Ports;
 import frc.robot.subsystems.SK21Drive;
 import frc.robot.utils.FilteredJoystick;
-import frc.robot.utils.filters.CubicDeadbandFilter;
+import frc.robot.utils.filters.SlewRateFilter;
 
 public class DefaultTankDriveCommand extends CommandBase{
      /**
@@ -36,14 +37,14 @@ public class DefaultTankDriveCommand extends CommandBase{
         // Applies a Cubic filter with a Deadband to the left speed axis of the joystick.
         // This Cubic filter will have a moderate curvature with a coefficient of 0.6.
         // The Deadband will have a width of 0.05.
-        leftJoystickDriver.setFilter(Ports.OIDriverSpeedAxis, new CubicDeadbandFilter(0.0, 0.0,0.8, true));
+        leftJoystickDriver.setFilter(Ports.OIDriverSpeedAxis, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE));
         // no deadband here as the SK21Drive implements the deadband 
         
 
         // Applies a Cubic Filter with a Deadband to the right speed axis of the joystick.
         // This Cubic filter will have maxmimum curvature with a coefficient of 1.
         // The Deadband will have a width of 0.05.
-        rightJoystickDriver.setFilter(Ports.OIDriverSpeedAxis, new CubicDeadbandFilter(0.0, 0.0, 0.8 ,true));
+        rightJoystickDriver.setFilter(Ports.OIDriverSpeedAxis, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE));
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);

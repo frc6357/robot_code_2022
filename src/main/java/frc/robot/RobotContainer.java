@@ -169,9 +169,7 @@ public class RobotContainer
      */
     private void configureButtonBindings()
     {
-        // TODO: Is the following control in the robot driver user interface specification?
-        // TODO: Test this implementation to make sure that it works as expected since it's 
-        // different from the way we've done this in the past.
+        // Turns on slowmode when driver presses slowmode button, giving more manueverability.
         new JoystickButton(driverLeftJoystick, Ports.OIDriverSlowmode)
             .whenPressed(() -> driveSubsystem.setMaxOutput(0.5))
             .whenReleased(() -> driveSubsystem.setMaxOutput(1));

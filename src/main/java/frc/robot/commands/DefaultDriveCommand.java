@@ -2,9 +2,11 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Ports;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SK21Drive;
 import frc.robot.utils.FilteredJoystick;
 import frc.robot.utils.filters.CubicDeadbandFilter;
+import frc.robot.utils.filters.SlewRateFilter;
 
 /**
  * A default drive command that takes in the filtered joysticks such that the robot drives
@@ -46,7 +48,7 @@ public class DefaultDriveCommand extends CommandBase
         // This Cubic filter will have maxmimum curvature with a coefficient of 1.
         // The Deadband will have a width of 0.05.
         // The throttle axis' inputs will be flipped
-        joystickDriver.setFilter(Ports.OIDriverMove, new CubicDeadbandFilter(0.0, 0.0, 0.8 ,true));
+        joystickDriver.setFilter(Ports.OIDriverMove, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE));
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
