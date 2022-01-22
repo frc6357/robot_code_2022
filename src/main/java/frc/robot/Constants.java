@@ -44,10 +44,10 @@ public final class Constants
             (WHEEL_DIAMETER * Math.PI) / ((double) ENCODER_CPR * GEAR_REDUCTION);
 
         // Data taken from characterization analysis on 01/21/2022
-        public static final double KS_VOLTS = 0.47667;
-        public static final double KV_VOLT_SECONDS_PER_METER = 0.0037589;
-        public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.00043482;
-        public static final double KP_DRIVE_VELOCITY = 2.26;
+        public static final double KS = 0.47667;        // Volts
+        public static final double KV = 0.0037589;      // Volt Seconds Per Meter
+        public static final double KA = 0.00043482;     // Volt Seconds Squared Per Meter
+        public static final double KP_DRIVE_VELOCITY = 2.26; // TODO: Check units for this value
 
         public static final double  DEADBAND_TURN = 0.01;
     }
