@@ -24,10 +24,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
+  BallSorter ballSorter = new BallSorter(70);
 
-  private final I2C.Port i2c = I2C.Port.kOnboard;
-
-  private final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2c);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -40,22 +38,7 @@ public class Robot extends TimedRobot {
     m_robotContainer = new RobotContainer();
   }
 
-  public void colorSensorLogic(double mRed , double mBlue, int distance){
-    double redPercentage = mRed * 100;
-    double bluePercentage = mBlue * 100;
-
-    if(distance > 170){
-      if(mRed >  mBlue){
-        System.out.println("Red Dominant " + redPercentage + "%");
-      }
-      else if(mBlue > mRed){
-        System.out.println("Blue Dominant " + bluePercentage + "%");
-      }
-      else{
-        System.out.println("None");
-      }
-    }
-  }
+  
 
   /**
    * This function is called every robot packet, no matter the mode. Use this for items like
@@ -69,16 +52,18 @@ public class Robot extends TimedRobot {
     // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
-    Color detectedColor = m_colorSensor.getColor();
-    double IR = m_colorSensor.getIR();
-    int proximity = m_colorSensor.getProximity();
+    
+
+    Color detectedColor = ballSorter.m_colorSensor.getColor();
+    int proximity = ballSorter.m_colorSensor.getProximity();
 
     // for(int i = 0; i < 1; i+= 0.1){
     //   if()
     // }
 
-    colorSensorLogic(detectedColor.red, detectedColor.blue, proximity);
-
+    ballSorter.colorSensorLogic(detectedColor.red,detectedColor.blue, proximity);
+    //System.out.println("test");
+    
     
 
     
