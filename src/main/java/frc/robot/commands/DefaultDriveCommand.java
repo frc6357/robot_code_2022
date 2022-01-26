@@ -48,7 +48,7 @@ public class DefaultDriveCommand extends CommandBase
         // This Cubic filter will have maxmimum curvature with a coefficient of 1.
         // The Deadband will have a width of 0.05.
         // The throttle axis' inputs will be flipped
-        joystickDriver.setFilter(Ports.OIDriverMove, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE));
+        joystickDriver.setFilter(Ports.OIDriverMove, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE, true));
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
