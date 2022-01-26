@@ -110,7 +110,7 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
             m_Sk22Vision.sSocket.close();
         } catch (Exception e) {
             // print exception message to log
-            System.out.println(e.toString());
+            System.out.println("Error in Vision2022 periodic: " + e.toString());
         }
     }
 
