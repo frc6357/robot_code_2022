@@ -87,12 +87,12 @@ public final class Constants
 
         public static final int controller = 0;
         
-        public static final int lowSpeedPresetButton = 0;
-        public static final int maxSpeedPresetButton = 1;
-        public static final int midSpeedPresetButton = 2;
-        public static final int highSpeedPresetButton = 3;
-        public static final int enableLauncherButton = 4;
-        public static final int disableLauncherButton = 5;
+        public static final int lowSpeedPresetButton = 1;
+        public static final int maxSpeedPresetButton = 2;
+        public static final int midSpeedPresetButton = 3;
+        public static final int highSpeedPresetButton = 4;
+        public static final int enableLauncherButton = 5;
+        public static final int disableLauncherButton = 6;
 
         public static final int lowSpeedPreset = 2500;
         public static final int midSpeedPreset = 5000;

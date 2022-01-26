@@ -6,6 +6,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import frc.robot.utils.MotorEncoder;
 // import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 public class Launcher
 {
@@ -15,16 +16,24 @@ public class Launcher
 
   private boolean launcherEnabled = false;
 
-  private final MotorControllerGroup motorControllerGroup;
+  //Set back to MotorConrollerGroup
+  private final MotorController motorControllerGroup;
   // private final MotorEncoder encoder;
 
   private final double gearRatio;
 
+  //Uncomment
   /** Creates a new SK22Launcher */
-  public Launcher(MotorControllerGroup motorControllerGroup, double gearRatio)
-  {
-    this.motorControllerGroup = motorControllerGroup;
-    // this.encoder = encoder;
+  // public Launcher(MotorControllerGroup motorControllerGroup, double gearRatio)
+  // {
+  //   this.motorControllerGroup = motorControllerGroup;
+  //   // this.encoder = encoder;
+  //   this.gearRatio = gearRatio;
+  // }
+
+  //Delete
+  public Launcher(MotorController motorController, double gearRatio) {
+    this.motorControllerGroup = motorController;
     this.gearRatio = gearRatio;
   }
   

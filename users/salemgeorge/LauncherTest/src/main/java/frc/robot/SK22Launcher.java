@@ -30,7 +30,7 @@ public class SK22Launcher extends SubsystemBase
     ballLauncher2.setNeutralMode(NeutralMode.Coast);
     
     // The 10 is a place holder value for the gear ratio of the motors
-    launcher = new Launcher(launcherGroup, 10);
+    launcher = new Launcher(ballLauncher1, 10);
   }
 
   @Override
