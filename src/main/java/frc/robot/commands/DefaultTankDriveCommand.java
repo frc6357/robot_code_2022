@@ -37,14 +37,14 @@ public class DefaultTankDriveCommand extends CommandBase{
         // Applies a Cubic filter with a Deadband to the left speed axis of the joystick.
         // This Cubic filter will have a moderate curvature with a coefficient of 0.6.
         // The Deadband will have a width of 0.05.
-        leftJoystickDriver.setFilter(Ports.OIDriverSpeedAxis, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE));
+        leftJoystickDriver.setFilter(Ports.OIDriverSpeedAxis, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE, true));
         // no deadband here as the SK21Drive implements the deadband 
         
 
         // Applies a Cubic Filter with a Deadband to the right speed axis of the joystick.
         // This Cubic filter will have maxmimum curvature with a coefficient of 1.
         // The Deadband will have a width of 0.05.
-        rightJoystickDriver.setFilter(Ports.OIDriverSpeedAxis, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE));
+        rightJoystickDriver.setFilter(Ports.OIDriverSpeedAxis, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE, true));
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
