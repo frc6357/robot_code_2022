@@ -57,12 +57,6 @@ public class DefaultTankDriveCommand extends CommandBase{
     @Override
     public void execute()
     {
-        /*
-         * TODO: This used to call the slowMode() method on the driveSubsystem dependent
-         * upon the value of the joystick bumper. This is now handled by creating a
-         * joystick button command which calls setMaxOutput(). Check to make sure this
-         * still works!
-         */
         double leftSpeed = leftJoystickDriver.getFilteredAxis(Ports.OIDriverSpeedAxis);
         double rightSpeed = rightJoystickDriver.getFilteredAxis(Ports.OIDriverSpeedAxis);
 
