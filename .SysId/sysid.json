@@ -1,0 +1,11 @@
+{
+  "SysId": {
+    "Analysis Type": "General Mechanism",
+    "AnalyzerJSONLocation": "C:\\Users\\hsteacher\\Desktop\\Characterization Stuff\\sysid_data20220121-153505.json",
+    "NetworkTables Settings": {
+      "serverTeam": "6357"
+    },
+    "mode": "Client",
+    "serverTeam": "6357"
+  }
+}

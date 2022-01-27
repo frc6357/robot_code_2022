@@ -6,6 +6,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
+import frc.robot.Constants;
+
 public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     // destination ports are required, but source ports are optional
     final int odroidPort = 5005;
@@ -13,12 +15,22 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     final String odroidIP = "";
     final int roborioPort = 5800;
     private String caughtException = "";
-    byte[] rDataBuffer = new byte[1024];
+    byte[] rDataBuffer = new byte[Constants.VisionConstants.UDP_PACKET_LENGTH];
+    // not needed yet
     byte[] sDataBuffer = new byte[1024];
-    DatagramSocket sSocket = null;
+    DatagramSocket sSocket;
 
     public SK22Vision()
     {
+        try {
+            sSocket = new DatagramSocket(roborioPort);
+            
+        } catch (Exception e) {
+            //TODO: handle exception
+            System.out.println(e.toString());
+        }
+
+        
 
         // memory allocated for packets to be read on the computer
         // ideally the memory is not hardcoded, but dynamic based on the packet size
@@ -39,7 +51,7 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         {
 
         // create Datagram packet with equal size to the 
-        DatagramPacket inputPacket = new DatagramPacket(rDataBuffer, rDataBuffer.length);
+        DatagramPacket inputPacket = new DatagramPacket(rDataBuffer, Constants.VisionConstants.UDP_PACKET_LENGTH);
         System.out.println("Waiting for message...");
 
         // get the packet at the port defined by sSocket
@@ -47,9 +59,6 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         
         // reads data from packet to string
         String rData = new String(inputPacket.getData());
-        
-        // refreshes memory to empty
-        this.rDataBuffer = new byte[1024];
 
         return rData;
 
@@ -95,15 +104,7 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         // reads packet data and print to terminal
         String packetData = getPacket(sSocket, rDataBuffer);
         // print packet data to log
-        System.out.println("\n");
-        System.out.println("\n");
-        System.out.println("\n");
         System.out.println(packetData);
-        System.out.println("\n");
-        System.out.println("\n");
-        System.out.println("\n");
-        
-        rDataBuffer = new byte[1024];
     }   
 
     

@@ -82,6 +82,11 @@ public final class Constants
         public static final double TEST_TURN_5                  = 180;    //Amount of degrees
     }
 
+    public static final class VisionConstants
+    {
+        public static final int UDP_PACKET_LENGTH               = 5;
+    }
+
     public static final double INCH_PER_MILLIMETER = 0.0393701;
   
     public static final String SPLINE_DIRECTORY = "paths/output";
