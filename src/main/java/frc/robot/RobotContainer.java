@@ -38,6 +38,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.DoNothingCommand;
 import frc.robot.subsystems.SK21Drive;
+import frc.robot.subsystems.SK22Vision;
 import frc.robot.utils.FilteredJoystick;
 //import frc.robot.utils.SubsystemControls;
 
@@ -75,6 +76,7 @@ public class RobotContainer
   
     // The robot's subsystems are defined here...
     private final SK21Drive driveSubsystem = new SK21Drive();
+    private final SK22Vision visionSubsystem = new SK22Vision();
 
     private final DefaultDriveCommand arcadeDrive = new DefaultDriveCommand(driveSubsystem, driverLeftJoystick);
     private final DefaultTankDriveCommand tankDrive 

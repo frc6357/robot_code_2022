@@ -12,32 +12,30 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     // this will change depending on the network connected
     final String odroidIP = "";
     final int roborioPort = 5800;
-    public DatagramSocket sSocket;
+    private String caughtException = "";
     byte[] rDataBuffer;
     byte[] sDataBuffer;
+   
+    try
+    {
+        DatagramSocket sSocket = new DatagramSocket(roborioPort);
+    }
+    catch (SocketException e) 
+    {
+        caughtException = e.toString();
+        System.out.println("Socket Exception in Constructor: " + caughtException);
+    }
 
-    private String caughtException = "";
     public SK22Vision()
     {
-        
-        try {
-            // binds socket to specified port on computer
-            sSocket = new DatagramSocket(roborioPort);
 
-            // memory allocated for packets to be read on the computer
-            // ideally the memory is not hardcoded, but dynamic based on the packet size
-            rDataBuffer = new byte[1024];
+        // memory allocated for packets to be read on the computer
+        // ideally the memory is not hardcoded, but dynamic based on the packet size
+        rDataBuffer = new byte[1024];
 
-            // memory allocated for packets to be sent from the computer
-            // ideally the memory is not hardcoded, but dynamic based on the packet size
-            byte[] sDataBuffer = new byte[1024];
-        
-        }
-
-        catch (SocketException e) 
-        {
-            caughtException = e.toString();
-        }
+        // memory allocated for packets to be sent from the computer
+        // ideally the memory is not hardcoded, but dynamic based on the packet size
+        byte[] sDataBuffer = new byte[1024];
         
     }
     // returns the boolean that represents whether or not an exception was caught
@@ -70,12 +68,14 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         catch (SocketException e) 
         {
             caughtException = e.toString();
+            System.out.println("Socket Excetion: " + caughtException);
             return caughtException;
         }
 
         catch (IOException i)
         {
             caughtException = i.toString();
+            System.out.println("IO Excetion: " + caughtException);
             return caughtException;
         }
 
@@ -94,7 +94,7 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         }
         catch (IOException i)
         {
-            System.out.println(i.toString());
+            System.out.println("IO Exception" + i.toString());
         }
     }
 
@@ -105,9 +105,16 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     {
         try (SK22Vision m_Sk22Vision = new SK22Vision()) {
             // reads packet data and print to terminal
-            System.out.println(getPacket(m_Sk22Vision.sSocket, m_Sk22Vision.rDataBuffer));
-            // close the socket after reading data
-            m_Sk22Vision.sSocket.close();
+            String packetData = getPacket(sSocket, m_Sk22Vision.rDataBuffer);
+            // print packet data to log
+            System.out.println("\n");
+            System.out.println("\n");
+            System.out.println("\n");
+            System.out.println(packetData);
+            System.out.println("\n");
+            System.out.println("\n");
+            System.out.println("\n");
+            
         } catch (Exception e) {
             // print exception message to log
             System.out.println("Error in Vision2022 periodic: " + e.toString());
