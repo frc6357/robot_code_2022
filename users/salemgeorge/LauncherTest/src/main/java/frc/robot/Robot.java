@@ -62,7 +62,7 @@ public class Robot extends TimedRobot {
     {
       launcher.setLauncherRPM(Constants.LauncherConstants.lowSpeedPreset);
     } 
-    else if(m_joystick.getRawButtonPressed(Constants.LauncherConstants.midSpeedPreset))
+    else if(m_joystick.getRawButtonPressed(Constants.LauncherConstants.midSpeedPresetButton))
     {
       launcher.setLauncherRPM(Constants.LauncherConstants.midSpeedPreset);
     }

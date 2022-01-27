@@ -82,17 +82,17 @@ public final class Constants
     }
 
     public static final class LauncherConstants {
-        public static final int ballLauncher1 = 4;
-        public static final int ballLauncher2 = 5;
+        public static final int ballLauncher1 = 23;
+        public static final int ballLauncher2 = 24;
 
         public static final int controller = 0;
         
-        public static final int lowSpeedPresetButton = 1;
-        public static final int maxSpeedPresetButton = 2;
-        public static final int midSpeedPresetButton = 3;
-        public static final int highSpeedPresetButton = 4;
-        public static final int enableLauncherButton = 5;
-        public static final int disableLauncherButton = 6;
+        public static final int lowSpeedPresetButton = 1; // A
+        public static final int maxSpeedPresetButton = 2; // B
+        public static final int midSpeedPresetButton = 3; // X
+        public static final int highSpeedPresetButton = 4; // Y
+        public static final int enableLauncherButton = 5; // Left bumper
+        public static final int disableLauncherButton = 6; // Right bumper
 
         public static final int lowSpeedPreset = 2500;
         public static final int midSpeedPreset = 5000;

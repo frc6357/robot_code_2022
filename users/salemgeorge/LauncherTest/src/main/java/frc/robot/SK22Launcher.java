@@ -12,9 +12,9 @@ import frc.robot.Launcher;
 public class SK22Launcher extends SubsystemBase
 {
   private final WPI_TalonFX ballLauncher1 = new WPI_TalonFX(Constants.LauncherConstants.ballLauncher1);
-  private final WPI_TalonFX ballLauncher2 = new WPI_TalonFX(Constants.LauncherConstants.ballLauncher2);
+  // private final WPI_TalonFX ballLauncher2 = new WPI_TalonFX(Constants.LauncherConstants.ballLauncher2);
 
-  private final MotorControllerGroup launcherGroup = new MotorControllerGroup(ballLauncher1, ballLauncher2);
+  private final MotorControllerGroup launcherGroup = new MotorControllerGroup(ballLauncher1);
   
   // private final MotorEncoder motorEncoder = new MotorEncoder(ballLauncher1, 
                                                                 //  Constants.DriveConstants.ENCODER_DISTANCE_PER_PULSE, 
@@ -27,10 +27,11 @@ public class SK22Launcher extends SubsystemBase
   public SK22Launcher()
   {
     ballLauncher1.setNeutralMode(NeutralMode.Coast);
-    ballLauncher2.setNeutralMode(NeutralMode.Coast);
+    ballLauncher1.setInverted(true);
+    // ballLauncher2.setNeutralMode(NeutralMode.Coast);
     
     // The 10 is a place holder value for the gear ratio of the motors
-    launcher = new Launcher(ballLauncher1, 10);
+    launcher = new Launcher(launcherGroup, 10);
   }
 
   @Override

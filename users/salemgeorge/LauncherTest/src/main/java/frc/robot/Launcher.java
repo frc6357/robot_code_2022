@@ -16,24 +16,17 @@ public class Launcher
 
   private boolean launcherEnabled = false;
 
-  //Set back to MotorConrollerGroup
-  private final MotorController motorControllerGroup;
+  private final MotorControllerGroup motorControllerGroup;
   // private final MotorEncoder encoder;
 
   private final double gearRatio;
 
   //Uncomment
   /** Creates a new SK22Launcher */
-  // public Launcher(MotorControllerGroup motorControllerGroup, double gearRatio)
-  // {
-  //   this.motorControllerGroup = motorControllerGroup;
-  //   // this.encoder = encoder;
-  //   this.gearRatio = gearRatio;
-  // }
-
-  //Delete
-  public Launcher(MotorController motorController, double gearRatio) {
-    this.motorControllerGroup = motorController;
+  public Launcher(MotorControllerGroup motorControllerGroup, double gearRatio)
+  {
+    this.motorControllerGroup = motorControllerGroup;
+    // this.encoder = encoder;
     this.gearRatio = gearRatio;
   }
   
