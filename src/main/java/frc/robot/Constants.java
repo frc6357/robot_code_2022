@@ -50,6 +50,7 @@ public final class Constants
         public static final double KP_DRIVE_VELOCITY = 2.26; // TODO: Check units for this value
 
         public static final double  DEADBAND_TURN = 0.01;
+        public static final double  SLEW_FILTER_RATE = 2;   // per second
     }
 
     /**
