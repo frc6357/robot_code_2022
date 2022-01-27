@@ -13,30 +13,19 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     final String odroidIP = "";
     final int roborioPort = 5800;
     private String caughtException = "";
-    byte[] rDataBuffer;
-    byte[] sDataBuffer;
-   
-    try
-    {
-        DatagramSocket sSocket = new DatagramSocket(roborioPort);
-    }
-    catch (SocketException e) 
-    {
-        caughtException = e.toString();
-        System.out.println("Socket Exception in Constructor: " + caughtException);
-    }
+    byte[] rDataBuffer = new byte[1024];
+    byte[] sDataBuffer = new byte[1024];
+    DatagramSocket sSocket = null;
 
     public SK22Vision()
     {
 
         // memory allocated for packets to be read on the computer
         // ideally the memory is not hardcoded, but dynamic based on the packet size
-        rDataBuffer = new byte[1024];
 
         // memory allocated for packets to be sent from the computer
         // ideally the memory is not hardcoded, but dynamic based on the packet size
-        byte[] sDataBuffer = new byte[1024];
-        
+
     }
     // returns the boolean that represents whether or not an exception was caught
     public String caughtException(String exceptionMessage)
@@ -103,23 +92,19 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     @Override
     public void periodic()
     {
-        try (SK22Vision m_Sk22Vision = new SK22Vision()) {
-            // reads packet data and print to terminal
-            String packetData = getPacket(sSocket, m_Sk22Vision.rDataBuffer);
-            // print packet data to log
-            System.out.println("\n");
-            System.out.println("\n");
-            System.out.println("\n");
-            System.out.println(packetData);
-            System.out.println("\n");
-            System.out.println("\n");
-            System.out.println("\n");
-            
-        } catch (Exception e) {
-            // print exception message to log
-            System.out.println("Error in Vision2022 periodic: " + e.toString());
-        }
-    }
+        // reads packet data and print to terminal
+        String packetData = getPacket(sSocket, rDataBuffer);
+        // print packet data to log
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println(packetData);
+        System.out.println("\n");
+        System.out.println("\n");
+        System.out.println("\n");
+        
+        rDataBuffer = new byte[1024];
+    }   
 
     
     @Override
