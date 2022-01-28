@@ -4,8 +4,12 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
-
+import java.nio.ByteBuffer;
+import java.nio.channels.DatagramChannel;
+import java.nio.charset.Charset;
+import javax.xml.crypto.Data;
 import frc.robot.Constants;
 
 public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
@@ -15,15 +19,17 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     final String odroidIP = "";
     final int roborioPort = 5800;
     private String caughtException = "";
-    byte[] rDataBuffer = new byte[Constants.VisionConstants.UDP_PACKET_LENGTH];
+    ByteBuffer rDataBuffer = ByteBuffer.allocate(Constants.VisionConstants.UDP_PACKET_LENGTH);
     // not needed yet
-    byte[] sDataBuffer = new byte[1024];
-    DatagramSocket sSocket;
+    // byte[] sDataBuffer = new byte[1024];
+    DatagramChannel sSocket;
 
     public SK22Vision()
     {
         try {
-            sSocket = new DatagramSocket(roborioPort);
+            sSocket = DatagramChannel.open();
+            sSocket.configureBlocking(false);
+            sSocket.socket().bind(new InetSocketAddress(roborioPort));
             
         } catch (Exception e) {
             //TODO: handle exception
@@ -45,22 +51,28 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         return caughtException;
     }
 
-    public String getPacket(DatagramSocket sSocket, byte[] rDataBuffer) 
+    public String getPacket(DatagramChannel sSocket, ByteBuffer rDataBuffer) 
     {
         try
         {
-
-        // create Datagram packet with equal size to the 
-        DatagramPacket inputPacket = new DatagramPacket(rDataBuffer, Constants.VisionConstants.UDP_PACKET_LENGTH);
+        // get the packet at the port defined by sSocket
+        sSocket.receive(rDataBuffer);
         System.out.println("Waiting for message...");
 
-        // get the packet at the port defined by sSocket
-        sSocket.receive(inputPacket);
         
         // reads data from packet to string
-        String rData = new String(inputPacket.getData());
+        if (rDataBuffer.hasArray())
+        {
+            String rData = new String(rDataBuffer.array(), Charset.defaultCharset());
+            return rData;
+        }
+        else
+        {
+            String rData = new String("rDataBuffer no Array");
+            return rData;
+        }
 
-        return rData;
+        
 
         }
         catch (SocketException e) 
