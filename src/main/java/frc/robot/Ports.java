@@ -1,5 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.I2C.Port;
+
 // Resource Allocations:
 //
 // PCM 0 - colorSpinnerExtend
@@ -29,7 +32,7 @@ public class Ports
     //////////////////////////////
     // I2C device addresses
     //////////////////////////////
-    public static final int i2cColorSensor              = 0x52;
+    public static final Port i2cColorSensor              =  I2C.Port.kOnboard;
 
     //////////////////////////////
     // Drivetrain Addresses
@@ -38,6 +41,13 @@ public class Ports
     public static final int frontRightDrive             = 11; // CAN ID
     public static final int backLeftDrive               = 12; // CAN ID
     public static final int backRightDrive              = 13; // CAN ID
+
+    //////////////////////////////
+    // Transfer Addresses
+    //////////////////////////////
+    public static final int horizontalTransferMotor1    = 12; // Currently unknown Port
+    public static final int horizontalTransferMotor2    = 12; // Currently unknown Port
+    public static final int VerticalTransferMotor       = 12; // Currently unknown Port
 
     //////////////////////////////
     // Intake Addresses
@@ -80,5 +90,8 @@ public class Ports
     // Controls set for Tank Drive
     public static final int OIDriverSpeedAxis           = 1;           
     
-    public static final int OIDriverSlowmode            = 1;  // Right Trigger Axis    
+    public static final int OIDriverSlowmode            = 1;  // Right Trigger Axis    \
+
+    public static Port i2c;
+
 }
