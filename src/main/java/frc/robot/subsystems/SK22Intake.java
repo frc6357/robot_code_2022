@@ -4,38 +4,50 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import frc.robot.Ports;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
 public class SK22Intake extends SKSubsystemBase
 {
+  private final DoubleSolenoid intakeMover = new DoubleSolenoid(Ports.intakePCM, Ports.intakeMoverForward, Ports.intakeMoverBackward);
+  private final CANSparkMax intakeMotor = new CANSparkMax(Ports.intakeMotor, MotorType.kBrushless);
+  
   /** Creates a new SK22Intake. */
   public SK22Intake()
   {
-
+    disableIntake();
   }
-  //this should be the safe and initial code that happens. nothing should move
+  /** This should be the safe and initial code that happens. Nothing should move. */
   public void disableIntake()
   {
-    
+    intakeMover.set(Value.kOff);
+    intakeMotor.set(0.0);
   }
-  //this will extend the double solenoids, moving the intake to the active position
+  /** This will extend the double solenoids, moving the intake to the active position,
+   *  then, will turn on the intake motors. */
   public void extendIntake()
   {
-
+    intakeMover.set(Value.kForward);
   }
-  //his will retract the double solenoids, moving the intake to the inactive position
+  /** This will retract the double solenoids, moving the intake to the inactive position then, 
+   * turning off the intake motor shortly after completion.*/
   public void retractIntake()
   {
-
+    intakeMover.set(Value.kReverse);
   }
-  //this will set the speed of the motor that powers the ball pulling part of the intake
-  public void setIntakeSpeed()
+  /** this will set the speed of the motor that powers the ball pulling part of the intake
+   */
+  public void setIntakeSpeed(double speed)
   {
-
+    intakeMotor.set(speed);
   }
-  //this will display the current speed of the motor
-  public void getIntakeSpeed()
+  /** This will display the current speed of the motor */
+  public double getIntakeSpeed()
   {
-
+    return(intakeMotor.get());
   }
 
   @Override

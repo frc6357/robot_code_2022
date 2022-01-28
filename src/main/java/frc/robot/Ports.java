@@ -1,5 +1,8 @@
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
+
 // Resource Allocations:
 //
 // PCM 0 - colorSpinnerExtend
@@ -42,7 +45,13 @@ public class Ports
     //////////////////////////////
     // Intake Addresses
     //////////////////////////////
-    
+    public static final int intakeMotor                 = 31; // CAN ID 
+
+    public static final int intakeMoverForward          = 0;  // PCM Channel 
+    public static final int intakeMoverBackward         = 1;  // PCM Channel 
+
+    public static final PneumaticsModuleType intakePCM  = PneumaticsModuleType.CTREPCM;
+
 
     ///////////////////////////////
     // Ball Indexer Addresses
@@ -52,8 +61,8 @@ public class Ports
     ///////////////////////////////
     // Ball Launcher Addresses
     ///////////////////////////////
-    public static final int ballLauncher1           = 23; // CAN ID
-    public static final int ballLauncher2            = 24; // CAN ID
+    public static final int ballLauncher1              = 23; // CAN ID
+    public static final int ballLauncher2              = 24; // CAN ID
 
     ///////////////////////////////
     // Climb Addresses
