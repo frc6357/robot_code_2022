@@ -40,11 +40,12 @@ public class Launcher
   public void update() 
   {
     // Get the current rotation rate in pulses per 100mS
-    double pulsesPerMinute = motorEncoder1.getVelocityPulses() * 600;
-    double MotorRevsPerMinute = pulsesPerMinute / Constants.DriveConstants.ENCODER_CPR;
-    double LauncherRPM = MotorRevsPerMinute / Constants.LauncherConstants.LAUNCH_GEAR_RATIO;
+    
+    double launcherRPM = getLauncherRPM();
 
-    motorControllerGroup.set(bangBangController.calculate(LauncherRPM, targetRPM));
+    System.out.println("LauncherRPM: " + launcherRPM);
+
+    // motorControllerGroup.set(bangBangController.calculate(launcherRPM, targetRPM));
   }
 
   /**
@@ -118,10 +119,10 @@ public class Launcher
     this.targetRPM = targetRPM;
 
     // TODO: Nasty hack, just to test prototype(will fix)
-    // if(isLauncherEnabled()) 
-    // {
-    //   motorControllerGroup.set(convertRPMtoMotorInput(targetRPM));
-    // }
+    if(isLauncherEnabled()) 
+    {
+      motorControllerGroup.set(convertRPMtoMotorInput(targetRPM));
+    }
   }
 
   /**
@@ -131,6 +132,15 @@ public class Launcher
   public double getTargetMotorRPM() 
   {
     return targetRPM;
+  }
+
+  public double getLauncherRPM() 
+  {
+    double pulsesPerMinute = motorEncoder1.getVelocityPulses() * 600;
+    double MotorRevsPerMinute = pulsesPerMinute / Constants.DriveConstants.ENCODER_CPR;
+    double LauncherRPM = MotorRevsPerMinute / Constants.LauncherConstants.LAUNCH_GEAR_RATIO;
+
+    return LauncherRPM;
   }
 
   private double convertRPMtoMotorInput(double RPM) {
