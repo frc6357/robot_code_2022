@@ -43,10 +43,10 @@ public final class Constants
             // Assumes the encoders are directly mounted on the wheel shafts
             (WHEEL_DIAMETER * Math.PI) / ((double) ENCODER_CPR * GEAR_REDUCTION);
 
-        // Data taken from characterization analysis on 01/21/2022
-        public static final double KS = 0.47667;        // Volts
-        public static final double KV = 0.0037589;      // Volt Seconds Per Meter
-        public static final double KA = 0.00043482;     // Volt Seconds Squared Per Meter
+        // Data taken from characterization analysis on 03/02/2021
+        public static final double KS = 0.651;          // Volts
+        public static final double KV = 2.3;            // Volt Seconds Per Meter
+        public static final double KA = 0.217;          // Volt Seconds Squared Per Meter
         public static final double KP_DRIVE_VELOCITY = 2.26; // TODO: Check units for this value
 
         public static final double  DEADBAND_TURN = 0.01;
