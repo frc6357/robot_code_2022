@@ -6,33 +6,45 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 // import frc.robot.utils.MotorEncoder;
 // import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 public class Launcher
 {
+  //TODO: Add method to calculate RPM
+
   private double targetRPM = 0.0;
   //Current rpm of the launcher motors
-  private double curRPM = 0f;
 
   private boolean launcherEnabled = false;
 
   private final MotorControllerGroup motorControllerGroup;
-  // private final MotorEncoder encoder;
+  private final MotorEncoder motorEncoder1;
+  // private final MotorEncoder motorEncoder2;
+
+  private final BangBangController bangBangController;
 
   private final double gearRatio;
 
-  //Uncomment
+  // TODO: When second motor is added to the launcher, make sure to add a motorEncoder2 to this constructor
   /** Creates a new SK22Launcher */
-  public Launcher(MotorControllerGroup motorControllerGroup, double gearRatio)
+  public Launcher(MotorControllerGroup motorControllerGroup, MotorEncoder motorEncoder1, double gearRatio)
   {
     this.motorControllerGroup = motorControllerGroup;
-    // this.encoder = encoder;
+    this.motorEncoder1 = motorEncoder1;
     this.gearRatio = gearRatio;
+
+    this.bangBangController = new BangBangController();
   }
   
   public void update() 
   {
-    
+    // Get the current rotation rate in pulses per 100mS
+    double pulsesPerMinute = motorEncoder1.getVelocityPulses() * 600;
+    double MotorRevsPerMinute = pulsesPerMinute / Constants.DriveConstants.ENCODER_CPR;
+    double LauncherRPM = MotorRevsPerMinute / Constants.LauncherConstants.LAUNCH_GEAR_RATIO;
+
+    motorControllerGroup.set(bangBangController.calculate(LauncherRPM, targetRPM));
   }
 
   /**
@@ -106,10 +118,10 @@ public class Launcher
     this.targetRPM = targetRPM;
 
     // TODO: Nasty hack, just to test prototype(will fix)
-    if(isLauncherEnabled()) 
-    {
-      motorControllerGroup.set(convertRPMtoMotorInput(targetRPM));
-    }
+    // if(isLauncherEnabled()) 
+    // {
+    //   motorControllerGroup.set(convertRPMtoMotorInput(targetRPM));
+    // }
   }
 
   /**

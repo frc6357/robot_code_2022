@@ -24,8 +24,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
  * to the Dashboard.
  */
 public class Robot extends TimedRobot {
-  private static final int kJoystickPort = 0;
-
   private Joystick m_joystick;
   
   private SK22Launcher launcher;
@@ -44,7 +42,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() 
   {
-
+    launcher.periodic();
   }
 
   @Override

@@ -5,7 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 // import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.Constants;
-import frc.robot.Launcher;
+import frc.robot.subsystems.base.Launcher;
 import frc.robot.Ports;
 import frc.robot.utils.MotorEncoder;
 
@@ -19,8 +19,7 @@ public class SK22Launcher extends SKSubsystemBase
   private final MotorEncoder motorEncoder = new MotorEncoder(ballLauncher1, 
                                                                  Constants.DriveConstants.ENCODER_DISTANCE_PER_PULSE, 
                                                                  Constants.DriveConstants.LEFT_ENCODER_REVERSED);
-
-
+                                                                 
   private final Launcher launcher;
 
   /** Creates a new ExampleSubsystem. */

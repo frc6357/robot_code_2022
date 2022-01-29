@@ -98,6 +98,8 @@ public final class Constants
         public static final int midSpeedPreset = 5000;
         public static final int highSpeedPreset = 7500;
         public static final int maxSpeedPreset = 10000;
+
+        public static final double LAUNCH_GEAR_RATIO = 24.0/16.0;
     }
 
     public static final double INCH_PER_MILLIMETER = 0.0393701;
