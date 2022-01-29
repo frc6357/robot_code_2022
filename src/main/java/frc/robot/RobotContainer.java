@@ -209,27 +209,22 @@ public class RobotContainer
             
             // This sequentially runs thorugh the 2 sub-paths of the Drive1mForwardBackward path defined in PathWeaver 
             case Drive1mForwardBackward:
-                
-                // Generate a command for driving 1m forward from trajectory created from PathWeaver JSON file
-                File drive1mf = new File(splineDirectory + "/1m Forwards.wpilib.json");
-                Trajectory drive1mfTrajectory = makeTrajectoryFromJSON(drive1mf);
-                if (drive1mfTrajectory == null)
+
+                // Required segments for the path
+                String[] dependencies = {"1m Forwards", "1m Backwards"};
+                // Check if each required segment has been created
+                if(trajectoryCreator.hasTrajectories(dependencies))
+                {
+                    // Create commands for each segment
+                    Command drive1mfCommand = makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Forwards"), true);
+                    Command drive1mbCommand = makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Backwards"), false);
+                    // Execute each of the single commands in chronological order
+                    return new SequentialCommandGroup(drive1mfCommand, drive1mbCommand);
+                }
+                else
                 {
                     return new DoNothingCommand();
                 }
-                Command drive1mfCommand = makeTrajectoryCommand(drive1mfTrajectory, true);
-
-                // Generate a command for driving 1m backward from trajectory created from PathWeaver JSON file
-                File drive1mb = new File(splineDirectory + "/1m Backwards.wpilib.json");
-                Trajectory drive1mbTrajectory = makeTrajectoryFromJSON(drive1mb);
-                if (drive1mbTrajectory == null)
-                {
-                    return new DoNothingCommand();
-                }
-                Command drive1mbCommand = makeTrajectoryCommand(drive1mbTrajectory, false);
-
-                // Execute each of the single commands in chronological order
-                return new SequentialCommandGroup(drive1mfCommand, drive1mbCommand);
 
             default:
                 DriverStation.reportError("Uncoded selection from autoSelector chooser!", false);
