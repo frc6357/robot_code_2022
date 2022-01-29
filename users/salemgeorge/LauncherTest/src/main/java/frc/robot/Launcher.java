@@ -1,21 +1,11 @@
 package frc.robot;
 
-import com.ctre.phoenix.motorcontrol.NeutralMode;
-
-// import edu.wpi.first.wpilibj.Encoder;
-// import frc.robot.utils.MotorEncoder;
-// import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.math.controller.BangBangController;
-import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 
 public class Launcher
 {
-  //TODO: Add method to calculate RPM
-
   private double targetRPM = 0.0;
-  //Current rpm of the launcher motors
-
   private boolean launcherEnabled = false;
 
   private final MotorControllerGroup motorControllerGroup;
@@ -37,15 +27,20 @@ public class Launcher
     this.bangBangController = new BangBangController();
   }
   
-  public void update() 
+  public void update()
   {
-    // Get the current rotation rate in pulses per 100mS
-    
     double launcherRPM = getLauncherRPM();
 
     System.out.println("LauncherRPM: " + launcherRPM);
 
-    // motorControllerGroup.set(bangBangController.calculate(launcherRPM, targetRPM));
+    if(launcherEnabled)
+    {
+      motorControllerGroup.set(bangBangController.calculate(launcherRPM, targetRPM));
+    }
+    else
+    {
+      motorControllerGroup.set(0.0);
+    }
   }
 
   /**
@@ -57,8 +52,6 @@ public class Launcher
   public void enableLauncher() 
   {
     launcherEnabled = true;
-
-    motorControllerGroup.set(convertRPMtoMotorInput(targetRPM));
   }
 
   /**
@@ -70,8 +63,6 @@ public class Launcher
   public void disableLauncher() 
   {
     launcherEnabled = false;
-
-    motorControllerGroup.set(0.0);
   }
 
   /**
@@ -96,7 +87,6 @@ public class Launcher
    */
   public double getCurMotorRPM() 
   {
-    // TODO: just for testing
     if(isLauncherEnabled()) 
     {
       return targetRPM;
@@ -117,12 +107,6 @@ public class Launcher
   public void setTargetMotorRPM(double targetRPM) 
   {
     this.targetRPM = targetRPM;
-
-    // TODO: Nasty hack, just to test prototype(will fix)
-    if(isLauncherEnabled()) 
-    {
-      motorControllerGroup.set(convertRPMtoMotorInput(targetRPM));
-    }
   }
 
   /**
@@ -137,14 +121,10 @@ public class Launcher
   public double getLauncherRPM() 
   {
     double pulsesPerMinute = motorEncoder1.getVelocityPulses() * 600;
+    // TODO: Update constructor to pass in encoder CPR number.
     double MotorRevsPerMinute = pulsesPerMinute / Constants.DriveConstants.ENCODER_CPR;
-    double LauncherRPM = MotorRevsPerMinute / Constants.LauncherConstants.LAUNCH_GEAR_RATIO;
+    double LauncherRPM = MotorRevsPerMinute / gearRatio;
 
     return LauncherRPM;
-  }
-
-  private double convertRPMtoMotorInput(double RPM) {
-    // TODO: just for testing
-    return (RPM / 10000);
   }
 }

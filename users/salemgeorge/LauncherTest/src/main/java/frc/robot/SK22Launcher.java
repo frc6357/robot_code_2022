@@ -37,7 +37,7 @@ public class SK22Launcher extends SubsystemBase
     // ballLauncher2.setInverted(false);
     
     // The 10 is a place holder value for the gear ratio of the motors
-    launcher = new Launcher(launcherGroup, motorEncoder1, 10);
+    launcher = new Launcher(launcherGroup, motorEncoder1, Constants.LauncherConstants.LAUNCH_GEAR_RATIO);
   }
 
   @Override

@@ -106,5 +106,4 @@ public final class Constants
   
     public static final String SPLINE_DIRECTORY = "paths/output";
     public static final String SUBSYSTEM = "Subsystems.json";
-
 }
