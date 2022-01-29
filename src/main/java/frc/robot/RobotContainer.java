@@ -9,6 +9,7 @@ package frc.robot;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -61,13 +62,14 @@ public class RobotContainer
      */
     private enum AutoCommands
     {
-        DoNothing, DriveSplineFromJSON, DriveSplineCanned, Drive1mForwardBackward, DriveBounce
+        DoNothing, DriveSplineFromJSON, DriveSplineCanned, Drive1mForwardBackward
     };
 
+    private final TrajectoryBuilder trajectoryCreator = new TrajectoryBuilder(Constants.SPLINE_DIRECTORY);
     private SendableChooser<AutoCommands> autoCommandSelector = new SendableChooser<AutoCommands>();
     private SendableChooser<Command> driveModeSelector = new SendableChooser<Command>();
 
-    private SendableChooser<File> splineCommandSelector = new SendableChooser<File>();
+    private SendableChooser<Trajectory> splineCommandSelector = new SendableChooser<Trajectory>();
 
     // The Robot controllers
     private final FilteredJoystick driverLeftJoystick = new FilteredJoystick(Ports.OIDriverLeftJoystick);
@@ -138,7 +140,6 @@ public class RobotContainer
         autoCommandSelector.addOption("Drive path from JSON", AutoCommands.DriveSplineFromJSON);
         autoCommandSelector.addOption("Drive canned path", AutoCommands.DriveSplineCanned);
         autoCommandSelector.addOption("Drive forwards then backwards 1m", AutoCommands.Drive1mForwardBackward);
-        autoCommandSelector.addOption("Drive bounce path", AutoCommands.DriveBounce);
 
         driveModeSelector.setDefaultOption("Arcade Drive", arcadeDrive);
         driveModeSelector.addOption("Tank Drive", tankDrive);
@@ -146,17 +147,12 @@ public class RobotContainer
         SmartDashboard.putData("Auto Chooser", autoCommandSelector);
         SmartDashboard.putData("Drive Mode", driveModeSelector);
 
-        File deployDirectory = Filesystem.getDeployDirectory();
-        File splineDirectory = new File(deployDirectory, Constants.SPLINE_DIRECTORY);
+        Set<String> splineDirectory = trajectoryCreator.getTrajectoryNames();
 
-        File[] pathNames = splineDirectory.listFiles();
-        for (File pathname : pathNames)
+        for (String pathname : splineDirectory)
         {
-            // Print the names of files and directories
-            System.out.println(pathname);
-            splineCommandSelector.addOption(pathname.getName(), pathname);
+            splineCommandSelector.addOption(pathname, trajectoryCreator.getTrajectory(pathname));
         }
-
         SmartDashboard.putData(splineCommandSelector);
     }
 
@@ -204,8 +200,7 @@ public class RobotContainer
             case DriveSplineFromJSON:
                 // Note that the drive constraints are baked into the PathWeaver output so they are not
                 // mentioned here.
-                File splineFile = splineCommandSelector.getSelected();
-                Trajectory trajectory = makeTrajectoryFromJSON(splineFile);
+                Trajectory trajectory = splineCommandSelector.getSelected();
                 if (trajectory == null)
                 {
                     return new DoNothingCommand();
