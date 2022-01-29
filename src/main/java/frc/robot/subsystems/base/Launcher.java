@@ -1,34 +1,48 @@
-package frc.robot;
+package frc.robot.subsystems.base;
 
-// import edu.wpi.first.wpilibj.Encoder;
-import frc.robot.utils.MotorEncoder;
-// import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.math.controller.PIDController;
 
 public class Launcher
 {
-  private double targetRPM = 0.0;
-  //Current rpm of the launcher motors
-  private double curRPM = 0f;
-
+  private double targetRPM        = 0.0;
   private boolean launcherEnabled = false;
+  private double EncoderCPR       = 0.0;
 
   private final MotorControllerGroup motorControllerGroup;
-  private final MotorEncoder encoder;
+  private final MotorEncoder motorEncoder1;
+  // private final MotorEncoder motorEncoder2;
+
+  private final PIDController Controller;
 
   private final double gearRatio;
 
+  // TODO: When second motor is added to the launcher, make sure to add a motorEncoder2 to this constructor
   /** Creates a new SK22Launcher */
-  public Launcher(MotorControllerGroup motorControllerGroup, MotorEncoder encoder, double gearRatio)
+  public Launcher(MotorControllerGroup motorControllerGroup, MotorEncoder motorEncoder1, double gearRatio, int encoderCPR, double KP, double KI, double KD)
   {
     this.motorControllerGroup = motorControllerGroup;
-    this.encoder = encoder;
+    this.motorEncoder1 = motorEncoder1;
     this.gearRatio = gearRatio;
+    this.EncoderCPR   = encoderCPR;
+
+    this.Controller = new PIDController(KP, KI, KD);
   }
   
-  public void update() 
+  public void update()
   {
-    
+    double launcherRPM = getLauncherRPM();
+
+    System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
+
+    if(launcherEnabled || (targetRPM == 0.0))
+    {
+      motorControllerGroup.set(Controller.calculate(launcherRPM, targetRPM));
+    }
+    else
+    {
+      motorControllerGroup.set(0.0);
+    }
   }
 
   /**
@@ -40,8 +54,6 @@ public class Launcher
   public void enableLauncher() 
   {
     launcherEnabled = true;
-
-    motorControllerGroup.set(targetRPM);
   }
 
   /**
@@ -53,8 +65,6 @@ public class Launcher
   public void disableLauncher() 
   {
     launcherEnabled = false;
-
-    motorControllerGroup.set(0.0);
   }
 
   /**
@@ -79,7 +89,14 @@ public class Launcher
    */
   public double getCurMotorRPM() 
   {
-    return curRPM;
+    if(isLauncherEnabled()) 
+    {
+      return targetRPM;
+    } 
+    else 
+    {
+      return 0.0;
+    }
   }
 
   /**
@@ -92,13 +109,6 @@ public class Launcher
   public void setTargetMotorRPM(double targetRPM) 
   {
     this.targetRPM = targetRPM;
-
-    // TODO: Nasty hack, just to test prototype(will fix)
-    if(isLauncherEnabled()) 
-    {
-      motorControllerGroup.set(targetRPM);
-    }
-
   }
 
   /**
@@ -108,5 +118,14 @@ public class Launcher
   public double getTargetMotorRPM() 
   {
     return targetRPM;
+  }
+
+  public double getLauncherRPM() 
+  {
+    double pulsesPerMinute = motorEncoder1.getVelocityPulses() * 600;
+    double MotorRevsPerMinute = pulsesPerMinute / EncoderCPR;
+    double LauncherRPM = MotorRevsPerMinute / gearRatio;
+
+    return LauncherRPM;
   }
 }

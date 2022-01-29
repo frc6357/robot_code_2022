@@ -6,16 +6,11 @@
 package frc.robot;
 
 import com.revrobotics.ColorSensorV3;
-import com.revrobotics.CANSparkMaxLowLevel.PeriodicFrame;
-
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 
-
-
 public class ColorSensor {
 
-    
   private final I2C.Port i2c = Ports.i2c;
   public final ColorSensorV3 m_colorSensor = new ColorSensorV3(i2c);
   Color detectedColor;
@@ -31,8 +26,6 @@ public class ColorSensor {
         int m_Distance = distanceThreshold;
         detectedColor = m_colorSensor.getColor();
         proximity = m_colorSensor.getProximity();
-        
-        
     }
 
     //Must be called every 20 miliseconds
