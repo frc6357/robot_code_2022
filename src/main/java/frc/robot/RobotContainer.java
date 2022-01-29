@@ -7,8 +7,6 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Set;
 
 import edu.wpi.first.cameraserver.CameraServer;
@@ -21,9 +19,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
@@ -135,21 +131,10 @@ public class RobotContainer
 
     private void configureShuffleboard()
     {
-        // auto commands
-        autoCommandSelector.setDefaultOption("Do Nothing", AutoCommands.DoNothing);
-        autoCommandSelector.addOption("Drive path from JSON", AutoCommands.DriveSplineFromJSON);
-        autoCommandSelector.addOption("Drive canned path", AutoCommands.DriveSplineCanned);
-        autoCommandSelector.addOption("Drive forwards then backwards 1m", AutoCommands.Drive1mForwardBackward);
+        addPossibleAutos();
 
         driveModeSelector.setDefaultOption("Arcade Drive", arcadeDrive);
         driveModeSelector.addOption("Tank Drive", tankDrive);
-
-        Set<String> splineDirectory = trajectoryCreator.getTrajectoryNames();
-
-        for (String pathname : splineDirectory)
-        {
-            splineCommandSelector.addOption(pathname, trajectoryCreator.getTrajectory(pathname));
-        }
 
         SmartDashboard.putData("Auto Chooser", autoCommandSelector);
         SmartDashboard.putData("Drive Mode", driveModeSelector);
@@ -181,15 +166,39 @@ public class RobotContainer
     }
 
     /**
+     * Adds the possible auto commands to the Shuffleboard list depending on the
+     * auto segments that are present according to the {@link TrajectoryBuilder}.
+     * Adds the auto commands to their respective {@link SendableChooser} to be
+     * used by {@link SmartDashboard}.
+     */
+    public void addPossibleAutos()
+    {
+        // Adding Segment Independent Paths
+        autoCommandSelector.setDefaultOption("Do Nothing", AutoCommands.DoNothing);
+        autoCommandSelector.addOption("Drive path from JSON", AutoCommands.DriveSplineFromJSON);
+        autoCommandSelector.addOption("Drive canned path", AutoCommands.DriveSplineCanned);
+
+        // Adding paths if their segments are present
+        if(trajectoryCreator.hasTrajectories(new String[]{"1m Forwards", "1m Backwards"}))
+        {
+            autoCommandSelector.addOption("Drive forwards then backwards 1m", AutoCommands.Drive1mForwardBackward);
+        }
+
+        // Adding all JSON paths
+        Set<String> splineDirectory = trajectoryCreator.getTrajectoryNames();
+        for (String pathname : splineDirectory)
+        {
+            splineCommandSelector.addOption(pathname, trajectoryCreator.getTrajectory(pathname));
+        }
+    }
+
+    /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand()
     {
-        File deployDirectory = Filesystem.getDeployDirectory();
-        File splineDirectory = new File(deployDirectory, Constants.SPLINE_DIRECTORY);
-
         var autoSelector = autoCommandSelector.getSelected();
 
         switch (autoSelector)
@@ -209,44 +218,17 @@ public class RobotContainer
             
             // This sequentially runs thorugh the 2 sub-paths of the Drive1mForwardBackward path defined in PathWeaver 
             case Drive1mForwardBackward:
-
-                // Required segments for the path
-                String[] dependencies = {"1m Forwards", "1m Backwards"};
-                // Check if each required segment has been created
-                if(trajectoryCreator.hasTrajectories(dependencies))
-                {
-                    // Create commands for each segment
-                    Command drive1mfCommand = makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Forwards"), true);
-                    Command drive1mbCommand = makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Backwards"), false);
-                    // Execute each of the single commands in chronological order
-                    return new SequentialCommandGroup(drive1mfCommand, drive1mbCommand);
-                }
-                else
-                {
-                    return new DoNothingCommand();
-                }
+                // Create commands for each segment
+                Command drive1mfCommand = makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Forwards"), true);
+                Command drive1mbCommand = makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Backwards"), false);
+                // Execute each of the single commands in chronological order
+                return new SequentialCommandGroup(drive1mfCommand, drive1mbCommand);
 
             default:
                 DriverStation.reportError("Uncoded selection from autoSelector chooser!", false);
                 return new DoNothingCommand();
 
         }
-    }
-
-    private Trajectory makeTrajectoryFromJSON(File trajectoryJSON)
-    {
-        Trajectory trajectory = new Trajectory();
-        try
-        {
-            trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryJSON.toPath());
-        }
-        catch (IOException ex)
-        {
-            // If we are unable to open the file the method returns a null object
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON.getName(), ex.getStackTrace());
-            return null;
-        }
-        return trajectory;
     }
 
     private Command makeTrajectoryCommand(Trajectory trajectory, boolean bFirst) 
