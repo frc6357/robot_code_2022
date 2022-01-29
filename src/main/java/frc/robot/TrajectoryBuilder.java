@@ -109,6 +109,27 @@ public class TrajectoryBuilder {
     }
 
     /**
+     * Checks if all of the specified trajectories exist. Can be used to 
+     * see if all the required trajectories needed to make a auto command 
+     * exists.
+     * @param names
+     *             A string array with all of the desired trajectories
+     * @return
+     *             Whether all of the specified trajectories exist
+     */
+    public boolean hasTrajectories(String[] names)
+    {
+        for (String name : names)
+        {
+            if(!hasTrajectory(name))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Creates a trajectory using a Pathweaver-style json file
      * @param trajectoryJSON
      *          The desire json file to create a trajectory from
