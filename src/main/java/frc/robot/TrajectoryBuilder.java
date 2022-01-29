@@ -54,13 +54,9 @@ public class TrajectoryBuilder {
 
             // Creating trajectory with json
             Trajectory trajectory = makeTrajectoryFromJSON(pathname);
-            if (trajectory == null)
+            if (trajectory != null)
             {
-                // Trajectory was not created
-            }
-            else
-            {
-                // Added trajectory to set
+                // Add trajectory to set
                 m_trajectories.put(pathname.getName().replace(".wpilib.json", ""), trajectory);
             }
         }
