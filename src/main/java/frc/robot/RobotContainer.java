@@ -190,6 +190,8 @@ public class RobotContainer
         {
             splineCommandSelector.addOption(pathname, trajectoryCreator.getTrajectory(pathname));
         }
+        String firstJSON = splineDirectory.stream().findFirst().get();
+        splineCommandSelector.setDefaultOption(firstJSON, trajectoryCreator.getTrajectory(firstJSON));
     }
 
     /**
@@ -218,11 +220,10 @@ public class RobotContainer
             
             // This sequentially runs thorugh the 2 sub-paths of the Drive1mForwardBackward path defined in PathWeaver 
             case Drive1mForwardBackward:
-                // Create commands for each segment
-                Command drive1mfCommand = makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Forwards"), true);
-                Command drive1mbCommand = makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Backwards"), false);
                 // Execute each of the single commands in chronological order
-                return new SequentialCommandGroup(drive1mfCommand, drive1mbCommand);
+                return new SequentialCommandGroup(
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Forwards"), true), 
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Backwards"), false));
 
             default:
                 DriverStation.reportError("Uncoded selection from autoSelector chooser!", false);
