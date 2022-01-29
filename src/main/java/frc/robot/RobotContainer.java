@@ -10,6 +10,8 @@ package frc.robot;
 import java.util.List;
 import java.util.Set;
 
+import com.ctre.phoenix.schedulers.SequentialScheduler;
+
 import edu.wpi.first.cameraserver.CameraServer;
 
 //import com.fasterxml.jackson.core.JsonFactory;
@@ -35,6 +37,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -44,6 +47,7 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.DoNothingCommand;
 import frc.robot.subsystems.SK21Drive;
+import frc.robot.subsystems.base.SuperClasses.AutoCommands;
 import frc.robot.utils.FilteredJoystick;
 //import frc.robot.utils.SubsystemControls;
 
@@ -64,13 +68,7 @@ public class RobotContainer
     private UsbCamera camera2;
     NetworkTableEntry cameraSelection;
 
-    /**
-     * Available autonomous commands for the Robot.
-     */
-    private enum AutoCommands
-    {
-        DoNothing, DriveSplineFromJSON, DriveSplineCanned, Drive1mForwardBackward
-    };
+    
 
     private final TrajectoryBuilder trajectoryCreator = new TrajectoryBuilder(Constants.SPLINE_DIRECTORY);
     private SendableChooser<AutoCommands> autoCommandSelector = new SendableChooser<AutoCommands>();
@@ -204,6 +202,46 @@ public class RobotContainer
         {
             autoCommandSelector.addOption("Drive forwards then backwards 1m", AutoCommands.Drive1mForwardBackward);
         }
+        if(trajectoryCreator.hasTrajectory("Simple Taxi"))
+        {
+            autoCommandSelector.addOption("Taxi", AutoCommands.Taxi);
+        }
+        if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 1 (LH)", "Ball 1 to Low"}))
+        {
+            autoCommandSelector.addOption("2 Ball Tarmac 1A", AutoCommands.N2_LL_1A);
+        }
+        if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 2 (LH)", "Ball 2 to Low"}))
+        {
+            autoCommandSelector.addOption("2 Ball Tarmac 2A", AutoCommands.N2_LL_2A);
+        }
+        if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 3 (LH)", "Ball 3 to Low"}))
+        {
+            autoCommandSelector.addOption("2 Ball Tarmac 2B", AutoCommands.N2_LL_2B);
+        }
+        if(trajectoryCreator.hasTrajectories(new String[]{"Terminal to Shoot", "Ball 2 to Terminal"}))
+        {
+            if(trajectoryCreator.hasTrajectory("Grab Ball Radial (HH)"))
+            {
+                if(trajectoryCreator.hasTrajectory("Ball 1 to Ball 2"))
+                {
+                    autoCommandSelector.addOption("4T Ball Radial Tarmac 1A HHHH", AutoCommands.T4_HHHH_1A);
+                }
+                if(trajectoryCreator.hasTrajectory("Ball 3 to Ball 2"))
+                {
+                    autoCommandSelector.addOption("4T Ball Radial Tarmac 2B HHHH", AutoCommands.T4_HHHH_2B);
+                }
+                autoCommandSelector.addOption("2 Ball Radial HH", AutoCommands.N2_HH);
+            }
+            if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 1 (LH)", "Ball 1 to Ball 2"}))
+            {
+                autoCommandSelector.addOption("4 Ball Tarmac 1A", AutoCommands.T4_LHHH_1A);
+            }
+            if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 3 (LH)", "Ball 3 to Ball 2"}))
+            {
+                autoCommandSelector.addOption("4 Ball Tarmac 2B", AutoCommands.T4_LHHH_2B);
+            }
+            
+        }
 
         // Adding all JSON paths
         Set<String> splineDirectory = trajectoryCreator.getTrajectoryNames();
@@ -268,6 +306,91 @@ public class RobotContainer
                 return new SequentialCommandGroup(
                     makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Forwards"), true), 
                     makeTrajectoryCommand(trajectoryCreator.getTrajectory("1m Backwards"), false));
+
+            case Taxi:
+                return makeTrajectoryCommand(trajectoryCreator.getTrajectory("Simple Taxi"), true);
+            
+            case N2_HH:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        makeTrajectoryCommand(trajectoryCreator.getTrajectory("Grab Ball Radial (HH)"), true),
+                        new DoNothingCommand()),    // Set Up Intake
+                    new DoNothingCommand());        // Launcher Shoot HH
+
+            case N2_LL_1A:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        new DoNothingCommand(),     // Launcher Shoot L
+                        new DoNothingCommand()),    // Set Up Intake
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Low to Ball 1 (LH)"), true),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 1 to Low"), false),
+                    new DoNothingCommand());        // Launcher Shoot L
+                
+            case N2_LL_2A:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        new DoNothingCommand(),     // Launcher Shoot L
+                        new DoNothingCommand()),    // Set Up Intake
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Low to Ball 2 (LH)"), true),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 2 to Low"), false),
+                    new DoNothingCommand());         // Launcher Shoot L
+
+            case N2_LL_2B:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        new DoNothingCommand(),     // Launcher Shoot L
+                        new DoNothingCommand()),    // Set Up Intake
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Low to Ball 3 (LH)"), true),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 3 to Low"), false),
+                    new DoNothingCommand());        // Launcher Shoot L
+            
+            case T4_LHHH_1A:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        new DoNothingCommand(),     // Launcher Shoot L
+                        new DoNothingCommand()),    // Set Up Intake
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Low to Ball 1 (LH)"), true),
+                    new DoNothingCommand(),         // Launcher Shoot H
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 1 to Ball 2"), false),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 2 to Terminal"), false),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Terminal to Shoot"), false),
+                    new DoNothingCommand());        // Launcher Shoot HH
+
+            case T4_LHHH_2B:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        new DoNothingCommand(),     // Launcher Shoot L
+                        new DoNothingCommand()),    // Set Up Intake
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Low to Ball 3 (LH)"), true),
+                    new DoNothingCommand(),         // Launcher Shoot H
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 3 to Ball 2"), false),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 2 to Terminal"), false),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Terminal to Shoot"), false),
+                    new DoNothingCommand());        // Launcher Shoot HH
+
+            case T4_HHHH_1A:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        makeTrajectoryCommand(trajectoryCreator.getTrajectory("Grab Ball Radial (HH)"), true),
+                        new DoNothingCommand(),     // Intake Set Up
+                        new DoNothingCommand()),    // Launcher Set Up
+                    new DoNothingCommand(),         // Launcher Shoot HH
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 1 to Ball 2"), false),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 2 to Terminal"), false),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Terminal to Shoot"), false),
+                    new DoNothingCommand());        // Launcher Shoot HH
+
+            case T4_HHHH_2B:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        makeTrajectoryCommand(trajectoryCreator.getTrajectory("Grab Ball Radial (HH)"), true),
+                        new DoNothingCommand(),     // Intake Set Up
+                        new DoNothingCommand()),    // Launcher Set Up
+                    new DoNothingCommand(),         // Launcher Shoot HH
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 3 to Ball 2"), false),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 2 to Terminal"), false),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Terminal to Shoot"), false),
+                    new DoNothingCommand());        // Launcher Shoot HH
 
             default:
                 DriverStation.reportError("Uncoded selection from autoSelector chooser!", false);
