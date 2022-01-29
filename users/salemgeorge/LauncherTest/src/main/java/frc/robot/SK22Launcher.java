@@ -3,12 +3,8 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import edu.wpi.first.math.controller.BangBangController;
-// import edu.wpi.first.wpilibj.motorcontrol.MotorController;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
-import frc.robot.Launcher;
 
 public class SK22Launcher extends SubsystemBase
 {
@@ -37,7 +33,12 @@ public class SK22Launcher extends SubsystemBase
     // ballLauncher2.setInverted(false);
     
     // The 10 is a place holder value for the gear ratio of the motors
-    launcher = new Launcher(launcherGroup, motorEncoder1, Constants.LauncherConstants.LAUNCH_GEAR_RATIO);
+    launcher = new Launcher(launcherGroup, motorEncoder1,
+                            Constants.LauncherConstants.LAUNCH_GEAR_RATIO,
+                            Constants.LauncherConstants.LAUNCHER_ENCODER_CPR,
+                            Constants.LauncherConstants.LAUNCHER_KP,
+                            Constants.LauncherConstants.LAUNCHER_KI,
+                            Constants.LauncherConstants.LAUNCHER_KD);
   }
 
   @Override
@@ -45,6 +46,9 @@ public class SK22Launcher extends SubsystemBase
   {
     // This method will be called once per scheduler run
     launcher.update();
+    double setpoint = launcher.getTargetMotorRPM();
+    double speed    = launcher.getCurMotorRPM();
+    
   }
 
   @Override

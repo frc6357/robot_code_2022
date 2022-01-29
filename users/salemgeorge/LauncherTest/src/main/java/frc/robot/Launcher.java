@@ -1,41 +1,43 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.math.controller.PIDController;
 
 public class Launcher
 {
-  private double targetRPM = 0.0;
+  private double targetRPM        = 0.0;
   private boolean launcherEnabled = false;
+  private double EncoderCPR       = 0.0;
 
   private final MotorControllerGroup motorControllerGroup;
   private final MotorEncoder motorEncoder1;
   // private final MotorEncoder motorEncoder2;
 
-  private final BangBangController bangBangController;
+  private final PIDController Controller;
 
   private final double gearRatio;
 
   // TODO: When second motor is added to the launcher, make sure to add a motorEncoder2 to this constructor
   /** Creates a new SK22Launcher */
-  public Launcher(MotorControllerGroup motorControllerGroup, MotorEncoder motorEncoder1, double gearRatio)
+  public Launcher(MotorControllerGroup motorControllerGroup, MotorEncoder motorEncoder1, double gearRatio, int encoderCPR, double KP, double KI, double KD)
   {
     this.motorControllerGroup = motorControllerGroup;
     this.motorEncoder1 = motorEncoder1;
     this.gearRatio = gearRatio;
+    this.EncoderCPR   = encoderCPR;
 
-    this.bangBangController = new BangBangController();
+    this.Controller = new PIDController(KP, KI, KD);
   }
   
   public void update()
   {
     double launcherRPM = getLauncherRPM();
 
-    System.out.println("LauncherRPM: " + launcherRPM);
+    System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
 
-    if(launcherEnabled)
+    if(launcherEnabled || (targetRPM == 0.0))
     {
-      motorControllerGroup.set(bangBangController.calculate(launcherRPM, targetRPM));
+      motorControllerGroup.set(Controller.calculate(launcherRPM, targetRPM));
     }
     else
     {
@@ -121,8 +123,7 @@ public class Launcher
   public double getLauncherRPM() 
   {
     double pulsesPerMinute = motorEncoder1.getVelocityPulses() * 600;
-    // TODO: Update constructor to pass in encoder CPR number.
-    double MotorRevsPerMinute = pulsesPerMinute / Constants.DriveConstants.ENCODER_CPR;
+    double MotorRevsPerMinute = pulsesPerMinute / EncoderCPR;
     double LauncherRPM = MotorRevsPerMinute / gearRatio;
 
     return LauncherRPM;

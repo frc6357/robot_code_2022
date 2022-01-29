@@ -42,7 +42,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() 
   {
-    launcher.periodic();
+
   }
 
   @Override
@@ -72,5 +72,7 @@ public class Robot extends TimedRobot {
     {
       launcher.setLauncherRPM(Constants.LauncherConstants.maxSpeedPreset);
     }
+
+    launcher.periodic();
   }
 }

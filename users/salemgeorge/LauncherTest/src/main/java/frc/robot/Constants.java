@@ -94,12 +94,18 @@ public final class Constants
         public static final int enableLauncherButton = 5; // Left bumper
         public static final int disableLauncherButton = 6; // Right bumper
 
-        public static final int lowSpeedPreset = 2500;
-        public static final int midSpeedPreset = 5000;
-        public static final int highSpeedPreset = 7500;
-        public static final int maxSpeedPreset = 10000;
+        public static final int lowSpeedPreset  = 1000;
+        public static final int midSpeedPreset  = 2000;
+        public static final int highSpeedPreset = 3000;
+        public static final int maxSpeedPreset  = 4000;
 
-        public static final double LAUNCH_GEAR_RATIO = 24.0/16.0;
+        // TODO: Run SysID on the launcher and update these values.
+        public static final double LAUNCHER_KP          = 0.00035;
+        public static final double LAUNCHER_KI          = 0.0002;
+        public static final double LAUNCHER_KD          = 0.0;
+
+        public static final int LAUNCHER_ENCODER_CPR    = 2048;
+        public static final double LAUNCH_GEAR_RATIO    = 24.0/16.0;
     }
 
     public static final double INCH_PER_MILLIMETER = 0.0393701;
