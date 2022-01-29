@@ -26,6 +26,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -58,7 +60,9 @@ public class RobotContainer
     /**
      * The USB Camera for the Robot.
      */
-    private UsbCamera camera;
+    private UsbCamera camera1;
+    private UsbCamera camera2;
+    NetworkTableEntry cameraSelection;
 
     /**
      * Available autonomous commands for the Robot.
@@ -123,9 +127,19 @@ public class RobotContainer
         // Driver camera configuration.
         if (RobotBase.isReal())
         {
-            camera = CameraServer.startAutomaticCapture("Driver Front Camera", 0);
-            camera.setResolution(240, 240);
-            camera.setFPS(15);
+            camera1 = CameraServer.startAutomaticCapture("Driver Front Camera", 0);
+            camera1.setResolution(240, 240);
+            camera1.setFPS(15);
+
+            camera2 = CameraServer.startAutomaticCapture("Driver Rear Camera", 1);
+            camera2.setResolution(240, 240);
+            camera2.setFPS(15);
+
+            cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+
+            // to change camera displayed feed later on, use the following code
+            // cameraSelection.setString(camera2.getName());
+            // cameraSelection.setString(camera1.getName());
         }
     }
 
