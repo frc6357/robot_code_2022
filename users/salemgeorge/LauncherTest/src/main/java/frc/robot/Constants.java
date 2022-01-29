@@ -94,8 +94,8 @@ public final class Constants
         public static final int enableLauncherButton = 5; // Left bumper
         public static final int disableLauncherButton = 6; // Right bumper
 
-        public static final int lowSpeedPreset  = 2000;
-        public static final int midSpeedPreset  = 3000;
+        public static final int lowSpeedPreset  = 3000;
+        public static final int midSpeedPreset  = 3400;
         public static final int highSpeedPreset = 3600;
         public static final int maxSpeedPreset  = 4200;
 
