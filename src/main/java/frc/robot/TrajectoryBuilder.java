@@ -61,7 +61,7 @@ public class TrajectoryBuilder {
             else
             {
                 // Added trajectory to set
-                m_trajectories.put(pathname.getName(), trajectory);
+                m_trajectories.put(pathname.getName().replace(".wpilib.json", ""), trajectory);
             }
         }
     }

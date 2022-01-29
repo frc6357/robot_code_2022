@@ -143,9 +143,6 @@ public class RobotContainer
 
         driveModeSelector.setDefaultOption("Arcade Drive", arcadeDrive);
         driveModeSelector.addOption("Tank Drive", tankDrive);
-    
-        SmartDashboard.putData("Auto Chooser", autoCommandSelector);
-        SmartDashboard.putData("Drive Mode", driveModeSelector);
 
         Set<String> splineDirectory = trajectoryCreator.getTrajectoryNames();
 
@@ -153,7 +150,10 @@ public class RobotContainer
         {
             splineCommandSelector.addOption(pathname, trajectoryCreator.getTrajectory(pathname));
         }
-        SmartDashboard.putData(splineCommandSelector);
+
+        SmartDashboard.putData("Auto Chooser", autoCommandSelector);
+        SmartDashboard.putData("Drive Mode", driveModeSelector);
+        SmartDashboard.putData("JSON Selector", splineCommandSelector);
     }
 
     /**
