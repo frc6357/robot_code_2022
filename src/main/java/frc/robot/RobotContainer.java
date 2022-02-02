@@ -184,6 +184,42 @@ public class RobotContainer
         // }
     }
 
+    private Command makeTrajectoryCommand(Trajectory trajectory, boolean bFirst) 
+    {
+        RamseteCommand ramseteCommand = new RamseteCommand(trajectory,
+                                                           driveSubsystem::getPose,
+                        new RamseteController(AutoConstants.RAMSETE_B,
+                                              AutoConstants.RAMSETE_ZETA),
+                        new SimpleMotorFeedforward(DriveConstants.KS,
+                                                   DriveConstants.KV,
+                                                   DriveConstants.KA),
+                                                   DriveConstants.DRIVE_KINEMATICS, driveSubsystem::getWheelSpeeds,
+                        new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0),
+                        new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0),
+                        // RamseteCommand passes volts to the callback
+                        driveSubsystem::tankDriveVolts, driveSubsystem);
+    
+        // Tell the robot where it is starting from if this is the first trajectory of a path.
+        if (bFirst)
+        {
+            driveSubsystem.resetOdometry(trajectory.getInitialPose());
+        }
+
+        // Run path following command, then stop at the end.
+        return ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0));
+    }
+
+    /**
+     * Reset the encoders and gyro in the drive subsystem. This should be called
+     * on boot and when initializing auto and reset modes.
+     */
+    public void resetDriveSubsystem()
+    {
+        driveSubsystem.resetEncoders();
+        driveSubsystem.resetGyro();
+    }
+
+
     /**
      * Adds the possible auto commands to the Shuffleboard list depending on the
      * auto segments that are present according to the {@link TrajectoryBuilder}.
@@ -197,7 +233,11 @@ public class RobotContainer
         autoCommandSelector.addOption("Drive path from JSON", AutoCommands.DriveSplineFromJSON);
         autoCommandSelector.addOption("Drive canned path", AutoCommands.DriveSplineCanned);
 
-        // Adding paths if their segments are present
+        /*
+            Checking dependencies for autos before giving option to run
+        */
+
+        // Simple paths
         if(trajectoryCreator.hasTrajectories(new String[]{"1m Forwards", "1m Backwards"}))
         {
             autoCommandSelector.addOption("Drive forwards then backwards 1m", AutoCommands.Drive1mForwardBackward);
@@ -206,41 +246,91 @@ public class RobotContainer
         {
             autoCommandSelector.addOption("Taxi", AutoCommands.Taxi);
         }
-        if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 1 (LH)", "Ball 1 to Low"}))
+
+        // Autos that start at the hub (Tarmac 1A)
+        if(trajectoryCreator.hasTrajectory("Low to Ball 1 (LH)"))
         {
-            autoCommandSelector.addOption("2 Ball Tarmac 1A", AutoCommands.N2_LL_1A);
-        }
-        if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 2 (LH)", "Ball 2 to Low"}))
-        {
-            autoCommandSelector.addOption("2 Ball Tarmac 2A", AutoCommands.N2_LL_2A);
-        }
-        if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 3 (LH)", "Ball 3 to Low"}))
-        {
-            autoCommandSelector.addOption("2 Ball Tarmac 2B", AutoCommands.N2_LL_2B);
-        }
-        if(trajectoryCreator.hasTrajectories(new String[]{"Terminal to Shoot", "Ball 2 to Terminal"}))
-        {
-            if(trajectoryCreator.hasTrajectory("Grab Ball Radial (HH)"))
+            autoCommandSelector.addOption("Low to Ball 2", AutoCommands.N2_LH_1A);
+            if(trajectoryCreator.hasTrajectory("Ball 1 to Low"))
             {
-                if(trajectoryCreator.hasTrajectory("Ball 1 to Ball 2"))
+                autoCommandSelector.addOption("2 Ball Tarmac 1A", AutoCommands.N2_LL_1A);
+            }
+            if(trajectoryCreator.hasTrajectory("Ball 1 to Ball 2"))
+            {
+                autoCommandSelector.addOption("3 Ball Tarmac 1A", AutoCommands.N3_LHH_2B);
+            }
+        }
+        // Autos that start at the hub (Tarmac 2A)
+        if(trajectoryCreator.hasTrajectory("Low to Ball 2 (LH)"))
+        {
+            autoCommandSelector.addOption("Low to Ball 2", AutoCommands.N2_LH_2A);
+            if(trajectoryCreator.hasTrajectory("Ball 2 to Low"))
+            {
+                autoCommandSelector.addOption("2 Ball Tarmac 2A", AutoCommands.N2_LL_2A);
+            }
+            // TODO: Look at extra option (3 Ball PreLoaded-2-1)
+            if(trajectoryCreator.hasTrajectory("Ball 2 to Ball 3"))
+            {
+                autoCommandSelector.addOption("3 Ball Tarmac 2A", AutoCommands.N3_LHH_2B);
+            }
+        }
+        // Autos that start at the hub (Tarmac 2B)
+        if(trajectoryCreator.hasTrajectory("Low to Ball 3 (LH)"))
+        {
+            autoCommandSelector.addOption("Low to Ball 3", AutoCommands.N2_LH_2B);
+            if(trajectoryCreator.hasTrajectory("Ball 3 to Low"))
+            {
+                autoCommandSelector.addOption("2 Ball Tarmac 2B", AutoCommands.N2_LL_2B);
+            }
+            if(trajectoryCreator.hasTrajectory("Ball 3 to Ball 2"))
+            {
+                autoCommandSelector.addOption("3 Ball Tarmac 2B", AutoCommands.N3_LHH_2B);
+            }
+        }
+
+        // Paths that require the terminal ball
+        if(trajectoryCreator.hasTrajectory("Terminal to Shoot"))
+        {
+            if(trajectoryCreator.hasTrajectory("Ball 2 to Terminal"))
+            {
+                if(trajectoryCreator.hasTrajectory("Grab Ball Radial (HH)"))
                 {
-                    autoCommandSelector.addOption("4T Ball Radial Tarmac 1A HHHH", AutoCommands.T4_HHHH_1A);
+                    if(trajectoryCreator.hasTrajectory("Ball 1 to Ball 2"))
+                    {
+                        autoCommandSelector.addOption("4T Ball Radial Tarmac 1A HHHH", AutoCommands.T4_HHHH_R1A);
+                    }
+                    if(trajectoryCreator.hasTrajectory("Ball 3 to Ball 2"))
+                    {
+                        autoCommandSelector.addOption("4T Ball Radial Tarmac 2B HHHH", AutoCommands.T4_HHHH_R2B);
+                    }
+                    autoCommandSelector.addOption("2 Ball Radial HH", AutoCommands.N2_HH_R);
                 }
-                if(trajectoryCreator.hasTrajectory("Ball 3 to Ball 2"))
+                if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 1 (LH)", "Ball 1 to Ball 2"}))
                 {
-                    autoCommandSelector.addOption("4T Ball Radial Tarmac 2B HHHH", AutoCommands.T4_HHHH_2B);
+                    autoCommandSelector.addOption("4 Ball Tarmac 1A", AutoCommands.T4_LHHH_1A);
                 }
-                autoCommandSelector.addOption("2 Ball Radial HH", AutoCommands.N2_HH);
+                if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 3 (LH)", "Ball 3 to Ball 2"}))
+                {
+                    autoCommandSelector.addOption("4 Ball Tarmac 2B", AutoCommands.T4_LHHH_2B);
+                }
             }
-            if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 1 (LH)", "Ball 1 to Ball 2"}))
+        }
+
+        // Non-Terminal Ball Autos that Start Radially
+        if(trajectoryCreator.hasTrajectory("Grab Ball Radial (HH)"))
+        {
+            if(trajectoryCreator.hasTrajectory("Ball 2 to Ball 3"))
             {
-                autoCommandSelector.addOption("4 Ball Tarmac 1A", AutoCommands.T4_LHHH_1A);
+                autoCommandSelector.addOption("3 Ball Tarmac R1A", AutoCommands.N3_LHH_2B);
             }
-            if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 3 (LH)", "Ball 3 to Ball 2"}))
+            if(trajectoryCreator.hasTrajectory("Ball 2 to Ball 3"))
             {
-                autoCommandSelector.addOption("4 Ball Tarmac 2B", AutoCommands.T4_LHHH_2B);
+                autoCommandSelector.addOption("3 Ball Tarmac R2A", AutoCommands.N3_LHH_2B);
             }
-            
+            if(trajectoryCreator.hasTrajectory("Ball 3 to Ball 2"))
+            {
+                autoCommandSelector.addOption("3 Ball Tarmac R2B", AutoCommands.N3_LHH_2B);
+            }
         }
 
         // Adding all JSON paths
@@ -253,6 +343,7 @@ public class RobotContainer
         splineCommandSelector.setDefaultOption(firstJSON, trajectoryCreator.getTrajectory(firstJSON));
     }
 
+    
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
@@ -310,7 +401,7 @@ public class RobotContainer
             case Taxi:
                 return makeTrajectoryCommand(trajectoryCreator.getTrajectory("Simple Taxi"), true);
             
-            case N2_HH:
+            case N2_HH_R:
                 return new SequentialCommandGroup(
                     new ParallelCommandGroup(
                         makeTrajectoryCommand(trajectoryCreator.getTrajectory("Grab Ball Radial (HH)"), true),
@@ -344,6 +435,31 @@ public class RobotContainer
                     makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 3 to Low"), false),
                     new DoNothingCommand());        // Launcher Shoot L
             
+            case N2_LH_1A:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        new DoNothingCommand(),     // Launcher Shoot L
+                        new DoNothingCommand()),    // Set Up Intake
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Low To Ball 1 (LH)"), true),
+                    new DoNothingCommand());        // Launcher Shoot H
+
+            case N2_LH_2A:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        new DoNothingCommand(),     // Launcher Shoot L
+                        new DoNothingCommand()),    // Set Up Intake
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Low To Ball 2 (LH)"), true),
+                    new DoNothingCommand());        // Launcher Shoot H
+                
+            case N2_LH_2B:
+                return new SequentialCommandGroup(
+                    new ParallelCommandGroup(
+                        new DoNothingCommand(),     // Launcher Shoot L
+                        new DoNothingCommand()),    // Set Up Intake
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Low To Ball 3 (LH)"), true),
+                    new DoNothingCommand());        // Launcher Shoot H
+                
+
             case T4_LHHH_1A:
                 return new SequentialCommandGroup(
                     new ParallelCommandGroup(
@@ -368,7 +484,7 @@ public class RobotContainer
                     makeTrajectoryCommand(trajectoryCreator.getTrajectory("Terminal to Shoot"), false),
                     new DoNothingCommand());        // Launcher Shoot HH
 
-            case T4_HHHH_1A:
+            case T4_HHHH_R1A:
                 return new SequentialCommandGroup(
                     new ParallelCommandGroup(
                         makeTrajectoryCommand(trajectoryCreator.getTrajectory("Grab Ball Radial (HH)"), true),
@@ -380,7 +496,7 @@ public class RobotContainer
                     makeTrajectoryCommand(trajectoryCreator.getTrajectory("Terminal to Shoot"), false),
                     new DoNothingCommand());        // Launcher Shoot HH
 
-            case T4_HHHH_2B:
+            case T4_HHHH_R2B:
                 return new SequentialCommandGroup(
                     new ParallelCommandGroup(
                         makeTrajectoryCommand(trajectoryCreator.getTrajectory("Grab Ball Radial (HH)"), true),
@@ -397,40 +513,5 @@ public class RobotContainer
                 return new DoNothingCommand();
 
         }
-    }
-
-    private Command makeTrajectoryCommand(Trajectory trajectory, boolean bFirst) 
-    {
-        RamseteCommand ramseteCommand = new RamseteCommand(trajectory,
-                                                           driveSubsystem::getPose,
-                        new RamseteController(AutoConstants.RAMSETE_B,
-                                              AutoConstants.RAMSETE_ZETA),
-                        new SimpleMotorFeedforward(DriveConstants.KS,
-                                                   DriveConstants.KV,
-                                                   DriveConstants.KA),
-                                                   DriveConstants.DRIVE_KINEMATICS, driveSubsystem::getWheelSpeeds,
-                        new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0),
-                        new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0),
-                        // RamseteCommand passes volts to the callback
-                        driveSubsystem::tankDriveVolts, driveSubsystem);
-    
-        // Tell the robot where it is starting from if this is the first trajectory of a path.
-        if (bFirst)
-        {
-            driveSubsystem.resetOdometry(trajectory.getInitialPose());
-        }
-
-        // Run path following command, then stop at the end.
-        return ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0));
-    }
-
-    /**
-     * Reset the encoders and gyro in the drive subsystem. This should be called
-     * on boot and when initializing auto and reset modes.
-     */
-    public void resetDriveSubsystem()
-    {
-        driveSubsystem.resetEncoders();
-        driveSubsystem.resetGyro();
     }
 }
