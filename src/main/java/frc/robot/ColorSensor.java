@@ -5,6 +5,8 @@
    */
 package frc.robot;
 
+import java.lang.Math;
+
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
@@ -34,15 +36,12 @@ public class ColorSensor {
       
 
       if(count > maxCount){
-        getColors();
+        getAllColors();
+        irToCentimeterConverter();
         count = 1;
       }
-
-      
     }
-
-
-    public void getDominantColor(){
+    public void getColor(){
         double mRed = detectedColor.red;
         double mBlue = detectedColor.red;
         int distance = proximity;
@@ -64,7 +63,7 @@ public class ColorSensor {
         }
       }
 
-      public void getColors(){
+      public void getAllColors(){
         detectedColor = m_colorSensor.getColor();
         double mRed = detectedColor.red;
         double mGreen = detectedColor.green;
@@ -83,8 +82,11 @@ public class ColorSensor {
 
       }
 
-      public void irToCentimeterConverter(){
-        
+      public double irToCentimeterConverter(){
+        double numerator = proximity/1000;
+        double cm = Math.log(numerator)/Math.log(0.64889);
+        System.out.println(cm);
+        return cm;
       }
 
 }

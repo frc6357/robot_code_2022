@@ -48,7 +48,7 @@ public class Ports
     //////////////////////////////
     public static final int horizontalTransferMotor1    = 12; // Currently unknown Port
     public static final int horizontalTransferMotor2    = 12; // Currently unknown Port
-    public static final int VerticalTransferMotor       = 12; // Currently unknown Port
+    public static final int verticalTransferMotor       = 12; // Currently unknown Port
 
     //////////////////////////////
     // Intake Addresses
