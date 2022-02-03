@@ -16,7 +16,8 @@ public class SK22Transfer extends SKSubsystemBase
   private CANSparkMax horizontalTransferMotor1;
   private CANSparkMax horizontalTransferMotor2;
   private CANSparkMax verticalTransferMotor;
-  
+  protected boolean verticalFull;
+
   ColorSensor colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
   DigitalInput horizontalSensor;
   DigitalInput verticalSensor = new DigitalInput(0);
@@ -79,14 +80,14 @@ public class SK22Transfer extends SKSubsystemBase
     colorSensor.getAllColors();
   }
 
-  public void getPositionTwoPrecense()
+  public boolean getPositionTwoPrecense()
   {
-    horizontalSensor.get();
+    return horizontalSensor.get();
   }
 
-  public void getPositionThreePrecense()
+  public boolean getPositionThreePrecense()
   {
-    verticalSensor.get();
+    return verticalSensor.get();
   }
 
 
