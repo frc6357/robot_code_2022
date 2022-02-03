@@ -9,8 +9,7 @@ package frc.robot;
 
 import java.util.List;
 import java.util.Set;
-
-import com.ctre.phoenix.schedulers.SequentialScheduler;
+import java.util.function.Function;
 
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -37,6 +36,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -184,7 +184,7 @@ public class RobotContainer
         // }
     }
 
-    private Command makeTrajectoryCommand(Trajectory trajectory, boolean bFirst) 
+    private Command makeTrajectoryCommand(Trajectory trajectory, boolean resetOdometry) 
     {
         RamseteCommand ramseteCommand = new RamseteCommand(trajectory,
                                                            driveSubsystem::getPose,
@@ -200,13 +200,13 @@ public class RobotContainer
                         driveSubsystem::tankDriveVolts, driveSubsystem);
     
         // Tell the robot where it is starting from if this is the first trajectory of a path.
-        if (bFirst)
-        {
-            driveSubsystem.resetOdometry(trajectory.getInitialPose());
-        }
-
-        // Run path following command, then stop at the end.
-        return ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0));
+        return resetOdometry ? 
+            // Run path following command, then stop at the end.
+            new SequentialCommandGroup(
+                new InstantCommand(() -> driveSubsystem.resetOdometry(trajectory.getInitialPose()), driveSubsystem),
+                ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0)))
+            :
+            ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0));
     }
 
     /**
@@ -491,7 +491,7 @@ public class RobotContainer
                         new DoNothingCommand(),     // Intake Set Up
                         new DoNothingCommand()),    // Launcher Set Up
                     new DoNothingCommand(),         // Launcher Shoot HH
-                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 1 to Ball 2"), false),
+                    makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 1 to Ball 2"), true),
                     makeTrajectoryCommand(trajectoryCreator.getTrajectory("Ball 2 to Terminal"), false),
                     makeTrajectoryCommand(trajectoryCreator.getTrajectory("Terminal to Shoot"), false),
                     new DoNothingCommand());        // Launcher Shoot HH

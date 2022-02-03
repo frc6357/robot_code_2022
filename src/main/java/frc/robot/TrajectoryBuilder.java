@@ -113,6 +113,7 @@ public class TrajectoryBuilder {
      * @return
      *             Whether all of the specified trajectories exist
      */
+    // TODO: THIS ALWAYS RETURNS FALSE. Fix the logic
     public boolean hasTrajectories(String[] names)
     {
         for (String name : names)
