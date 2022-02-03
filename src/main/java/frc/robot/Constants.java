@@ -84,7 +84,7 @@ public final class Constants
 
     public static final class VisionConstants
     {
-        public static final int UDP_PACKET_LENGTH               = 5;
+        public static final int UDP_PACKET_LENGTH               = 26;
     }
 
     public static final double INCH_PER_MILLIMETER = 0.0393701;

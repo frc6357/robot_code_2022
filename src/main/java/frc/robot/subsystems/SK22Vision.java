@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -7,10 +9,15 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.nio.channels.DatagramChannel;
-import java.nio.charset.Charset;
-import javax.xml.crypto.Data;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeoutException;
+
+import javax.swing.text.StyledEditorKit;
+
 import frc.robot.Constants;
+import frc.robot.utils.CRC;
 
 public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     // destination ports are required, but source ports are optional
@@ -23,6 +30,18 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     // not needed yet
     // byte[] sDataBuffer = new byte[1024];
     DatagramChannel sSocket;
+    ByteArrayInputStream byteArrayInputStream;
+    DataInputStream dataInputStream;
+    byte[] versionID = new byte[1];
+    byte[] packetLength = new byte[1];
+    byte[] frameID = new byte[4];
+    byte[] timestamp = new byte[4];
+    byte[] distance = new byte[2];
+    byte[] horiAngle = new byte[2];
+    byte[] vertAngle = new byte[2];
+    byte[] reserved = new byte[8];
+    byte[] pythonChecksum = new byte[2];
+
 
     public SK22Vision()
     {
@@ -45,51 +64,35 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         // ideally the memory is not hardcoded, but dynamic based on the packet size
 
     }
+    
     // returns the boolean that represents whether or not an exception was caught
     public String caughtException(String exceptionMessage)
     {
         return caughtException;
     }
 
-    public String getPacket(DatagramChannel sSocket, ByteBuffer rDataBuffer) 
+    public boolean getPacket(DatagramChannel sSocket) 
     {
+        boolean returnCode = false;
         try
         {
-        // get the packet at the port defined by sSocket
-        sSocket.receive(rDataBuffer);
-        System.out.println("Waiting for message...");
-
-        
-        // reads data from packet to string
-        if (rDataBuffer.hasArray())
-        {
-            String rData = new String(rDataBuffer.array(), Charset.defaultCharset());
-            return rData;
-        }
-        else
-        {
-            String rData = new String("rDataBuffer no Array");
-            return rData;
-        }
+            // get the packet at the port defined by sSocket
+            if (!(sSocket.receive(rDataBuffer) == null))
+            {
+                returnCode = true;
+            }
 
         
 
         }
-        catch (SocketException e) 
+        catch (Exception e) 
         {
             caughtException = e.toString();
             System.out.println("Socket Excetion: " + caughtException);
-            return caughtException;
+            returnCode = false;
         }
 
-        catch (IOException i)
-        {
-            caughtException = i.toString();
-            System.out.println("IO Excetion: " + caughtException);
-            return caughtException;
-        }
-
-        
+        return returnCode;
     }
 
     public void sendPacket(byte[] sDataBuffer, DatagramSocket sSocket, String message)
@@ -108,15 +111,105 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         }
     }
 
+    public void getByteBuffer(byte[] inputBytes, ByteBuffer byteBuffer, int minIndex, int maxIndex)
+    {
+        int arrayIndex = 0;
+        for (int i = minIndex; i<maxIndex; i++){
+            inputBytes[arrayIndex] = byteBuffer.get(i);
+            arrayIndex++;
+        }
+    }
+
+    public int convertBytesInt(byte[] byteArray)
+    {
+        ByteBuffer byteArrayBuffer = ByteBuffer.wrap(byteArray);
+        byteArrayBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        int dataByteArrayBuffer = byteArrayBuffer.getInt();
+        return dataByteArrayBuffer;
+    }
+
+    public short convertBytesShort(byte[] byteArray)
+    {
+        ByteBuffer byteArrayBuffer = ByteBuffer.wrap(byteArray);
+        byteArrayBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        short dataByteArrayBuffer = byteArrayBuffer.getShort();
+        return dataByteArrayBuffer;
+    }
+
+    public char convertBytesChar(byte[] byteArray)
+    {
+        ByteBuffer byteArrayBuffer = ByteBuffer.wrap(byteArray);
+        byteArrayBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        char dataByteArrayBuffer = byteArrayBuffer.getChar();
+        return dataByteArrayBuffer;
+    }
+    
+    public long convertBytesLong(byte[] byteArray)
+    {
+        ByteBuffer byteArrayBuffer = ByteBuffer.wrap(byteArray);
+        byteArrayBuffer.order(ByteOrder.LITTLE_ENDIAN);
+        long dataByteArrayBuffer = byteArrayBuffer.getLong();
+        return dataByteArrayBuffer;
+    }
 
     
     @Override
     public void periodic()
     {
         // reads packet data and print to terminal
-        String packetData = getPacket(sSocket, rDataBuffer);
-        // print packet data to log
-        System.out.println(packetData);
+        if(getPacket(sSocket))
+        {
+            // TODO: Move this to a function
+            versionID[0] = rDataBuffer.get(0);
+            packetLength[0] = rDataBuffer.get(1);
+            getByteBuffer(frameID, rDataBuffer, 2, 6);
+            getByteBuffer(timestamp, rDataBuffer, 6, 10);
+            getByteBuffer(distance, rDataBuffer, 10, 12);
+            getByteBuffer(horiAngle, rDataBuffer, 12, 14);
+            getByteBuffer(vertAngle, rDataBuffer, 14, 16);
+            getByteBuffer(reserved, rDataBuffer, 16, 24);
+            getByteBuffer(pythonChecksum, rDataBuffer, 24, 26);
+            char versionIDData = convertBytesChar(versionID);
+            char packetLengthData = convertBytesChar(packetLength);
+            int frameIDData = convertBytesInt(frameID);
+            int distanceData = convertBytesInt(distance);
+            short horiAngleData =  convertBytesShort(horiAngle);
+            short vertAngleData = convertBytesShort(vertAngle);
+            long reservedData = convertBytesShort(reserved);
+            short pythonChecksumData = convertBytesShort(pythonChecksum);
+        }
+
+        /*  try {
+            int inputStreamAvailable = packetData.available();
+            System.out.println("packet data available: " + inputStreamAvailable);
+            int distanceBytes = packetData.read(distance, 10, 2);
+            
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            System.out.println("DataInputStream available(): " + e.toString());
+        } */
+        
+
+        
+        /*versionID = packetData.getChar(0);
+        frameID = packetData.getInt(2);
+        timestamp = packetData.getInt(6);
+        distance = packetData.getShort(10);
+        horiAngle = packetData.getShort(12);
+        vertAngle = packetData.getShort(14);
+        reserved = packetData.getLong(16);
+        pythonChecksum = packetData.getShort(24); */
+
+        // System.out.println(versionID);
+        // System.out.println(packetLength);
+        // System.out.println(frameID);
+        // System.out.println(timestamp);
+        // System.out.println(distance);
+        // System.out.println(horiAngle);
+        // System.out.println(vertAngle);s
+        // System.out.println(reserved);
+        // System.out.println(pythonChecksum);
+
     }   
 
     
