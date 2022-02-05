@@ -15,6 +15,9 @@ public class DefaultTransferCommand extends CommandBase{
 
     private TimerType timerType;
 
+    // Just for testing
+    private boolean testVerticalFull = false;
+
     public DefaultTransferCommand(SK22Transfer transfer)
     {
         this.transfer = transfer;
@@ -45,7 +48,10 @@ public class DefaultTransferCommand extends CommandBase{
                 // Handle storing the ball & locking the intake so we cannot 
                 // intake any more balls while we are processing the one we 
                 // already have in the system
-                if(!transfer.getPositionThreePresence())
+
+                // Replace the conditions with:
+                // !transfer.getPositionThreePresence()
+                if(testVerticalFull)
                 {
                     // Transfer ball to the vertical hold
                     timerType = TimerType.VERTICAL;
@@ -54,8 +60,11 @@ public class DefaultTransferCommand extends CommandBase{
                     transfer.setIntakeTransferMotor(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
                     transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
                 } 
-                else if(transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled())
+                else if(testVerticalFull && transfer.getIsRunningTimerEnabled())
                 {
+                    // Replace above if's conditions with:
+                    // transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled()
+
                     transfer.setIsRunningTimerEnabled(false);
                     updateTimer();
                 }

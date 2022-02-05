@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -14,9 +15,9 @@ public class SK22Transfer extends SKSubsystemBase
 {
   public final String teamColor;
 
-  private CANSparkMax intakeTransferMotor;
-  private CANSparkMax exitTransferMotor;
-  private CANSparkMax verticalTransferMotor;
+  private WPI_VictorSPX intakeTransferMotor;
+  private WPI_VictorSPX exitTransferMotor;
+  private WPI_VictorSPX verticalTransferMotor;
 
   protected boolean verticalFull;
   protected boolean horizontalFull;
@@ -36,9 +37,9 @@ public class SK22Transfer extends SKSubsystemBase
       // TODO: This is JUST FOR TESTING
       teamColor = "Red";
 
-      intakeTransferMotor = new CANSparkMax(Ports.intakeTransferMotor, MotorType.kBrushless);
-      exitTransferMotor = new CANSparkMax(Ports.exitTransferMotor, MotorType.kBrushless);
-      verticalTransferMotor = new CANSparkMax(Ports.verticalTransferMotor, MotorType.kBrushless);
+      intakeTransferMotor = new WPI_VictorSPX(Ports.intakeTransferMotor);
+      exitTransferMotor = new WPI_VictorSPX(Ports.exitTransferMotor);
+      verticalTransferMotor = new WPI_VictorSPX(Ports.verticalTransferMotor);
       exitTransferSensor = new DigitalInput(0);
       verticalTransferSensor = new DigitalInput(0);
 
