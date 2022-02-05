@@ -124,6 +124,7 @@ public final class Constants
     public static final double INCH_PER_MILLIMETER = 0.0393701;
   
     public static final String SPLINE_DIRECTORY = "paths/output";
+    public static final String AUTOS_FOLDER_DIRECTORY = "paths/Autos";
     public static final String SUBSYSTEM = "Subsystems.json";
 
 }

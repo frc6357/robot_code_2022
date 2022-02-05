@@ -9,7 +9,6 @@ package frc.robot;
 
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -49,7 +48,9 @@ import frc.robot.commands.DoNothingCommand;
 import frc.robot.subsystems.SK21Drive;
 import frc.robot.subsystems.base.SuperClasses.AutoCommands;
 import frc.robot.utils.FilteredJoystick;
+import frc.robot.utils.SK22CommandBuilder;
 //import frc.robot.utils.SubsystemControls;
+import frc.robot.utils.TrajectoryBuilder;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -71,6 +72,8 @@ public class RobotContainer
     
 
     private final TrajectoryBuilder trajectoryCreator = new TrajectoryBuilder(Constants.SPLINE_DIRECTORY);
+    private final SK22CommandBuilder pathBuilder = 
+                            new SK22CommandBuilder(Constants.AUTOS_FOLDER_DIRECTORY, trajectoryCreator);
     private SendableChooser<AutoCommands> autoCommandSelector = new SendableChooser<AutoCommands>();
     private SendableChooser<Command> driveModeSelector = new SendableChooser<Command>();
 
@@ -85,7 +88,7 @@ public class RobotContainer
 
     private final DefaultDriveCommand arcadeDrive = new DefaultDriveCommand(driveSubsystem, driverLeftJoystick);
     private final DefaultTankDriveCommand tankDrive 
-                                    = new DefaultTankDriveCommand(driveSubsystem, driverLeftJoystick, driverRightJoystick);
+                                = new DefaultTankDriveCommand(driveSubsystem, driverLeftJoystick, driverRightJoystick);
   
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -228,111 +231,21 @@ public class RobotContainer
      */
     public void addPossibleAutos()
     {
-        // Adding Segment Independent Paths
+        // Default Path of Nothign
         autoCommandSelector.setDefaultOption("Do Nothing", AutoCommands.DoNothing);
+        
+        // Test Paths
         autoCommandSelector.addOption("Drive path from JSON", AutoCommands.DriveSplineFromJSON);
         autoCommandSelector.addOption("Drive canned path", AutoCommands.DriveSplineCanned);
-
-        /*
-            Checking dependencies for autos before giving option to run
-        */
-
-        // Simple paths
         if(trajectoryCreator.hasTrajectories(new String[]{"1m Forwards", "1m Backwards"}))
         {
             autoCommandSelector.addOption("Drive forwards then backwards 1m", AutoCommands.Drive1mForwardBackward);
         }
-        if(trajectoryCreator.hasTrajectory("Simple Taxi"))
-        {
-            autoCommandSelector.addOption("Taxi", AutoCommands.Taxi);
-        }
-
-        // Autos that start at the hub (Tarmac 1A)
-        if(trajectoryCreator.hasTrajectory("Low to Ball 1 (LH)"))
-        {
-            autoCommandSelector.addOption("Low to Ball 2", AutoCommands.N2_LH_1A);
-            if(trajectoryCreator.hasTrajectory("Ball 1 to Low"))
-            {
-                autoCommandSelector.addOption("2 Ball Tarmac 1A", AutoCommands.N2_LL_1A);
-            }
-            if(trajectoryCreator.hasTrajectory("Ball 1 to Ball 2"))
-            {
-                autoCommandSelector.addOption("3 Ball Tarmac 1A", AutoCommands.N3_LHH_2B);
-            }
-        }
-        // Autos that start at the hub (Tarmac 2A)
-        if(trajectoryCreator.hasTrajectory("Low to Ball 2 (LH)"))
-        {
-            autoCommandSelector.addOption("Low to Ball 2", AutoCommands.N2_LH_2A);
-            if(trajectoryCreator.hasTrajectory("Ball 2 to Low"))
-            {
-                autoCommandSelector.addOption("2 Ball Tarmac 2A", AutoCommands.N2_LL_2A);
-            }
-            // TODO: Look at extra option (3 Ball PreLoaded-2-1)
-            if(trajectoryCreator.hasTrajectory("Ball 2 to Ball 3"))
-            {
-                autoCommandSelector.addOption("3 Ball Tarmac 2A", AutoCommands.N3_LHH_2B);
-            }
-        }
-        // Autos that start at the hub (Tarmac 2B)
-        if(trajectoryCreator.hasTrajectory("Low to Ball 3 (LH)"))
-        {
-            autoCommandSelector.addOption("Low to Ball 3", AutoCommands.N2_LH_2B);
-            if(trajectoryCreator.hasTrajectory("Ball 3 to Low"))
-            {
-                autoCommandSelector.addOption("2 Ball Tarmac 2B", AutoCommands.N2_LL_2B);
-            }
-            if(trajectoryCreator.hasTrajectory("Ball 3 to Ball 2"))
-            {
-                autoCommandSelector.addOption("3 Ball Tarmac 2B", AutoCommands.N3_LHH_2B);
-            }
-        }
-
-        // Paths that require the terminal ball
-        if(trajectoryCreator.hasTrajectory("Terminal to Shoot"))
-        {
-            if(trajectoryCreator.hasTrajectory("Ball 2 to Terminal"))
-            {
-                if(trajectoryCreator.hasTrajectory("Grab Ball Radial (HH)"))
-                {
-                    if(trajectoryCreator.hasTrajectory("Ball 1 to Ball 2"))
-                    {
-                        autoCommandSelector.addOption("4T Ball Radial Tarmac 1A HHHH", AutoCommands.T4_HHHH_R1A);
-                    }
-                    if(trajectoryCreator.hasTrajectory("Ball 3 to Ball 2"))
-                    {
-                        autoCommandSelector.addOption("4T Ball Radial Tarmac 2B HHHH", AutoCommands.T4_HHHH_R2B);
-                    }
-                    autoCommandSelector.addOption("2 Ball Radial HH", AutoCommands.N2_HH_R);
-                }
-                if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 1 (LH)", "Ball 1 to Ball 2"}))
-                {
-                    autoCommandSelector.addOption("4 Ball Tarmac 1A", AutoCommands.T4_LHHH_1A);
-                }
-                if(trajectoryCreator.hasTrajectories(new String[]{"Low to Ball 3 (LH)", "Ball 3 to Ball 2"}))
-                {
-                    autoCommandSelector.addOption("4 Ball Tarmac 2B", AutoCommands.T4_LHHH_2B);
-                }
-            }
-        }
-
-        // Non-Terminal Ball Autos that Start Radially
-        if(trajectoryCreator.hasTrajectory("Grab Ball Radial (HH)"))
-        {
-            if(trajectoryCreator.hasTrajectory("Ball 2 to Ball 3"))
-            {
-                autoCommandSelector.addOption("3 Ball Tarmac R1A", AutoCommands.N3_LHH_2B);
-            }
-            if(trajectoryCreator.hasTrajectory("Ball 2 to Ball 3"))
-            {
-                autoCommandSelector.addOption("3 Ball Tarmac R2A", AutoCommands.N3_LHH_2B);
-            }
-            if(trajectoryCreator.hasTrajectory("Ball 3 to Ball 2"))
-            {
-                autoCommandSelector.addOption("3 Ball Tarmac R2B", AutoCommands.N3_LHH_2B);
-            }
-        }
-
+       
+        // Checking dependencies for autos before giving option to run
+        // Adds a majority of autos that have multiple segments
+        pathBuilder.displayPossibleAutos((name, command) -> autoCommandSelector.addOption(name, command));
+        
         // Adding all JSON paths
         Set<String> splineDirectory = trajectoryCreator.getTrajectoryNames();
         for (String pathname : splineDirectory)

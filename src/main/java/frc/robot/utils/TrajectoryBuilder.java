@@ -3,7 +3,7 @@
 // to ensure that all the time-consuming trajectory creation is done well
 // before autonomous mode starts.
 
-package frc.robot;
+package frc.robot.utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryUtil;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.Robot;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -113,8 +114,30 @@ public class TrajectoryBuilder {
      * @return
      *             Whether all of the specified trajectories exist
      */
-    // TODO: THIS ALWAYS RETURNS FALSE. Fix the logic
+    // TODO: Check if this works as expected
     public boolean hasTrajectories(String[] names)
+    {
+        for (String name : names)
+        {
+            if(!hasTrajectory(name))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks if all of the specified trajectories exist. Can be used to 
+     * see if all the required trajectories needed to make a auto command 
+     * exists.
+     * @param names
+     *             A string set with all of the desired trajectories
+     * @return
+     *             Whether all of the specified trajectories exist
+     */
+    // TODO: Check if this works as expected
+    public boolean hasTrajectories(Set<String> names)
     {
         for (String name : names)
         {
