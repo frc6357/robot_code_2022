@@ -12,6 +12,7 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.simulation.RobotSim;
 import frc.robot.subsystems.TestModeManager;
 
 /**
@@ -21,10 +22,10 @@ import frc.robot.subsystems.TestModeManager;
  * creating this project, you must also update the build.gradle file in the
  * project.
  */
-public class Robot extends TimedRobot 
-{
+public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
+    private RobotSim robotSimulation;
 
     ColorSensor cs1 = new ColorSensor(70);
 
@@ -32,14 +33,12 @@ public class Robot extends TimedRobot
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
      */
-    public Robot() 
-    {
+    public Robot() {
         // TODO: May want to build or load trajectories here?
     }
 
     @Override
-    public void robotInit() 
-    {
+    public void robotInit() {
         robotContainer = new RobotContainer();
     }
 
@@ -52,10 +51,9 @@ public class Robot extends TimedRobot
      * and SmartDashboard integrated updating.
      */
     @Override
-    public void robotPeriodic() 
-    {
+    public void robotPeriodic() {
         cs1.periodic();
-        /* 
+        /*
          * Runs the Scheduler. This is responsible for polling buttons, adding
          * newly-scheduled commands, running already-scheduled commands, removing
          * finished or interrupted commands, and running subsystem periodic()
@@ -69,17 +67,15 @@ public class Robot extends TimedRobot
 
     /**
      * This function is called at the beginning of the Autonomous Phase.
-     * At the start of the Autonomous mode initiates the AutonomousCommand 
+     * At the start of the Autonomous mode initiates the AutonomousCommand
      */
     @Override
-    public void autonomousInit() 
-    {
+    public void autonomousInit() {
         robotContainer.resetDriveSubsystem();
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // Schedule the autonomous command (example)
-        if (autonomousCommand != null) 
-        {
+        if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
     }
@@ -88,13 +84,11 @@ public class Robot extends TimedRobot
      * This function is called periodically during autonomous.
      */
     @Override
-    public void autonomousPeriodic()
-    {
+    public void autonomousPeriodic() {
     }
 
     @Override
-    public void teleopInit() 
-    {
+    public void teleopInit() {
         robotContainer.resetDriveSubsystem();
         robotContainer.resetDriveDefaultCommand();
 
@@ -103,8 +97,7 @@ public class Robot extends TimedRobot
          * If you want the autonomous to continue until interrupted by another command,
          * remove this line or comment it out.
          */
-        if (autonomousCommand != null)
-        {
+        if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
     }
@@ -113,14 +106,12 @@ public class Robot extends TimedRobot
      * This function is called periodically during operator control.
      */
     @Override
-    public void teleopPeriodic() 
-    {
+    public void teleopPeriodic() {
 
     }
 
     @Override
-    public void testInit() 
-    {
+    public void testInit() {
         TestModeManager.initializeTestMode();
         robotContainer.resetDriveSubsystem();
     }
@@ -129,8 +120,15 @@ public class Robot extends TimedRobot
      * This function is called periodically during test mode.
      */
     @Override
-    public void testPeriodic() 
-    {
+    public void testPeriodic() {
         TestModeManager.testModePeriodic();
+    }
+
+    /**
+     * This function is called periodically during simulation.
+     */
+    @Override
+    public void simulationPeriodic() {
+        robotSimulation.update();
     }
 }
