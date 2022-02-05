@@ -88,8 +88,8 @@ public class Ports
     ///////////////////////////////
     // Climb Addresses
     ///////////////////////////////
-    public static final int ComplexBrakePivot                       = 1; // Currently unknown Port
-    public static final int ComplexRatchetLift                      = 2; // Currently unknown Port
+    public static final int ComplexBrakePivot                       = 1; // TODO: Currently unknown Port
+    public static final int ComplexRatchetLift                      = 2; // TODO: Currently unknown Port
     public static final int ClimbHandForwardChannel                 = 4; 
     public static final int ClimbHandReverseChannel                 = 5;
     public static final int ClimbBrakePistonForwardChannel          = 6; 
@@ -111,18 +111,29 @@ public class Ports
     // Joystick Ports
     public static final int OIDriverLeftJoystick        = 0;
     public static final int OIDriverRightJoystick       = 1;
+    public static final int OIOperatorController        = 2;
 
     // Controls set for Arcade Drive - left stick turn, right stick throttle.
     public static final int OIDriverTurn                = 2;  // Z Axis for Extreme 3D Pro
     public static final int OIDriverMove                = 1;  // Y Axis for Extreme 3D Pro
 
     // Controls set for Tank Drive
-    public static final int OIDriverSpeedAxis           = 1;           
+    public static final int OIDriverSpeedAxis           = 1;               
     
-    public static final int OIDriverSlowmode            = 1;  // Right Trigger Axis    \
+    // Driver Controls
+    public static final int OIDriverShoot               = 2;  // Joystick Button 2s
+    public static final int OIDriverSetLowGear          = 3;  // Joystick Button 3
+    public static final int OIDriverSetHighGear         = 4;  // Joystick Button 4
+    public static final int OIDriverSlowmode            = 5;  // Joystick Button 5
+    public static final int OIDriverAcquireTarget       = 1;  // Joystick Trigger Button
 
     // TODO: Would need to choose the correct button and ID.
-    public static final int OIOperatorEjectBallButton   = 4; //Y button
+    public static final int OIOperatorEjectBallButton   = 4;  // Y button
+    public static final int OIOperatorIntakeExtend      = 1;  // A Button
+    public static final int OIOperatorIntakeRetract     = 2;  // B Button
+    public static final int OIOperatorExtendClimb       = 3;  // Right Trigger Axis
+    public static final int OIOperatorRetractClimb      = 6;  // Right Bumper
+    public static final int OIOperatorOrchestrateClimb  = 5;  // Left Bumper
 
     public static Port i2c;
 

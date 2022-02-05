@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
 /**
@@ -13,6 +15,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 public final class Constants
 {
 
+    /** Constants related to the Transfer Subsystem */
     public static final class TransferConstants{
         public static final int DISTANCE_THRESHOLD = 70;
         public static final double POSITION_ONE_MOTOR_SPEED = 0.2;
@@ -22,9 +25,7 @@ public final class Constants
         public static final double BALL_EJECTION_SPEED = 0.5;
         public static final double BALL_VERTICAL_LOAD_SPEED = 0.5;
     }
-    /**
-     * Constants related to Driving the Robot.
-     */
+    /** Constants related to Driving the Robot. */
     public static final class DriveConstants
     {
         public static final boolean LEFT_ENCODER_REVERSED   = false;
@@ -51,9 +52,7 @@ public final class Constants
         public static final double  SLEW_FILTER_RATE    = 2;     // per second
     }
 
-    /**
-     * Constants related to the Autonomous operation mode for the Robot.
-     */
+    /** Constants related to the Autonomous operation mode for the Robot. */
     public static final class AutoConstants
     {
         public static final double MAX_SPEED            = 2;     // Meters Per Second
@@ -64,9 +63,7 @@ public final class Constants
         public static final double RAMSETE_ZETA         = 0.7;
     }
 
-    /**
-     * Constants related to the Launcher for the Robot.
-     */
+    /** Constants related to the Launcher for the Robot. */
     public static final class LauncherConstants {
         public static final int BALL_LAUNCHER1               = 23;
         public static final int BALL_LAUNCHER2               = 24;
@@ -93,18 +90,14 @@ public final class Constants
             (LAUNCHER_WHEEL_DIAMETER * Math.PI) / ((double) LAUNCHER_ENCODER_CPR * LAUNCH_GEAR_RATIO);
     }
 
-    /**
-     * Constants related to Intake
-     */
+    /** Constants related to Intake */
     public static final class IntakeConstants 
     {
         // TODO: Tune this value
         public static final double INTAKE_MOTOR_SPEED = 0.75;
     }
 
-    /**
-     * Constants related to Test Mode
-     */
+    /** Constants related to Test Mode */
     public static final class TestConstants
     {
         public static final double TEST_DRIVE_STRAIGHT_1        = 100;    //Amount in centimeters
@@ -118,8 +111,11 @@ public final class Constants
         public static final double TEST_TURN_5                  = 180;    //Amount of degrees
     }
 
-    public class ClimbConstants
+    /** Constants related to Climb */
+    public static final class ClimbConstants
     {
+        public static final MotorType MOTOR_TYPE = MotorType.kBrushless;
+        
         public static final double ARM_MOTOR_RPM = 5000; //Guess???
 
         //Pivot
@@ -138,6 +134,8 @@ public final class Constants
     public static final int SECONDS_PER_MINUTE = 60;
     public static final int DEGREES_PER_REVOLUTION = 360;
   
+    public static final double TRIGGER_THRESHOLD = 0.75;
+
     public static final String SPLINE_DIRECTORY = "paths/output";
     public static final String AUTOS_FOLDER_DIRECTORY = "paths/Autos";
     public static final String SUBSYSTEM = "Subsystems.json";
