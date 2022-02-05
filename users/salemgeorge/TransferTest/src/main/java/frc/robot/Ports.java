@@ -55,14 +55,14 @@ public class Ports
     //////////////////////////////
     // Transfer Addresses
     //////////////////////////////
-    public static final int exitTransferMotor           = 12; // Currently unknown Port
-    public static final int intakeTransferMotor         = 12; // Currently unknown Port
-    public static final int verticalTransferMotor       = 12; // Currently unknown Port
+    public static final int exitTransferMotor           = 30; // CAN ID
+    public static final int intakeTransferMotor         = 31; // CAN ID
+    public static final int verticalTransferMotor       = 32; // CAN ID
 
     //////////////////////////////
     // Intake Addresses
     //////////////////////////////
-    public static final int intakeMotor                 = 31; // CAN ID 
+    public static final int intakeMotor                 = 41; // CAN ID 
 
     public static final int intakeMoverForward          = 0;  // PCM Channel 
     public static final int intakeMoverBackward         = 1;  // PCM Channel 
