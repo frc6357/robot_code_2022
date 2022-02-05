@@ -1,34 +1,25 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// 
+// Constants used in the software build for FRC Team 6357's 2022 robot.
+//
 
 package frc.robot;
 
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 
-// TODO: The values in this file represent parameters for Banshee 2.0. These will need
-// to be updated for the 2022 robot.
-
 /**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical
- * or boolean constants. This class should not be used for any other purpose. All
- * constants should be declared globally (i.e. public static). Do not put anything
- * functional in this class.
- *
- * <p>
- * It is advised to statically import this class (or one of its inner classes) wherever
- * the constants are needed, to reduce verbosity.
+ * The Constants class provides a convenient place to hold robot-wide numerical
+ * or boolean constants.
  */
 public final class Constants
 {
 
-    public static final class TransferConstants{
-        public static final int DISTANCE_THRESHOLD = 70;
-        public static final double POSITION_ONE_MOTOR_SPEED = 0.2;
-        public static final double POSITION_TWO_MOTOR_SPEED = 0.2;
-        public static final double POSITION_THREE_MOTOR_SPEED = 0.2;
-        public static final double STOP_SPEED = 0.0;
-        public static final double BALL_EJECTION_SPEED = 0.5;
+    public static final class TransferConstants {
+        public static final int DISTANCE_THRESHOLD              = 70;
+        public static final double POSITION_ONE_MOTOR_SPEED     = 0.2;
+        public static final double POSITION_TWO_MOTOR_SPEED     = 0.2;
+        public static final double POSITION_THREE_MOTOR_SPEED   = 0.2;
+        public static final double STOP_SPEED                   = 0.0;
+        public static final double BALL_EJECTION_SPEED          = 0.5;
     }
     /**
      * Constants related to Driving the Robot.
@@ -38,28 +29,25 @@ public final class Constants
         public static final boolean LEFT_ENCODER_REVERSED   = false;
         public static final boolean RIGHT_ENCODER_REVERSED  = true;
 
-        // TODO: The value here is what we measured from the robot. Check to make sure this works
-        // correctly because the drive characterization tool determines the track width automatically
-        // and comes up with a rather different value closer to 1.0m.
-        public static final double TRACKWIDTH = 0.69;   // Meters
+        public static final double TRACKWIDTH           = 0.69;   // Meters
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS =
             new DifferentialDriveKinematics(TRACKWIDTH);
 
-        public static final double GEAR_REDUCTION = 12.412;
-        public static final int    ENCODER_CPR = 2048;
-        public static final double WHEEL_DIAMETER = 0.18375;    // Meters
+        public static final double GEAR_REDUCTION       = 12.412;
+        public static final int    ENCODER_CPR          = 2048;
+        public static final double WHEEL_DIAMETER       = 0.18375;    // Meters
         public static final double ENCODER_DISTANCE_PER_PULSE =
             // Assumes the encoders are directly mounted on the wheel shafts
             (WHEEL_DIAMETER * Math.PI) / ((double) ENCODER_CPR * GEAR_REDUCTION);
 
         // Data taken from characterization analysis on 03/02/2021
-        public static final double KS = 0.651;          // Volts
-        public static final double KV = 2.3;            // Volt Seconds Per Meter
-        public static final double KA = 0.217;          // Volt Seconds Squared Per Meter
-        public static final double KP_DRIVE_VELOCITY = 2.26; // TODO: Check units for this value
+        public static final double KS                   = 0.651; // Volts
+        public static final double KV                   = 2.3;   // Volt Seconds Per Meter
+        public static final double KA                   = 0.217; // Volt Seconds Squared Per Meter
+        public static final double KP_DRIVE_VELOCITY    = 2.26;  // TODO: Check units for this value
 
-        public static final double  DEADBAND_TURN = 0.01;
-        public static final double  SLEW_FILTER_RATE = 2;   // per second
+        public static final double  DEADBAND_TURN       = 0.01;
+        public static final double  SLEW_FILTER_RATE    = 2;     // per second
     }
 
     /**
@@ -67,36 +55,35 @@ public final class Constants
      */
     public static final class AutoConstants
     {
-        public static final double MAX_SPEED = 2;   // Meters Per Second
-        public static final double MAX_ACCELERATION = .50;  // Meters Per Seconds Squared
+        public static final double MAX_SPEED            = 2;     // Meters Per Second
+        public static final double MAX_ACCELERATION     = 0.50;  // Meters Per Seconds Squared
 
         // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
-        public static final double RAMSETE_B = 2;
-        public static final double RAMSETE_ZETA = 0.7;
+        public static final double RAMSETE_B            = 2;
+        public static final double RAMSETE_ZETA         = 0.7;
     }
 
     /**
      * Constants related to the Launcher for the Robot.
      */
     public static final class LauncherConstants {
-        public static final int ballLauncher1 = 23;
-        public static final int ballLauncher2 = 24;
+        public static final int ballLauncher1           = 23;
+        public static final int ballLauncher2           = 24;
 
-        public static final int controller = 0;
+        public static final int controller              = 0;
         
-        public static final int lowSpeedPresetButton = 1; // A
-        public static final int maxSpeedPresetButton = 2; // B
-        public static final int midSpeedPresetButton = 3; // X
-        public static final int highSpeedPresetButton = 4; // Y
-        public static final int enableLauncherButton = 5; // Left bumper
-        public static final int disableLauncherButton = 6; // Right bumper
+        public static final int lowSpeedPresetButton    = 1; // A
+        public static final int maxSpeedPresetButton    = 2; // B
+        public static final int midSpeedPresetButton    = 3; // X
+        public static final int highSpeedPresetButton   = 4; // Y
+        public static final int enableLauncherButton    = 5; // Left bumper
+        public static final int disableLauncherButton   = 6; // Right bumper
 
-        public static final int lowSpeedPreset  = 3000;
-        public static final int midSpeedPreset  = 3400;
-        public static final int highSpeedPreset = 3600;
-        public static final int maxSpeedPreset  = 4200;
+        public static final int lowSpeedPreset          = 3000;
+        public static final int midSpeedPreset          = 3400;
+        public static final int highSpeedPreset         = 3600;
+        public static final int maxSpeedPreset          = 4200;
 
-        // TODO: Run SysID on the launcher and update these values.
         public static final double LAUNCHER_KP          = 0.0005;
         public static final double LAUNCHER_KI          = 0.0004;
         public static final double LAUNCHER_KD          = 0.0;
@@ -114,10 +101,10 @@ public final class Constants
         public static final double TEST_DRIVE_STRAIGHT_2        = 200;    //Amount in centimeters
         public static final double TEST_DRIVE_STRAIGHT_3        = 500;    //Amount in centimeters
 
-        public static final double TEST_TURN_1                  = 10;    //Amount of degrees
-        public static final double TEST_TURN_2                  = 30;    //Amount of degrees
-        public static final double TEST_TURN_3                  = 50;    //Amount of degrees
-        public static final double TEST_TURN_4                  = 90;    //Amount of degrees
+        public static final double TEST_TURN_1                  = 10;     //Amount of degrees
+        public static final double TEST_TURN_2                  = 30;     //Amount of degrees
+        public static final double TEST_TURN_3                  = 50;     //Amount of degrees
+        public static final double TEST_TURN_4                  = 90;     //Amount of degrees
         public static final double TEST_TURN_5                  = 180;    //Amount of degrees
     }
 

@@ -1,19 +1,24 @@
+// 
+// Definitions of addresses and hardware port numbers used in
+// the FRC Team 6357 2022 robot.
+//
 package frc.robot;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 
-// Resource Allocations:
+// Pneumatic Resource Allocations:
 //
-// PCM 0 - colorSpinnerExtend
-//     1 - launcherHoodExtend
-//     2 - intakeMoverRaise  
-//     3 - launcherFeederRetract
-//     4 - launcherFeederExtend 
-//     5 - intakeMoverDrop 
-//     6 - launcherHoodRetract      
-//     7 - colorSpinnerRetract
+// PCM 0 port 0 - intake forward
+//     0 port 1 - intake reverse
+//     0 port 2 -
+//     0 port 3 -
+//     0 port 4 -
+//     0 port 5 -
+//     0 port 6 -
+//     0 port 7 -
+
 
 /** 
  * Definitions of all hardware connections and hardware-related
@@ -33,7 +38,7 @@ public class Ports
     //////////////////////////////
     // I2C device addresses
     //////////////////////////////
-    public static final Port i2cColorSensor              =  I2C.Port.kOnboard;
+    public static final Port i2cColorSensor             =  I2C.Port.kOnboard;
 
     //////////////////////////////
     // Drivetrain Addresses
