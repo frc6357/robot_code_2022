@@ -19,9 +19,7 @@ public class ColorSensor {
   int proximity;
   double maxCount;
   public int count = 1;
-    //Color detectedColor = m_colorSensor.getColor();
-    // double IR = m_colorSensor.getIR();
-    // int proximity = m_colorSensor.getProximity();
+
 
 
     public ColorSensor(int distanceThreshold){
@@ -37,10 +35,12 @@ public class ColorSensor {
 
       if(count > maxCount){
         getAllColors();
-        irToCentimeterConverter();
+        proximityToCmConverter();
         count = 1;
       }
     }
+
+    // Will return the color that comprises the majority of the input of the colorsensor
     public void getColor(){
         double mRed = detectedColor.red;
         double mBlue = detectedColor.red;
@@ -63,6 +63,7 @@ public class ColorSensor {
         }
       }
 
+      // Will return all colors and their percentage of the total inputed colors
       public void getAllColors(){
         detectedColor = m_colorSensor.getColor();
         double mRed = detectedColor.red;
@@ -78,11 +79,12 @@ public class ColorSensor {
         System.out.println("Blue " + bluePercentage + "%");
       }
 
-      public void getDistance(){
-
+      public double getDistance(){
+        double cmdistance = proximityToCmConverter();
+        return cmdistance;
       }
 
-      public double irToCentimeterConverter(){
+      public double proximityToCmConverter(){
         double numerator = proximity/1000;
         double cm = Math.log(numerator)/Math.log(0.64889);
         System.out.println(cm);

@@ -13,13 +13,18 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 public final class Constants
 {
 
-    public static final class TransferConstants {
-        public static final int DISTANCE_THRESHOLD              = 70;
-        public static final double POSITION_ONE_MOTOR_SPEED     = 0.2;
-        public static final double POSITION_TWO_MOTOR_SPEED     = 0.2;
-        public static final double POSITION_THREE_MOTOR_SPEED   = 0.2;
-        public static final double STOP_SPEED                   = 0.0;
-        public static final double BALL_EJECTION_SPEED          = 0.5;
+    public static final class TransferConstants{
+        public static final int DISTANCE_THRESHOLD = 70;
+        public static final double POSITION_ONE_MOTOR_SPEED = 0.2;
+        public static final double POSITION_TWO_MOTOR_SPEED = 0.2;
+        public static final double POSITION_THREE_MOTOR_SPEED = 0.2;
+        public static final double STOP_SPEED = 0.0;
+        public static final double BALL_EJECTION_SPEED = 0.5;
+
+        // TODO: Would need to choose the correct button and ID.
+        public static final int ejectBallButton = 4; //Y button
+
+        
     }
     /**
      * Constants related to Driving the Robot.

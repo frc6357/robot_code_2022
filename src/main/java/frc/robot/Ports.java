@@ -55,8 +55,8 @@ public class Ports
     //////////////////////////////
     // Transfer Addresses
     //////////////////////////////
-    public static final int horizontalTransferMotor1    = 12; // Currently unknown Port
-    public static final int horizontalTransferMotor2    = 12; // Currently unknown Port
+    public static final int exitTransferMotor           = 12; // Currently unknown Port
+    public static final int intakeTransferMotor         = 12; // Currently unknown Port
     public static final int verticalTransferMotor       = 12; // Currently unknown Port
 
     //////////////////////////////

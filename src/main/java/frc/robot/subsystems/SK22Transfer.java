@@ -13,14 +13,14 @@ import frc.robot.Constants.TransferConstants;
 public class SK22Transfer extends SKSubsystemBase
 {
 
-  private CANSparkMax horizontalTransferMotor1;
-  private CANSparkMax horizontalTransferMotor2;
+  private CANSparkMax intakeTransferMotor;
+  private CANSparkMax exitTransferMotor;
   private CANSparkMax verticalTransferMotor;
   protected boolean verticalFull;
 
   ColorSensor colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
-  DigitalInput horizontalSensor;
-  DigitalInput verticalSensor = new DigitalInput(0);
+  DigitalInput exitTransferSensor;
+  DigitalInput verticalTransferSensor;
   private NetworkTable transferEntry;
   // private final I2C.Port i2c = Ports.i2cColorSensor;
   // private ColorSensorV3 colorsensor = new ColorSensorV3(i2c);
@@ -29,11 +29,11 @@ public class SK22Transfer extends SKSubsystemBase
   /** Creates a new ExampleSubsystem. */
   public SK22Transfer()
   {
-      horizontalTransferMotor1 = new CANSparkMax(Ports.horizontalTransferMotor1, MotorType.kBrushless);
-      horizontalTransferMotor2 = new CANSparkMax(Ports.horizontalTransferMotor2, MotorType.kBrushless);
+      intakeTransferMotor = new CANSparkMax(Ports.intakeTransferMotor, MotorType.kBrushless);
+      exitTransferMotor = new CANSparkMax(Ports.exitTransferMotor, MotorType.kBrushless);
       verticalTransferMotor = new CANSparkMax(Ports.verticalTransferMotor, MotorType.kBrushless);
-      horizontalSensor = new DigitalInput(0);
-      verticalSensor = new DigitalInput(0);
+      exitTransferSensor = new DigitalInput(0);
+      verticalTransferSensor = new DigitalInput(0);
 
   }
   // set all motors, start and stop motors, queue all data
@@ -44,50 +44,34 @@ public class SK22Transfer extends SKSubsystemBase
     // This method will be called once per scheduler run
   }
 
-  public void setPositionOneMotor(double Speed)
+  public void setIntakeTransferMotor(double Speed)
   {
-    horizontalTransferMotor1.set(Speed);
+    intakeTransferMotor.set(Speed);
   }
 
-  public void setPositionTwoMotor(double Speed)
+  public void setExitTransferMotor(double Speed)
   {
-    horizontalTransferMotor2.set(Speed);
+    exitTransferMotor.set(Speed);
   }
 
-  public void setPositionThreeMotor(double Speed)
+  public void setVerticalTransferMotor(double Speed)
   {
     verticalTransferMotor.set(Speed);
   }
-
-  public void stopPositionOneMotor()
-  {
-    horizontalTransferMotor1.set(TransferConstants.STOP_SPEED);
-  }
-
-  public void stopPositionTwoMotor()
-  {
-    horizontalTransferMotor2.set(TransferConstants.STOP_SPEED);
-  }
-
-  public void stopPositionThreeMotor()
-  {
-    verticalTransferMotor.set(TransferConstants.STOP_SPEED);
-  }
-
 
   public void getColorSensor()
   {
     colorSensor.getAllColors();
   }
 
-  public boolean getPositionTwoPrecense()
+  public boolean getPositionTwoPresence()
   {
-    return horizontalSensor.get();
+    return exitTransferSensor.get();
   }
 
-  public boolean getPositionThreePrecense()
+  public boolean getPositionThreePresence()
   {
-    return verticalSensor.get();
+    return verticalTransferSensor.get();
   }
 
 
