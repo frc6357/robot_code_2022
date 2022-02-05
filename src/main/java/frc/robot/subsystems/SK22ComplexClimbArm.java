@@ -15,7 +15,7 @@ public class SK22ComplexClimbArm
     private final DoubleSolenoid complexBrakePiston = new DoubleSolenoid(Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH,
                                                                          Ports.ClimbBrakePistonForwardChannel, Ports.ClimbBrakePistonReverseChannel);
     private final DoubleSolenoid complexRatchetPiston = new DoubleSolenoid(Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH, 
-                                                                           Ports.ClimbRatchetPistonForwardChannel, Ports.ClimbRatchetPistonReverseChannel);
+                                                                           Ports.ComplexClimbRatchetPistonForwardChannel, Ports.ComplexClimbRatchetPistonReverseChannel);
 
     public SK22ComplexClimbArm(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift)
     {

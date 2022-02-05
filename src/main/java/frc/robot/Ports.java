@@ -88,14 +88,17 @@ public class Ports
     ///////////////////////////////
     // Climb Addresses
     ///////////////////////////////
-    public static final int ComplexBrakePivot                       = 1; // TODO: Currently unknown Port
-    public static final int ComplexRatchetLift                      = 2; // TODO: Currently unknown Port
+    public static final int ComplexBrakePivot                       = 1; // Currently unknown Port
+    public static final int ComplexRatchetLift                      = 2; // Currently unknown Port
+    public static final int SimpleRatchetLift                       = 3; // Currently unkown Port
     public static final int ClimbHandForwardChannel                 = 4; 
     public static final int ClimbHandReverseChannel                 = 5;
     public static final int ClimbBrakePistonForwardChannel          = 6; 
     public static final int ClimbBrakePistonReverseChannel          = 7;
-    public static final int ClimbRatchetPistonForwardChannel        = 8; 
-    public static final int ClimbRatchetPistonReverseChannel        = 9;
+    public static final int ComplexClimbRatchetPistonForwardChannel        = 8; 
+    public static final int ComplexClimbRatchetPistonReverseChannel        = 9;
+    public static final int SimpleClimbRatchetPistonForwardChannel        = 10; 
+    public static final int SimpleClimbRatchetPistonReverseChannel        = 11;
 
     ///////////////////////////////
     // Additional hardware
