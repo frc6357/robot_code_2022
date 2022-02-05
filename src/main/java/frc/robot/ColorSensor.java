@@ -1,8 +1,4 @@
- /**
-   * This class is used to 
-   * 
-   * 
-   */
+ 
 package frc.robot;
 
 import java.lang.Math;
@@ -11,6 +7,9 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 
+/**
+ * This class is used for a varity of colorsensor related tasks such as getting distance and the dominate color.
+ */
 public class ColorSensor {
 
   private final I2C.Port i2c = Ports.i2c;
@@ -19,11 +18,12 @@ public class ColorSensor {
   int proximity;
   double maxCount;
   public int count = 1;
+  int threshold;
 
 
 
     public ColorSensor(int distanceThreshold){
-        int m_Distance = distanceThreshold;
+        threshold = distanceThreshold;
         detectedColor = m_colorSensor.getColor();
         proximity = m_colorSensor.getProximity();
     }
@@ -40,40 +40,49 @@ public class ColorSensor {
       }
     }
 
-    // Will return the color that comprises the majority of the input of the colorsensor
-    public void getColor(){
+    /**
+     * Will return the color that comprises the majority of the input of the colorsensor
+     */
+    public String getColor(){
+        //get the specific percentage of red and blue
         double mRed = detectedColor.red;
-        double mBlue = detectedColor.red;
+        double mBlue = detectedColor.blue;
+
+        //will get the distance in IR not in cm
         int distance = proximity;
-        double redPercentage = mRed * 100;
-        double bluePercentage = mBlue * 100;
     
-        if(distance > 170){
+        if(distance > threshold){
 
           if(mRed >  mBlue){
-            System.out.println("Red Dominant " + redPercentage + "%");
-
+            return "Red";
           }
           else if(mBlue > mRed){
-            System.out.println("Blue Dominant " + bluePercentage + "%");
-          }
-          else{
-            System.out.println("None");
+            return "Blue";
           }
         }
+        return null;
       }
 
-      // Will return all colors and their percentage of the total inputed colors
+      /** 
+       * Will return all colors and their percentage of the total inputed colors
+       * THIS FUNCTION IS USED FOR TESTING
+       */ 
       public void getAllColors(){
+        //get the color from the color sensor
         detectedColor = m_colorSensor.getColor();
+        //from the total array of detected colors find red percentage
         double mRed = detectedColor.red;
+        //from the total array of detected colors find green percentage
         double mGreen = detectedColor.green;
+        //from the total array of detected colors find blue percentage
         double mBlue = detectedColor.red;
 
+        //Multiply to make percentage easier to read
         double redPercentage = mRed * 100;
         double greenPercentage = mGreen * 100;
         double bluePercentage = mBlue * 100;
 
+        //Print to see the total color
         System.out.println("Red " + redPercentage + "%");
         System.out.println("Green " + greenPercentage + "%");
         System.out.println("Blue " + bluePercentage + "%");
@@ -82,6 +91,14 @@ public class ColorSensor {
       public double getDistance(){
         double cmdistance = proximityToCmConverter();
         return cmdistance;
+      }
+
+      public boolean getBallPresence(){
+        int distnace = proximity;
+        if(distnace < threshold){
+          return true;
+        }
+        return false;
       }
 
       public double proximityToCmConverter(){

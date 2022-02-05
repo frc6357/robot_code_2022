@@ -20,6 +20,7 @@ public final class Constants
         public static final double POSITION_THREE_MOTOR_SPEED = 0.2;
         public static final double STOP_SPEED = 0.0;
         public static final double BALL_EJECTION_SPEED = 0.5;
+        public static final double BALL_VERTICAL_LOAD_SPEED = 0.5;
     }
     /**
      * Constants related to Driving the Robot.
