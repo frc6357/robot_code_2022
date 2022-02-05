@@ -18,12 +18,6 @@ public class EjectBallCommand extends CommandBase{
     @Override
     public void initialize()
     {
-        
-    }
-
-    @Override
-    public void execute()
-    {
         if(this.transfer.getPositionTwoPrecense() || this.transfer.getPositionThreePrecense())
         {
             this.transfer.setPositionThreeMotor(TransferConstants.BALL_EJECTION_SPEED);
@@ -34,8 +28,8 @@ public class EjectBallCommand extends CommandBase{
             this.transfer.setPositionOneMotor(TransferConstants.STOP_SPEED);
             this.transfer.setPositionThreeMotor(TransferConstants.STOP_SPEED);
         }
-        
     }
+
 
     @Override
     public boolean isFinished()
