@@ -67,29 +67,36 @@ public final class Constants
      * Constants related to the Launcher for the Robot.
      */
     public static final class LauncherConstants {
-        public static final int ballLauncher1           = 23;
-        public static final int ballLauncher2           = 24;
+        public static final int ballLauncher1               = 23;
+        public static final int ballLauncher2               = 24;
 
-        public static final int controller              = 0;
+        public static final int controller                  = 0;
         
-        public static final int lowSpeedPresetButton    = 1; // A
-        public static final int maxSpeedPresetButton    = 2; // B
-        public static final int midSpeedPresetButton    = 3; // X
-        public static final int highSpeedPresetButton   = 4; // Y
-        public static final int enableLauncherButton    = 5; // Left bumper
-        public static final int disableLauncherButton   = 6; // Right bumper
+        public static final int lowSpeedPresetButton        = 1; // A
+        public static final int maxSpeedPresetButton        = 2; // B
+        public static final int midSpeedPresetButton        = 3; // X
+        public static final int highSpeedPresetButton       = 4; // Y
+        public static final int enableLauncherButton        = 5; // Left bumper
+        public static final int disableLauncherButton       = 6; // Right bumper
 
-        public static final int lowSpeedPreset          = 3000;
-        public static final int midSpeedPreset          = 3400;
-        public static final int highSpeedPreset         = 3600;
-        public static final int maxSpeedPreset          = 4200;
+        public static final int lowSpeedPreset              = 3000;
+        public static final int midSpeedPreset              = 3400;
+        public static final int highSpeedPreset             = 3600;
+        public static final int maxSpeedPreset              = 4200;
 
-        public static final double LAUNCHER_KP          = 0.0005;
-        public static final double LAUNCHER_KI          = 0.0004;
-        public static final double LAUNCHER_KD          = 0.0;
+        public static final double LAUNCHER_KP              = 0.0005;
+        public static final double LAUNCHER_KI              = 0.0004;
+        public static final double LAUNCHER_KD              = 0.0;
 
-        public static final int LAUNCHER_ENCODER_CPR    = 2048;
-        public static final double LAUNCH_GEAR_RATIO    = 24.0/16.0;
+        public static final int LAUNCHER_ENCODER_CPR        = 2048;
+        public static final double LAUNCH_GEAR_RATIO        = 24.0/16.0;
+        public static final double LAUNCHER_WHEEL_DIAMETER  = 0.18375;
+
+        public static final boolean LEFT_ENCODER_REVERSED   = false;
+
+        public static final double ENCODER_DISTANCE_PER_PULSE =
+            // Assumes the encoders are directly mounted on the wheel shafts
+            (LAUNCHER_WHEEL_DIAMETER * Math.PI) / ((double) LAUNCHER_ENCODER_CPR * LAUNCH_GEAR_RATIO);
     }
 
     /**

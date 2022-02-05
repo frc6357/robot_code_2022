@@ -18,8 +18,8 @@ public class SK22Launcher extends SubsystemBase
   private final MotorControllerGroup launcherGroup = new MotorControllerGroup(ballLauncher1);
   
   private final MotorEncoder motorEncoder1 = new MotorEncoder(ballLauncher1, 
-                                                              Constants.DriveConstants.ENCODER_DISTANCE_PER_PULSE, 
-                                                              Constants.DriveConstants.LEFT_ENCODER_REVERSED);
+                                                              Constants.LauncherConstants.ENCODER_DISTANCE_PER_PULSE, 
+                                                              Constants.LauncherConstants.LEFT_ENCODER_REVERSED);
 
   // private final MotorEncoder motorEncoder2 = new MotorEncoder(ballLauncher2, 
   //                                                                Constants.DriveConstants.ENCODER_DISTANCE_PER_PULSE, 
