@@ -1,0 +1,7 @@
+{
+    "intake"    : false,
+    "transfer"  : false,
+    "launcher"  : false,
+    "climb"     : false,
+    "vision"    : false
+}

@@ -2,7 +2,7 @@ package frc.robot.utils;
 
 import frc.robot.subsystems.base.SuperClasses.AutoCommands;
 
-public interface SmartdashboardDisplay
+public interface SmartdashboardPaths
 {
-    void run(String name, AutoCommands command);
+    void display(String name, AutoCommands command);
 }

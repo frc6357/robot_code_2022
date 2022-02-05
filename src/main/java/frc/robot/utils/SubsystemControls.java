@@ -4,16 +4,16 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * This class holds the subsystem control values as imported from the subsystem control
- * JSON file.
+ * JSON file. This is made for the 2022 season
  */
 public class SubsystemControls
 {
 
     private final boolean intake;
     private final boolean launcher;
-    private final boolean indexer;
-    private final boolean colorwheel;
+    private final boolean transfer;
     private final boolean climb;
+    private final boolean vision;
 
     /**
      * Constructs a new SubsystemControls object with the given subsystem presence.
@@ -22,25 +22,27 @@ public class SubsystemControls
      *            indicates if the intake system is present and should be enabled
      * @param launcher
      *            indicates if the launcher system is present and should be enabled
-     * @param indexer
+     * @param transfer
      *            indictes if the indexer system is present and should be enabled
-     * @param colorwheel
-     *            indicates if the color wheel system is present and should be enabled
      * @param climb
      *            indicates if the climb system is present and should be enabled
      */
     public SubsystemControls(@JsonProperty(required = true, value = "intake")
-    boolean intake, @JsonProperty(required = true, value = "launcher")
-    boolean launcher, @JsonProperty(required = true, value = "indexer")
-    boolean indexer, @JsonProperty(required = true, value = "colorwheel")
-    boolean colorwheel,  @JsonProperty(required = true, value = "climb")
-    boolean climb)
+                                boolean intake,
+                            @JsonProperty(required = true, value = "launcher")
+                                boolean launcher,
+                            @JsonProperty(required = true, value = "indexer")
+                                boolean transfer,
+                            @JsonProperty(required = true, value = "climb")
+                                boolean climb,
+                            @JsonProperty(required = true, value = "vision")
+                                boolean vision)
     {
         this.intake = intake;
         this.launcher = launcher;
-        this.indexer = indexer;
-        this.colorwheel = colorwheel;
+        this.transfer = transfer;
         this.climb = climb;
+        this.vision = vision;
     }
 
     /**
@@ -66,25 +68,14 @@ public class SubsystemControls
     }
 
     /**
-     * Returns true if the indexer system is indicated as present and should be enabled.
+     * Returns true if the transfer system is indicated as present and should be enabled.
      * 
-     * @return true if the indexer system is indicated as present and should be enabled;
+     * @return true if the transfer system is indicated as present and should be enabled;
      *         false otherwise
      */
-    public boolean isIndexerPresent()
+    public boolean isTransferPresent()
     {
-        return indexer;
-    }
-
-    /**
-     * Returns true if the colorwheel system is indicated as present and should be enabled.
-     * 
-     * @return true if the colorwheel system is indicated as present and should be enabled;
-     *         false otherwise
-     */
-    public boolean isColorwheelPresent()
-    {
-        return colorwheel;
+        return transfer;
     }
 
     /**
@@ -96,5 +87,16 @@ public class SubsystemControls
         public boolean isClimbPresent()
     {
         return climb;
+    }
+
+    /**
+     * Returns true if the climb system is indicated as present and should be enabled.
+     * 
+     * @return true if the climb system is indicated as present and should be enabled;
+     *         false otherwise
+     */
+        public boolean isVisionPresent()
+    {
+        return vision;
     }
 }

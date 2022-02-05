@@ -7,8 +7,15 @@
 
 package frc.robot;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.cameraserver.CameraServer;
 
@@ -29,6 +36,7 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
@@ -46,9 +54,14 @@ import frc.robot.commands.DefaultDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.DoNothingCommand;
 import frc.robot.subsystems.SK21Drive;
+import frc.robot.subsystems.SK22Intake;
+import frc.robot.subsystems.SK22Launcher;
+import frc.robot.subsystems.SK22Transfer;
+import frc.robot.subsystems.SK22Vision;
 import frc.robot.subsystems.base.SuperClasses.AutoCommands;
 import frc.robot.utils.FilteredJoystick;
 import frc.robot.utils.SK22CommandBuilder;
+import frc.robot.utils.SubsystemControls;
 //import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.TrajectoryBuilder;
 
@@ -85,8 +98,15 @@ public class RobotContainer
   
     // The robot's subsystems are defined here...
     private final SK21Drive driveSubsystem = new SK21Drive();
+    // These are currently empty and only created in the contructor
+    // based on the Subsystem.json file
+    private Optional<SK22Intake> intakeSubsystem = Optional.empty();
+    private Optional<SK22Launcher> launcherSubsystem = Optional.empty();
+    private Optional<SK22Transfer> transferSubsystem = Optional.empty();
+    private Optional<SK22Vision> visionSubsystem = Optional.empty();
 
-    private final DefaultDriveCommand arcadeDrive = new DefaultDriveCommand(driveSubsystem, driverLeftJoystick);
+    private final DefaultDriveCommand arcadeDrive
+                                = new DefaultDriveCommand(driveSubsystem, driverLeftJoystick);
     private final DefaultTankDriveCommand tankDrive 
                                 = new DefaultTankDriveCommand(driveSubsystem, driverLeftJoystick, driverRightJoystick);
   
@@ -97,28 +117,40 @@ public class RobotContainer
     {
         configureShuffleboard();
 
-        // TODO: Add code here to load optional subsystems. This is left as an example.
-        //
-        // File deployDirectory = Filesystem.getDeployDirectory();
-        // File subsystemFile = new File(deployDirectory, Constants.kSubsystem);
-        //
-        // ObjectMapper mapper = new ObjectMapper();
-        // JsonFactory factory = new JsonFactory();
-        //
-        // try
-        // {
-        //     JsonParser parser = factory.createParser(subsystemFile);
-        //     SubsystemControls subsystems = mapper.readValue(parser, SubsystemControls.class);
-        //  
-        //    if (subsystems.isLauncherPresent())
-        //    {
-        //        launcherSubsystem  = Optional.of(new SK21Launcher());
-        //    }
-        // }
-        // catch (IOException e)
-        // {
-        //     DriverStation.reportError("Failure to read Subsystem Control File!", e.getStackTrace());
-        // }
+        File deployDirectory = Filesystem.getDeployDirectory();
+        
+        ObjectMapper mapper = new ObjectMapper();
+        JsonFactory factory = new JsonFactory();
+        
+        try
+        {
+            // Looking for the Subsystems.json file in the deploy directory
+            JsonParser parser = factory.createParser(new File(deployDirectory, Constants.SUBSYSTEM));
+            SubsystemControls subsystems = mapper.readValue(parser, SubsystemControls.class);
+         
+            // Instantiating subsystems if they are present
+            // This is decided by looking at Subsystems.json
+            if(subsystems.isIntakePresent())
+            {
+                intakeSubsystem = Optional.of(new SK22Intake());
+            }
+            if(subsystems.isLauncherPresent())
+            {
+                launcherSubsystem  = Optional.of(new SK22Launcher());
+            }
+            if(subsystems.isTransferPresent())
+            {
+                transferSubsystem  = Optional.of(new SK22Transfer());
+            }
+            if(subsystems.isVisionPresent())
+            {
+                visionSubsystem  = Optional.of(new SK22Vision());
+            }
+        }
+        catch (IOException e)
+        {
+            DriverStation.reportError("Failure to read Subsystem Control File!", e.getStackTrace());
+        }
 
         // Configure the button bindings
         configureButtonBindings();
@@ -208,8 +240,7 @@ public class RobotContainer
             new SequentialCommandGroup(
                 new InstantCommand(() -> driveSubsystem.resetOdometry(trajectory.getInitialPose()), driveSubsystem),
                 ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0)))
-            :
-            ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0));
+            :ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0));
     }
 
     /**
