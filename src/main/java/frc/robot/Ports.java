@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 //
 // PCM 0 port 0 - intake forward
 //     0 port 1 - intake reverse
-//     0 port 2 -
-//     0 port 3 -
+//     0 port 2 - gear shift high
+//     0 port 3 - gear shift low
 //     0 port 4 -
 //     0 port 5 -
 //     0 port 6 -
@@ -34,6 +34,7 @@ public class Ports
     // Robot Infrastructure
     //////////////////////////////
     public static final int pcm                         = 1;  // CAN ID
+    public static final PneumaticsModuleType pneumaticsModuleType = PneumaticsModuleType.REVPH;
 
     //////////////////////////////
     // I2C device addresses
@@ -48,9 +49,8 @@ public class Ports
     public static final int backLeftDrive               = 12; // CAN ID
     public static final int backRightDrive              = 13; // CAN ID
 
-    public static final int gearShiftPCM                = -1;   // TODO: Find this value
-    public static final int gearShiftHigh               = -1;   // TODO: Find this value
-    public static final int gearShiftLow                = -1;   // TODO: Find this value
+    public static final int gearShiftHigh               = 2;
+    public static final int gearShiftLow                = 3;
 
     //////////////////////////////
     // Transfer Addresses

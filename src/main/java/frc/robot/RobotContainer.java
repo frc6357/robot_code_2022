@@ -102,8 +102,8 @@ public class RobotContainer
     // TODO: Find which one is high gear and which one is low gear
     private final SK22Drive driveSubsystem = new SK22Drive(
                                                 new DoubleSolenoid(
-                                                    Ports.gearShiftPCM, 
-                                                    PneumaticsModuleType.REVPH, 
+                                                    Ports.pcm, 
+                                                    Ports.pneumaticsModuleType, 
                                                     Ports.gearShiftHigh, 
                                                     Ports.gearShiftLow));
     // These are currently empty and only created in the contructor
