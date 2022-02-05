@@ -5,6 +5,9 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismRoot2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
+import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimbConstants;
 
@@ -16,7 +19,7 @@ public class RobotSim {
     private final MechanismRoot2d mech2dRoot = mech2d.getRoot("Arm Root", 10, 0);
     private final MechanismLigament2d armMech2d = mech2dRoot.append(
             new MechanismLigament2d(
-                    "Arm", armSim.getExtendLength() + armSim.getBaseLength(), 90));
+                    "Arm", armSim.getExtendLength() + armSim.getBaseLength(), 90, 6, new Color8Bit(Color.kBlue)));
 
     private final CANSparkMax pivotMotor;
     private final CANSparkMax liftMotor;
@@ -24,6 +27,7 @@ public class RobotSim {
     public RobotSim(CANSparkMax pivot, CANSparkMax lift) {
         this.pivotMotor = pivot;
         this.liftMotor = lift;
+        SmartDashboard.putData("RobotPose", mech2d);
     }
 
     public void update() {

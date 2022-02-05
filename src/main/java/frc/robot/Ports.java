@@ -14,10 +14,12 @@ import edu.wpi.first.wpilibj.PneumaticsModuleType;
 //     0 port 1 - intake reverse
 //     0 port 2 - gear shift high
 //     0 port 3 - gear shift low
-//     0 port 4 - cliimb front forward
-//     0 port 5 - cliimb front reverse
-//     0 port 6 -
-//     0 port 7 -
+//     0 port 4 - climb hand forward
+//     0 port 5 - climb hand reverse
+//     0 port 6 - climb complexBrakePiston forward
+//     0 port 7 - climb complexBrakePiston reverse
+//     0 port 8 - climb complexRatchetPiston forward
+//     0 port 9 - climb complexRatchetPiston reverse
 
 
 /** 
@@ -86,10 +88,14 @@ public class Ports
     ///////////////////////////////
     // Climb Addresses
     ///////////////////////////////
-    public static final int ComplexBrakePivot          = 1; // Currently unknown Port
-    public static final int ComplexRatchetLift         = 2; // Currently unknown Port
-    public static final int ClimbForwardChannel        = 4; 
-    public static final int ClimbReverseChannel        = 5;
+    public static final int ComplexBrakePivot                       = 1; // Currently unknown Port
+    public static final int ComplexRatchetLift                      = 2; // Currently unknown Port
+    public static final int ClimbHandForwardChannel                 = 4; 
+    public static final int ClimbHandReverseChannel                 = 5;
+    public static final int ClimbBrakePistonForwardChannel          = 6; 
+    public static final int ClimbBrakePistonReverseChannel          = 7;
+    public static final int ClimbRatchetPistonForwardChannel        = 8; 
+    public static final int ClimbRatchetPistonReverseChannel        = 9;
 
     ///////////////////////////////
     // Additional hardware
