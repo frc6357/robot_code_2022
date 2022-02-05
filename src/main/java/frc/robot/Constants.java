@@ -84,7 +84,9 @@ public final class Constants
 
     public static final class VisionConstants
     {
-        public static final int UDP_PACKET_LENGTH               = 26;
+        public static final int UDP_PACKET_LENGTH               = 28;
+        public static final int ODROID_PORT                     = 5005;
+        public static final int ROBORIO_PORT                    = 5800;
     }
 
     public static final double INCH_PER_MILLIMETER = 0.0393701;

@@ -12,12 +12,56 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.DatagramChannel;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
+import java.util.zip.CRC32;
 
 import javax.swing.text.StyledEditorKit;
 
 import frc.robot.Constants;
 import frc.robot.utils.CRC;
+
+class Datagram{
+    int versionID;
+    int packetLength;
+    long frameID;
+    long timestamp;
+    int distance;
+    int horiAngle;
+    int vertAngle;
+    long reserved;
+    long checksum;
+    boolean validPacket = false;
+
+    Datagram(ByteBuffer byteBuffer)
+    {
+        byteBuffer.position(0);
+
+        byte versionIDSigned = byteBuffer.get();
+        versionID = Byte.toUnsignedInt(versionIDSigned);
+
+        byte packetLengthSigned = byteBuffer.get();
+        packetLength =  Byte.toUnsignedInt(packetLengthSigned);
+
+        int frameIDSigned = byteBuffer.getInt();
+        frameID = Integer.toUnsignedLong(frameIDSigned);
+
+        int timestampSigned = byteBuffer.getInt();
+        timestamp = Integer.toUnsignedLong(timestampSigned);
+
+        short distanceSigned = byteBuffer.getShort();
+        distance = Short.toUnsignedInt(distanceSigned);
+
+        horiAngle = byteBuffer.getShort();
+        vertAngle = byteBuffer.getShort();
+        reserved = byteBuffer.getLong();
+        checksum = byteBuffer.getInt();
+
+        CRC32 crc = new CRC32();
+        crc.update(byteBuffer);
+        validPacket = (crc.getValue() == 0) ? true : false;
+    }
+}
 
 public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     // destination ports are required, but source ports are optional
@@ -26,22 +70,12 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     final String odroidIP = "";
     final int roborioPort = 5800;
     private String caughtException = "";
-    ByteBuffer rDataBuffer = ByteBuffer.allocate(Constants.VisionConstants.UDP_PACKET_LENGTH);
+    ByteBuffer rDataBuffer = ByteBuffer.allocate(Constants.VisionConstants.UDP_PACKET_LENGTH).order(ByteOrder.LITTLE_ENDIAN);
     // not needed yet
     // byte[] sDataBuffer = new byte[1024];
     DatagramChannel sSocket;
     ByteArrayInputStream byteArrayInputStream;
     DataInputStream dataInputStream;
-    byte[] versionID = new byte[1];
-    byte[] packetLength = new byte[1];
-    byte[] frameID = new byte[4];
-    byte[] timestamp = new byte[4];
-    byte[] distance = new byte[2];
-    byte[] horiAngle = new byte[2];
-    byte[] vertAngle = new byte[2];
-    byte[] reserved = new byte[8];
-    byte[] pythonChecksum = new byte[2];
-
 
     public SK22Vision()
     {
@@ -110,105 +144,20 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
             System.out.println("IO Exception" + i.toString());
         }
     }
-
-    public void getByteBuffer(byte[] inputBytes, ByteBuffer byteBuffer, int minIndex, int maxIndex)
-    {
-        int arrayIndex = 0;
-        for (int i = minIndex; i<maxIndex; i++){
-            inputBytes[arrayIndex] = byteBuffer.get(i);
-            arrayIndex++;
-        }
-    }
-
-    public int convertBytesInt(byte[] byteArray)
-    {
-        ByteBuffer byteArrayBuffer = ByteBuffer.wrap(byteArray);
-        byteArrayBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        int dataByteArrayBuffer = byteArrayBuffer.getInt();
-        return dataByteArrayBuffer;
-    }
-
-    public short convertBytesShort(byte[] byteArray)
-    {
-        ByteBuffer byteArrayBuffer = ByteBuffer.wrap(byteArray);
-        byteArrayBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        short dataByteArrayBuffer = byteArrayBuffer.getShort();
-        return dataByteArrayBuffer;
-    }
-
-    public char convertBytesChar(byte[] byteArray)
-    {
-        ByteBuffer byteArrayBuffer = ByteBuffer.wrap(byteArray);
-        byteArrayBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        char dataByteArrayBuffer = byteArrayBuffer.getChar();
-        return dataByteArrayBuffer;
-    }
-    
-    public long convertBytesLong(byte[] byteArray)
-    {
-        ByteBuffer byteArrayBuffer = ByteBuffer.wrap(byteArray);
-        byteArrayBuffer.order(ByteOrder.LITTLE_ENDIAN);
-        long dataByteArrayBuffer = byteArrayBuffer.getLong();
-        return dataByteArrayBuffer;
-    }
-
     
     @Override
     public void periodic()
     {
-        // reads packet data and print to terminal
-        if(getPacket(sSocket))
+        boolean packetRecieved = getPacket(sSocket);
+        // check if packet is
+        if(packetRecieved)
         {
-            // TODO: Move this to a function
-            versionID[0] = rDataBuffer.get(0);
-            packetLength[0] = rDataBuffer.get(1);
-            getByteBuffer(frameID, rDataBuffer, 2, 6);
-            getByteBuffer(timestamp, rDataBuffer, 6, 10);
-            getByteBuffer(distance, rDataBuffer, 10, 12);
-            getByteBuffer(horiAngle, rDataBuffer, 12, 14);
-            getByteBuffer(vertAngle, rDataBuffer, 14, 16);
-            getByteBuffer(reserved, rDataBuffer, 16, 24);
-            getByteBuffer(pythonChecksum, rDataBuffer, 24, 26);
-            char versionIDData = convertBytesChar(versionID);
-            char packetLengthData = convertBytesChar(packetLength);
-            int frameIDData = convertBytesInt(frameID);
-            int distanceData = convertBytesInt(distance);
-            short horiAngleData =  convertBytesShort(horiAngle);
-            short vertAngleData = convertBytesShort(vertAngle);
-            long reservedData = convertBytesShort(reserved);
-            short pythonChecksumData = convertBytesShort(pythonChecksum);
+            Datagram packetDatagram = new Datagram(rDataBuffer);
+            if (packetDatagram.validPacket)
+            {
+                System.out.println("Packet received");
+            }
         }
-
-        /*  try {
-            int inputStreamAvailable = packetData.available();
-            System.out.println("packet data available: " + inputStreamAvailable);
-            int distanceBytes = packetData.read(distance, 10, 2);
-            
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            System.out.println("DataInputStream available(): " + e.toString());
-        } */
-        
-
-        
-        /*versionID = packetData.getChar(0);
-        frameID = packetData.getInt(2);
-        timestamp = packetData.getInt(6);
-        distance = packetData.getShort(10);
-        horiAngle = packetData.getShort(12);
-        vertAngle = packetData.getShort(14);
-        reserved = packetData.getLong(16);
-        pythonChecksum = packetData.getShort(24); */
-
-        // System.out.println(versionID);
-        // System.out.println(packetLength);
-        // System.out.println(frameID);
-        // System.out.println(timestamp);
-        // System.out.println(distance);
-        // System.out.println(horiAngle);
-        // System.out.println(vertAngle);s
-        // System.out.println(reserved);
-        // System.out.println(pythonChecksum);
 
     }   
 
