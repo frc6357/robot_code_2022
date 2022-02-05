@@ -55,7 +55,7 @@ public class RobotContainer
     /**
      * The USB Camera for the Robot.
      */
-    private UsbCamera camera;
+    //private UsbCamera camera;
 
     /**
      * Available autonomous commands for the Robot.
@@ -118,12 +118,12 @@ public class RobotContainer
         resetDriveDefaultCommand();
 
         // Driver camera configuration.
-        if (RobotBase.isReal())
-        {
-            camera = CameraServer.startAutomaticCapture("Driver Front Camera", 0);
-            camera.setResolution(240, 240);
-            camera.setFPS(15);
-        }
+        //if (RobotBase.isReal())
+        //{
+        //    camera = CameraServer.startAutomaticCapture("Driver Front Camera", 0);
+        //    camera.setResolution(240, 240);
+        //    camera.setFPS(15);
+        //}
     }
 
     public void resetDriveDefaultCommand()

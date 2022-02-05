@@ -7,6 +7,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -16,10 +17,10 @@ import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
 import java.util.zip.CRC32;
 
+import javax.print.DocFlavor.BYTE_ARRAY;
 import javax.swing.text.StyledEditorKit;
 
 import frc.robot.Constants;
-import frc.robot.utils.CRC;
 
 class Datagram{
     int versionID;
@@ -71,6 +72,7 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     final int roborioPort = 5800;
     private String caughtException = "";
     ByteBuffer rDataBuffer = ByteBuffer.allocate(Constants.VisionConstants.UDP_PACKET_LENGTH).order(ByteOrder.LITTLE_ENDIAN);
+    ByteBuffer packetBuffer = ByteBuffer.allocate(Constants.VisionConstants.UDP_PACKET_LENGTH).order(ByteOrder.LITTLE_ENDIAN);
     // not needed yet
     // byte[] sDataBuffer = new byte[1024];
     DatagramChannel sSocket;
@@ -105,28 +107,44 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         return caughtException;
     }
 
+    // Receive the latest available UDP packet if any is available. Return
+    // true if a packet has been read, false if none is available.
+    //
+    // This method discards all but the latest received packet on the 
+    // socket.
     public boolean getPacket(DatagramChannel sSocket) 
     {
-        boolean returnCode = false;
-        try
+        boolean receivedOne = false;
+        SocketAddress SockRet;
+        int ReadCount = 0;
+
+        do
         {
-            // get the packet at the port defined by sSocket
-            if (!(sSocket.receive(rDataBuffer) == null))
+            rDataBuffer.position(0);
+            ReadCount++;
+
+            try
             {
-                returnCode = true;
+                // get the packet at the port defined by sSocket
+                SockRet = sSocket.receive(rDataBuffer);
+                if (SockRet != null)
+                {
+                    // We got a packet! Save it into a local buffer
+                    // for later.
+                    receivedOne = true;
+                    packetBuffer = rDataBuffer.duplicate();
+                    packetBuffer.order(ByteOrder.LITTLE_ENDIAN);
+                }
             }
+            catch (Exception e) 
+            {
+                caughtException = e.toString();
+                System.out.println("Socket Excetion: " + caughtException);
+                SockRet = null;
+            }
+        } while(SockRet != null);
 
-        
-
-        }
-        catch (Exception e) 
-        {
-            caughtException = e.toString();
-            System.out.println("Socket Excetion: " + caughtException);
-            returnCode = false;
-        }
-
-        return returnCode;
+        return receivedOne;
     }
 
     public void sendPacket(byte[] sDataBuffer, DatagramSocket sSocket, String message)
@@ -152,13 +170,12 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         // check if packet is
         if(packetRecieved)
         {
-            Datagram packetDatagram = new Datagram(rDataBuffer);
+            Datagram packetDatagram = new Datagram(packetBuffer);
             if (packetDatagram.validPacket)
             {
-                System.out.println("Packet received");
+                System.out.println("Packet received: " + packetDatagram.frameID);
             }
         }
-
     }   
 
     
