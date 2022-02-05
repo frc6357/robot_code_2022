@@ -94,6 +94,15 @@ public final class Constants
     }
 
     /**
+     * Constants related to Intake
+     */
+    public static final class IntakeConstants 
+    {
+        // TODO: Tune this value
+        public static final double INTAKE_MOTOR_SPEED = 0.75;
+    }
+
+    /**
      * Constants related to Test Mode
      */
     public static final class TestConstants

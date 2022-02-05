@@ -28,14 +28,14 @@ public class SK22Intake extends SKSubsystemBase
 
   }
   //this will set the speed of the motor that powers the ball pulling part of the intake
-  public void setIntakeSpeed()
+  public void setIntakeSpeed(double speed) 
   {
 
   }
   //this will display the current speed of the motor
-  public void getIntakeSpeed()
+  public double getIntakeSpeed()
   {
-
+    return 0.0;
   }
 
   @Override
