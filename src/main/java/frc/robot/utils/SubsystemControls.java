@@ -29,10 +29,10 @@ public class SubsystemControls
      */
     public SubsystemControls(@JsonProperty(required = true, value = "intake")
                                 boolean intake,
+                            @JsonProperty(required = true, value = "transfer")
+                                boolean transfer,
                             @JsonProperty(required = true, value = "launcher")
                                 boolean launcher,
-                            @JsonProperty(required = true, value = "indexer")
-                                boolean transfer,
                             @JsonProperty(required = true, value = "climb")
                                 boolean climb,
                             @JsonProperty(required = true, value = "vision")
