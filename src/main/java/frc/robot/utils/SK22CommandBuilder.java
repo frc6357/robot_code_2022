@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Scanner;
 import java.util.Set;
 
+import edu.wpi.first.wpilibj.Filesystem;
 import frc.robot.subsystems.base.SuperClasses.AutoCommands;
 
 public class SK22CommandBuilder {
@@ -32,7 +33,7 @@ public class SK22CommandBuilder {
      */
     public SK22CommandBuilder(String directory, TrajectoryBuilder pathBuilder) {
         this.pathBuilder = pathBuilder;
-        pathDirectory = new File(directory);
+        pathDirectory = new File(Filesystem.getDeployDirectory(), directory);
         files = pathDirectory.listFiles();
         for (File file : files) {
             try {
