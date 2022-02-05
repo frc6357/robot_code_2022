@@ -111,7 +111,14 @@ public class Ports
     public static final int OIDriverSlowmode            = 1;  // Right Trigger Axis    \
 
     // TODO: Would need to choose the correct button and ID.
-    public static final int OIOperatorEjectBallButton   = 4; //Y button
+    public static final int OIOperatorEjectStartButton   = 1; // A button
+    public static final int OIOperatorLoadVertStartButton   = 3; // X button
+
+    public static final int OIOperatorEjectStopButton   = 2; // B button
+    public static final int OIOperatorLoadVertSTopButton   = 4; // Y button
+
+
+    public static final int OIOperatorJoystick          = 2;
 
     public static Port i2c;
 

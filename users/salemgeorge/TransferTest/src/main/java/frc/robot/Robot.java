@@ -8,7 +8,11 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.commands.DefaultTransferCommand;
+import frc.robot.commands.EjectBallCommand;
+import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.subsystems.SK22Transfer;
 
 /**
@@ -22,8 +26,14 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-
+  private final Joystick operatorJoystick = new Joystick(Ports.OIOperatorJoystick);
   private final SK22Transfer transfer = new SK22Transfer();
+
+  private final JoystickButton ejectBallStart = new JoystickButton(operatorJoystick, Ports.OIOperatorEjectStartButton);
+  private final JoystickButton loadBallVerticalStart = new JoystickButton(operatorJoystick, Ports.OIOperatorLoadVertStartButton);
+
+  private final JoystickButton ejectBallStop = new JoystickButton(operatorJoystick, Ports.OIOperatorEjectStopButton);
+  private final JoystickButton loadBallVerticalStop = new JoystickButton(operatorJoystick, Ports.OIOperatorLoadVertSTopButton);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -34,6 +44,12 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+
+    ejectBallStart.whenPressed(new EjectBallCommand(transfer, true));
+    loadBallVerticalStart.whenPressed(new LoadBallVerticalCommand(transfer, true));
+
+    ejectBallStop.whenPressed(new EjectBallCommand(transfer, false));
+    loadBallVerticalStop.whenPressed(new LoadBallVerticalCommand(transfer, false));
   }
 
   /**
@@ -44,7 +60,9 @@ public class Robot extends TimedRobot {
    * SmartDashboard integrated updating.
    */
   @Override
-  public void robotPeriodic() {}
+  public void robotPeriodic() {
+    CommandScheduler.getInstance().run();
+  }
 
   /**
    * This autonomous (along with the chooser code above) shows how to select between different
@@ -79,18 +97,14 @@ public class Robot extends TimedRobot {
 
   /** This function is called once when teleop is enabled. */
   @Override
-  public void teleopInit() {}
+  public void teleopInit() {
+
+  }
 
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    Joystick joystick = new Joystick(0);
-
-    // A button
-    if(joystick.getRawButtonPressed(1))
-    {
-      DefaultTransferCommand defaultCommand = new DefaultTransferCommand(transfer);
-    }
+    
   }
 
   /** This function is called once when the robot is disabled. */

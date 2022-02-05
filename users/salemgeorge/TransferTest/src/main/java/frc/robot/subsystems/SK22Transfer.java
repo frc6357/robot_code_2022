@@ -17,13 +17,13 @@ public class SK22Transfer extends SKSubsystemBase
 
   private WPI_VictorSPX intakeTransferMotor;
   private WPI_VictorSPX exitTransferMotor;
-  private WPI_VictorSPX verticalTransferMotor;
+  //private WPI_VictorSPX verticalTransferMotor;
 
   protected boolean verticalFull;
   protected boolean horizontalFull;
   protected boolean isRunningTimer;
 
-  ColorSensor colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
+  //ColorSensor colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
   DigitalInput exitTransferSensor;
   DigitalInput verticalTransferSensor;
   private NetworkTable transferEntry;
@@ -39,9 +39,9 @@ public class SK22Transfer extends SKSubsystemBase
 
       intakeTransferMotor = new WPI_VictorSPX(Ports.intakeTransferMotor);
       exitTransferMotor = new WPI_VictorSPX(Ports.exitTransferMotor);
-      verticalTransferMotor = new WPI_VictorSPX(Ports.verticalTransferMotor);
-      exitTransferSensor = new DigitalInput(0);
-      verticalTransferSensor = new DigitalInput(0);
+      //verticalTransferMotor = new WPI_VictorSPX(Ports.verticalTransferMotor);
+      //exitTransferSensor = new DigitalInput(0);
+      //verticalTransferSensor = new DigitalInput(0);
 
   }
   // set all motors, start and stop motors, queue all data
@@ -55,35 +55,41 @@ public class SK22Transfer extends SKSubsystemBase
   public void setIntakeTransferMotor(double Speed)
   {
     intakeTransferMotor.set(Speed);
+    System.out.println("Intake: " + Speed);
   }
 
   public void setExitTransferMotor(double Speed)
   {
-    exitTransferMotor.set(Speed);
+    exitTransferMotor.set(-Speed);
+    System.out.println("Exit: " + -Speed);
   }
 
   public void setVerticalTransferMotor(double Speed)
   {
-    verticalTransferMotor.set(Speed);
+    //verticalTransferMotor.set(Speed);
   }
 
   public String getColorSensor()
   {
-    return colorSensor.getColor();
+    //return colorSensor.getColor();
+    return "jaofw";
   }
 
   public boolean getPositionOnePresence() {
-    return colorSensor.getBallPresence();
+    //return colorSensor.getBallPresence();
+    return false;
   }
 
   public boolean getPositionTwoPresence()
   {
-    return exitTransferSensor.get();
+    //return exitTransferSensor.get();
+    return false;
   }
 
   public boolean getPositionThreePresence()
   {
-    return verticalTransferSensor.get();
+    //return verticalTransferSensor.get();
+    return false;
   }
 
   public void setVerticalFull(boolean isFull)
