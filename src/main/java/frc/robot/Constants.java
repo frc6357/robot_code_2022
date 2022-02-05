@@ -50,6 +50,9 @@ public final class Constants
 
         public static final double  DEADBAND_TURN       = 0.01;
         public static final double  SLEW_FILTER_RATE    = 2;     // per second
+
+        public static final double TURN_TOLERANCE       = 5;    // Degrees
+        public static final double TURN_RATE_TOLERANCE  = 5;    // Degrees per Second
     }
 
     /** Constants related to the Autonomous operation mode for the Robot. */

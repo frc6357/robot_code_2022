@@ -98,7 +98,15 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         }
     }
 
-
+    /**
+     * Gets the relative horizontal angle of the hub
+     * @return
+     *      The relative horizontal angle
+     */
+    public double getHorizontalAngle()
+    {
+        return 0.0;
+    }
     
     @Override
     public void periodic()
