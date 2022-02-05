@@ -7,12 +7,16 @@
 
 package frc.robot;
 
-import com.revrobotics.ColorSensorV3;
+import java.util.Optional;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.simulation.RobotSim;
+import frc.robot.subsystems.SK22Climb;
 import frc.robot.subsystems.TestModeManager;
 
 /**
@@ -27,6 +31,11 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer;
     private RobotSim robotSimulation;
 
+    private final CANSparkMax complexBrakePivot = new CANSparkMax(Ports.ComplexBrakePivot, MotorType.kBrushless);
+    private final CANSparkMax complexRatchetLift = new CANSparkMax(Ports.ComplexRatchetLift, MotorType.kBrushless);
+
+    private Optional<SK22Climb> climbSubsystem = Optional.of(new SK22Climb(complexBrakePivot, complexRatchetLift));
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -37,7 +46,8 @@ public class Robot extends TimedRobot {
 
     @Override
     public void robotInit() {
-        robotContainer = new RobotContainer();
+        robotContainer = new RobotContainer(climbSubsystem);
+        robotSimulation = new RobotSim(complexBrakePivot, complexRatchetLift);
     }
 
     /**

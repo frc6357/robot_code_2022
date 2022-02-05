@@ -1,19 +1,16 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import frc.robot.Ports;
-import frc.robot.simulation.RobotSim;
 
 public class SK22Climb extends SKSubsystemBase
 {
-    private final CANSparkMax complexBrakePivot = new CANSparkMax(Ports.ComplexBrakePivot, MotorType.kBrushless);
-    private final CANSparkMax complexRatchetLift = new CANSparkMax(Ports.ComplexRatchetLift, MotorType.kBrushless);
 
-    private final SK22ComplexClimbArm backArm = new SK22ComplexClimbArm(complexBrakePivot, complexRatchetLift);
-
-    private final RobotSim simulation = new RobotSim(complexBrakePivot, complexRatchetLift);
+    private final SK22ComplexClimbArm backArm;
+    
+    public SK22Climb(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift)
+    {
+        backArm = new SK22ComplexClimbArm(complexBrakePivot, complexRatchetLift);
+    }
 
     public void extend()
     {

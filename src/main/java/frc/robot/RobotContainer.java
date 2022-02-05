@@ -39,7 +39,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -55,6 +54,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.DoNothingCommand;
+import frc.robot.subsystems.SK22Climb;
 import frc.robot.subsystems.SK22Drive;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
@@ -102,7 +102,7 @@ public class RobotContainer
     // TODO: Find which one is high gear and which one is low gear
     private final SK22Drive driveSubsystem = new SK22Drive(
                                                 new DoubleSolenoid(
-                                                    Ports.pcm, 
+                                                    Ports.BASE_PCM, 
                                                     Ports.pneumaticsModuleType, 
                                                     Ports.gearShiftHigh, 
                                                     Ports.gearShiftLow));
@@ -111,6 +111,7 @@ public class RobotContainer
     private Optional<SK22Intake> intakeSubsystem = Optional.empty();
     private Optional<SK22Launcher> launcherSubsystem = Optional.empty();
     private Optional<SK22Transfer> transferSubsystem = Optional.empty();
+    private final Optional<SK22Climb> climbSubsystem;
     private Optional<SK22Vision> visionSubsystem = Optional.empty();
 
     private final DefaultArcadeDriveCommand arcadeDrive
@@ -121,8 +122,10 @@ public class RobotContainer
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-    public RobotContainer()
+    public RobotContainer(Optional<SK22Climb> climbSubsystem)
     {
+        this.climbSubsystem = climbSubsystem;
+    
         configureShuffleboard();
 
         File deployDirectory = Filesystem.getDeployDirectory();

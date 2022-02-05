@@ -33,7 +33,9 @@ public class Ports
     //////////////////////////////
     // Robot Infrastructure
     //////////////////////////////
-    public static final int pcm                         = 1;  // CAN ID
+    public static final int BASE_PCM                    = 1;  // CAN ID
+    public static final int ClimbPneumaticModule        = 2;
+
     public static final PneumaticsModuleType pneumaticsModuleType = PneumaticsModuleType.REVPH;
 
     //////////////////////////////
@@ -86,7 +88,6 @@ public class Ports
     ///////////////////////////////
     public static final int ComplexBrakePivot          = 1; // Currently unknown Port
     public static final int ComplexRatchetLift         = 2; // Currently unknown Port
-    public static final int ClimbPneumaticModule       = 0;
     public static final int ClimbForwardChannel        = 4; 
     public static final int ClimbReverseChannel        = 5;
 
