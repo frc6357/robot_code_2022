@@ -4,7 +4,7 @@ Usage:
     cap_process.py [-h | -help]
 Options:
     -h -help                Shows this screen
-    --camera=<int>  Video Capture Device number given to OpenCV, used to represent the camera [default: 1]
+    --camera-windows=<int>  Video Capture Device number given to OpenCV, used to represent the camera [default: 1]
     --camera-linux=<string> Video Capture Device path in /dev/ directory, the script will parse this to give the Video capture Device number to OpenCV [default: "v4l2-ctl --list-devices | tail -n +`v4l2-ctl --list-devices | egrep \"Video Capture\" -n -m1 | cut -f1 -d:` | head -2 | tail -1 | cut -f2"]
     
     
@@ -23,6 +23,7 @@ from datetime import datetime
 from docopt import docopt
 import os
 from udp_send import sendPacket
+import curses
 
 def sendFloat(input):
     string = str(input)
@@ -45,57 +46,11 @@ def ResizeWithAspectRatio(image, width=None, inter=cv2.INTER_AREA):
         dim = (width, int(h*r))
     return cv2.resize(image, dim, interpolation=inter)
 
-def test_process_frame(frame):
-    #print(frame[0])
-    h, w, d = frame.shape
-    cv2.circle(frame, (int(w/2), int(h/2)), 3, (255, 0, 0))
-    cv2.circle(frame, (int(w/4), int(h/4)), 3, (255, 0, 0))
-    cv2.circle(frame, (int(w/6), int(h/6)), 3, (255, 0, 0))
-    cv2.circle(frame, (int(w/8), int(h/8)), 3, (255, 0, 0))
-    cv2.circle(frame, (int(w/10), int(h/10)), 3, (255, 0, 0))
-    cv2.circle(frame, (int(w/12), int(h/12)), 3, (255, 0, 0))
-    cv2.circle(frame, (int(w/14), int(h/14)), 3, (255, 0, 0))
-    cv2.circle(frame, (int(w/16), int(h/16)), 3, (255, 0, 0))
-
-    return frame
-
-def rectCentr(input):
-    Xs = [a[0] for a in input]
-    Ys = [a[1] for a in input]
-    bot_left = [min(Xs), min(Ys)]
-    top_right = [max(Xs), max(Ys)]
-    mid_point = (int((bot_left[1] + top_right[1])/2), int((bot_left[0] + top_right[0])/2))
-    return mid_point
-
-def extremeItems(a, str_input):
-    Xs = [i[0] for i in a]
-    Ys = [i[1] for i in a]
-    if str_input == 'minXmaxY':
-        bucket = []
-        b = min(Xs)
-        for i, j in enumerate(a):
-            if b in j:
-                bucket.append(a[i])
-        return [b, max(Ys)]
-    elif str_input == 'maxXmaxY':
-        bucket = []
-        b = max(Xs)
-        for i, j in enumerate(a):
-            if b in j:
-                bucket.append(a[i])
-        return [b, max(Ys)]
-
-def findHoriDist(dist, w):
-    hori_angle = dist * 0.04499
-    # bottom side length of rectangle is 4 inches total
-    # return distance in inches
-    return (104-45) / math.tan(hori_angle)
-
 def process_frame(frame):
     #frame = ResizeWithAspectRatio(frame, width=1280)
     start_time = time.time()
     h, w, d = frame.shape
-    print(frame.shape)
+    #print(frame.shape)
     #print("height: {h}, width: {w}".format(h=h, w=w))
 
     #cv2.circle(frame, (320, 240), 5, (248, 26, 225))
@@ -125,8 +80,8 @@ def process_frame(frame):
     image_upper_bound = bound_percent_cv2(120, 100, 97, 1.05)
     """
 
-    image_lower_bound = bound_percent_cv2(171, 100, 61, 0.85)
-    image_upper_bound = bound_percent_cv2(171, 100, 61, 1.6)
+    image_lower_bound = bound_percent_cv2(165, 86, 60, 0.9)
+    image_upper_bound = bound_percent_cv2(165, 86, 60, 1.2)
 
     """
     cv2.inRange() takes in a variable storing a read image, lower bound, and upper bound
@@ -136,7 +91,7 @@ def process_frame(frame):
     """
     imageFilter = cv2.inRange(im, image_lower_bound, image_upper_bound)
     imageFiltered = cv2.bitwise_and(im, im, mask=imageFilter)
-    # cv2.imshow("Filtered Image", imageFiltered)
+    cv2.imshow("Filtered Image", imageFiltered)
 
     """
     OpenCV displays all images in the BGR color space in order to look properly
@@ -152,10 +107,10 @@ def process_frame(frame):
 
     # uses OTSU and Binary Thresholding methods to maximize contrast in filtered image
     ret2, th2 = cv2.threshold(grayscale_im, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
-    cv2.imshow("Grayscale Otsu Thresholded Image", th2)
+    #cv2.imshow("Grayscale Otsu Thresholded Image", th2)
 
     # uses canny edge detection to find the edges of segmented image
-    edges = cv2.Canny(th2, 50, 200)
+    #edges = cv2.Canny(th2, 50, 200)
     # cv2.imshow("Canny Edge Detection", edges)
 
     # finds each individual "contour" or OTSU thresholded rectangluar region
@@ -174,16 +129,32 @@ def process_frame(frame):
     distance = 0
     vertAngle = 0
     horiAngle = 0
+    adjVal = 255
     valid = False
     for contour in contours:
         M = cv2.moments(contour)
         if int(M["m00"]) != 0:
             # chooses the target with the largest pixel count
             if (cv2.contourArea(contour) == max(contourAreas)):
+                roiBox = cv2.minAreaRect(contour)
+                box = cv2.boxPoints(roiBox)
+                box = np.int0(box)
+                
+                points = []
+                for point in box:
+                    points.append(point[0])
+                    cv2.circle(frame, (point[0], point[1]), 1, (0,0,255))
+                pixelWidth = max(points)-min(points) 
+                stdscr.addstr(3, 0, "ROI width: {}".format(pixelWidth))
+                #print("ROI width: {}".format(pixelWidth))
+                #cv2.imshow("roi points", frame)
+                #cv2.waitKey(0)
                 Cx = int(M["m10"]/M["m00"])
                 Cy = int(M["m01"]/M["m00"])
-                print("Center Value x: {}".format(Cx))
-                print("Center Value y: {}".format(Cy))
+                stdscr.addstr(4, 0, "Cy: {}".format(Cy))
+                #print("Center Value x: {}".format(Cx))
+                #print("Center Value y: {}".format(Cy))
+                #print("Y distance from center: {}".format(Cy-))
                 cv2.circle(frame, (Cx, Cy), 3, (255,255,255))
                 #cv2.putText(frame, "center: ({x_val}, {y_val})".format(x_val=Cx, y_val=Cy), (20, 20),
                             #cv2.FONT_HERSHEY_PLAIN, 2, (255,0,0), 1)
@@ -191,22 +162,41 @@ def process_frame(frame):
                 vertOffset = 45
 
                 # degrees per pixel, constant measure before hand
-                degPix = 0.3
+                degPixHFOV = 70.42/w
 
-                horiAngle = degPix * abs((w/2-Cx))
-                vertAngle = degPix * abs((h/2-Cy))
+                horiAngle = (degPixHFOV * ((w/2)-Cx))
+                stdscr.addstr(5, 0, "Hori Angle: {}".format(horiAngle))
+                #print(horiAngle)
                 # if vertical angle is zero then this breaks, practically in a match we will never be level with the
                 # target
-                distanceRaw = (104-vertOffset) / (math.tan(math.pi/180 * vertAngle))
-                print(distanceRaw)
-                floatVals = sendFloat(distanceRaw)
+                #print(math.atan(horiAngle))
+                distanceRaw = (0.5*5)/math.atan(horiAngle)
+                distanceCalib = (1.0526*distanceRaw)-27.711
+                stdscr.addstr(0,0, "Calib: " + str(distanceCalib))
+                #print("Raw: " + str(distanceRaw))
+                #print("Calib: " + str(distanceCalib), end = "\r")
+                #print("\n")
+                #print((h/2) - Cy)
+                #print((43.3/h) * ((h/2)-Cy) + 40)
+                degPixVFOV = 43.3/h
+                vertAngle  = (degPixVFOV * ((h/2)-Cy)) + 40
+                #print("vertical angle: {}".format(vertAngle))
+                
+                distance2 = (102-46.25) / math.tan(vertAngle * (math.pi/180))
+                distance2Calib = 1.0862*distance2-1.09967
+                stdscr.addstr(1,0,"distance2 calib: {}".format(distance2Calib))
+                #print("\n")
+                #print(distanceRaw)
+                #print("Avg Distance: " + str((distance2+distanceCalib)/2), end = "\r")
+                stdscr.addstr(2,0,"distance2: " + str(distance2))
+                floatVals = sendFloat(distance2)
                 distance = floatVals["int"]
                 adjVal = floatVals["adjVal"]               
-                valid = True
-                print("horizontal angle: " + str(horiAngle))
-                print("vertical angle: " + str(vertAngle))
-                print("distance: " + str(distance))
-                print("\n")
+                valid = False
+                #print("horizontal angle: " + str(horiAngle))
+                #print("vertical angle: " + str(vertAngle))
+                #print("distance: " + str(distance/(10**adjVal)))
+                #print("\n")
                 
                 #cv2.putText(frame, "horizontal angle: {theta}".format(theta=horiAngle), (20, 80),
                             #cv2.FONT_HERSHEY_PLAIN, 2, (255,0,0), 1)
@@ -216,10 +206,15 @@ def process_frame(frame):
                             #cv2.FONT_HERSHEY_PLAIN, 2, (255,0,0), 1)
     #sendUDP(distance, horiAngle, vertAngle, frameID)
     end_time = time.time()
+    stdscr.refresh()
     #print("Processing Time for 1 Frame: " + str(end_time-start_time))
     cv2.imshow("frame", frame)
     if cv2.waitKey(0) & 0xFF == ord('q'):
-                cv2.destroyAllWindows()
+        cv2.destroyAllWindows()
+        #curses.endwin()
+    #elif cv2.waitKey(0) & 0xFF == ord('s'):
+                #cv2.imwrite("/home/odroid/Desktop/frame.png", frame)
+                #cv2.destroyAllWindows()
     return {"frame": frame, "dist": distance, "adjVal":adjVal, "hAngle": float(horiAngle), "vAngle": float(vertAngle), "valid":valid}
     
         
@@ -229,6 +224,7 @@ def process_frame(frame):
 
 def cap_frame(args):
     frameID = 0
+    running = True
     """if (bool(args['--camera-windows'])):
         cap = cv2.VideoCapture(int(args['--camera-windows']))
         cap.set(cv2.CAP_PROP_EXPOSURE, -11)
@@ -243,72 +239,29 @@ def cap_frame(args):
     cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
     # cap_prop_exposure is in terms of milliseconds
     cap.set(cv2.CAP_PROP_EXPOSURE, 10)
-    key_values = {
-        49 : 1,
-        50 : 2,
-        51 : 3,
-        52 : 4,
-        53 : 5,
-        54 : 6,
-        55 : 7,
-        56 : 8,
-        57 : 9,
-        113 : "q",
-        114 : "r",
-        115 : "s"
-    }
-    x = ord(input("How many frames: "))
-    while cap.isOpened():
 
-        if x in key_values:
-
-            if key_values[x] == "q":
-                cap.release()
-                return
-            if key_values[x] == "r":
-                cap.release()
-                print("released")
-                continue
-            #time.sleep(7)
-            frames = []
-            for i in range(0, key_values[x]):
-                ret, frame = cap.read()
-                # frame = cv2.imread("C:/Users/vivek/Desktop/stuffff/multiple-targets.png")
-                if ret == False:
-                    print("broke -> " + str(cap.isOpened()))
-                    cap.release()
-                    print("released " + str(cap.isOpened()))
-                    quit()
-                frames.append(frame)
-
-            #print(str(frames) + "\n")
-            with multiprocessing.Pool(processes=9) as pool:
-                processed_frames = pool.map(process_frame, frames)
-                #processed_frames = pool.map(test_process_frame, frames)
-
-
-            a = 1
-            for x in processed_frames:
-                #print(frame)
-                #print("\n")
-                frame = x["frame"]
-                frame = ResizeWithAspectRatio(frame, width=640)
-                cv2.imshow("Processed frames " + str(a), frame)
-                a += 1 
-                if (x["valid"]):
-                    distance = x["dist"]
-                    adjVal = x["adjVal"]
-                    print(adjVal)
-                    vertAngle = int(float("{:.2f}".format(x["vAngle"]))* 100)
-                    horiAngle = int(float("{:.2f}".format(x["hAngle"]))* 100)
-                    frameID +=1
-                    sendPacket(distance, adjVal, horiAngle, vertAngle, frameID)  
+    while running:
+        ret, frame = cap.read()
+        if ret == False:
+            running == False
+            print("Camera ret val false, qutting")
+            exit()
+        frameOutputs = process_frame(frame)
+        if (frameOutputs["valid"]):
+            distance = frameOutputs["dist"]
+            adjVal = frameOutputs["adjVal"]
+            vertAngle = int(float("{:.2f}".format(frameOutputs["vAngle"]))* 100)
+            horiAngle = int(float("{:.2f}".format(frameOutputs["hAngle"]))* 100)
+            frameID +=1
+            sendPacket(distance, adjVal, horiAngle, vertAngle, frameID)
+        #else:
+            #print("Target Not Found")
             
-            if cv2.waitKey(0) & 0xFF == ord('q'):
-                cv2.destroyAllWindows()
-                continue
 
 if __name__ == "__main__":
+    stdscr = curses.initscr()
+    curses.noecho()
+    curses.cbreak()
     frameID = 0
     args = docopt(__doc__)
     cap_frame(args)
