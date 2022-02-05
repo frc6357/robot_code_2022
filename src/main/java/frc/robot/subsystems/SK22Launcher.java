@@ -11,7 +11,7 @@ import frc.robot.subsystems.base.MotorEncoder;
 
 public class SK22Launcher extends SubsystemBase
 {
-  private final WPI_TalonFX ballLauncher1 = new WPI_TalonFX(Constants.LauncherConstants.ballLauncher1);
+  private final WPI_TalonFX ballLauncher1 = new WPI_TalonFX(Constants.LauncherConstants.BALL_LAUNCHER1);
   // private final WPI_TalonFX ballLauncher2 = new WPI_TalonFX(Constants.LauncherConstants.ballLauncher2);
 
   // TODO: When second motor is added, make sure to add ballLauncher2 to the launcherGroup

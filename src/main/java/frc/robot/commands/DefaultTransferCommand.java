@@ -23,7 +23,10 @@ public class DefaultTransferCommand extends CommandBase{
     @Override
     public void execute()
     {
-        
+        if(transfer.getPositionOnePresence())
+        {
+            
+        }
         
     }
 

@@ -94,6 +94,8 @@ public class Ports
     ///////////////////////////////
     // Operator Interface
     ///////////////////////////////
+    public static final int ENABLE_LAUNCHER_BUTTON        = 5; // Left bumper
+    public static final int DISABLE_LAUNCHER_BUTTON       = 6; // Right bumper
     
     // Joystick Ports
     public static final int OIDriverLeftJoystick        = 0;

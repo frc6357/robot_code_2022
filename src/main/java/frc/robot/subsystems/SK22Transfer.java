@@ -64,6 +64,10 @@ public class SK22Transfer extends SKSubsystemBase
     colorSensor.getAllColors();
   }
 
+  public boolean getPositionOnePresence() {
+    return colorSensor.getDistance() >= 1 && colorSensor.getDistance() <= 5;
+  }
+
   public boolean getPositionTwoPresence()
   {
     return exitTransferSensor.get();
@@ -73,7 +77,6 @@ public class SK22Transfer extends SKSubsystemBase
   {
     return verticalTransferSensor.get();
   }
-
 
   @Override
   public void simulationPeriodic()
