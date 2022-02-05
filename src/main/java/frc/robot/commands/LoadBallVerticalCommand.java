@@ -15,13 +15,13 @@ public class LoadBallVerticalCommand extends CommandBase{
     /**
      * Varible that checks whether the player is turning on the robot or not
      */
-    private boolean exitToggle;
+    private boolean verticalToggle;
  
 
-    public LoadBallVerticalCommand(SK22Transfer transferSubsystem, boolean exitToggle)
+    public LoadBallVerticalCommand(SK22Transfer transferSubsystem, boolean verticalToggle)
     {
         this.transferSubsystem = transferSubsystem;
-        this.exitToggle = exitToggle;
+        this.verticalToggle = verticalToggle;
 
         addRequirements(transferSubsystem);
     }
@@ -34,9 +34,9 @@ public class LoadBallVerticalCommand extends CommandBase{
     public void initialize()
     {
         //Sets the vertical transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem.setVerticalTransferMotor(exitToggle? TransferConstants.BALL_EJECTION_SPEED : 0);
+        this.transferSubsystem.setVerticalTransferMotor(verticalToggle? TransferConstants.BALL_EJECTION_SPEED : 0);
         //Sets the intake transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem.setIntakeTransferMotor(exitToggle? TransferConstants.BALL_VERTICAL_LOAD_SPEED : 0);
+        this.transferSubsystem.setIntakeTransferMotor(verticalToggle? TransferConstants.BALL_VERTICAL_LOAD_SPEED : 0);
     }
 
     @Override
