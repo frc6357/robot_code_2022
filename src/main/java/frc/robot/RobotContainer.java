@@ -54,6 +54,7 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
+import frc.robot.commands.DefaultTransferCommand;
 import frc.robot.commands.DoNothingCommand;
 import frc.robot.subsystems.SK22Drive;
 import frc.robot.subsystems.SK22Intake;
@@ -90,6 +91,7 @@ public class RobotContainer
     private final SK22CommandBuilder pathBuilder = 
                             new SK22CommandBuilder(Constants.AUTOS_FOLDER_DIRECTORY, trajectoryCreator);
     private SendableChooser<AutoCommands> autoCommandSelector = new SendableChooser<AutoCommands>();
+    //private SendableChooser<Command> transferCommandSelector = new SendableChooser<Command>();
     private SendableChooser<Command> driveModeSelector = new SendableChooser<Command>();
 
     private SendableChooser<Trajectory> splineCommandSelector = new SendableChooser<Trajectory>();
@@ -117,7 +119,8 @@ public class RobotContainer
                                 = new DefaultArcadeDriveCommand(driveSubsystem, driverLeftJoystick);
     private final DefaultTankDriveCommand tankDrive 
                                 = new DefaultTankDriveCommand(driveSubsystem, driverLeftJoystick, driverRightJoystick);
-  
+
+    
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -201,6 +204,9 @@ public class RobotContainer
         SmartDashboard.putData("Auto Chooser", autoCommandSelector);
         SmartDashboard.putData("Drive Mode", driveModeSelector);
         SmartDashboard.putData("JSON Selector", splineCommandSelector);
+
+
+        
     }
 
     /**
