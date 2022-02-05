@@ -27,8 +27,6 @@ public class Robot extends TimedRobot {
     private RobotContainer robotContainer;
     private RobotSim robotSimulation;
 
-    ColorSensor cs1 = new ColorSensor(70);
-
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -51,9 +49,9 @@ public class Robot extends TimedRobot {
      * and SmartDashboard integrated updating.
      */
     @Override
-    public void robotPeriodic() {
-        cs1.periodic();
-        /*
+    public void robotPeriodic() 
+    {
+        /* 
          * Runs the Scheduler. This is responsible for polling buttons, adding
          * newly-scheduled commands, running already-scheduled commands, removing
          * finished or interrupted commands, and running subsystem periodic()
