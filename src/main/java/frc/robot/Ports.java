@@ -48,6 +48,10 @@ public class Ports
     public static final int backLeftDrive               = 12; // CAN ID
     public static final int backRightDrive              = 13; // CAN ID
 
+    public static final int gearShiftPCM                = -1;   // TODO: Find this value
+    public static final int gearShiftHigh               = -1;   // TODO: Find this value
+    public static final int gearShiftLow                = -1;   // TODO: Find this value
+
     //////////////////////////////
     // Transfer Addresses
     //////////////////////////////

@@ -35,9 +35,11 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -50,10 +52,10 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.commands.DefaultDriveCommand;
+import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.DoNothingCommand;
-import frc.robot.subsystems.SK21Drive;
+import frc.robot.subsystems.SK22Drive;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
@@ -97,7 +99,13 @@ public class RobotContainer
     private final FilteredJoystick driverRightJoystick = new FilteredJoystick(Ports.OIDriverRightJoystick);
   
     // The robot's subsystems are defined here...
-    private final SK21Drive driveSubsystem = new SK21Drive();
+    // TODO: Find which one is high gear and which one is low gear
+    private final SK22Drive driveSubsystem = new SK22Drive(
+                                                new DoubleSolenoid(
+                                                    Ports.gearShiftPCM, 
+                                                    PneumaticsModuleType.REVPH, 
+                                                    Ports.gearShiftHigh, 
+                                                    Ports.gearShiftLow));
     // These are currently empty and only created in the contructor
     // based on the Subsystem.json file
     private Optional<SK22Intake> intakeSubsystem = Optional.empty();
@@ -105,8 +113,8 @@ public class RobotContainer
     private Optional<SK22Transfer> transferSubsystem = Optional.empty();
     private Optional<SK22Vision> visionSubsystem = Optional.empty();
 
-    private final DefaultDriveCommand arcadeDrive
-                                = new DefaultDriveCommand(driveSubsystem, driverLeftJoystick);
+    private final DefaultArcadeDriveCommand arcadeDrive
+                                = new DefaultArcadeDriveCommand(driveSubsystem, driverLeftJoystick);
     private final DefaultTankDriveCommand tankDrive 
                                 = new DefaultTankDriveCommand(driveSubsystem, driverLeftJoystick, driverRightJoystick);
   

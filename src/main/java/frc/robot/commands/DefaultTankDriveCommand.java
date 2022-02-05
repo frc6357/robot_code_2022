@@ -3,7 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Ports;
-import frc.robot.subsystems.SK21Drive;
+import frc.robot.subsystems.SK22Drive;
 import frc.robot.utils.FilteredJoystick;
 import frc.robot.utils.filters.SlewRateFilter;
 
@@ -11,7 +11,7 @@ public class DefaultTankDriveCommand extends CommandBase{
      /**
      * The Drive subsystem for this DefaultDriveCommand.
      */
-    private final SK21Drive driveSubsystem;
+    private final SK22Drive driveSubsystem;
 
     /**
      * The Joystick for the Driver.
@@ -27,7 +27,7 @@ public class DefaultTankDriveCommand extends CommandBase{
      * @param joystickDriver
      *            The Joystick used for driving
      */
-    public DefaultTankDriveCommand(SK21Drive driveSubsystem, 
+    public DefaultTankDriveCommand(SK22Drive driveSubsystem, 
                     FilteredJoystick leftJoystickDriver, FilteredJoystick rightJoystickDriver)
     {
         this.driveSubsystem = driveSubsystem;
