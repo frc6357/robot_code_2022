@@ -1,4 +1,5 @@
 package frc.robot.commands;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TransferConstants;
 import frc.robot.subsystems.SK22Transfer;
@@ -14,13 +15,13 @@ public class LoadBallVerticalCommand extends CommandBase{
     /**
      * Varible that checks whether the player is turning on the robot or not
      */
-    private boolean on;
+    private boolean exitToggle;
  
 
-    public LoadBallVerticalCommand(SK22Transfer transferSubsystem, boolean on)
+    public LoadBallVerticalCommand(SK22Transfer transferSubsystem, boolean exitToggle)
     {
         this.transferSubsystem = transferSubsystem;
-        this.on = on;
+        this.exitToggle = exitToggle;
 
         addRequirements(transferSubsystem);
     }
@@ -33,14 +34,11 @@ public class LoadBallVerticalCommand extends CommandBase{
     public void initialize()
     {
         //Sets the vertical transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem.setVerticalTransferMotor(on? TransferConstants.BALL_EJECTION_SPEED : 0);
+        this.transferSubsystem.setVerticalTransferMotor(exitToggle? TransferConstants.BALL_EJECTION_SPEED : 0);
         //Sets the intake transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem.setIntakeTransferMotor(on? TransferConstants.BALL_VERTICAL_LOAD_SPEED : 0);
+        this.transferSubsystem.setIntakeTransferMotor(exitToggle? TransferConstants.BALL_VERTICAL_LOAD_SPEED : 0);
     }
 
-    /**
-     * Allows the function to finish
-     */
     @Override
     public boolean isFinished()
     {

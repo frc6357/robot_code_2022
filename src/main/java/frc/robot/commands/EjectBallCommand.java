@@ -17,13 +17,13 @@ public class EjectBallCommand extends CommandBase{
     /**
      * Varible that checks whether the player is turning on the robot or not
      */
-    private boolean on;
+    private boolean exitToggle;
  
 
-    public EjectBallCommand(SK22Transfer transferSubsystem, boolean on)
+    public EjectBallCommand(SK22Transfer transferSubsystem, boolean exitToggle)
     {
         this.transferSubsystem = transferSubsystem;
-        this.on = on;
+        this.exitToggle = exitToggle;
 
         addRequirements(transferSubsystem);
     }
@@ -36,9 +36,9 @@ public class EjectBallCommand extends CommandBase{
     public void initialize()
     {
         //Sets the exist transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem.setExitTransferMotor(on? TransferConstants.BALL_EJECTION_SPEED : 0);
+        this.transferSubsystem.setExitTransferMotor(exitToggle? TransferConstants.BALL_EJECTION_SPEED : 0);
         //Sets the intake transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem.setIntakeTransferMotor(on? TransferConstants.BALL_EJECTION_SPEED: 0);
+        this.transferSubsystem.setIntakeTransferMotor(exitToggle? TransferConstants.BALL_EJECTION_SPEED: 0);
     }
 
     /**
