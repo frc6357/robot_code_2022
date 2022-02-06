@@ -61,11 +61,12 @@ public class CubicDeadbandFilter implements Filter
      *            positive value. This is used to stop natural controller drift and small
      *            accidental inputs.
      * @param gain
-     *            Used to set the output value range to [-gain,gain].  
+     *            Used to set the output value range to [-gain,gain].
      * @param reverseInput
      *            Used to flip the joystick inputs to the opposite sign if required.
      */
-    public CubicDeadbandFilter(double coefficient, double deadband,double gain, boolean reverseInput)
+    public CubicDeadbandFilter(double coefficient, double deadband, double gain,
+        boolean reverseInput)
     {
         this.coefficient = coefficient;
         this.deadband = deadband;
@@ -81,7 +82,6 @@ public class CubicDeadbandFilter implements Filter
      * @return The cubic relation of that data
      */
 
-    
     @Override
     public double filter(double rawAxis)
     {
@@ -89,8 +89,6 @@ public class CubicDeadbandFilter implements Filter
         double filteredInput = (Math.abs(rawAxis) - deadband) * Math.signum(rawAxis);
         filteredInput *= reverseFilter;
         double c = (1 - (coefficient * Math.pow((1 - deadband), 3)) / (1 - deadband));
-
-        
 
         // If it's within the deadband, it sets the input to zero
         if (Math.abs(rawAxis) < deadband)
@@ -118,8 +116,9 @@ public class CubicDeadbandFilter implements Filter
 
     /**
      * Sets the gain of the cubic function
+     * 
      * @param newG
-     *              The gain must be between -1 and 1 
+     *            The gain must be between -1 and 1
      */
     public void setGain(double newG)
     {

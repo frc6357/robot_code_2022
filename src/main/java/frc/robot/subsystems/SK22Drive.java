@@ -32,17 +32,15 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable
 {
     private final WPI_TalonFX leftLeader = new WPI_TalonFX(Ports.frontLeftDrive);
     private final WPI_TalonFX leftFollower = new WPI_TalonFX(Ports.backLeftDrive);
-    private final MotorEncoder leftMotorEncoder =
-            new MotorEncoder(leftLeader, DriveConstants.ENCODER_DISTANCE_PER_PULSE,
-                DriveConstants.LEFT_ENCODER_REVERSED);
+    private final MotorEncoder leftMotorEncoder = new MotorEncoder(leftLeader,
+        DriveConstants.ENCODER_DISTANCE_PER_PULSE, DriveConstants.LEFT_ENCODER_REVERSED);
     private final MotorControllerGroup leftGroup =
             new MotorControllerGroup(leftLeader, leftFollower);
 
     private final WPI_TalonFX rightLeader = new WPI_TalonFX(Ports.frontRightDrive);
     private final WPI_TalonFX rightFollower = new WPI_TalonFX(Ports.backRightDrive);
-    private final MotorEncoder rightMotorEncoder =
-            new MotorEncoder(rightLeader, DriveConstants.ENCODER_DISTANCE_PER_PULSE,
-                DriveConstants.RIGHT_ENCODER_REVERSED);
+    private final MotorEncoder rightMotorEncoder = new MotorEncoder(rightLeader,
+        DriveConstants.ENCODER_DISTANCE_PER_PULSE, DriveConstants.RIGHT_ENCODER_REVERSED);
     private final MotorControllerGroup rightGroup =
             new MotorControllerGroup(rightLeader, rightFollower);
 
@@ -151,9 +149,9 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable
      * Drives the robot using tank controls
      * 
      * @param leftSpeed
-     *              the speed of the left motors
+     *            the speed of the left motors
      * @param rightSpeed
-     *              the speed of the right motors
+     *            the speed of the right motors
      */
     public void tankDrive(double leftSpeed, double rightSpeed)
     {
@@ -238,14 +236,14 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable
     }
 
     @Override
-    public void initializeTestMode() 
+    public void initializeTestMode()
     {
         testControlChooser.setDefaultOption("By left/right group", true);
         testControlChooser.addOption("Individual motors", false);
-        
+
         Shuffleboard.getTab("Drive").add("Control Mode", testControlChooser)
             .withWidget(BuiltInWidgets.kComboBoxChooser).withSize(2, 1).withPosition(0, 0);
-        
+
         leftLeaderEntry = Shuffleboard.getTab("Drive").add("leftLeader", 1)
             .withWidget(BuiltInWidgets.kNumberSlider).withSize(2, 1).withPosition(0, 1).getEntry();
 
@@ -270,16 +268,18 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable
     /**
      * Sets the gear for both sides of the drivetrain.
      * 
-     * @param newGear The gear value that we want the robot to achieve.
+     * @param newGear
+     *            The gear value that we want the robot to achieve.
      */
-    public void setGear(Gear newGear) 
+    public void setGear(Gear newGear)
     {
-        DoubleSolenoid.Value check = (newGear == Gear.HIGH) ? DoubleSolenoid.Value.kForward: DoubleSolenoid.Value.kReverse;
+        DoubleSolenoid.Value check = (newGear == Gear.HIGH) ? DoubleSolenoid.Value.kForward
+            : DoubleSolenoid.Value.kReverse;
         gearShiftSolenoid.set(check);
     }
 
     @Override
-    public void testModePeriodic() 
+    public void testModePeriodic()
     {
         if (testControlChooser.getSelected())
         {
@@ -293,11 +293,11 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable
             rightLeader.set(rightLeaderEntry.getValue().getDouble());
             rightFollower.set(rightFollowerEntry.getValue().getDouble());
         }
-        
+
     }
 
     @Override
-    public void enterTestMode() 
+    public void enterTestMode()
     {
         speedControllerGroupRightEntry.setDouble(0.0);
         speedControllerGroupLeftEntry.setDouble(0.0);
@@ -305,7 +305,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable
         rightFollowerEntry.setDouble(0.0);
         rightLeaderEntry.setDouble(0.0);
         leftLeaderEntry.setDouble(0.0);
-        
+
     }
 
     // The close() method is required to allow use with jUnit unit tests (see src/test/java).
@@ -313,7 +313,8 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable
     // This is called to clean up between each test and must close all downstream objects
     // before returning.
     @Override
-    public void close() throws Exception {
+    public void close() throws Exception
+    {
         drive.close();
         leftGroup.close();
         rightGroup.close();

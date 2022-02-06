@@ -13,12 +13,13 @@ public class SetIntakePositionCommand extends CommandBase
     private final boolean onCommand;
 
     /**
-     * Creates new SetIntakePositionCommand 
+     * Creates new SetIntakePositionCommand
+     * 
      * @param intakeSubsystem
-     *          Ihe Intake Subsystem required for this command.
-     *          Used to actuate Intake on a linear axis and set motor speed.
+     *            Ihe Intake Subsystem required for this command. Used to actuate Intake
+     *            on a linear axis and set motor speed.
      * @param extended
-     *          Whether or not the intake is extended.
+     *            Whether or not the intake is extended.
      */
     public SetIntakePositionCommand(SK22Intake intakeSubsystem, boolean extended)
     {
@@ -27,6 +28,7 @@ public class SetIntakePositionCommand extends CommandBase
 
         addRequirements(intakeSubsystem);
     }
+
     @Override
     public void initialize()
     {
@@ -41,9 +43,10 @@ public class SetIntakePositionCommand extends CommandBase
             intakeSubsystem.setIntakeSpeed(0.0);
         }
     }
+
     @Override
     public boolean isFinished()
     {
         return true;
-    }    
+    }
 }

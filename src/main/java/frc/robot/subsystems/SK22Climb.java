@@ -6,7 +6,7 @@ public class SK22Climb extends SKSubsystemBase
 {
 
     private final SK22ComplexClimbArm backArm;
-    
+
     public SK22Climb(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift)
     {
         backArm = new SK22ComplexClimbArm(complexBrakePivot, complexRatchetLift);
@@ -24,15 +24,18 @@ public class SK22Climb extends SKSubsystemBase
 
     public void orchestra()
     {
-        /*Performs the motion of switichuing the rotation of the arm while retracting the arm to essentially have a linear
-        motion. While this is happening we need to extent the back arm outward */
+        /*
+         * Performs the motion of switichuing the rotation of the arm while retracting the
+         * arm to essentially have a linear motion. While this is happening we need to
+         * extent the back arm outward
+         */
     }
 
     @Override
     public void simulationPeriodic()
     {
         // This method will be called once per scheduler run during simulation
-    }    
+    }
 
     @Override
     public void initializeTestMode()

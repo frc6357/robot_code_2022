@@ -9,11 +9,11 @@ public class SlewRateFilter implements Filter
     private double reversed = 1.0;
 
     /**
-     * Creates a filter with a max specified change rate. This prevents an
-     * input from changing too quickly.
+     * Creates a filter with a max specified change rate. This prevents an input from
+     * changing too quickly.
      * 
      * @param filterRate
-     *              The max rate at which the input can change
+     *            The max rate at which the input can change
      */
     public SlewRateFilter(double filterRate)
     {
@@ -21,13 +21,13 @@ public class SlewRateFilter implements Filter
     }
 
     /**
-     * Creates a filter with a max specified change rate. This prevents an
-     * input from changing too quickly.
+     * Creates a filter with a max specified change rate. This prevents an input from
+     * changing too quickly.
      * 
      * @param filterRate
-     *              The max rate at which the input can change
+     *            The max rate at which the input can change
      * @param reversed
-     *              Whether the sign of the input should be inverted
+     *            Whether the sign of the input should be inverted
      */
     public SlewRateFilter(double filterRate, boolean reversed)
     {
@@ -43,7 +43,7 @@ public class SlewRateFilter implements Filter
      *            The actual value being returned by the raw data
      * @return The filtered data to be passed to the motor
      */
-    public double filter(double rawAxis) 
+    public double filter(double rawAxis)
     {
         return reversed * slewFilter.calculate(rawAxis);
     }
@@ -52,8 +52,7 @@ public class SlewRateFilter implements Filter
      * Sets whether the sign of input should be inverted
      * 
      * @param reversed
-     *             Whether or not should the output sign should be
-     *              reversed.
+     *            Whether or not should the output sign should be reversed.
      */
     public void setInversion(boolean reversed)
     {

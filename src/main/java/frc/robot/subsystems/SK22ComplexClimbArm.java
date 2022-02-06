@@ -1,4 +1,5 @@
 package frc.robot.subsystems;
+
 import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -10,12 +11,15 @@ public class SK22ComplexClimbArm
     private final CANSparkMax complexBrakePivot;
     private final CANSparkMax complexRatchetLift;
 
-    private final DoubleSolenoid handPiston = new DoubleSolenoid(Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH,
-                                                                 Ports.ClimbHandForwardChannel, Ports.ClimbHandReverseChannel);
-    private final DoubleSolenoid complexBrakePiston = new DoubleSolenoid(Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH,
-                                                                         Ports.ClimbBrakePistonForwardChannel, Ports.ClimbBrakePistonReverseChannel);
-    private final DoubleSolenoid complexRatchetPiston = new DoubleSolenoid(Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH, 
-                                                                           Ports.ComplexClimbRatchetPistonForwardChannel, Ports.ComplexClimbRatchetPistonReverseChannel);
+    private final DoubleSolenoid handPiston = new DoubleSolenoid(Ports.ClimbPneumaticModule,
+        PneumaticsModuleType.REVPH, Ports.ClimbHandForwardChannel, Ports.ClimbHandReverseChannel);
+    private final DoubleSolenoid complexBrakePiston =
+            new DoubleSolenoid(Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH,
+                Ports.ClimbBrakePistonForwardChannel, Ports.ClimbBrakePistonReverseChannel);
+    private final DoubleSolenoid complexRatchetPiston =
+            new DoubleSolenoid(Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH,
+                Ports.ComplexClimbRatchetPistonForwardChannel,
+                Ports.ComplexClimbRatchetPistonReverseChannel);
 
     public SK22ComplexClimbArm(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift)
     {
@@ -53,7 +57,7 @@ public class SK22ComplexClimbArm
     {
         complexBrakePiston.set(DoubleSolenoid.Value.kReverse);
     }
-    
+
     public void turnComplexRatchetLiftOn(int speed)
     {
         complexRatchetLift.set(speed);
@@ -68,7 +72,7 @@ public class SK22ComplexClimbArm
     {
         complexRatchetPiston.set(DoubleSolenoid.Value.kForward);
     }
-    
+
     public void turnRatchetPistonOff()
     {
         complexRatchetPiston.set(DoubleSolenoid.Value.kReverse);

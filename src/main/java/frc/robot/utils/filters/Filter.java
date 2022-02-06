@@ -1,8 +1,8 @@
 package frc.robot.utils.filters;
 
 /**
- * This class is an interface for individual Filters. It lays out the groundwork
- * for any filtering to be done by subclasses.
+ * This class is an interface for individual Filters. It lays out the groundwork for any
+ * filtering to be done by subclasses.
  */
 public interface Filter
 {

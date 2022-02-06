@@ -11,31 +11,34 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimbConstants;
 
-public class RobotSim {
+public class RobotSim
+{
     private final ArmSim armSim = new ArmSim(36, 24, 63, 90);
 
     // Create a Mechanism2d visualization of the elevator
     private final Mechanism2d mech2d = new Mechanism2d(20, 70);
     private final MechanismRoot2d mech2dRoot = mech2d.getRoot("Arm Root", 10, 5);
-    private final MechanismLigament2d armMech2d = mech2dRoot.append(
-            new MechanismLigament2d(
-                    "Arm", armSim.getExtendLength() + armSim.getBaseLength(), 90, 6, new Color8Bit(Color.kBlue)));
+    private final MechanismLigament2d armMech2d = mech2dRoot.append(new MechanismLigament2d("Arm",
+        armSim.getExtendLength() + armSim.getBaseLength(), 90, 6, new Color8Bit(Color.kBlue)));
 
     private final CANSparkMax pivotMotor;
     private final CANSparkMax liftMotor;
 
-    public RobotSim(CANSparkMax pivot, CANSparkMax lift) {
+    public RobotSim(CANSparkMax pivot, CANSparkMax lift)
+    {
         this.pivotMotor = pivot;
         this.liftMotor = lift;
         SmartDashboard.putData("RobotPose", mech2d);
     }
 
-    public void update() {
+    public void update()
+    {
         updateArc();
         updateExtend();
     }
 
-    public void updateArc() {
+    public void updateArc()
+    {
         double motorRPM = pivotMotor.get() * ClimbConstants.ARM_MOTOR_RPM;
         double motorRPS = motorRPM / Constants.SECONDS_PER_MINUTE;
         double motorRPT = motorRPS / Constants.SIM_TICS_PER_SECOND;
@@ -47,7 +50,8 @@ public class RobotSim {
         armMech2d.setAngle(armSim.getAngle());
     }
 
-    public void updateExtend() {
+    public void updateExtend()
+    {
         double motorRPM = liftMotor.get() * ClimbConstants.ARM_MOTOR_RPM;
         double motorRPS = motorRPM / Constants.SECONDS_PER_MINUTE;
         double motorRPT = motorRPS / Constants.SIM_TICS_PER_SECOND;

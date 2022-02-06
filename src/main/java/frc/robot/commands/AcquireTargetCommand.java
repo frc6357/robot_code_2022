@@ -8,8 +8,8 @@ import frc.robot.subsystems.SK22Drive;
 import frc.robot.subsystems.SK22Vision;
 
 /**
- * Uses the vision acquisition system to put the drivetrain
- * into the correct rotation to face the target. This uses
+ * Uses the vision acquisition system to put the drivetrain into the correct rotation to
+ * face the target. This uses
  */
 public class AcquireTargetCommand extends CommandBase
 {
@@ -26,15 +26,13 @@ public class AcquireTargetCommand extends CommandBase
     @Override
     public void initialize()
     {
-        pidController = new PIDCommand(
-            new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0),
-            drive::getHeading,
-            vision.getHorizontalAngle(),
-            output -> drive.arcadeDrive(0, output),
+        pidController = new PIDCommand(new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0),
+            drive::getHeading, vision.getHorizontalAngle(), output -> drive.arcadeDrive(0, output),
             drive).getController();
 
         pidController.enableContinuousInput(-180, 180);
-        pidController.setTolerance(DriveConstants.TURN_TOLERANCE, DriveConstants.TURN_RATE_TOLERANCE);
+        pidController.setTolerance(DriveConstants.TURN_TOLERANCE,
+            DriveConstants.TURN_RATE_TOLERANCE);
 
         pidController.reset();
     }
@@ -42,11 +40,13 @@ public class AcquireTargetCommand extends CommandBase
     @Override
     public void execute()
     {
-        drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), vision.getHorizontalAngle()));
+        drive.arcadeDrive(0,
+            pidController.calculate(drive.getHeading(), vision.getHorizontalAngle()));
     }
 
     @Override
-    public void end(boolean interrupted) {
+    public void end(boolean interrupted)
+    {
         drive.arcadeDrive(0, 0);
     }
 

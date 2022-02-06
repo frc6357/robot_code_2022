@@ -6,7 +6,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
+public class SK22Vision extends SKSubsystemBase implements AutoCloseable
+{
     // destination ports are required, but source ports are optional
     final int odroidPort = 5005;
     // this will change depending on the network connected
@@ -17,10 +18,12 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     byte[] sDataBuffer;
 
     private String caughtException = "";
+
     public SK22Vision()
     {
-        
-        try {
+
+        try
+        {
             // binds socket to specified port on computer
             sSocket = new DatagramSocket(roborioPort);
 
@@ -31,43 +34,44 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
             // memory allocated for packets to be sent from the computer
             // ideally the memory is not hardcoded, but dynamic based on the packet size
             byte[] sDataBuffer = new byte[1024];
-        
+
         }
 
-        catch (SocketException e) 
+        catch (SocketException e)
         {
             caughtException = e.toString();
         }
-        
+
     }
+
     // returns the boolean that represents whether or not an exception was caught
     public String caughtException(String exceptionMessage)
     {
         return caughtException;
     }
 
-    public String getPacket(DatagramSocket sSocket, byte[] rDataBuffer) 
+    public String getPacket(DatagramSocket sSocket, byte[] rDataBuffer)
     {
         try
         {
 
-        // create Datagram packet with equal size to the 
-        DatagramPacket inputPacket = new DatagramPacket(rDataBuffer, rDataBuffer.length);
-        System.out.println("Waiting for message...");
+            // create Datagram packet with equal size to the 
+            DatagramPacket inputPacket = new DatagramPacket(rDataBuffer, rDataBuffer.length);
+            System.out.println("Waiting for message...");
 
-        // get the packet at the port defined by sSocket
-        sSocket.receive(inputPacket);
-        
-        // reads data from packet to string
-        String rData = new String(inputPacket.getData());
-        
-        // refreshes memory to empty
-        this.rDataBuffer = new byte[1024];
+            // get the packet at the port defined by sSocket
+            sSocket.receive(inputPacket);
 
-        return rData;
+            // reads data from packet to string
+            String rData = new String(inputPacket.getData());
+
+            // refreshes memory to empty
+            this.rDataBuffer = new byte[1024];
+
+            return rData;
 
         }
-        catch (SocketException e) 
+        catch (SocketException e)
         {
             caughtException = e.toString();
             return caughtException;
@@ -79,18 +83,18 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
             return caughtException;
         }
 
-        
     }
 
     public void sendPacket(byte[] sDataBuffer, DatagramSocket sSocket, String message)
     {
-        try 
+        try
         {
             // converts string data to byte data and stores this in the Data Buffer to be sent
             sDataBuffer = message.getBytes();
             // takes byte data stored in sDataBuffer and sends it to the odroid's IP address at the specified port on the odroid
-            DatagramPacket outputPacket = new DatagramPacket(sDataBuffer, sDataBuffer.length, InetAddress.getByName(odroidIP), odroidPort);
-            sSocket.send(outputPacket); 
+            DatagramPacket outputPacket = new DatagramPacket(sDataBuffer, sDataBuffer.length,
+                InetAddress.getByName(odroidIP), odroidPort);
+            sSocket.send(outputPacket);
         }
         catch (IOException i)
         {
@@ -100,29 +104,31 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
 
     /**
      * Gets the relative horizontal angle of the hub
-     * @return
-     *      The relative horizontal angle
+     * 
+     * @return The relative horizontal angle
      */
     public double getHorizontalAngle()
     {
         return 0.0;
     }
-    
+
     @Override
     public void periodic()
     {
-        try (SK22Vision m_Sk22Vision = new SK22Vision()) {
+        try (SK22Vision m_Sk22Vision = new SK22Vision())
+        {
             // reads packet data and print to terminal
             System.out.println(getPacket(m_Sk22Vision.sSocket, m_Sk22Vision.rDataBuffer));
             // close the socket after reading data
             m_Sk22Vision.sSocket.close();
-        } catch (Exception e) {
+        }
+        catch (Exception e)
+        {
             // print exception message to log
             System.out.println("Error in Vision2022 periodic: " + e.toString());
         }
     }
 
-    
     @Override
     public void initializeTestMode()
     {
@@ -142,9 +148,9 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     }
 
     @Override
-    public void close() throws Exception{
+    public void close() throws Exception
+    {
 
     }
-
 
 }

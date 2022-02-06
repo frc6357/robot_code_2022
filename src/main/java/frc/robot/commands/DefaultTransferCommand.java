@@ -3,10 +3,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SK22Transfer;
 
-public class DefaultTransferCommand extends CommandBase{
+public class DefaultTransferCommand extends CommandBase
+{
     private final SK22Transfer transfer;
     boolean verticalFull;
-
 
     public DefaultTransferCommand(SK22Transfer transfer)
     {
@@ -16,18 +16,17 @@ public class DefaultTransferCommand extends CommandBase{
     @Override
     public void initialize()
     {
-        
+
     }
-    
 
     @Override
     public void execute()
     {
-        if(transfer.getPositionOnePresence())
+        if (transfer.getPositionOnePresence())
         {
-            
+
         }
-        
+
     }
 
     @Override
