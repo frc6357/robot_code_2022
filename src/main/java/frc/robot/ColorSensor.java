@@ -1,8 +1,6 @@
 
 package frc.robot;
 
-import java.lang.Math;
-
 import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;

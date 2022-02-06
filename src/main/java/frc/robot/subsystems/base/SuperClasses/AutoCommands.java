@@ -36,4 +36,4 @@ public enum AutoCommands
         T4_LHHH_1A, T4_LHHH_2B,
         // All High Goals
         T4_HHHH_R1A, T4_HHHH_R2B
-};
+}

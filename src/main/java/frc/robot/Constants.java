@@ -16,7 +16,8 @@ public final class Constants
 {
 
     /** Constants related to the Transfer Subsystem */
-    public static final class TransferConstants{
+    public static final class TransferConstants
+    {
         public static final int DISTANCE_THRESHOLD = 70;
         public static final double POSITION_ONE_MOTOR_SPEED = 0.2;
         public static final double POSITION_TWO_MOTOR_SPEED = 0.2;
@@ -72,7 +73,8 @@ public final class Constants
     }
 
     /** Constants related to the Launcher for the Robot. */
-    public static final class LauncherConstants {
+    public static final class LauncherConstants
+    {
         public static final int BALL_LAUNCHER1               = 23;
         public static final int BALL_LAUNCHER2               = 24;
 
