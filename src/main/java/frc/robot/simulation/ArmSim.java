@@ -6,7 +6,7 @@ public class ArmSim {
     private final int maxExtendLength;
     private final int minAngle;
     private final int maxAngle;
-    private double extendLength;
+    private double extendLength = 0;
     private double degreeLocation;
 
     public ArmSim(int baseLength, int maxExtendLength, int minAngle, int maxAngle) {

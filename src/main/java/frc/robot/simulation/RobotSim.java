@@ -15,8 +15,8 @@ public class RobotSim {
     private final ArmSim armSim = new ArmSim(36, 24, 63, 90);
 
     // Create a Mechanism2d visualization of the elevator
-    private final Mechanism2d mech2d = new Mechanism2d(20, 50);
-    private final MechanismRoot2d mech2dRoot = mech2d.getRoot("Arm Root", 10, 0);
+    private final Mechanism2d mech2d = new Mechanism2d(20, 70);
+    private final MechanismRoot2d mech2dRoot = mech2d.getRoot("Arm Root", 10, 5);
     private final MechanismLigament2d armMech2d = mech2dRoot.append(
             new MechanismLigament2d(
                     "Arm", armSim.getExtendLength() + armSim.getBaseLength(), 90, 6, new Color8Bit(Color.kBlue)));
