@@ -17,8 +17,12 @@ public class Launcher
 
   private final double gearRatio;
 
-  // TODO: When second motor is added to the launcher, make sure to add a motorEncoder2 to this constructor
-  /** Creates a new SK22Launcher */
+  /** Creates a new SK22Launcher
+   * 
+   * Note that we only pass one motor encoder here. Both motors are operated as a group. 
+   * We don't control them independently but run one PID controller with input based on
+   * the reading from one encoder.
+  */
   public Launcher(MotorControllerGroup motorControllerGroup, MotorEncoder motorEncoder1, double gearRatio, int encoderCPR, double KP, double KI, double KD)
   {
     this.motorControllerGroup = motorControllerGroup;

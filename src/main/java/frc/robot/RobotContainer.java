@@ -54,11 +54,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.IntakeConstants;
 import frc.robot.commands.AcquireTargetCommand;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.DoNothingCommand;
+import frc.robot.commands.EjectBallCommand;
+import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
 import frc.robot.subsystems.SK22Climb;
@@ -85,15 +86,12 @@ import frc.robot.utils.TrajectoryBuilder;
  */
 public class RobotContainer
 {
-
     /**
      * The USB Camera for the Robot.
      */
     private UsbCamera camera1;
     private UsbCamera camera2;
     NetworkTableEntry cameraSelection;
-
-    
 
     private final TrajectoryBuilder trajectoryCreator = new TrajectoryBuilder(Constants.SPLINE_DIRECTORY);
     private final SK22CommandBuilder pathBuilder = 
@@ -103,10 +101,6 @@ public class RobotContainer
 
     private SendableChooser<Trajectory> splineCommandSelector = new SendableChooser<Trajectory>();
 
-    // The Robot controllers
-    private final FilteredJoystick driverLeftJoystick = new FilteredJoystick(Ports.OIDriverLeftJoystick);
-    private final FilteredJoystick driverRightJoystick = new FilteredJoystick(Ports.OIDriverRightJoystick);
-  
     // The robot's subsystems are defined here...
     // TODO: Find which one is high gear and which one is low gear
     private final SK22Drive driveSubsystem = new SK22Drive(
@@ -124,15 +118,27 @@ public class RobotContainer
     private Optional<SK22Vision> visionSubsystem = Optional.empty();
 
     // Robot External Controllers (Joysticks and Logitech Controller)
+    private final FilteredJoystick driverLeftJoystick = new FilteredJoystick(Ports.OIDriverLeftJoystick);
+    private final FilteredJoystick driverRightJoystick = new FilteredJoystick(Ports.OIDriverRightJoystick);
     private final Joystick operatorJoystick = new Joystick(Ports.OIOperatorController);
 
-    // Transfer control buttons
-    private final JoystickButton ejectBall = new JoystickButton(operatorJoystick, Ports.OIOperatorEjectBallButton);
-    // Vision control buttons
-    // TODO: Figure out how to use left and right joystick if we are using both left and right joysticks
-    // as the buttons could go on either joystick. Using arcade drive could result this button to be
-    // put on another joystick compared to tank drive.
-    private final JoystickButton acquireTarget = new JoystickButton(driverLeftJoystick, Ports.OIDriverAcquireTarget);
+    // Joystick buttons
+
+    // Note: If we want to continue allowing the choice of both tank drive and arcade drive, we can't use
+    // any buttons on the driverRightJoystick since this may not actually be present if arcade drive is
+    // chosen!!
+    private final JoystickButton driveAcquireTargetBtn = new JoystickButton(driverLeftJoystick, Ports.OIDriverAcquireTarget);
+    private final JoystickButton driveSlowBtn = new JoystickButton(driverLeftJoystick, Ports.OIDriverAcquireTarget);
+    private final JoystickButton driveLowGearBtn = new JoystickButton(driverLeftJoystick, Ports.OIDriverAcquireTarget);
+    private final JoystickButton driveHighGearBtn = new JoystickButton(driverLeftJoystick, Ports.OIDriverAcquireTarget);
+    private final JoystickButton driveShootBtn = new JoystickButton(driverLeftJoystick, Ports.OIDriverShoot);
+    private final JoystickButton intakeExtendBtn = new JoystickButton(operatorJoystick, Ports.OIDriverAcquireTarget);
+    private final JoystickButton intakeRetractBtn = new JoystickButton(operatorJoystick, Ports.OIDriverAcquireTarget);
+    private final JoystickButton transferEjectBallBtn = new JoystickButton(operatorJoystick, Ports.OIOperatorTransferEject);
+    private final JoystickButton transferLoadBallBtn = new JoystickButton(operatorJoystick, Ports.OIOperatorTransferLoad);
+    private final TriggerButton  climbExtendBtn = new TriggerButton(operatorJoystick, Ports.OIOperatorExtendClimb);
+    private final JoystickButton climbRetractBtn = new JoystickButton(operatorJoystick, Ports.OIOperatorRetractClimb);
+    private final JoystickButton climbOrchestrateBtn = new JoystickButton(operatorJoystick, Ports.OIOperatorOrchestrateClimb);
 
     private final DefaultArcadeDriveCommand arcadeDrive
                                 = new DefaultArcadeDriveCommand(driveSubsystem, driverLeftJoystick);
@@ -235,79 +241,88 @@ public class RobotContainer
     private void configureButtonBindings()
     {
         // Turns on slowmode when driver presses slowmode button, giving more manueverability.
-        new JoystickButton(driverLeftJoystick, Ports.OIDriverSlowmode)
-            .whenPressed(() -> driveSubsystem.setMaxOutput(0.5))
-            .whenReleased(() -> driveSubsystem.setMaxOutput(1));
+        // TODO: Do we need slow mode now that we have a gear shift? Doesn't low gear achieve
+        // the same end?
+        driveSlowBtn.whenPressed(() -> driveSubsystem.setMaxOutput(0.5));
+        driveSlowBtn.whenReleased(() -> driveSubsystem.setMaxOutput(1));
         
         // Sets the gear to low when driver clicks setLowGear Buttons
-        new JoystickButton(driverLeftJoystick, Ports.OIDriverSetLowGear)
-            .whenPressed(() -> driveSubsystem.setGear(Gear.LOW));
+       driveLowGearBtn.whenPressed(() -> driveSubsystem.setGear(Gear.LOW));
 
         // Sets the gear to high when driver clicks setHighGear Buttons
-        new JoystickButton(driverLeftJoystick, Ports.OIDriverSetHighGear)
-            .whenPressed(() -> driveSubsystem.setGear(Gear.HIGH));
+        driveHighGearBtn.whenPressed(() -> driveSubsystem.setGear(Gear.HIGH));
 
-        // Set up intake buttons if the intake is present
+        // User controls related to the ball intake subsystem
         if(intakeSubsystem.isPresent())
         {
             SK22Intake intake = intakeSubsystem.get();
             
             // Extends the intake when the extendIntake Button is pressed
-            new JoystickButton(operatorJoystick, Ports.OIOperatorIntakeExtend)
-                .whenPressed(new SetIntakePositionCommand(intake, true));
+            intakeExtendBtn.whenPressed(new SetIntakePositionCommand(intake, true));
+
             // Retracts the intake when the retractIntake Button is pressed
-            new JoystickButton(operatorJoystick, Ports.OIOperatorIntakeRetract)
-                .whenPressed(new SetIntakePositionCommand(intake, false));
-            
-            // TODO: Check if we would rather set the intake command using the method
-            // This is only viable if the intake extension and retraction do not severely
-            // increase in complexity
-            // shown below or using the method shown above.
-            // // Extends the intake when the extendIntake Button is pressed
-            // new JoystickButton(operatorJoystick, Ports.OIOperatorIntakeExtend)
-            //     .whenPressed(() -> 
-            //         {intake.extendIntake();
-            //         intake.setIntakeSpeed(IntakeConstants.INTAKE_MOTOR_SPEED);});
-            // // Retracts the intake when the retractIntake Button is pressed
-            // new JoystickButton(operatorJoystick, Ports.OIOperatorIntakeRetract)
-            //     .whenPressed(() ->
-            //         {intake.retractIntake();
-            //         intake.setIntakeSpeed(0.0);});
+            intakeRetractBtn.whenPressed(new SetIntakePositionCommand(intake, false));
         }
-        // Set up the transfer 
+
+        // User controls related to the ball transfer subsystem 
         if(transferSubsystem.isPresent())
         {
             SK22Transfer transfer = transferSubsystem.get();
+
+            // Emergency override to eject balls from the horizontal transfer
+            transferEjectBallBtn.whenPressed(new EjectBallCommand(transfer, true));
+            transferEjectBallBtn.whenReleased(new EjectBallCommand(transfer, false));
+
+            // Emergency override to move ball from the horizontal transfer
+            // into the vertical loader.
+            transferLoadBallBtn.whenPressed(new LoadBallVerticalCommand(transfer, true));
+            transferLoadBallBtn.whenReleased(new LoadBallVerticalCommand(transfer, false));
         }
+
         if(visionSubsystem.isPresent())
         {
             SK22Vision vision = visionSubsystem.get();
-            acquireTarget.whenPressed(new AcquireTargetCommand(driveSubsystem, vision));
+            driveAcquireTargetBtn.whenPressed(new AcquireTargetCommand(driveSubsystem, vision));
+            // TODO: How do we break out of this command if it fails to acquire the 
+            // target for some reason?
         }
+
+        // User controls related to the ball launcher.
         if(launcherSubsystem.isPresent() && visionSubsystem.isPresent())
         {
+            // TODO: I don't think the shoot command should need anything
+            // in the vision subsystem. My assumption is that the launcher
+            // motor speed will be being set automatically whenever the
+            // target is acquired and that the driver will already have 
+            // aligned on the target. We should discuss this.
             SK22Launcher launcher = launcherSubsystem.get();
             SK22Vision vision = visionSubsystem.get();
 
             // Shoots ball(s) using the vision system and the launcher
-            new JoystickButton(driverLeftJoystick, Ports.OIDriverShoot)
-                .whenPressed(new ShootBallsCommand(launcher, vision));
+            driveShootBtn.whenPressed(new ShootBallsCommand(launcher, vision));
         }
+
+        // User controls related to the climbing function.
         if(climbSubsystem.isPresent())
         {
             SK22Climb climb = new SK22Climb(
                             new CANSparkMax(Ports.ComplexBrakePivot, ClimbConstants.MOTOR_TYPE),
                             new CANSparkMax(Ports.ComplexRatchetLift, ClimbConstants.MOTOR_TYPE));
 
+            // TODO: The following are not implemented as commands. If extend and retract
+            // are one-off operations, that's probably OK though they may have to be wrapped
+            // as instant commands. I imagine that orchestra is a multi-stage, lengthy operation,
+            // though so you can't just perform the whole thing in one call since that will
+            // completely block the scheduler and the robot will grind to a halt.
+            
             // Extends the climb arms
-            new TriggerButton(operatorJoystick, Ports.OIOperatorExtendClimb)
-                .whenPressed(climb::extend);
+            climbExtendBtn.whenPressed(climb::extend);
+
             // Retracts the climb arms
-            new JoystickButton(operatorJoystick, Ports.OIOperatorRetractClimb)
-                .whenPressed(climb::retract);
+            climbRetractBtn.whenPressed(climb::retract);
+
             // Goes from one climb rung to the next highest rung
-            new JoystickButton(operatorJoystick, Ports.OIOperatorOrchestrateClimb)
-                .whenPressed(climb::orchestra);
+            climbOrchestrateBtn.whenPressed(climb::orchestra);
         }
     }
 

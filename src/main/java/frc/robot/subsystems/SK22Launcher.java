@@ -4,6 +4,7 @@ import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.base.Launcher;
@@ -14,7 +15,7 @@ public class SK22Launcher extends SubsystemBase
   private final WPI_TalonFX ballLauncher1 = new WPI_TalonFX(Constants.LauncherConstants.BALL_LAUNCHER1);
   // private final WPI_TalonFX ballLauncher2 = new WPI_TalonFX(Constants.LauncherConstants.ballLauncher2);
 
-  // TODO: When second motor is added, make sure to add ballLauncher2 to the launcherGroup
+  // TODO: When/if second motor is added, make sure to add ballLauncher2 to the launcherGroup
   private final MotorControllerGroup launcherGroup = new MotorControllerGroup(ballLauncher1);
   
   private final MotorEncoder motorEncoder1 = new MotorEncoder(ballLauncher1, 
@@ -52,6 +53,8 @@ public class SK22Launcher extends SubsystemBase
     double setpoint = launcher.getTargetMotorRPM();
     double speed    = launcher.getCurMotorRPM();
     
+    SmartDashboard.putNumber("Launcher RPM", speed);
+    SmartDashboard.putNumber("Lauchner Setpoint RPM", setpoint);
   }
 
   @Override

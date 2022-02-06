@@ -4,68 +4,68 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
-public class SK22Intake extends SKSubsystemBase
-{
-  /** Creates a new SK22Intake. */
-  public SK22Intake()
-  {
+public class SK22Intake extends SKSubsystemBase {
+    /** Creates a new SK22Intake. */
+    public SK22Intake() {
 
-  }
-  //this should be the safe and initial code that happens. nothing should move
-  public void disableIntake()
-  {
-    
-  }
-  //this will extend the double solenoids, moving the intake to the active position
-  public void extendIntake()
-  {
+    }
 
-  }
-  //his will retract the double solenoids, moving the intake to the inactive position
-  public void retractIntake()
-  {
+    // This should be the safe and initial code that happens. nothing should move
+    public void disableIntake() {
+        // TODO: Write this!
+    }
 
-  }
-  //this will set the speed of the motor that powers the ball pulling part of the intake
-  public void setIntakeSpeed(double speed) 
-  {
+    // This will extend the double solenoids, moving the intake to the active
+    // position
+    public void extendIntake() {
+        // TODO: Write this!
+        SmartDashboard.putBoolean("Intake Extended", true);
+    }
 
-  }
-  //this will display the current speed of the motor
-  public double getIntakeSpeed()
-  {
-    return 0.0;
-  }
+    // This will retract the double solenoids, moving the intake to the inactive
+    // position
+    public void retractIntake() {
+        // TODO: Write this!
+        SmartDashboard.putBoolean("Intake Extended", false);
+    }
 
-  @Override
-  public void periodic()
-  {
-    // This method will be called once per scheduler run
-  }
+    // This will set the speed of the motor that powers the ball pulling part of the
+    // intake
+    public void setIntakeSpeed(double speed) {
+        // TODO: Write this!
+        SmartDashboard.putNumber("Intake Speed", speed);
+    }
 
-  @Override
-  public void simulationPeriodic()
-  {
-    // This method will be called once per scheduler run during simulation
-  }
+    // This will return the current speed of the motor
+    public double getIntakeSpeed() {
+        return 0.0;
+    }
 
-  @Override
-  public void initializeTestMode()
-  {
+    @Override
+    public void periodic() {
+        // This method will be called once per scheduler run
+    }
 
-  }
+    @Override
+    public void simulationPeriodic() {
+        // This method will be called once per scheduler run during simulation
+    }
 
-  @Override
-  public void testModePeriodic()
-  {
+    @Override
+    public void initializeTestMode() {
 
-  }
+    }
 
-  @Override
-  public void enterTestMode()
-  {
+    @Override
+    public void testModePeriodic() {
 
-  }
+    }
+
+    @Override
+    public void enterTestMode() {
+
+    }
 
 }

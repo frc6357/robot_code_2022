@@ -130,8 +130,8 @@ public class Ports
     public static final int OIDriverSlowmode            = 5;  // Joystick Button 5
     public static final int OIDriverAcquireTarget       = 1;  // Joystick Trigger Button
 
-    // TODO: Would need to choose the correct button and ID.
-    public static final int OIOperatorEjectBallButton   = 4;  // Y button
+    public static final int OIOperatorTransferEject     = 4;  // Y button
+    public static final int OIOperatorTransferLoad      = 9;  // Left Stick button (TODO: Pick something better)
     public static final int OIOperatorIntakeExtend      = 1;  // A Button
     public static final int OIOperatorIntakeRetract     = 2;  // B Button
     public static final int OIOperatorExtendClimb       = 3;  // Right Trigger Axis

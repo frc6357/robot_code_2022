@@ -24,6 +24,11 @@ public final class Constants
         public static final double STOP_SPEED = 0.0;
         public static final double BALL_EJECTION_SPEED = 0.5;
         public static final double BALL_VERTICAL_LOAD_SPEED = 0.5;
+
+        // Distance sensor readings between which we assume a ball is 
+        // present in the intake side of the transfer.
+        public static final double DISTANCE_LOW_THRESHOLD = 1.0;
+        public static final double DISTANCE_HIGH_THRESHOLD = 5.0;
     }
     /** Constants related to Driving the Robot. */
     public static final class DriveConstants
