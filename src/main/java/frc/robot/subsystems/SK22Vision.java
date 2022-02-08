@@ -173,7 +173,9 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
             Datagram packetDatagram = new Datagram(packetBuffer);
             if (packetDatagram.validPacket)
             {
-                System.out.println("Packet received: " + packetDatagram.frameID);
+                System.out.println("Distance: " + packetDatagram.distance + 
+                                   "\n" + "Horizontal Angle: " + packetDatagram.horiAngle + 
+                                   "\n" + "Vertical Angle: " + packetDatagram.vertAngle);
             }
         }
     }   
