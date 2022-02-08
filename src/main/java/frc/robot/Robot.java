@@ -11,7 +11,9 @@ import java.util.Optional;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.REVPhysicsSim;
 
+import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -145,12 +147,25 @@ public class Robot extends TimedRobot
         TestModeManager.testModePeriodic();
     }
 
+
+    
+    @Override
+    public void simulationInit()
+    {
+        super.simulationInit();
+        REVPhysicsSim.getInstance().addSparkMax(complexBrakePivot, DCMotor.getNEO(1));
+        REVPhysicsSim.getInstance().addSparkMax(complexRatchetLift, DCMotor.getNEO(1));
+    }
+
     /**
      * This function is called periodically during simulation.
      */
     @Override
     public void simulationPeriodic()
     {
+        complexBrakePivot.set(-.025);
+        complexRatchetLift.set(.25);
+        REVPhysicsSim.getInstance().run();
         robotSimulation.update();
     }
 }

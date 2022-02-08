@@ -16,12 +16,8 @@ import java.util.Set;
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.cameraserver.CameraServer;
-
-//import com.fasterxml.jackson.core.JsonFactory;
-//import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.controller.PIDController;
@@ -52,7 +48,6 @@ import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.ClimbConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.AcquireTargetCommand;
 import frc.robot.commands.DefaultArcadeDriveCommand;
@@ -74,7 +69,6 @@ import frc.robot.subsystems.base.SuperClasses.Gear;
 import frc.robot.utils.FilteredJoystick;
 import frc.robot.utils.SK22CommandBuilder;
 import frc.robot.utils.SubsystemControls;
-//import frc.robot.utils.SubsystemControls;
 import frc.robot.utils.TrajectoryBuilder;
 
 /**
@@ -305,9 +299,7 @@ public class RobotContainer
         // User controls related to the climbing function.
         if(climbSubsystem.isPresent())
         {
-            SK22Climb climb = new SK22Climb(
-                            new CANSparkMax(Ports.ComplexBrakePivot, ClimbConstants.MOTOR_TYPE),
-                            new CANSparkMax(Ports.ComplexRatchetLift, ClimbConstants.MOTOR_TYPE));
+            SK22Climb climb = climbSubsystem.get();
 
             // TODO: The following are not implemented as commands. If extend and retract
             // are one-off operations, that's probably OK though they may have to be wrapped

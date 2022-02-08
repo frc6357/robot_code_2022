@@ -8,7 +8,7 @@ public class ArmSim
     private final int minAngle;
     private final int maxAngle;
     private double extendLength = 0;
-    private double degreeLocation;
+    private double degreeLocation = 90;
 
     public ArmSim(int baseLength, int maxExtendLength, int minAngle, int maxAngle)
     {
@@ -46,6 +46,11 @@ public class ArmSim
     public int getBaseLength()
     {
         return baseLength;
+    }
+
+    public double getTotalLength()
+    {
+        return extendLength + baseLength;
     }
 
     public void changeAngle(double deltaDegrees)

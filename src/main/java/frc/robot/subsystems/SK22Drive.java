@@ -30,23 +30,23 @@ import frc.robot.utils.MotorEncoder;
  */
 public class SK22Drive extends SKSubsystemBase implements AutoCloseable
 {
-    private final WPI_TalonFX leftLeader = new WPI_TalonFX(Ports.frontLeftDrive);
-    private final WPI_TalonFX leftFollower = new WPI_TalonFX(Ports.backLeftDrive);
-    private final MotorEncoder leftMotorEncoder = new MotorEncoder(leftLeader,
+    private final WPI_TalonFX          leftLeader       = new WPI_TalonFX(Ports.frontLeftDrive);
+    private final WPI_TalonFX          leftFollower     = new WPI_TalonFX(Ports.backLeftDrive);
+    private final MotorEncoder         leftMotorEncoder = new MotorEncoder(leftLeader,
         DriveConstants.ENCODER_DISTANCE_PER_PULSE, DriveConstants.LEFT_ENCODER_REVERSED);
-    private final MotorControllerGroup leftGroup =
+    private final MotorControllerGroup leftGroup        =
             new MotorControllerGroup(leftLeader, leftFollower);
 
-    private final WPI_TalonFX rightLeader = new WPI_TalonFX(Ports.frontRightDrive);
-    private final WPI_TalonFX rightFollower = new WPI_TalonFX(Ports.backRightDrive);
-    private final MotorEncoder rightMotorEncoder = new MotorEncoder(rightLeader,
+    private final WPI_TalonFX          rightLeader       = new WPI_TalonFX(Ports.frontRightDrive);
+    private final WPI_TalonFX          rightFollower     = new WPI_TalonFX(Ports.backRightDrive);
+    private final MotorEncoder         rightMotorEncoder = new MotorEncoder(rightLeader,
         DriveConstants.ENCODER_DISTANCE_PER_PULSE, DriveConstants.RIGHT_ENCODER_REVERSED);
-    private final MotorControllerGroup rightGroup =
+    private final MotorControllerGroup rightGroup        =
             new MotorControllerGroup(rightLeader, rightFollower);
 
     private final AHRS gyro = new AHRS(SPI.Port.kMXP);
 
-    private final DifferentialDrive drive;
+    private final DifferentialDrive         drive;
     private final DifferentialDriveOdometry odometry;
 
     private SendableChooser<Boolean> testControlChooser = new SendableChooser<Boolean>();
