@@ -6,3 +6,5 @@ bin/
 simgui-ds.json
 simgui-window.json
 simgui.json
+.classpath
+.project
