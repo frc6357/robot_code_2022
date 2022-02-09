@@ -13,14 +13,24 @@ import frc.robot.subsystems.SK22Vision;
  */
 public class AcquireTargetCommand extends CommandBase
 {
-    private final SK22Drive drive;
+    private final SK22Drive  drive;
     private final SK22Vision vision;
-    PIDController pidController;
+    private PIDController    pidController;
 
+    /**
+     * Creates a new AcquireTargetCommand and sets the
+     * 
+     * @param drive
+     *            The drive subsystem required to move the robot
+     * @param vision
+     *            The vision subsystem required to find the position of the robot relative
+     *            to the goal
+     */
     public AcquireTargetCommand(SK22Drive drive, SK22Vision vision)
     {
         this.drive = drive;
         this.vision = vision;
+        addRequirements(drive, vision);
     }
 
     @Override
