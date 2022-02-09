@@ -23,12 +23,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Ports;
 import frc.robot.subsystems.base.SuperClasses.Gear;
+import frc.robot.utils.DifferentialDrivetrain;
 import frc.robot.utils.MotorEncoder;
 
 /**
  * The SK22Drive class is the subsystem that controls the drive train of the Robot.
  */
-public class SK22Drive extends SKSubsystemBase implements AutoCloseable
+public class SK22Drive extends SKSubsystemBase implements AutoCloseable, DifferentialDrivetrain
 {
     private final WPI_TalonFX          leftLeader       = new WPI_TalonFX(Ports.frontLeftDrive);
     private final WPI_TalonFX          leftFollower     = new WPI_TalonFX(Ports.backLeftDrive);

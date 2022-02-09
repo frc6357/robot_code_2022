@@ -26,6 +26,8 @@ public class SubsystemControls
      *            indictes if the indexer system is present and should be enabled
      * @param climb
      *            indicates if the climb system is present and should be enabled
+     * @param vision
+     *           indicates if the vision system is present and should be enabled
      */
     public SubsystemControls(@JsonProperty(required = true, value = "intake")
                                 boolean intake,

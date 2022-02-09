@@ -1,4 +1,4 @@
-package frc.robot.utils;
+package frc.robot.AutoTools;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,14 +9,23 @@ import java.util.Scanner;
 import java.util.Set;
 
 import edu.wpi.first.wpilibj.Filesystem;
-import frc.robot.subsystems.base.SuperClasses.AutoCommands;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.AutoTools.SK22Paths.N2_HH_R;
+import frc.robot.AutoTools.SK22Paths.T4_HHHH_R1A;
+import frc.robot.AutoTools.SK22Paths.T4_HHHH_R2B;
+import frc.robot.AutoTools.SK22Paths.T4_LHHH_2B;
+import frc.robot.AutoTools.SK22Paths.Taxi;
 
+/**
+ * A class that adds auto path options to smart dashboard if the segments to create the
+ * paths are present.
+ */
 public class SK22CommandBuilder
 {
-    private File pathDirectory;
-    private File[] files;
+    private File                     pathDirectory;
+    private File[]                   files;
     private Map<String, Set<String>> dependencies = new HashMap<String, Set<String>>();
-    private TrajectoryBuilder pathBuilder;
+    private TrajectoryBuilder        pathBuilder;
 
     /**
      * Creates a new SK22CommandBuilder. It will create all the dependencies for each auto
@@ -84,7 +93,7 @@ public class SK22CommandBuilder
      * @param displayMethod
      *            The function required to add the options for the paths
      */
-    public void displayPossibleAutos(SmartdashboardPaths displayMethod)
+    public void displayPossibleAutos(SendableChooser<AutoPaths> displayMethod)
     {
         /**
          * A set of autos that are possible with the known auto paths and their
@@ -95,75 +104,40 @@ public class SK22CommandBuilder
         // Adds paths if they are possible to make
         if (possibleAutos.contains("Taxi"))
         {
-            displayMethod.display("Taxi", AutoCommands.Taxi);
+            displayMethod.addOption("Taxi", new Taxi());
         }
         if (possibleAutos.contains("Radial (HH)"))
         {
-            displayMethod.display("2 Ball Radial HH", AutoCommands.N2_HH_R);
+            displayMethod.addOption("2 Ball Radial HH", new N2_HH_R());
         }
-        if (possibleAutos.contains("Low to Ball 1 (LH)"))
-        {
-            displayMethod.display("Low to Ball 1 (LH)", AutoCommands.N2_LH_1A);
-        }
-        if (possibleAutos.contains("Low to Ball 2 (LH)"))
-        {
-            displayMethod.display("Low to Ball 2 (LH)", AutoCommands.N2_LH_2A);
-        }
-        if (possibleAutos.contains("Low to Ball 3 (LH)"))
-        {
-            displayMethod.display("Low to Ball 3 (LH)", AutoCommands.N2_LH_2B);
-        }
-        if (possibleAutos.contains("2(LL) Tarmac 1A"))
-        {
-            displayMethod.display("2 Ball Tarmac 1A LL", AutoCommands.N2_LL_1A);
-        }
-        if (possibleAutos.contains("2(LL) Tarmac 2A"))
-        {
-            displayMethod.display("2 Ball Tarmac 2A LL", AutoCommands.N2_LL_2A);
-        }
-        if (possibleAutos.contains("2(LL) Tarmac 2B"))
-        {
-            displayMethod.display("2 Ball Tarmac 2A LL", AutoCommands.N2_LL_2B);
-        }
-        if (possibleAutos.contains("3(LHH) Tarmac 1A"))
-        {
-            displayMethod.display("3 Ball Tarmac 1A", AutoCommands.N3_LHH_1A);
-        }
-        if (possibleAutos.contains("3(LHH) Tarmac 2A"))
-        {
-            displayMethod.display("3 Ball Tarmac 2A", AutoCommands.N3_LHH_2A);
-        }
-        if (possibleAutos.contains("3(LHH) Tarmac 2B"))
-        {
-            displayMethod.display("3 Ball Tarmac 2B", AutoCommands.N3_LHH_2B);
-        }
-        if (possibleAutos.contains("3(HHH) Tarmac 1A"))
-        {
-            displayMethod.display("3 Ball Tarmac 1A Radial", AutoCommands.N3_HHH_R1A);
-        }
-        if (possibleAutos.contains("3(HHH) Tarmac 2A"))
-        {
-            displayMethod.display("3 Ball Tarmac 2A Radial", AutoCommands.N3_HHH_R2A);
-        }
-        if (possibleAutos.contains("3(HHH) Tarmac 2B"))
-        {
-            displayMethod.display("3 Ball Tarmac 2B Radial", AutoCommands.N3_HHH_R2B);
-        }
-        if (possibleAutos.contains("4T(LHHH) Tarmac 1A"))
-        {
-            displayMethod.display("4 Ball Terminal Tarmac 1A", AutoCommands.T4_LHHH_1A);
-        }
+        // TODO: Must make skeleton commands for all 3 ball autos
+        // if (possibleAutos.contains("3(HHH) Tarmac 1A"))
+        // {
+        //     displayMethod.addOption("3 Ball Tarmac 1A Radial", AutoCommands.N3_HHH_R1A);
+        // }
+        // if (possibleAutos.contains("3(HHH) Tarmac 2A"))
+        // {
+        //     displayMethod.addOption("3 Ball Tarmac 2A Radial", AutoCommands.N3_HHH_R2A);
+        // }
+        // if (possibleAutos.contains("3(HHH) Tarmac 2B"))
+        // {
+        //     displayMethod.addOption("3 Ball Tarmac 2B Radial", AutoCommands.N3_HHH_R2B);
+        // }
+        // if (possibleAutos.contains("4T(LHHH) Tarmac 1A"))
+        // {
+        //     displayMethod.addOption("4 Ball Terminal Tarmac 1A", new T4_LHHH_1A());
+        // }
         if (possibleAutos.contains("4T(LHHH) Tarmac 2B"))
         {
-            displayMethod.display("4 Ball Terminal Tarmac 2B", AutoCommands.T4_LHHH_2B);
+            displayMethod.addOption("4 Ball Terminal Tarmac 2B", new T4_LHHH_2B());
         }
         if (possibleAutos.contains("4T(HHHH) Tarmac 1A"))
         {
-            displayMethod.display("4 Ball Terminal Tarmac 1A Radial", AutoCommands.T4_HHHH_R1A);
+            displayMethod.addOption("4 Ball Terminal Tarmac 1A Radial", new T4_HHHH_R1A());
         }
         if (possibleAutos.contains("4T(HHHH) Tarmac 2B"))
         {
-            displayMethod.display("4 Ball Terminal Tarmac 2B Radial", AutoCommands.T4_HHHH_R2B);
+            displayMethod.addOption("4 Ball Terminal Tarmac 2B Radial", new T4_HHHH_R2B());
         }
     }
 }

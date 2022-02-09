@@ -3,7 +3,7 @@
 // to ensure that all the time-consuming trajectory creation is done well
 // before autonomous mode starts.
 
-package frc.robot.utils;
+package frc.robot.AutoTools;
 
 import java.io.File;
 import java.io.IOException;
@@ -28,19 +28,23 @@ import java.util.Set;
 public class TrajectoryBuilder
 {
 
-    private Map<String, Trajectory> m_trajectories = new HashMap<String, Trajectory>();
+    private Map<String, Trajectory> trajectories = new HashMap<String, Trajectory>();
 
     /**
      * The constructor for the TrajectorBuilder class takes a path to the trajectory JSON
-     * directory as input. This is relative to the current deploy directory so, if the
-     * paths are in home/lvuser/deploy/paths, you would pass "paths".
+     * directory as input.
+     * 
+     * @param pathSubDir
+     *            The path required to access the paths folder. This is relative to the
+     *            current deploy directory so, if the paths are in
+     *            home/lvuser/deploy/paths, you would pass "paths".
      */
-    public TrajectoryBuilder(String PathSubDir)
+    public TrajectoryBuilder(String pathSubDir)
     {
         Timer timer = new Timer();
 
         File deployDirectory = Filesystem.getDeployDirectory();
-        File pathDirectory = new File(deployDirectory, PathSubDir);
+        File pathDirectory = new File(deployDirectory, pathSubDir);
 
         File[] pathNames = pathDirectory.listFiles();
 
@@ -61,7 +65,7 @@ public class TrajectoryBuilder
             if (trajectory != null)
             {
                 // Add trajectory to set
-                m_trajectories.put(pathname.getName().replace(".wpilib.json", ""), trajectory);
+                trajectories.put(pathname.getName().replace(".wpilib.json", ""), trajectory);
             }
         }
     }
@@ -73,7 +77,7 @@ public class TrajectoryBuilder
      */
     public int getNumTrajectories()
     {
-        return m_trajectories.size();
+        return trajectories.size();
     }
 
     /**
@@ -83,7 +87,7 @@ public class TrajectoryBuilder
      */
     public Set<String> getTrajectoryNames()
     {
-        return m_trajectories.keySet();
+        return trajectories.keySet();
     }
 
     /**
@@ -95,7 +99,7 @@ public class TrajectoryBuilder
      */
     public Trajectory getTrajectory(String name)
     {
-        return m_trajectories.get(name);
+        return trajectories.get(name);
     }
 
     /**
@@ -107,7 +111,7 @@ public class TrajectoryBuilder
      */
     public boolean hasTrajectory(String name)
     {
-        return m_trajectories.containsKey(name);
+        return trajectories.containsKey(name);
     }
 
     /**
@@ -118,7 +122,6 @@ public class TrajectoryBuilder
      *            A string array with all of the desired trajectories
      * @return Whether all of the specified trajectories exist
      */
-    // TODO: Check if this works as expected
     public boolean hasTrajectories(String[] names)
     {
         for (String name : names)
@@ -139,7 +142,6 @@ public class TrajectoryBuilder
      *            A string set with all of the desired trajectories
      * @return Whether all of the specified trajectories exist
      */
-    // TODO: Check if this works as expected
     public boolean hasTrajectories(Set<String> names)
     {
         for (String name : names)

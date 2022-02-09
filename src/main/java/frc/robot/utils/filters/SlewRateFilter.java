@@ -2,11 +2,14 @@ package frc.robot.utils.filters;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
 
+/**
+ * A class that uses the slew rate limiter to limit the rate of change of the input.
+ */
 public class SlewRateFilter implements Filter
 {
 
     private final SlewRateLimiter slewFilter;
-    private double reversed = 1.0;
+    private double                reversed = 1.0;
 
     /**
      * Creates a filter with a max specified change rate. This prevents an input from
