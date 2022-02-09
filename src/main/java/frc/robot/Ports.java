@@ -98,8 +98,10 @@ public class Ports
     public static final int ClimbBrakePistonReverseChannel          = 7;
     public static final int ComplexClimbRatchetPistonForwardChannel        = 8; 
     public static final int ComplexClimbRatchetPistonReverseChannel        = 9;
-    public static final int SimpleClimbRatchetPistonForwardChannel        = 10; 
-    public static final int SimpleClimbRatchetPistonReverseChannel        = 11;
+    public static final int SimpleClimbLiftPistonForwardChannel        = 10; 
+    public static final int SimpleClimbLiftPistonReverseChannel        = 11;
+    public static final int SimpleClimbTiltPistonForwardChannel        = 12; 
+    public static final int SimpleClimbTiltPistonReverseChannel        = 13;
 
     ///////////////////////////////
     // Additional hardware
