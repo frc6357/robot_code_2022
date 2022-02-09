@@ -60,7 +60,10 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable
     private NetworkTableEntry speedControllerGroupLeftEntry;
     private NetworkTableEntry speedControllerGroupRightEntry;
 
-    /** Creates a new SK22Drive. */
+    /**
+     * Creates a SK22Drive which accepts a double solenoid in order to gear shift
+     * @param gearShiftSolenoid This is the solenoid that will allow for the shift between more speed or more torque
+     */
     public SK22Drive(DoubleSolenoid gearShiftSolenoid)
     {
         this.gearShiftSolenoid = gearShiftSolenoid;
