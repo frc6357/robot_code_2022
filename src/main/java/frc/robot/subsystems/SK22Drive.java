@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
@@ -20,6 +21,11 @@ import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Ports;
 import frc.robot.subsystems.base.SuperClasses.Gear;
@@ -63,7 +69,10 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
 
     /**
      * Creates a SK22Drive which accepts a double solenoid in order to gear shift
-     * @param gearShiftSolenoid This is the solenoid that will allow for the shift between more speed or more torque
+     * 
+     * @param gearShiftSolenoid
+     *            This is the solenoid that will allow for the shift between more speed or
+     *            more torque
      */
     public SK22Drive(DoubleSolenoid gearShiftSolenoid)
     {
@@ -280,6 +289,33 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         DoubleSolenoid.Value check = (newGear == Gear.HIGH) ? DoubleSolenoid.Value.kForward
             : DoubleSolenoid.Value.kReverse;
         gearShiftSolenoid.set(check);
+    }
+
+    /**
+     * Creates a command using a trajectory.
+     * 
+     * @param trajectory
+     *            The {@link Trajectory} to be made into a command
+     * @param resetOdometry
+     *            Whether the command should reset the odometry before starting the path
+     * @return The command that uses {@link SK22Drive} to run a path.
+     */
+    public Command makeTrajectoryCommand(Trajectory trajectory, boolean resetOdometry)
+    {
+        RamseteCommand ramseteCommand = new RamseteCommand(trajectory, this::getPose,
+            AutoConstants.RAMSETE_CONTROLLER, AutoConstants.SIMPLE_MOTOR_FEEDFORWARD,
+            DriveConstants.DRIVE_KINEMATICS, this::getWheelSpeeds, AutoConstants.PID_CONTROLLER,
+            AutoConstants.PID_CONTROLLER,
+            // RamseteCommand passes volts to the callback
+            this::tankDriveVolts, this);
+
+        // Tell the robot where it is starting from if this is the first trajectory of a path.
+        return resetOdometry ?
+        // Run path following command, then stop at the end.
+            new SequentialCommandGroup(
+                new InstantCommand(() -> this.resetOdometry(trajectory.getInitialPose()), this),
+                ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0)))
+            : ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0));
     }
 
     @Override

@@ -31,12 +31,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.RamseteCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.Constants.AutoConstants;
-import frc.robot.Constants.DriveConstants;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.SK22CommandBuilder;
 import frc.robot.AutoTools.TrajectoryBuilder;
@@ -58,7 +53,6 @@ import frc.robot.subsystems.SK22Transfer;
 import frc.robot.subsystems.SK22Vision;
 import frc.robot.subsystems.base.TriggerButton;
 import frc.robot.subsystems.base.SuperClasses.Gear;
-import frc.robot.utils.DifferentialDrivetrain;
 import frc.robot.utils.FilteredJoystick;
 import frc.robot.utils.SubsystemControls;
 
@@ -326,26 +320,6 @@ public class RobotContainer
         }
     }
 
-    private Command makeTrajectoryCommand(Trajectory trajectory, boolean resetOdometry,
-        DifferentialDrivetrain driveSubystem)
-    {
-        RamseteCommand ramseteCommand = new RamseteCommand(trajectory, driveSubsystem::getPose,
-            AutoConstants.RAMSETE_CONTROLLER, AutoConstants.SIMPLE_MOTOR_FEEDFORWARD,
-            DriveConstants.DRIVE_KINEMATICS, driveSubsystem::getWheelSpeeds,
-            AutoConstants.PID_CONTROLLER, AutoConstants.PID_CONTROLLER,
-            // RamseteCommand passes volts to the callback
-            driveSubsystem::tankDriveVolts, driveSubsystem);
-
-        // Tell the robot where it is starting from if this is the first trajectory of a path.
-        return resetOdometry ?
-        // Run path following command, then stop at the end.
-            new SequentialCommandGroup(
-                new InstantCommand(() -> driveSubsystem.resetOdometry(trajectory.getInitialPose()),
-                    driveSubsystem),
-                ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0)))
-            : ramseteCommand.andThen(() -> driveSubsystem.tankDriveVolts(0, 0));
-    }
-
     /**
      * Reset the encoders and gyro in the drive subsystem. This should be called on boot
      * and when initializing auto and reset modes.
@@ -364,7 +338,7 @@ public class RobotContainer
      */
     public void addPossibleAutos()
     {
-        // Default Path of Nothign
+        // Default Path of Nothing
         autoCommandSelector.setDefaultOption("Do Nothing", new DoNothing());
 
         // Test Paths
@@ -396,7 +370,7 @@ public class RobotContainer
      */
     public Command getAutonomousCommand()
     {
-        var autoSelector = autoCommandSelector.getSelected();
-        return autoSelector.getCommand(driveSubsystem, segmentCreator, this::makeTrajectoryCommand);
+        return autoCommandSelector.getSelected().getCommand(segmentCreator,
+            driveSubsystem::makeTrajectoryCommand);
     }
 }

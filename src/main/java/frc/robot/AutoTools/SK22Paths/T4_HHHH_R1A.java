@@ -7,7 +7,6 @@ import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.RamseteTrajectoryMethod;
 import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.commands.DoNothingCommand;
-import frc.robot.utils.DifferentialDrivetrain;
 
 /**
  * A class that contains a 4 ball auto that starts on the outside of the tarmac 1A (when
@@ -29,30 +28,28 @@ public class T4_HHHH_R1A implements AutoPaths
     /**
      * Creates and returns an autonomous command
      * 
-     * @param driveSubsystem
-     *            The subsystem required to run the autonomous command
      * @param segmentCreator
      *            The class that is used to access the auto segments
      * @param trajectoryCreator
      *            The method used to create the trajectory using Ramsete controller
      * @return The auto command
      */
-    public Command getCommand(DifferentialDrivetrain driveSubsystem,
+    public Command getCommand(
         TrajectoryBuilder segmentCreator, RamseteTrajectoryMethod trajectoryCreator)
     {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 trajectoryCreator.createTrajectory(
-                    segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true, driveSubsystem),
+                    segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
                 new DoNothingCommand(),     // Intake Set Up
                 new DoNothingCommand()),    // Launcher Set Up
             new DoNothingCommand(),         // Launcher Shoot HH
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 1 to Ball 2"),
-                true, driveSubsystem),
+                true),
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 2 to Terminal"),
-                false, driveSubsystem),
+                false),
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Terminal to Shoot"),
-                false, driveSubsystem),
+                false),
             new DoNothingCommand());        // Launcher Shoot HH
     }
 }

@@ -7,7 +7,6 @@ import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.RamseteTrajectoryMethod;
 import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.commands.DoNothingCommand;
-import frc.robot.utils.DifferentialDrivetrain;
 
 /**
  * A class that contains the auto path that starts at the outer edge of the tarmac (when
@@ -29,21 +28,19 @@ public class N2_HH_R implements AutoPaths
     /**
      * Creates and returns an autonomous command
      * 
-     * @param driveSubsystem
-     *            The subsystem required to run the autonomous command
      * @param segmentCreator
      *            The class that is used to access the auto segments
      * @param trajectoryCreator
      *            The method used to create the trajectory using Ramsete controller
      * @return The auto command
      */
-    public Command getCommand(DifferentialDrivetrain driveSubsystem,
+    public Command getCommand(
         TrajectoryBuilder segmentCreator, RamseteTrajectoryMethod trajectoryCreator)
     {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 trajectoryCreator.createTrajectory(
-                    segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true, driveSubsystem),
+                    segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
                 new DoNothingCommand()),    // Set Up Intake
             new DoNothingCommand());        // Launcher Shoot HH
     }

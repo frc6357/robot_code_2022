@@ -12,7 +12,6 @@ import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstrai
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
-import frc.robot.utils.DifferentialDrivetrain;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.RamseteTrajectoryMethod;
 import frc.robot.AutoTools.TrajectoryBuilder;
@@ -36,16 +35,14 @@ public class DriveSplineCanned implements AutoPaths
     /**
      * Creates and returns an autonomous command
      * 
-     * @param driveSubsystem
-     *            The subsystem required to run the autonomous command
      * @param segmentCreator
      *            The class that is used to access the auto segments
      * @param trajectoryCreator
      *            The method used to create the trajectory using Ramsete controller
      * @return The auto command
      */
-    public Command getCommand(DifferentialDrivetrain driveSubsystem,
-        TrajectoryBuilder segmentCreator, RamseteTrajectoryMethod trajectoryCreator)
+    public Command getCommand(TrajectoryBuilder segmentCreator,
+        RamseteTrajectoryMethod trajectoryCreator)
     {
         var autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
             AutoConstants.SIMPLE_MOTOR_FEEDFORWARD, DriveConstants.DRIVE_KINEMATICS, 10);
@@ -61,6 +58,6 @@ public class DriveSplineCanned implements AutoPaths
             new Pose2d(0, 0, new Rotation2d(0)), List.of(new Translation2d(0.5, 0)),
             new Pose2d(1, 0, new Rotation2d(0)), config);
 
-        return trajectoryCreator.createTrajectory(trajectory, true, driveSubsystem);
+        return trajectoryCreator.createTrajectory(trajectory, true);
     }
 }

@@ -7,7 +7,6 @@ import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.RamseteTrajectoryMethod;
 import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.commands.DoNothingCommand;
-import frc.robot.utils.DifferentialDrivetrain;
 
 /**
  * A class that contains the four ball auto that starts near the hub of Tarmac 1A then
@@ -30,30 +29,28 @@ public class T4_LHHH_1A implements AutoPaths
     /**
      * Creates and returns an autonomous command
      * 
-     * @param driveSubsystem
-     *            The subsystem required to run the autonomous command
      * @param segmentCreator
      *            The class that is used to access the auto segments
      * @param trajectoryCreator
      *            The method used to create the trajectory using Ramsete controller
      * @return The auto command
      */
-    public Command getCommand(DifferentialDrivetrain driveSubsystem,
-        TrajectoryBuilder segmentCreator, RamseteTrajectoryMethod trajectoryCreator)
+    public Command getCommand(TrajectoryBuilder segmentCreator,
+        RamseteTrajectoryMethod trajectoryCreator)
     {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new DoNothingCommand(),     // Launcher Shoot L
-                new DoNothingCommand()),        // Set Up Intake
-            trajectoryCreator.createTrajectory(
-                segmentCreator.getTrajectory("Low to Ball 1 (LH)"), true, driveSubsystem),
+                new DoNothingCommand()),    // Set Up Intake
+            trajectoryCreator
+                .createTrajectory(segmentCreator.getTrajectory("Low to Ball 1 (LH)"), true),
             new DoNothingCommand(),         // Launcher Shoot H
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 1 to Ball 2"),
-                false, driveSubsystem),
+                false),
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 2 to Terminal"),
-                false, driveSubsystem),
+                false),
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Terminal to Shoot"),
-                false, driveSubsystem),
+                false),
             new DoNothingCommand());        // Launcher Shoot HH
     }
 }
