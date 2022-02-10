@@ -8,48 +8,49 @@ import frc.robot.Constants.ClimbConstants;
 
 public class SK22SimpleClimbArm
 {
-    private final CANSparkMax simpleRatchetLift =
-            new CANSparkMax(Ports.SIMPLE_RATCHET_LIFT, ClimbConstants.MOTOR_TYPE);
-
     private final DoubleSolenoid handPiston = new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE,
         PneumaticsModuleType.REVPH, Ports.CLIMB_HAND_FORWARD_CHANNEL, Ports.CLIMB_HAND_REVERSE_CHANNEL);
 
-    private final DoubleSolenoid simpleRatchetPiston = new DoubleSolenoid(
+    private final DoubleSolenoid simpleLiftPiston = new DoubleSolenoid(
         Ports.CLIMB_PNEUMATIC_MODULE, PneumaticsModuleType.REVPH,
         Ports.SIMPLE_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL, Ports.SIMPLE_CLIMB_RATCHET_PISTON_REVERSE_CHANNEL);
 
-    public SK22SimpleClimbArm(CANSparkMax simpleRatchetLift)
+    private final DoubleSolenoid simpleTiltPiston = new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL,
+        Ports.SIMPLE_CLIMB_RATCHET_PISTON_REVERSE_CHANNEL); //TODO: make sure this is the right ports
+
+    public SK22SimpleClimbArm()
     {
 
     }
 
-    public void retractArm()
+    public void retractHand()
     {
         handPiston.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void extendArm()
+    public void extendHand()
     {
         handPiston.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void turnComplexRatchetLiftOn(int speed)
+    public void raise()
     {
-        simpleRatchetLift.set(speed);
+        simpleLiftPiston.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void turnComplexRatchetLiftOff()
+    public void lower()
     {
-        simpleRatchetLift.stopMotor();
+        simpleLiftPiston.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void turnRatchetPistonOn()
+    public void tilt()
     {
-        simpleRatchetPiston.set(DoubleSolenoid.Value.kForward);
+        simpleTiltPiston.set(DoubleSolenoid.Value.kForward);
     }
 
-    public void turnRatchetPistonOff()
+    public void straighten()
     {
-        simpleRatchetPiston.set(DoubleSolenoid.Value.kReverse);
+        simpleTiltPiston.set(DoubleSolenoid.Value.kReverse);
     }
 }
