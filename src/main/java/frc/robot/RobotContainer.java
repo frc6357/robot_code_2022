@@ -35,9 +35,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.SK22CommandBuilder;
 import frc.robot.AutoTools.TrajectoryBuilder;
-import frc.robot.AutoTools.SK22Paths.DoNothing;
-import frc.robot.AutoTools.SK22Paths.Drive1mForwardBackward;
-import frc.robot.AutoTools.SK22Paths.DriveSplineCanned;
+import frc.robot.AutoTools.SK22Paths.RunJson;
 import frc.robot.commands.AcquireTargetCommand;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
@@ -338,21 +336,6 @@ public class RobotContainer
      */
     public void addPossibleAutos()
     {
-        // Default Path of Nothing
-        autoCommandSelector.setDefaultOption("Do Nothing", new DoNothing());
-
-        // Test Paths
-        autoCommandSelector.addOption("Drive canned path", new DriveSplineCanned());
-        if (segmentCreator.hasTrajectories(new String[]{"1m Forwards", "1m Backwards"}))
-        {
-            autoCommandSelector.addOption("Drive forwards then backwards 1m",
-                new Drive1mForwardBackward());
-        }
-
-        // Checking dependencies for autos before giving option to run
-        // Adds a majority of autos that have multiple segments
-        pathBuilder.displayPossibleAutos(autoCommandSelector);
-
         // Adding all JSON paths
         Set<String> splineDirectory = segmentCreator.getTrajectoryNames();
         for (String pathname : splineDirectory)
@@ -361,6 +344,12 @@ public class RobotContainer
         }
         String firstJSON = splineDirectory.stream().findFirst().get();
         splineCommandSelector.setDefaultOption(firstJSON, segmentCreator.getTrajectory(firstJSON));
+
+        autoCommandSelector.addOption("Run Json", new RunJson(splineCommandSelector));
+
+        // Checking dependencies for autos before giving option to run
+        // Adds a majority of autos that have multiple segments
+        pathBuilder.displayPossibleAutos(autoCommandSelector);
     }
 
     /**
