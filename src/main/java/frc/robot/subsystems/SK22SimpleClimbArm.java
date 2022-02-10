@@ -9,14 +9,14 @@ import frc.robot.Constants.ClimbConstants;
 public class SK22SimpleClimbArm
 {
     private final CANSparkMax simpleRatchetLift =
-            new CANSparkMax(Ports.SimpleRatchetLift, ClimbConstants.MOTOR_TYPE);
+            new CANSparkMax(Ports.SIMPLE_RATCHET_LIFT, ClimbConstants.MOTOR_TYPE);
 
-    private final DoubleSolenoid handPiston = new DoubleSolenoid(Ports.ClimbPneumaticModule,
-        PneumaticsModuleType.REVPH, Ports.ClimbHandForwardChannel, Ports.ClimbHandReverseChannel);
+    private final DoubleSolenoid handPiston = new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+        PneumaticsModuleType.REVPH, Ports.CLIMB_HAND_FORWARD_CHANNEL, Ports.CLIMB_HAND_REVERSE_CHANNEL);
 
     private final DoubleSolenoid simpleRatchetPiston = new DoubleSolenoid(
-        Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH,
-        Ports.SimpleClimbRatchetPistonForwardChannel, Ports.SimpleClimbRatchetPistonReverseChannel);
+        Ports.CLIMB_PNEUMATIC_MODULE, PneumaticsModuleType.REVPH,
+        Ports.SIMPLE_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL, Ports.SIMPLE_CLIMB_RATCHET_PISTON_REVERSE_CHANNEL);
 
     public SK22SimpleClimbArm(CANSparkMax simpleRatchetLift)
     {

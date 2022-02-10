@@ -84,7 +84,7 @@ public class RobotContainer
     // The robot's subsystems are defined here...
     // TODO: Find which one is high gear and which one is low gear
     private final SK22Drive driveSubsystem = new SK22Drive(new DoubleSolenoid(Ports.BASE_PCM,
-        Ports.pneumaticsModuleType, Ports.gearShiftHigh, Ports.gearShiftLow));
+        Ports.PNEUMATICS_MODULE_TYPE, Ports.GEAR_SHIFT_HIGH, Ports.GEAR_SHIFT_LOW));
     // These are currently empty and only created in the contructor
     // based on the Subsystem.json file
     private Optional<SK22Intake>      intakeSubsystem   = Optional.empty();
@@ -95,10 +95,10 @@ public class RobotContainer
 
     // Robot External Controllers (Joysticks and Logitech Controller)
     private final FilteredJoystick driverLeftJoystick  =
-            new FilteredJoystick(Ports.OIDriverLeftJoystick);
+            new FilteredJoystick(Ports.OI_DRIVER_LEFT_JOYSTICK);
     private final FilteredJoystick driverRightJoystick =
-            new FilteredJoystick(Ports.OIDriverRightJoystick);
-    private final Joystick         operatorJoystick    = new Joystick(Ports.OIOperatorController);
+            new FilteredJoystick(Ports.OI_DRIVER_RIGHT_JOYSTICK);
+    private final Joystick         operatorJoystick    = new Joystick(Ports.OI_OPERATOR_CONTROLLER);
 
     // Joystick buttons
 
@@ -106,29 +106,29 @@ public class RobotContainer
     // any buttons on the driverRightJoystick since this may not actually be present if arcade drive is
     // chosen!!
     private final JoystickButton driveAcquireTargetBtn =
-            new JoystickButton(driverLeftJoystick, Ports.OIDriverAcquireTarget);
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
     private final JoystickButton driveSlowBtn          =
-            new JoystickButton(driverLeftJoystick, Ports.OIDriverAcquireTarget);
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
     private final JoystickButton driveLowGearBtn       =
-            new JoystickButton(driverLeftJoystick, Ports.OIDriverAcquireTarget);
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
     private final JoystickButton driveHighGearBtn      =
-            new JoystickButton(driverLeftJoystick, Ports.OIDriverAcquireTarget);
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
     private final JoystickButton driveShootBtn         =
-            new JoystickButton(driverLeftJoystick, Ports.OIDriverShoot);
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SHOOT);
     private final JoystickButton intakeExtendBtn       =
-            new JoystickButton(operatorJoystick, Ports.OIDriverAcquireTarget);
+            new JoystickButton(operatorJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
     private final JoystickButton intakeRetractBtn      =
-            new JoystickButton(operatorJoystick, Ports.OIDriverAcquireTarget);
+            new JoystickButton(operatorJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
     private final JoystickButton transferEjectBallBtn  =
-            new JoystickButton(operatorJoystick, Ports.OIOperatorTransferEject);
+            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_EJECT);
     private final JoystickButton transferLoadBallBtn   =
-            new JoystickButton(operatorJoystick, Ports.OIOperatorTransferLoad);
+            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_LOAD);
     private final TriggerButton  climbExtendBtn        =
-            new TriggerButton(operatorJoystick, Ports.OIOperatorExtendClimb);
+            new TriggerButton(operatorJoystick, Ports.OI_OPERATOR_EXTEND_CLIMB);
     private final JoystickButton climbRetractBtn       =
-            new JoystickButton(operatorJoystick, Ports.OIOperatorRetractClimb);
+            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_RETRACT_CLIMB);
     private final JoystickButton climbOrchestrateBtn   =
-            new JoystickButton(operatorJoystick, Ports.OIOperatorOrchestrateClimb);
+            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_ORCHESTRATE_CLIMB);
 
     private final DefaultArcadeDriveCommand arcadeDrive =
             new DefaultArcadeDriveCommand(driveSubsystem, driverLeftJoystick);

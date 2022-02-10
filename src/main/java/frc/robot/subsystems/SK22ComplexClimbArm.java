@@ -15,15 +15,15 @@ public class SK22ComplexClimbArm
     private final CANSparkMax complexBrakePivot;
     private final CANSparkMax complexRatchetLift;
 
-    private final DoubleSolenoid handPiston = new DoubleSolenoid(Ports.ClimbPneumaticModule,
-        PneumaticsModuleType.REVPH, Ports.ClimbHandForwardChannel, Ports.ClimbHandReverseChannel);
+    private final DoubleSolenoid handPiston = new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+        PneumaticsModuleType.REVPH, Ports.CLIMB_HAND_FORWARD_CHANNEL, Ports.CLIMB_HAND_REVERSE_CHANNEL);
     private final DoubleSolenoid complexBrakePiston =
-            new DoubleSolenoid(Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH,
-                Ports.ClimbBrakePistonForwardChannel, Ports.ClimbBrakePistonReverseChannel);
+            new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE, PneumaticsModuleType.REVPH,
+                Ports.CLIMB_BRAKE_PISTON_FORWARD_CHANNEL, Ports.CLIMB_BRAKE_PISTON_REVERSE_CHANNEL);
     private final DoubleSolenoid complexRatchetPiston =
-            new DoubleSolenoid(Ports.ClimbPneumaticModule, PneumaticsModuleType.REVPH,
-                Ports.ComplexClimbRatchetPistonForwardChannel,
-                Ports.ComplexClimbRatchetPistonReverseChannel);
+            new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE, PneumaticsModuleType.REVPH,
+                Ports.COMPLEX_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL,
+                Ports.COMPLEX_CLIMB_RATCHET_PISTON_REVERSE_CHANNEL);
 
     /**
      * The constructor requires the two CANSparkMax motors for rotation of the arm and the extending vertically

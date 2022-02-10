@@ -40,7 +40,7 @@ public class DefaultArcadeDriveCommand extends CommandBase
         // Applies a Cubic filter with a Deadband to the Turning axis of the joystick.
         // This Cubic filter will have a moderate curvature with a coefficient of 0.6.
         // The Deadband will have a width of 0.05.
-        joystickDriver.setFilter(Ports.OIDriverTurn, new CubicDeadbandFilter(0.0, 0.0, 0.5, false));
+        joystickDriver.setFilter(Ports.OI_DRIVER_TURN, new CubicDeadbandFilter(0.0, 0.0, 0.5, false));
         // no deadband here as the SK21Drive implements the deadband 
         
 
@@ -48,7 +48,7 @@ public class DefaultArcadeDriveCommand extends CommandBase
         // This Cubic filter will have maxmimum curvature with a coefficient of 1.
         // The Deadband will have a width of 0.05.
         // The throttle axis' inputs will be flipped
-        joystickDriver.setFilter(Ports.OIDriverMove, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE, true));
+        joystickDriver.setFilter(Ports.OI_DRIVER_MOVE, new SlewRateFilter(DriveConstants.SLEW_FILTER_RATE, true));
 
         // Use addRequirements() here to declare subsystem dependencies.
         addRequirements(driveSubsystem);
@@ -61,8 +61,8 @@ public class DefaultArcadeDriveCommand extends CommandBase
     @Override
     public void execute()
     {
-        double throttle = joystickDriver.getFilteredAxis(Ports.OIDriverMove);
-        double turnRate = joystickDriver.getFilteredAxis(Ports.OIDriverTurn);
+        double throttle = joystickDriver.getFilteredAxis(Ports.OI_DRIVER_MOVE);
+        double turnRate = joystickDriver.getFilteredAxis(Ports.OI_DRIVER_TURN);
 
         driveSubsystem.arcadeDrive(throttle, turnRate);
     }

@@ -27,9 +27,9 @@ public class SK22Transfer extends SKSubsystemBase
     /** Creates a new ExampleSubsystem. */
     public SK22Transfer()
     {
-        intakeTransferMotor = new CANSparkMax(Ports.intakeTransferMotor, MotorType.kBrushless);
-        exitTransferMotor = new CANSparkMax(Ports.exitTransferMotor, MotorType.kBrushless);
-        verticalTransferMotor = new CANSparkMax(Ports.verticalTransferMotor, MotorType.kBrushless);
+        intakeTransferMotor = new CANSparkMax(Ports.INTAKE_TRANSFER_MOTOR, MotorType.kBrushless);
+        exitTransferMotor = new CANSparkMax(Ports.EXIT_TRANSFER_MOTOR, MotorType.kBrushless);
+        verticalTransferMotor = new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
         exitTransferSensor = new DigitalInput(0);
         verticalTransferSensor = new DigitalInput(0);
     }

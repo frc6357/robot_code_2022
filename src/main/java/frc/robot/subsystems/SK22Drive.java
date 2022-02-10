@@ -37,15 +37,15 @@ import frc.robot.utils.MotorEncoder;
  */
 public class SK22Drive extends SKSubsystemBase implements AutoCloseable, DifferentialDrivetrain
 {
-    private final WPI_TalonFX          leftLeader       = new WPI_TalonFX(Ports.frontLeftDrive);
-    private final WPI_TalonFX          leftFollower     = new WPI_TalonFX(Ports.backLeftDrive);
+    private final WPI_TalonFX          leftLeader       = new WPI_TalonFX(Ports.FRONT_LEFT_DRIVE);
+    private final WPI_TalonFX          leftFollower     = new WPI_TalonFX(Ports.BACK_LEFT_DRIVE);
     private final MotorEncoder         leftMotorEncoder = new MotorEncoder(leftLeader,
         DriveConstants.ENCODER_DISTANCE_PER_PULSE, DriveConstants.LEFT_ENCODER_REVERSED);
     private final MotorControllerGroup leftGroup        =
             new MotorControllerGroup(leftLeader, leftFollower);
 
-    private final WPI_TalonFX          rightLeader       = new WPI_TalonFX(Ports.frontRightDrive);
-    private final WPI_TalonFX          rightFollower     = new WPI_TalonFX(Ports.backRightDrive);
+    private final WPI_TalonFX          rightLeader       = new WPI_TalonFX(Ports.FRONT_RIGHT_DRIVE);
+    private final WPI_TalonFX          rightFollower     = new WPI_TalonFX(Ports.BACK_RIGHT_DRIVE);
     private final MotorEncoder         rightMotorEncoder = new MotorEncoder(rightLeader,
         DriveConstants.ENCODER_DISTANCE_PER_PULSE, DriveConstants.RIGHT_ENCODER_REVERSED);
     private final MotorControllerGroup rightGroup        =

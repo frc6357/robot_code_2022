@@ -34,9 +34,9 @@ public class Robot extends TimedRobot
     private RobotSim robotSimulation;
 
     private final CANSparkMax complexBrakePivot =
-            new CANSparkMax(Ports.ComplexBrakePivot, MotorType.kBrushless);
+            new CANSparkMax(Ports.COMPLEX_BRAKE_PIVOT, MotorType.kBrushless);
     private final CANSparkMax complexRatchetLift =
-            new CANSparkMax(Ports.ComplexRatchetLift, MotorType.kBrushless);
+            new CANSparkMax(Ports.COMPLEX_RATCHET_LIFT, MotorType.kBrushless);
 
     private Optional<SK22Climb> climbSubsystem =
             Optional.of(new SK22Climb(complexBrakePivot, complexRatchetLift));
