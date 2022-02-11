@@ -1,13 +1,10 @@
 package frc.robot.commands.subcommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants.IntakeConstants;
-import frc.robot.subsystems.SK22Climb;
-import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22SimpleClimbArm;
 
-
-public class ExtendSimpleArmCommand extends CommandBase{
+public class ExtendSimpleArmCommand extends CommandBase
+{
     private final SK22SimpleClimbArm simpleClimbArm;
 
     public ExtendSimpleArmCommand(SK22SimpleClimbArm simpleClimbArm)
@@ -24,8 +21,9 @@ public class ExtendSimpleArmCommand extends CommandBase{
     @Override
     public void execute()
     {
-       
+
     }
+
     @Override
     public boolean isFinished()
     {

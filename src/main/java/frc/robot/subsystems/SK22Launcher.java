@@ -53,7 +53,7 @@ public class SK22Launcher extends SubsystemBase
     double speed = launcher.getCurMotorRPM();
 
     SmartDashboard.putNumber("Launcher RPM", speed);
-    SmartDashboard.putNumber("Lauchner Setpoint RPM", setpoint);
+    SmartDashboard.putNumber("Launcher Setpoint RPM", setpoint);
   }
 
   @Override
