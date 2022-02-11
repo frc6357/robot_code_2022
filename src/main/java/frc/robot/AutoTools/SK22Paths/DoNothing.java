@@ -12,6 +12,16 @@ import frc.robot.commands.DoNothingCommand;
 public class DoNothing implements AutoPaths
 {
     /**
+     * A function that gets the name of the auto path as defined by the Pathweaver tool
+     * 
+     * @return null, as this class does not have a Pathweaver path
+     */
+    public String getPathweaverName()
+    {
+        return null;
+    }
+
+    /**
      * A function that gets the name of the auto command
      * 
      * @return The name of the command

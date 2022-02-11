@@ -13,12 +13,13 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.AutoTools.SK22Paths.DoNothing;
 import frc.robot.AutoTools.SK22Paths.Drive1mForwardBackward;
 import frc.robot.AutoTools.SK22Paths.DriveSplineCanned;
-import frc.robot.AutoTools.SK22Paths.N2_HH_R;
-import frc.robot.AutoTools.SK22Paths.T3_LHH_2A;
-import frc.robot.AutoTools.SK22Paths.T4_HHHH_R1A;
-import frc.robot.AutoTools.SK22Paths.T4_HHHH_R2B;
-import frc.robot.AutoTools.SK22Paths.T4_LHHH_1A;
-import frc.robot.AutoTools.SK22Paths.T4_LHHH_2B;
+import frc.robot.AutoTools.SK22Paths.TwoBallRadialHH;
+import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal1A;
+import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal2A;
+import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial1AHHHH;
+import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial2BHHHH;
+import frc.robot.AutoTools.SK22Paths.FourBallTerminal1ALHHH;
+import frc.robot.AutoTools.SK22Paths.FourBallTerminal2BLHHH;
 import frc.robot.AutoTools.SK22Paths.Taxi;
 
 /**
@@ -31,6 +32,8 @@ public class SK22CommandBuilder
     private File[]                   files;
     private Map<String, Set<String>> dependencies = new HashMap<String, Set<String>>();
     private TrajectoryBuilder        pathBuilder;
+
+    private Set<AutoPaths> autoPaths = new HashSet<AutoPaths>();
 
     /**
      * Creates a new SK22CommandBuilder. It will create all the dependencies for each auto
@@ -65,6 +68,17 @@ public class SK22CommandBuilder
                 System.out.println(e);
             }
         }
+
+        // Adding all the auto paths to the set
+        autoPaths.add(new Taxi());
+        autoPaths.add(new TwoBallRadialHH());
+        autoPaths.add(new ThreeBallTerminal1A());
+        autoPaths.add(new ThreeBallTerminal2A());
+        autoPaths.add(new FourBallTerminal1ALHHH());
+        autoPaths.add(new FourBallTerminal2BLHHH());
+        autoPaths.add(new FourBallTerminalRadial1AHHHH());
+        autoPaths.add(new FourBallTerminalRadial2BHHHH());
+
     }
 
     /**
@@ -120,34 +134,12 @@ public class SK22CommandBuilder
         }
 
         // Adds paths if they are possible to make
-        if (possibleAutos.contains("Taxi"))
+        for (AutoPaths auto : autoPaths)
         {
-            displayMethod.addOption("Taxi", new Taxi());
-        }
-        if (possibleAutos.contains("Radial (HH)"))
-        {
-            displayMethod.addOption("2 Ball Radial HH", new N2_HH_R());
-        }
-        // TODO: Must make skeleton commands for all 3 ball autos
-        if (possibleAutos.contains("3T(LHH) Tarmac 2A"))
-        {
-            displayMethod.addOption("3 Ball Terminal Tarmac 2A", new T3_LHH_2A());
-        }
-        if (possibleAutos.contains("4T(LHHH) Tarmac 1A"))
-        {
-            displayMethod.addOption("4 Ball Terminal Tarmac 1A", new T4_LHHH_1A());
-        }
-        if (possibleAutos.contains("4T(LHHH) Tarmac 2B"))
-        {
-            displayMethod.addOption("4 Ball Terminal Tarmac 2B", new T4_LHHH_2B());
-        }
-        if (possibleAutos.contains("4T(HHHH) Tarmac 1A"))
-        {
-            displayMethod.addOption("4 Ball Terminal Tarmac 1A Radial", new T4_HHHH_R1A());
-        }
-        if (possibleAutos.contains("4T(HHHH) Tarmac 2B"))
-        {
-            displayMethod.addOption("4 Ball Terminal Tarmac 2B Radial", new T4_HHHH_R2B());
+            if (possibleAutos.contains(auto.getPathweaverName()))
+            {
+                displayMethod.addOption(auto.getName(), auto);
+            }
         }
     }
 }

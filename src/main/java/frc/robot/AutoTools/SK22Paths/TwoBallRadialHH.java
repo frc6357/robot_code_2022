@@ -9,12 +9,22 @@ import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.commands.DoNothingCommand;
 
 /**
- * A class that contains a 4 ball auto that starts on the outside of the tarmac 1A (when
- * speaking radially) and picks up three balls on the way. An extra ball can be picked up
- * from the human player. All of the balls are shot into the high goal
+ * A class that contains the auto path that starts at the outer edge of the tarmac (when
+ * speaking in radial terms) and then grabs the ball immediately behind it, then shoots
+ * both balls into the high goal.
  */
-public class T4_HHHH_R1A implements AutoPaths
+public class TwoBallRadialHH implements AutoPaths
 {
+    /**
+     * A function that gets the name of the auto path as defined by the Pathweaver tool
+     * 
+     * @return The name of the command in Pathweaver
+     */
+    public String getPathweaverName()
+    {
+        return "Radial (HH)";
+    }
+
     /**
      * A function that gets the name of the auto command
      * 
@@ -22,7 +32,7 @@ public class T4_HHHH_R1A implements AutoPaths
      */
     public String getName()
     {
-        return "4 Ball Terminal Tarmac 1A Radial";
+        return "2 Ball Radial HH";
     }
 
     /**
@@ -41,15 +51,7 @@ public class T4_HHHH_R1A implements AutoPaths
             new ParallelCommandGroup(
                 trajectoryCreator.createTrajectory(
                     segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
-                new DoNothingCommand(),     // Intake Set Up
-                new DoNothingCommand()),    // Launcher Set Up
-            new DoNothingCommand(),         // Launcher Shoot HH
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 1 to Ball 2"),
-                true),
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 2 to Terminal"),
-                false),
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Terminal to Shoot"),
-                false),
+                new DoNothingCommand()),    // Set Up Intake
             new DoNothingCommand());        // Launcher Shoot HH
     }
 }

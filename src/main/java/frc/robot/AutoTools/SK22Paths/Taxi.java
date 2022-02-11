@@ -11,6 +11,16 @@ import frc.robot.AutoTools.TrajectoryBuilder;
 public class Taxi implements AutoPaths
 {
     /**
+     * A function that gets the name of the auto path as defined by the Pathweaver tool
+     * 
+     * @return The name of the command in Pathweaver
+     */
+    public String getPathweaverName()
+    {
+        return "Taxi";
+    }
+
+    /**
      * A function that gets the name of the auto command
      * 
      * @return The name of the command

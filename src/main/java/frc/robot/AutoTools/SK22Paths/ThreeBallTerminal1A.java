@@ -9,13 +9,21 @@ import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.commands.DoNothingCommand;
 
 /**
- * A class that contains the four ball auto that starts near the hub of Tarmac 2B then
- * picks up three more balls off the field. A ball can also be picked up off an alliance
- * robot and from the human player at the terminal. The first ball is launched into the
- * low goal, while the others are launched into the high goal.
+ * A class that contains the auto path that starts in Tarmac 1A. It will then grab Ball 1,
+ * shoot both balls, then goes to the terminal, and shoots that ball
  */
-public class T4_LHHH_2B implements AutoPaths
+public class ThreeBallTerminal1A implements AutoPaths
 {
+    /**
+     * A function that gets the name of the auto path as defined by the Pathweaver tool
+     * 
+     * @return The name of the command in Pathweaver
+     */
+    public String getPathweaverName()
+    {
+        return "3T(LHH) Tarmac 1A";
+    }
+    
     /**
      * A function that gets the name of the auto command
      * 
@@ -23,7 +31,7 @@ public class T4_LHHH_2B implements AutoPaths
      */
     public String getName()
     {
-        return "4 Ball Terminal Tarmac 2B";
+        return "3 Ball Terminal Tarmac 1A";
     }
 
     /**
@@ -39,15 +47,11 @@ public class T4_LHHH_2B implements AutoPaths
         RamseteTrajectoryMethod trajectoryCreator)
     {
         return new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                new DoNothingCommand(),     // Launcher Shoot L
-                new DoNothingCommand()),    // Set Up Intake
+            new ParallelCommandGroup(new DoNothingCommand(), new DoNothingCommand(),
                 trajectoryCreator
-                    .createTrajectory(segmentCreator.getTrajectory("Low to Ball 3 (LH)"), true),
-            new DoNothingCommand(),         // Launcher Shoot H
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 3 to Ball 2"),
-                false),
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 2 to Terminal"),
+                    .createTrajectory(segmentCreator.getTrajectory("Low to Ball 1"), true)),
+            new DoNothingCommand(),
+            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 1 to Terminal"),
                 false),
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Terminal to Shoot"),
                 false),
