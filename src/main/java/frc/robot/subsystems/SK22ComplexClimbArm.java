@@ -5,6 +5,8 @@ import com.revrobotics.CANSparkMax;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Ports;
+import frc.robot.subsystems.base.MotorEncoder;
+import edu.wpi.first.math.controller.PIDController;
 
 /**
  * SK22ComplexClimbArm is meant to serve as the robot's front climb arm in which it will reach for the high rung
@@ -24,6 +26,7 @@ public class SK22ComplexClimbArm
             new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE, PneumaticsModuleType.REVPH,
                 Ports.COMPLEX_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL,
                 Ports.COMPLEX_CLIMB_RATCHET_PISTON_REVERSE_CHANNEL);
+    private final MotorEncoder climbEncoder;
 
     /**
      * The constructor requires the two CANSparkMax motors for rotation of the arm and the extending vertically
@@ -31,10 +34,11 @@ public class SK22ComplexClimbArm
      * @param complexBrakePivot The motor used for the rotation of the arm
      * @param complexRatchetLift The motor used for the extention of the arm vertically
      */
-    public SK22ComplexClimbArm(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift)
+    public SK22ComplexClimbArm(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift, MotorEncoder climbEncoder)
     {
         this.complexBrakePivot = complexBrakePivot;
         this.complexRatchetLift = complexRatchetLift;
+        this.climbEncoder = climbEncoder;
     }
 
     /**
@@ -126,5 +130,10 @@ public class SK22ComplexClimbArm
     public void turnRatchetPistonOff()
     {
         complexRatchetPiston.set(DoubleSolenoid.Value.kReverse);
+    }
+
+    public double getBackMotorPosition()
+    {
+        return climbEncoder.getPositionMeters() * 600;
     }
 }
