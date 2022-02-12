@@ -88,7 +88,7 @@ public class RobotContainer
     private Optional<SK22Intake>      intakeSubsystem   = Optional.empty();
     private Optional<SK22Launcher>    launcherSubsystem = Optional.empty();
     private Optional<SK22Transfer>    transferSubsystem = Optional.empty();
-    private final Optional<SK22Climb> climbSubsystem;
+    private Optional<SK22Climb>       climbSubsystem    = Optional.empty();
     private Optional<SK22Vision>      visionSubsystem   = Optional.empty();
 
     // Robot External Controllers (Joysticks and Logitech Controller)
@@ -136,10 +136,8 @@ public class RobotContainer
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-    public RobotContainer(Optional<SK22Climb> climbSubsystem)
+    public RobotContainer()
     {
-        this.climbSubsystem = climbSubsystem;
-
         configureShuffleboard();
 
         File deployDirectory = Filesystem.getDeployDirectory();
@@ -171,6 +169,10 @@ public class RobotContainer
             if (subsystems.isVisionPresent())
             {
                 visionSubsystem = Optional.of(new SK22Vision());
+            }
+            if (subsystems.isClimbPresent())
+            {
+                climbSubsystem = Optional.of(new SK22Climb());
             }
         }
         catch (IOException e)
@@ -308,13 +310,13 @@ public class RobotContainer
             // completely block the scheduler and the robot will grind to a halt.
 
             // Extends the climb arms
-            climbExtendBtn.whenPressed(climb::extend);
+            //climbExtendBtn.whenPressed(climb::extend);
 
             // Retracts the climb arms
-            climbRetractBtn.whenPressed(climb::retract);
+            //climbRetractBtn.whenPressed(climb::retract);
 
             // Goes from one climb rung to the next highest rung
-            climbOrchestrateBtn.whenPressed(climb::orchestra);
+            //climbOrchestrateBtn.whenPressed(climb::orchestra);
         }
     }
 

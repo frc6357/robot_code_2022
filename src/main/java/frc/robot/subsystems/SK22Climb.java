@@ -1,7 +1,11 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import frc.robot.Ports;
 import frc.robot.subsystems.base.MotorEncoder;
 
 public class SK22Climb extends SKSubsystemBase
@@ -12,13 +16,19 @@ public class SK22Climb extends SKSubsystemBase
     private final SK22SimpleClimbArm leftFrontArm;
     private final SK22SimpleClimbArm rightFrontArm;
 
-    public SK22Climb(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift, MotorEncoder climbEncoder)
+    // TODO: Updated to conform to convention of not passing objects into subsystem constructors
+    // and to allow us to get the code to build after a breaking commit.
+    public SK22Climb()
     {
+        // TODO: Verify that these are correct
+        final CANSparkMax complexBrakePivot = new CANSparkMax(Ports.COMPLEX_BRAKE_PIVOT, MotorType.kBrushless);
+        final CANSparkMax complexRatchetLift  = new CANSparkMax(Ports.COMPLEX_RATCHET_LIFT, MotorType.kBrushless);;
+        final RelativeEncoder climbEncoder = complexBrakePivot.getEncoder();
+
         leftBackArm = new SK22ComplexClimbArm(complexBrakePivot, complexRatchetLift, climbEncoder);
         rightBackArm = new SK22ComplexClimbArm(complexBrakePivot, complexRatchetLift, climbEncoder);
         leftFrontArm = new SK22SimpleClimbArm();
         rightFrontArm = new SK22SimpleClimbArm();
-
     }
 
     public void extendLeftArm(int speed, int distance)

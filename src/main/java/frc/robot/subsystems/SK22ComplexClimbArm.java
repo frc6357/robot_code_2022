@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
@@ -26,7 +27,7 @@ public class SK22ComplexClimbArm
             new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE, PneumaticsModuleType.REVPH,
                 Ports.COMPLEX_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL,
                 Ports.COMPLEX_CLIMB_RATCHET_PISTON_REVERSE_CHANNEL);
-    private final MotorEncoder climbEncoder;
+    private final RelativeEncoder climbEncoder;
 
     /**
      * The constructor requires the two CANSparkMax motors for rotation of the arm and the extending vertically
@@ -34,7 +35,7 @@ public class SK22ComplexClimbArm
      * @param complexBrakePivot The motor used for the rotation of the arm
      * @param complexRatchetLift The motor used for the extention of the arm vertically
      */
-    public SK22ComplexClimbArm(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift, MotorEncoder climbEncoder)
+    public SK22ComplexClimbArm(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift, RelativeEncoder climbEncoder)
     {
         this.complexBrakePivot = complexBrakePivot;
         this.complexRatchetLift = complexRatchetLift;
@@ -134,6 +135,10 @@ public class SK22ComplexClimbArm
 
     public double getBackMotorPosition()
     {
-        return climbEncoder.getPositionMeters() * 600;
+        // TODO: This was getPositionMeters() but this method doesn't exist in the new
+        // RelativeEncoder class. You'll have to figure out how to scale the getPosition()
+        // output to return meters here. Also, the hardcoded 600 value should be a constant
+        // in Ports.java since it relates to the encoder hardware and gearing.
+        return climbEncoder.getPosition() * 600;
     }
 }
