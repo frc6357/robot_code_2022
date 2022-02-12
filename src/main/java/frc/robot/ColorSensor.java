@@ -105,10 +105,8 @@ public class ColorSensor {
         // return false;
 
         if(distance >= 150 && distance <= 500) {
-          System.out.println("Presence!");
           return true;
         }
-        System.out.println("No presence!");
         return false;
       }
 
