@@ -5,16 +5,16 @@
       "autoPopulate": true,
       "autoPopulatePrefix": "SmartDashboard/",
       "widgetPane": {
-        "gridSize": 128.0,
+        "gridSize": 32.0,
         "showGrid": true,
-        "hgap": 16.0,
-        "vgap": 16.0,
+        "hgap": 4.0,
+        "vgap": 4.0,
         "titleType": 0,
         "tiles": {
-          "0,0": {
+          "11,0": {
             "size": [
-              3,
-              3
+              12,
+              11
             ],
             "content": {
               "_type": "Camera Stream",
@@ -23,27 +23,179 @@
               "Crosshair/Crosshair color": "#FFFFFFFF",
               "Controls/Show controls": true,
               "Controls/Rotation": "NONE",
-              "compression": 1.4634158087939753,
+              "compression": 0.23170790439698763,
               "fps": -1,
               "imageWidth": -1,
               "imageHeight": -1
             }
           },
-          "4,1": {
+          "32,11": {
             "size": [
-              1,
-              1
+              2,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "11,11": {
+            "size": [
+              4,
+              3
             ],
             "content": {
               "_type": "ComboBox Chooser",
               "_source0": "network_table:///SmartDashboard/Auto Chooser",
-              "_title": "Auto"
+              "_title": "Auto Paths"
             }
           },
-          "4,2": {
+          "23,11": {
             "size": [
-              1,
-              1
+              9,
+              3
+            ],
+            "content": {
+              "_type": "Number Bar",
+              "_source0": "network_table:///SmartDashboard/Launcher RPM",
+              "_title": "Launcher RPM",
+              "Range/Min": 2800.0,
+              "Range/Max": 4200.0,
+              "Range/Center": 3.0,
+              "Visuals/Num tick marks": 8,
+              "Visuals/Show text": true
+            }
+          },
+          "15,11": {
+            "size": [
+              8,
+              2
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "Front/Back",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "5,6": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "Gear Shift",
+              "Colors/Color when true": "#00FF00FF",
+              "Colors/Color when false": "#008000FF"
+            }
+          },
+          "2,6": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "Slow Mode",
+              "Colors/Color when true": "#FFB366FF",
+              "Colors/Color when false": "#4AC04AFF"
+            }
+          },
+          "8,6": {
+            "size": [
+              3,
+              3
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "Reverse",
+              "Colors/Color when true": "#4AC04AFF",
+              "Colors/Color when false": "#FF0000FF"
+            }
+          },
+          "7,9": {
+            "size": [
+              4,
+              5
+            ],
+            "content": {
+              "_type": "Network Table Tree",
+              "_title": "Transfer info"
+            }
+          },
+          "2,9": {
+            "size": [
+              5,
+              5
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "TRANSFER CONTROL",
+              "Colors/Color when true": "#00FF00FF",
+              "Colors/Color when false": "#FF0000FF"
+            }
+          },
+          "0,6": {
+            "size": [
+              2,
+              8
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "Intake ",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "1,0": {
+            "size": [
+              10,
+              3
+            ],
+            "content": {
+              "_type": "Basic FMS Info",
+              "_source0": "network_table:///FMSInfo",
+              "_title": "Basic FMS Info"
+            }
+          },
+          "0,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_title": "Intake"
+            }
+          },
+          "8,4": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_title": "Reverse"
+            }
+          },
+          "36,0": {
+            "size": [
+              2,
+              2
+            ],
+            "content": {
+              "_type": "ComboBox Chooser",
+              "_source0": "network_table:///SmartDashboard/JSON Selector",
+              "_title": "JSON Selector"
+            }
+          },
+          "38,0": {
+            "size": [
+              2,
+              2
             ],
             "content": {
               "_type": "ComboBox Chooser",
@@ -51,20 +203,100 @@
               "_title": "Drive Mode"
             }
           },
-          "5,0": {
+          "40,0": {
             "size": [
-              3,
-              3
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Left Wheel Distance",
+              "_title": "Left Wheel Distance"
+            }
+          },
+          "42,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Right Wheel Distance",
+              "_title": "Right Wheel Distance"
+            }
+          },
+          "44,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Left Wheel Speed",
+              "_title": "Left Wheel Speed"
+            }
+          },
+          "46,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Right Wheel Speed",
+              "_title": "Right Wheel Speed"
+            }
+          },
+          "48,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Gyro Angle",
+              "_title": "Gyro Angle"
+            }
+          },
+          "50,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Launcher RPM",
+              "_title": "Launcher RPM"
+            }
+          },
+          "15,13": {
+            "size": [
+              8,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_title": "Front\u003dGreen Back\u003dRed"
+            }
+          },
+          "23,0": {
+            "size": [
+              11,
+              11
             ],
             "content": {
               "_type": "Graph",
+              "_source0": "network_table:///SmartDashboard/Launcher Setpoint RPM",
+              "_source1": "network_table:///SmartDashboard/Launcher RPM",
               "_title": "Graph",
               "Graph/Visible time": 30.0,
               "Graph/X-axis auto scrolling": true,
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 1.0,
               "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul"
+              "Y-axis/Unit": "ul",
+              "Visible data/SmartDashboard/Launcher RPM": true,
+              "Visible data/SmartDashboard/Launcher Setpoint RPM": true
             }
           }
         }
@@ -110,7 +342,7 @@
               "Visuals/Show velocity vectors": true
             }
           },
-          "5,2": {
+          "3,2": {
             "size": [
               2,
               1
@@ -118,6 +350,51 @@
             "content": {
               "_type": "Encoder",
               "_title": "Encoder"
+            }
+          },
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DoubleSolenoid[0,0]/Value",
+              "_title": "Ungrouped/DoubleSolenoid[0,0]/Value"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DoubleSolenoid[1,2]/Value",
+              "_title": "Ungrouped/DoubleSolenoid[1,2]/Value"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              2
+            ],
+            "content": {
+              "_type": "PID Controller",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[1]",
+              "_title": "Ungrouped/PIDController[1]"
+            }
+          },
+          "0,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Motor Controller",
+              "_source0": "network_table:///LiveWindow/Ungrouped/MotorControllerGroup[3]",
+              "_title": "Ungrouped/MotorControllerGroup[3]",
+              "Visuals/Orientation": "HORIZONTAL"
             }
           }
         }
