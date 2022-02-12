@@ -1,21 +1,21 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
+import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.I2C;
 import frc.robot.ColorSensor;
-import frc.robot.Ports;
 import frc.robot.Constants.TransferConstants;
+import frc.robot.Ports;
 
 public class SK22Transfer extends SKSubsystemBase
 {
   public final String teamColor;
 
-  private CANSparkMax intakeTransferMotor;
-  private CANSparkMax exitTransferMotor;
+  private VictorSPX intakeTransferMotor;
+  private VictorSPX exitTransferMotor;
   private CANSparkMax verticalTransferMotor;
 
   protected boolean verticalFull;
@@ -36,29 +36,29 @@ public class SK22Transfer extends SKSubsystemBase
       // TODO: This is JUST FOR TESTING
       teamColor = "Red";
 
-      intakeTransferMotor = new CANSparkMax(Ports.intakeTransferMotor, MotorType.kBrushless);
-      exitTransferMotor = new CANSparkMax(Ports.exitTransferMotor, MotorType.kBrushless);
-      verticalTransferMotor = new CANSparkMax(Ports.verticalTransferMotor, MotorType.kBrushless);
-      exitTransferSensor = new DigitalInput(0);
-      verticalTransferSensor = new DigitalInput(0);
+      intakeTransferMotor = new VictorSPX(Ports.intakeTransferMotor);
+      exitTransferMotor = new VictorSPX(Ports.exitTransferMotor);
+      // verticalTransferMotor = new CANSparkMax(Ports.verticalTransferMotor, MotorType.kBrushless);
+      // exitTransferSensor = new DigitalInput(0);
+      // verticalTransferSensor = new DigitalInput(0);
 
   }
   // set all motors, start and stop motors, queue all data
   @Override
   public void periodic()
   {
-    
+    colorSensor.periodic();
     // This method will be called once per scheduler run
   }
 
   public void setIntakeTransferMotor(double Speed)
   {
-    intakeTransferMotor.set(Speed);
+    intakeTransferMotor.set(VictorSPXControlMode.PercentOutput, Speed);
   }
 
   public void setExitTransferMotor(double Speed)
   {
-    exitTransferMotor.set(Speed);
+    exitTransferMotor.set(VictorSPXControlMode.PercentOutput, Speed);
   }
 
   public void setVerticalTransferMotor(double Speed)

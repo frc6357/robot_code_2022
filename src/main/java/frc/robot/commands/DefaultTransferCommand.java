@@ -25,7 +25,10 @@ public class DefaultTransferCommand extends CommandBase{
     @Override
     public void initialize()
     {
-        
+        transfer.setIntakeTransferMotor(-1.0);
+
+        // TODO: just for testing
+        verticalFull = true;
     }
     
 
@@ -36,25 +39,28 @@ public class DefaultTransferCommand extends CommandBase{
         // Position two   = the ejection port
         // Position three = the vertical shaft hold
 
+        System.out.println(transfer.getColorSensor());
+
         // This detects if we have just received a ball from the intake
         if(transfer.getPositionOnePresence())
         {
+            System.out.println("Presence detected in position one");
             // If the ball is the correct color
             if(transfer.getColorSensor().equals(transfer.teamColor))
             {
                 // Handle storing the ball & locking the intake so we cannot 
                 // intake any more balls while we are processing the one we 
                 // already have in the system
-                if(!transfer.getPositionThreePresence())
+                // TODO: change this to "!transfer.getPositionThreePresence()" when done testing
+                if(!verticalFull)
                 {
                     // Transfer ball to the vertical hold
                     timerType = TimerType.VERTICAL;
                     transfer.setIsRunningTimerEnabled(true);
 
-                    transfer.setIntakeTransferMotor(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
                     transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
                 } 
-                else if(transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled())
+                else if(verticalFull && transfer.getIsRunningTimerEnabled())
                 {
                     transfer.setIsRunningTimerEnabled(false);
                     updateTimer();
@@ -64,10 +70,10 @@ public class DefaultTransferCommand extends CommandBase{
             }
             else 
             {
+                System.out.println("Wrong color, ejecting!");
                 timerType = TimerType.EJECT;
                 transfer.setIsRunningTimerEnabled(true);
 
-                transfer.setIntakeTransferMotor(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
                 transfer.setExitTransferMotor(Constants.TransferConstants.EXIT_MOTOR_SPEED);
             }
         }
@@ -95,13 +101,11 @@ public class DefaultTransferCommand extends CommandBase{
                 timerElapsed = 0;
                 transfer.setIsRunningTimerEnabled(false);
 
-                transfer.setIntakeTransferMotor(0);
                 transfer.setExitTransferMotor(0);
             } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
             {
                 timerElapsed = 0;
 
-                transfer.setIntakeTransferMotor(0);
                 transfer.setExitTransferMotor(0);
             }
         }
@@ -117,13 +121,11 @@ public class DefaultTransferCommand extends CommandBase{
                 timerElapsed = 0;
                 transfer.setIsRunningTimerEnabled(false);
 
-                transfer.setIntakeTransferMotor(0);
                 transfer.setExitTransferMotor(0);
             } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
             {
                 timerElapsed = 0;
 
-                transfer.setIntakeTransferMotor(0);
                 transfer.setExitTransferMotor(0);
             }
         }

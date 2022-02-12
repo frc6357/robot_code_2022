@@ -83,9 +83,9 @@ public class ColorSensor {
         double bluePercentage = mBlue * 100;
 
         //Print to see the total color
-        System.out.println("Red " + redPercentage + "%");
-        System.out.println("Green " + greenPercentage + "%");
-        System.out.println("Blue " + bluePercentage + "%");
+        // System.out.println("Red " + redPercentage + "%");
+        // System.out.println("Green " + greenPercentage + "%");
+        // System.out.println("Blue " + bluePercentage + "%");
       }
 
       public double getDistance(){
@@ -104,7 +104,7 @@ public class ColorSensor {
       public double proximityToCmConverter(){
         double numerator = proximity/1000;
         double cm = Math.log(numerator)/Math.log(0.64889);
-        System.out.println(cm);
+        // System.out.println(cm);
         return cm;
       }
 

@@ -55,8 +55,8 @@ public class Ports
     //////////////////////////////
     // Transfer Addresses
     //////////////////////////////
-    public static final int exitTransferMotor           = 12; // Currently unknown Port
-    public static final int intakeTransferMotor         = 12; // Currently unknown Port
+    public static final int exitTransferMotor           = 31; // Currently unknown Port
+    public static final int intakeTransferMotor         = 30; // Currently unknown Port
     public static final int verticalTransferMotor       = 12; // Currently unknown Port
 
     //////////////////////////////
@@ -94,6 +94,8 @@ public class Ports
     ///////////////////////////////
     // Operator Interface
     ///////////////////////////////
+    public static final int joystickController          = 0;
+
     public static final int ENABLE_LAUNCHER_BUTTON        = 5; // Left bumper
     public static final int DISABLE_LAUNCHER_BUTTON       = 6; // Right bumper
     
@@ -113,6 +115,6 @@ public class Ports
     // TODO: Would need to choose the correct button and ID.
     public static final int OIOperatorEjectBallButton   = 4; //Y button
 
-    public static Port i2c;
+    public static Port i2c = Port.kOnboard;
 
 }

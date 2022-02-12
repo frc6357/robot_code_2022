@@ -32,6 +32,8 @@ public class ColorSensor {
     public void periodic(){
       count++;
       
+      proximity = m_colorSensor.getProximity();
+      System.out.println(proximity);
 
       if(count > maxCount){
         getAllColors();
@@ -83,9 +85,9 @@ public class ColorSensor {
         double bluePercentage = mBlue * 100;
 
         //Print to see the total color
-        System.out.println("Red " + redPercentage + "%");
-        System.out.println("Green " + greenPercentage + "%");
-        System.out.println("Blue " + bluePercentage + "%");
+        // System.out.println("Red " + redPercentage + "%");
+        // System.out.println("Green " + greenPercentage + "%");
+        // System.out.println("Blue " + bluePercentage + "%");
       }
 
       public double getDistance(){
@@ -94,17 +96,26 @@ public class ColorSensor {
       }
 
       public boolean getBallPresence(){
-        int distnace = proximity;
-        if(distnace < threshold){
+        int distance = proximity;
+        // if(distnace < threshold){
+        //   System.out.println("Presence!");
+        //   return true;
+        // }
+        // System.out.println("No presence!");
+        // return false;
+
+        if(distance >= 150 && distance <= 500) {
+          System.out.println("Presence!");
           return true;
         }
+        System.out.println("No presence!");
         return false;
       }
 
       public double proximityToCmConverter(){
         double numerator = proximity/1000;
         double cm = Math.log(numerator)/Math.log(0.64889);
-        System.out.println(cm);
+        // System.out.println(cm);
         return cm;
       }
 
