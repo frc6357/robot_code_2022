@@ -71,15 +71,27 @@ public class SK22Transfer extends SKSubsystemBase
     return colorSensor.getColor();
   }
 
+  /**
+   * States if there is a ball in the intake part of the transfer
+   * @return Whether there is a ball in position one.
+   */
   public boolean getPositionOnePresence() {
     return colorSensor.getBallPresence();
   }
 
+  /**
+   * States if there is a ball in the eject part of the transfer
+   * @return Whether there is a ball in position two.
+   */
   public boolean getPositionTwoPresence()
   {
     return exitTransferSensor.get();
   }
 
+  /**
+   * States if there is a ball in the launcher part of the transfer
+   * @return Whether there is a ball in position three.
+   */
   public boolean getPositionThreePresence()
   {
     return verticalTransferSensor.get();

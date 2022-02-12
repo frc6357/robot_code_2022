@@ -1,13 +1,11 @@
 package frc.robot.commands;
 
-import javax.swing.Timer;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.SK22Transfer;
 import frc.robot.utils.TimerType;
 
-public class DefaultTransferCommand extends CommandBase{
+public class DefaultTransferCommand extends CommandBase {
     private final SK22Transfer transfer;
     boolean verticalFull;
 
@@ -15,8 +13,7 @@ public class DefaultTransferCommand extends CommandBase{
 
     private TimerType timerType;
 
-    public DefaultTransferCommand(SK22Transfer transfer)
-    {
+    public DefaultTransferCommand(SK22Transfer transfer) {
         this.transfer = transfer;
 
         addRequirements(transfer);
@@ -28,15 +25,13 @@ public class DefaultTransferCommand extends CommandBase{
         transfer.setIntakeTransferMotor(-1.0);
 
         // TODO: just for testing
-        verticalFull = true;
+        verticalFull = false;
     }
-    
 
     @Override
-    public void execute()
-    {
-        // Position one   = the spot where the intake meets the transfer
-        // Position two   = the ejection port
+    public void execute() {
+        // Position one = the spot where the intake meets the transfer
+        // Position two = the ejection port
         // Position three = the vertical shaft hold
 
         System.out.println(transfer.getColorSensor());
@@ -46,10 +41,9 @@ public class DefaultTransferCommand extends CommandBase{
         {
             System.out.println("Presence detected in position one");
             // If the ball is the correct color
-            if(transfer.getColorSensor().equals(transfer.teamColor))
-            {
-                // Handle storing the ball & locking the intake so we cannot 
-                // intake any more balls while we are processing the one we 
+            if (transfer.getColorSensor().equals(transfer.teamColor)) {
+                // Handle storing the ball & locking the intake so we cannot
+                // intake any more balls while we are processing the one we
                 // already have in the system
                 // TODO: change this to "!transfer.getPositionThreePresence()" when done testing
                 if(!verticalFull)
@@ -65,8 +59,8 @@ public class DefaultTransferCommand extends CommandBase{
                     transfer.setIsRunningTimerEnabled(false);
                     updateTimer();
                 }
-                // If there is a ball in the vertical hold, than we dont need to do anything
-                // with the ball in the horizontal hold because it's in a good spot
+                // TODO: Create a case for when there is a ball in the launcher system and we
+                // want to keep the ball that we just picked up
             }
             else 
             {
@@ -82,48 +76,41 @@ public class DefaultTransferCommand extends CommandBase{
     }
 
     @Override
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         return false;
     }
 
-    private void updateTimer()
-    {
-        if(timerType == TimerType.VERTICAL) 
-        {
-            if(timerElapsed < Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION && 
-            transfer.getIsRunningTimerEnabled()) 
-            {
+    /**
+     * Counts method calls for timer
+     * <p>
+     * VERTICAL timer controls the motors required for shifting balls into the vertical shaft
+     * EJECT timer controls the motors required for ejecting the ball out the back
+     */
+    private void updateTimer() {
+        if (timerType == TimerType.VERTICAL) {
+            if (timerElapsed < Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION &&
+                    transfer.getIsRunningTimerEnabled()) {
                 timerElapsed++;
-            } 
-            else if(timerElapsed >= Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION)
-            {
+            } else if (timerElapsed >= Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION) {
                 timerElapsed = 0;
                 transfer.setIsRunningTimerEnabled(false);
 
                 transfer.setExitTransferMotor(0);
-            } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
-            {
+            } else if (!transfer.getIsRunningTimerEnabled() && timerElapsed > 0) {
                 timerElapsed = 0;
 
                 transfer.setExitTransferMotor(0);
             }
-        }
-        else
-        {
-            if(timerElapsed < Constants.TransferConstants.EJECT_DURATION && 
-            transfer.getIsRunningTimerEnabled()) 
-            {
+        } else {
+            if (timerElapsed < Constants.TransferConstants.EJECT_DURATION &&
+                    transfer.getIsRunningTimerEnabled()) {
                 timerElapsed++;
-            } 
-            else if(timerElapsed >= Constants.TransferConstants.EJECT_DURATION)
-            {
+            } else if (timerElapsed >= Constants.TransferConstants.EJECT_DURATION) {
                 timerElapsed = 0;
                 transfer.setIsRunningTimerEnabled(false);
 
                 transfer.setExitTransferMotor(0);
-            } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
-            {
+            } else if (!transfer.getIsRunningTimerEnabled() && timerElapsed > 0) {
                 timerElapsed = 0;
 
                 transfer.setExitTransferMotor(0);
