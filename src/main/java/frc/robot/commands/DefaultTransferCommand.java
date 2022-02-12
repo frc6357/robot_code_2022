@@ -1,13 +1,11 @@
 package frc.robot.commands;
 
-import javax.swing.Timer;
-
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.SK22Transfer;
 import frc.robot.utils.TimerType;
 
-public class DefaultTransferCommand extends CommandBase{
+public class DefaultTransferCommand extends CommandBase {
     private final SK22Transfer transfer;
     boolean verticalFull;
 
@@ -15,55 +13,48 @@ public class DefaultTransferCommand extends CommandBase{
 
     private TimerType timerType;
 
-    public DefaultTransferCommand(SK22Transfer transfer)
-    {
+    public DefaultTransferCommand(SK22Transfer transfer) {
         this.transfer = transfer;
 
         addRequirements(transfer);
     }
 
     @Override
-    public void initialize()
-    {
-        
+    public void initialize() {
+
     }
-    
 
     @Override
-    public void execute()
-    {
-        // Position one   = the spot where the intake meets the transfer
-        // Position two   = the ejection port
+    public void execute() {
+        // Position one = the spot where the intake meets the transfer
+        // Position two = the ejection port
         // Position three = the vertical shaft hold
 
         // This detects if we have just received a ball from the intake
-        if(transfer.getPositionOnePresence())
-        {
+        if (transfer.getPositionOnePresence()) {
             // If the ball is the correct color
-            if(transfer.getColorSensor().equals(transfer.teamColor))
-            {
-                // Handle storing the ball & locking the intake so we cannot 
-                // intake any more balls while we are processing the one we 
+            if (transfer.getColorSensor().equals(transfer.teamColor)) {
+                // Handle storing the ball & locking the intake so we cannot
+                // intake any more balls while we are processing the one we
                 // already have in the system
-                if(!transfer.getPositionThreePresence())
-                {
+                if (!transfer.getPositionThreePresence()) {
                     // Transfer ball to the vertical hold
                     timerType = TimerType.VERTICAL;
                     transfer.setIsRunningTimerEnabled(true);
 
                     transfer.setIntakeTransferMotor(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
                     transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
-                } 
-                else if(transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled())
-                {
+                }
+                // In case the ball gets to position three faster than the timer expects.
+                else if (transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled()) {
                     transfer.setIsRunningTimerEnabled(false);
                     updateTimer();
                 }
-                // If there is a ball in the vertical hold, than we dont need to do anything
-                // with the ball in the horizontal hold because it's in a good spot
+                // TODO: Create a case for when there is a ball in the launcher system and we
+                // want to keep the ball that we just picked up
             }
-            else 
-            {
+            // If the ball is the wrong color eject the ball.
+            else {
                 timerType = TimerType.EJECT;
                 transfer.setIsRunningTimerEnabled(true);
 
@@ -76,51 +67,44 @@ public class DefaultTransferCommand extends CommandBase{
     }
 
     @Override
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         return false;
     }
 
-    private void updateTimer()
-    {
-        if(timerType == TimerType.VERTICAL) 
-        {
-            if(timerElapsed < Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION && 
-            transfer.getIsRunningTimerEnabled()) 
-            {
+    /**
+     * Counts method calls for timer
+     * <p>
+     * VERTICAL timer controls the motors required for shifting balls into the vertical shaft
+     * EJECT timer controls the motors required for ejecting the ball out the back
+     */
+    private void updateTimer() {
+        if (timerType == TimerType.VERTICAL) {
+            if (timerElapsed < Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION &&
+                    transfer.getIsRunningTimerEnabled()) {
                 timerElapsed++;
-            } 
-            else if(timerElapsed >= Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION)
-            {
+            } else if (timerElapsed >= Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION) {
                 timerElapsed = 0;
                 transfer.setIsRunningTimerEnabled(false);
 
                 transfer.setIntakeTransferMotor(0);
                 transfer.setExitTransferMotor(0);
-            } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
-            {
+            } else if (!transfer.getIsRunningTimerEnabled() && timerElapsed > 0) {
                 timerElapsed = 0;
 
                 transfer.setIntakeTransferMotor(0);
                 transfer.setExitTransferMotor(0);
             }
-        }
-        else
-        {
-            if(timerElapsed < Constants.TransferConstants.EJECT_DURATION && 
-            transfer.getIsRunningTimerEnabled()) 
-            {
+        } else {
+            if (timerElapsed < Constants.TransferConstants.EJECT_DURATION &&
+                    transfer.getIsRunningTimerEnabled()) {
                 timerElapsed++;
-            } 
-            else if(timerElapsed >= Constants.TransferConstants.EJECT_DURATION)
-            {
+            } else if (timerElapsed >= Constants.TransferConstants.EJECT_DURATION) {
                 timerElapsed = 0;
                 transfer.setIsRunningTimerEnabled(false);
 
                 transfer.setIntakeTransferMotor(0);
                 transfer.setExitTransferMotor(0);
-            } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
-            {
+            } else if (!transfer.getIsRunningTimerEnabled() && timerElapsed > 0) {
                 timerElapsed = 0;
 
                 transfer.setIntakeTransferMotor(0);
