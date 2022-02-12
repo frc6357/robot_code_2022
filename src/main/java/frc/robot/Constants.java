@@ -19,20 +19,17 @@ public final class Constants
 {
 
     /** Constants related to the Transfer Subsystem */
-    public static final class TransferConstants
-    {
-        public static final int    DISTANCE_THRESHOLD         = 70;
-        public static final double POSITION_ONE_MOTOR_SPEED   = 0.2;
-        public static final double POSITION_TWO_MOTOR_SPEED   = 0.2;
-        public static final double POSITION_THREE_MOTOR_SPEED = 0.2;
-        public static final double STOP_SPEED                 = 0.0;
-        public static final double BALL_EJECTION_SPEED        = 0.5;
-        public static final double BALL_VERTICAL_LOAD_SPEED   = 0.5;
+    public static final class TransferConstants{
+        public static final int DISTANCE_THRESHOLD = 70;
+        public static final double INTAKE_MOTOR_SPEED = 0.2;
+        public static final double EXIT_MOTOR_SPEED = 0.5;
+        public static final double VERTICAL_MOTOR_SPEED = 0.2;
+        public static final double STOP_SPEED = 0.0;
+        public static final double BALL_EJECTION_SPEED = 0.5;
+        public static final double BALL_VERTICAL_LOAD_SPEED = 0.5;
 
-        // Distance sensor readings between which we assume a ball is 
-        // present in the intake side of the transfer.
-        public static final double DISTANCE_LOW_THRESHOLD  = 1.0;
-        public static final double DISTANCE_HIGH_THRESHOLD = 5.0;
+        public static final int TRANSFER_TO_VERTICAL_SHAFT_DURATION = 100;
+        public static final int EJECT_DURATION = 100;
     }
 
     /** Constants related to Driving the Robot. */
