@@ -1,6 +1,6 @@
 {
     "intake"    : false,
-    "transfer"  : true,
+    "transfer"  : false,
     "launcher"  : false,
     "climb"     : false,
     "vision"    : false
