@@ -38,6 +38,7 @@ public class Robot extends TimedRobot
     public Robot()
     {
         // TODO: May want to build or load trajectories here?
+        robotContainer = new RobotContainer();
     }
 
     @Override
