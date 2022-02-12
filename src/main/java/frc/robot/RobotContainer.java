@@ -43,12 +43,15 @@ import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
+import frc.robot.commands.subcommands.ExtendSimpleArmCommand;
 import frc.robot.subsystems.SK22Climb;
 import frc.robot.subsystems.SK22Drive;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
 import frc.robot.subsystems.SK22Vision;
+import frc.robot.subsystems.base.DpadDownButton;
+import frc.robot.subsystems.base.DpadUpButton;
 import frc.robot.subsystems.base.TriggerButton;
 import frc.robot.subsystems.base.SuperClasses.Gear;
 import frc.robot.utils.FilteredJoystick;
@@ -85,11 +88,11 @@ public class RobotContainer
         Ports.PNEUMATICS_MODULE_TYPE, Ports.GEAR_SHIFT_HIGH, Ports.GEAR_SHIFT_LOW));
     // These are currently empty and only created in the contructor
     // based on the Subsystem.json file
-    private Optional<SK22Intake>      intakeSubsystem   = Optional.empty();
-    private Optional<SK22Launcher>    launcherSubsystem = Optional.empty();
-    private Optional<SK22Transfer>    transferSubsystem = Optional.empty();
-    private Optional<SK22Climb>       climbSubsystem    = Optional.empty();
-    private Optional<SK22Vision>      visionSubsystem   = Optional.empty();
+    private Optional<SK22Intake>   intakeSubsystem   = Optional.empty();
+    private Optional<SK22Launcher> launcherSubsystem = Optional.empty();
+    private Optional<SK22Transfer> transferSubsystem = Optional.empty();
+    private Optional<SK22Climb>    climbSubsystem    = Optional.empty();
+    private Optional<SK22Vision>   visionSubsystem   = Optional.empty();
 
     // Robot External Controllers (Joysticks and Logitech Controller)
     private final FilteredJoystick driverLeftJoystick  =
@@ -103,20 +106,22 @@ public class RobotContainer
     // Note: If we want to continue allowing the choice of both tank drive and arcade drive, we can't use
     // any buttons on the driverRightJoystick since this may not actually be present if arcade drive is
     // chosen!!
+
+    // Verified according to 2022 Controller Mapping document on 2/12/2022 
     private final JoystickButton driveAcquireTargetBtn =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
     private final JoystickButton driveSlowBtn          =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SLOWMODE);
     private final JoystickButton driveLowGearBtn       =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_LOW_GEAR);
     private final JoystickButton driveHighGearBtn      =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_HIGH_GEAR);
     private final JoystickButton driveShootBtn         =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SHOOT);
     private final JoystickButton intakeExtendBtn       =
-            new JoystickButton(operatorJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
+            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_EXTEND);
     private final JoystickButton intakeRetractBtn      =
-            new JoystickButton(operatorJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
+            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_RETRACT);
     private final JoystickButton transferEjectBallBtn  =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_EJECT);
     private final JoystickButton transferLoadBallBtn   =

@@ -105,6 +105,9 @@ public class Ports
     ///////////////////////////////
     // Operator Interface
     ///////////////////////////////
+
+    // Verified according to 2022 Controller Mapping document on 2/12/2022 
+
     public static final int ENABLE_LAUNCHER_BUTTON  = 5; // Left bumper
     public static final int DISABLE_LAUNCHER_BUTTON = 6; // Right bumper
 
@@ -121,10 +124,10 @@ public class Ports
     public static final int OI_DRIVER_SPEED_AXIS = 1;
 
     // Driver Controls
-    public static final int OI_DRIVER_SHOOT          = 2;  // Joystick Button 2s
+    public static final int OI_DRIVER_SHOOT          = 2;  // Joystick Button 2
     public static final int OI_DRIVER_SET_LOW_GEAR   = 3;  // Joystick Button 3
-    public static final int OI_DRIVER_SET_HIGH_GEAR  = 4;  // Joystick Button 4
-    public static final int OI_DRIVER_SLOWMODE       = 5;  // Joystick Button 5
+    public static final int OI_DRIVER_SET_HIGH_GEAR  = 5;  // Joystick Button 5
+    public static final int OI_DRIVER_SLOWMODE       = 4;  // Joystick Button 4
     public static final int OI_DRIVER_ACQUIRE_TARGET = 1;  // Joystick Trigger Button
 
     public static final int OI_OPERATOR_TRANSFER_EJECT    = 4;  // Y button
