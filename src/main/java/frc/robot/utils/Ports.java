@@ -2,7 +2,7 @@
 // Definitions of addresses and hardware port numbers used in
 // the FRC Team 6357 2022 robot.
 //
-package frc.robot;
+package frc.robot.utils;
 
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.I2C.Port;
