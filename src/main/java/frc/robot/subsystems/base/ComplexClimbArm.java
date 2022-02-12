@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import frc.robot.Constants;
 import frc.robot.Ports;
 import edu.wpi.first.math.controller.PIDController;
 
@@ -24,6 +25,8 @@ public class ComplexClimbArm
                 Ports.COMPLEX_CLIMB_RATCHET_PISTON_REVERSE_CHANNEL);
     private final RelativeEncoder climbEncoder;
 
+    private final RotatingArm pivotArm;
+
     /**
      * The constructor requires the two CANSparkMax motors for rotation of the arm and the extending vertically
      * of the arm.
@@ -35,6 +38,11 @@ public class ComplexClimbArm
         this.complexBrakePivot = complexBrakePivot;
         this.complexRatchetLift = complexRatchetLift;
         this.climbEncoder = climbEncoder;
+        pivotArm = new RotatingArm(complexBrakePivot, climbEncoder, 
+                                   Constants.ClimbConstants.PIVOT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER, 
+                                   Constants.ClimbConstants.PIVOT_ARM_CONTROLLER_KP, 
+                                   Constants.ClimbConstants.PIVOT_ARM_CONTROLLER_KI,
+                                   Constants.ClimbConstants.PIVOT_ARM_CONTROLLER_KD);
     }
 
     /**
@@ -92,17 +100,13 @@ public class ComplexClimbArm
         complexRatchetPiston.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void getFrontMotorPosition(){
-
+    public double getPivotArmPosition()
+    {
+        return pivotArm.getAngle();
     }
 
-    public double getBackMotorPosition()
-    {
-        // TODO: This was getPositionMeters() but this method doesn't exist in the new
-        // RelativeEncoder class. You'll have to figure out how to scale the getPosition()
-        // output to return meters here. Also, the hardcoded 600 value should be a constant
-        // in Ports.java since it relates to the encoder hardware and gearing.
-        return climbEncoder.getPosition() * 600;
-
+    public void setPivotArmPosition(double degrees){
+        pivotArm.goToAngle(degrees);
+        pivotArm.enable();
     }
 }

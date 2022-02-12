@@ -39,17 +39,6 @@ public class SK22Climb extends SKSubsystemBase
         complexClimbArm = new ComplexClimbArm(complexBrakePivot, complexRatchetLift, climbEncoder);
     }
 
-    public void extendLeftArm(int speed, int distance)
-    {
-        // Releases the piston to extend the arm outward or have the hand in the proper position to hook
-        leftFrontArm.raise();
-        leftBackArm.turnComplexRatchetLiftOn(speed);
-        if(leftBackArm.getBackMotorPosition() == distance)
-        {
-            leftBackArm.turnComplexRatchetLiftOff();
-        }
-    }
-
     public void raise()
     {
         simpleClimbArm.raise();
@@ -60,6 +49,16 @@ public class SK22Climb extends SKSubsystemBase
     {
         simpleClimbArm.lower();
         // Pulls back the piston to retract the arm or have the hand pulled back in order to prevent crushing it while pulling up
+    }
+
+    public void straighten(){
+        simpleClimbArm.straighten();
+        // Straighten the simpleclimbarm
+    }
+
+    public void tilt(){
+        simpleClimbArm.tilt();
+        // tilt the simpleclimbarm
     }
 
     
