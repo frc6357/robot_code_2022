@@ -21,7 +21,7 @@ public class SK22Intake extends SKSubsystemBase
     /** Creates a new SK22Intake. */
     public SK22Intake()
     {
-        
+        SmartDashboard.putString("Intake Extended", "IN");
     }
 
     // This should be the safe and initial code that happens. nothing should move
@@ -37,7 +37,7 @@ public class SK22Intake extends SKSubsystemBase
     public void extendIntake()
     {
         intakeMover.set(DoubleSolenoid.Value.kForward);
-        SmartDashboard.putBoolean("Intake Extended", true);
+        SmartDashboard.putString("Intake Extended", "OUT");
     }
 
     // This will retract the double solenoids, moving the intake to the inactive
@@ -45,7 +45,7 @@ public class SK22Intake extends SKSubsystemBase
     public void retractIntake()
     {
         intakeMover.set(DoubleSolenoid.Value.kReverse);
-        SmartDashboard.putBoolean("Intake Extended", false);
+        SmartDashboard.putString("Intake Extended", "IN");
     }
 
     // This will set the speed of the motor that powers the ball pulling part of the
