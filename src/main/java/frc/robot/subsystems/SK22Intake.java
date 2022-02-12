@@ -5,26 +5,38 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import frc.robot.Ports;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 public class SK22Intake extends SKSubsystemBase
 {
+    private final DoubleSolenoid intakeMover = new DoubleSolenoid(Ports.INTAKE_PCM,
+        Ports.INTAKE_MOVER_FORWARD, Ports.INTAKE_MOVER_BACKWARD);
+
+    private final CANSparkMax intakeMotor = new CANSparkMax(Ports.INTAKE_MOTOR, MotorType.kBrushless);
+    private double motorSpeed = 0.0;
+
     /** Creates a new SK22Intake. */
     public SK22Intake()
     {
-
+        
     }
 
     // This should be the safe and initial code that happens. nothing should move
     public void disableIntake()
     {
-        // TODO: Write this!
+        motorSpeed = 0.0;
+        intakeMotor.set(motorSpeed);
+        intakeMover.set(DoubleSolenoid.Value.kOff);
     }
 
     // This will extend the double solenoids, moving the intake to the active
     // position
     public void extendIntake()
     {
-        // TODO: Write this!
+        intakeMover.set(DoubleSolenoid.Value.kForward);
         SmartDashboard.putBoolean("Intake Extended", true);
     }
 
@@ -32,7 +44,7 @@ public class SK22Intake extends SKSubsystemBase
     // position
     public void retractIntake()
     {
-        // TODO: Write this!
+        intakeMover.set(DoubleSolenoid.Value.kReverse);
         SmartDashboard.putBoolean("Intake Extended", false);
     }
 
@@ -40,26 +52,15 @@ public class SK22Intake extends SKSubsystemBase
     // intake
     public void setIntakeSpeed(double speed)
     {
-        // TODO: Write this!
+        motorSpeed = speed;
+        intakeMotor.set(motorSpeed);
         SmartDashboard.putNumber("Intake Speed", speed);
     }
 
     // This will return the current speed of the motor
     public double getIntakeSpeed()
     {
-        return 0.0;
-    }
-
-    @Override
-    public void periodic()
-    {
-        // This method will be called once per scheduler run
-    }
-
-    @Override
-    public void simulationPeriodic()
-    {
-        // This method will be called once per scheduler run during simulation
+        return motorSpeed;
     }
 
     @Override
