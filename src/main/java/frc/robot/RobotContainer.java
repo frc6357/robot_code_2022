@@ -52,6 +52,7 @@ import frc.robot.subsystems.SK22Transfer;
 import frc.robot.subsystems.SK22Vision;
 import frc.robot.subsystems.base.DpadDownButton;
 import frc.robot.subsystems.base.DpadUpButton;
+import frc.robot.subsystems.base.Dpad;
 import frc.robot.subsystems.base.TriggerButton;
 import frc.robot.subsystems.base.SuperClasses.Gear;
 import frc.robot.utils.FilteredJoystick;
@@ -118,6 +119,12 @@ public class RobotContainer
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_HIGH_GEAR);
     private final JoystickButton driveShootBtn         =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SHOOT);
+    private final Dpad dpad = 
+            new Dpad(driverLeftJoystick, Ports.OI_DRIVER_REVERSE);
+    private final DpadDownButton reverseOnBtn     =
+            new DpadDownButton(dpad);
+    private final DpadUpButton   reverseOffBtn    = 
+            new DpadUpButton(dpad);
     private final JoystickButton intakeExtendBtn       =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_EXTEND);
     private final JoystickButton intakeRetractBtn      =
@@ -241,6 +248,8 @@ public class RobotContainer
      */
     private void configureButtonBindings()
     {
+        //TODO: add command to reverse the robot camera and controls.
+
         // Turns on slowmode when driver presses slowmode button, giving more manueverability.
         // TODO: Do we need slow mode now that we have a gear shift? Doesn't low gear achieve
         // the same end?
