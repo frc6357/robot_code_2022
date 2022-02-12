@@ -137,15 +137,20 @@ public final class Constants
 
         public static final double ARM_MOTOR_RPM = 5000; //Guess???
 
+        
+
         //Pivot
         public static final int PIVOT_MOTOR_TEETH_PER_REVOLUTION = 20; //Per De E
         public static final int PIVOT_MOTOR_GEAR_RATIO           = 25;  // 2x 5:1 Gearbox
-        public static final int PIVOT_ARC_TEETH_PER_REVOLUTION   = 120; //Per De E
+        public static final int PIVOT_ARC_TEETH_PER_REVOLUTION   = 303; //59 teeth in a 70 degreee arc
+        public static final int PIVOT_ENCODER_PULSES_PER_REV     = 42; //Per rev neo
 
         //Lift
         public static final int LIFT_MOTOR_TEETH_PER_REVOLUTION = 20; // Check this!
         public static final int LIFT_RACK_TEETH_PER_INCH        = 20; // Check this!
         public static final int LIFT_MOTOR_GEAR_RATIO           = 9; // 9:1 gear ratio
+
+
     }
 
     public static final double INCH_PER_MILLIMETER    = 0.0393701;

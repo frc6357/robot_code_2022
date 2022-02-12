@@ -6,15 +6,20 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Ports;
+import frc.robot.subsystems.base.ComplexClimbArm;
 import frc.robot.subsystems.base.MotorEncoder;
+import frc.robot.subsystems.base.SimpleClimbArm;
 
 public class SK22Climb extends SKSubsystemBase
 {
 
-    private final SK22ComplexClimbArm leftBackArm;
-    private final SK22ComplexClimbArm rightBackArm;
-    private final SK22SimpleClimbArm leftFrontArm;
-    private final SK22SimpleClimbArm rightFrontArm;
+    private final ComplexClimbArm leftBackArm;
+    private final ComplexClimbArm rightBackArm;
+    private final SimpleClimbArm leftFrontArm;
+    private final SimpleClimbArm rightFrontArm;
+
+    private final SimpleClimbArm simpleClimbArm;
+    private final ComplexClimbArm complexClimbArm;
 
     // TODO: Updated to conform to convention of not passing objects into subsystem constructors
     // and to allow us to get the code to build after a breaking commit.
@@ -25,10 +30,13 @@ public class SK22Climb extends SKSubsystemBase
         final CANSparkMax complexRatchetLift  = new CANSparkMax(Ports.COMPLEX_RATCHET_LIFT, MotorType.kBrushless);;
         final RelativeEncoder climbEncoder = complexBrakePivot.getEncoder();
 
-        leftBackArm = new SK22ComplexClimbArm(complexBrakePivot, complexRatchetLift, climbEncoder);
-        rightBackArm = new SK22ComplexClimbArm(complexBrakePivot, complexRatchetLift, climbEncoder);
-        leftFrontArm = new SK22SimpleClimbArm();
-        rightFrontArm = new SK22SimpleClimbArm();
+        leftBackArm = new ComplexClimbArm(complexBrakePivot, complexRatchetLift, climbEncoder);
+        rightBackArm = new ComplexClimbArm(complexBrakePivot, complexRatchetLift, climbEncoder);
+        leftFrontArm = new SimpleClimbArm();
+        rightFrontArm = new SimpleClimbArm();
+
+        simpleClimbArm = new SimpleClimbArm();
+        complexClimbArm = new ComplexClimbArm(complexBrakePivot, complexRatchetLift, climbEncoder);
     }
 
     public void extendLeftArm(int speed, int distance)
@@ -42,10 +50,19 @@ public class SK22Climb extends SKSubsystemBase
         }
     }
 
-    public void retract()
+    public void raise()
     {
+        simpleClimbArm.raise();
+        // Extends arm from the simpleArm base class
+    }
+
+    public void lower()
+    {
+        simpleClimbArm.lower();
         // Pulls back the piston to retract the arm or have the hand pulled back in order to prevent crushing it while pulling up
     }
+
+    
 
     public void orchestra()
     {

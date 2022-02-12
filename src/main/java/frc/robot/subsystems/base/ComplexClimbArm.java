@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.base;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
@@ -6,23 +6,18 @@ import com.revrobotics.RelativeEncoder;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Ports;
-import frc.robot.subsystems.base.MotorEncoder;
 import edu.wpi.first.math.controller.PIDController;
 
 /**
  * SK22ComplexClimbArm is meant to serve as the robot's front climb arm in which it will reach for the high rung
- * and the traversl rung as well.
+ * and the traversal rung as well.
  */
-public class SK22ComplexClimbArm
+public class ComplexClimbArm
 {
     private final CANSparkMax complexBrakePivot;
     private final CANSparkMax complexRatchetLift;
 
-    private final DoubleSolenoid handPiston = new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE,
-        PneumaticsModuleType.REVPH, Ports.CLIMB_HAND_FORWARD_CHANNEL, Ports.CLIMB_HAND_REVERSE_CHANNEL);
-    private final DoubleSolenoid complexBrakePiston =
-            new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE, PneumaticsModuleType.REVPH,
-                Ports.CLIMB_BRAKE_PISTON_FORWARD_CHANNEL, Ports.CLIMB_BRAKE_PISTON_REVERSE_CHANNEL);
+
     private final DoubleSolenoid complexRatchetPiston =
             new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE, PneumaticsModuleType.REVPH,
                 Ports.COMPLEX_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL,
@@ -35,29 +30,11 @@ public class SK22ComplexClimbArm
      * @param complexBrakePivot The motor used for the rotation of the arm
      * @param complexRatchetLift The motor used for the extention of the arm vertically
      */
-    public SK22ComplexClimbArm(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift, RelativeEncoder climbEncoder)
+    public ComplexClimbArm(CANSparkMax complexBrakePivot, CANSparkMax complexRatchetLift, RelativeEncoder climbEncoder)
     {
         this.complexBrakePivot = complexBrakePivot;
         this.complexRatchetLift = complexRatchetLift;
         this.climbEncoder = climbEncoder;
-    }
-
-    /**
-     * The retract hand method will turn off the piston in the hand so that we can lift the robot onto the
-     * middle rung without crushing the hand
-     */
-    public void retractHand()
-    {
-        handPiston.set(DoubleSolenoid.Value.kReverse);
-    }
-
-    /**
-     * The extend hand method will turn on the piston in the hand so that we can extend and grab the
-     * high rung
-     */
-    public void extendHand()
-    {
-        handPiston.set(DoubleSolenoid.Value.kForward);
     }
 
     /**
@@ -78,24 +55,6 @@ public class SK22ComplexClimbArm
     public void turnBrakePivotOff()
     {
         complexBrakePivot.stopMotor();
-    }
-
-    /**
-     * The turnBrakePistonOn method will turn on the piston in the rotational portion of
-     * the arm so that the arm can properly stop at a specific angle
-     */
-    public void turnBrakePistonOn()
-    {
-        complexBrakePiston.set(DoubleSolenoid.Value.kForward);
-    }
-
-    /**
-     * The turnBrakePistonOff method will turn off the piston in the rotational portion of
-     * the arm so that the motor can rotate to a different position
-     */
-    public void turnBrakePistonOff()
-    {
-        complexBrakePiston.set(DoubleSolenoid.Value.kReverse);
     }
 
     /**
@@ -133,6 +92,10 @@ public class SK22ComplexClimbArm
         complexRatchetPiston.set(DoubleSolenoid.Value.kReverse);
     }
 
+    public void getFrontMotorPosition(){
+
+    }
+
     public double getBackMotorPosition()
     {
         // TODO: This was getPositionMeters() but this method doesn't exist in the new
@@ -140,5 +103,6 @@ public class SK22ComplexClimbArm
         // output to return meters here. Also, the hardcoded 600 value should be a constant
         // in Ports.java since it relates to the encoder hardware and gearing.
         return climbEncoder.getPosition() * 600;
+
     }
 }

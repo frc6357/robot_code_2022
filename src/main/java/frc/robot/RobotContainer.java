@@ -43,7 +43,8 @@ import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
-import frc.robot.commands.subcommands.ExtendSimpleArmCommand;
+import frc.robot.commands.subcommands.LowerSimpleArmCommand;
+import frc.robot.commands.subcommands.RaiseSimpleArmCommand;
 import frc.robot.subsystems.SK22Climb;
 import frc.robot.subsystems.SK22Drive;
 import frc.robot.subsystems.SK22Intake;
@@ -317,17 +318,11 @@ public class RobotContainer
         {
             SK22Climb climb = climbSubsystem.get();
 
-            // TODO: The following are not implemented as commands. If extend and retract
-            // are one-off operations, that's probably OK though they may have to be wrapped
-            // as instant commands. I imagine that orchestra is a multi-stage, lengthy operation,
-            // though so you can't just perform the whole thing in one call since that will
-            // completely block the scheduler and the robot will grind to a halt.
-
             // Extends the climb arms
-            //climbExtendBtn.whenPressed(climb::extend);
+            climbExtendBtn.whenPressed(new RaiseSimpleArmCommand(climb));
 
             // Retracts the climb arms
-            //climbRetractBtn.whenPressed(climb::retract);
+            climbRetractBtn.whenPressed(new LowerSimpleArmCommand(climb));
 
             // Goes from one climb rung to the next highest rung
             //climbOrchestrateBtn.whenPressed(climb::orchestra);
