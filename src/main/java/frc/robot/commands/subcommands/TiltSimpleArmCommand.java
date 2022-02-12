@@ -3,11 +3,11 @@ package frc.robot.commands.subcommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SK22Climb;
 
-public class StraightenSimpleArmCommand extends CommandBase{
+public class TiltSimpleArmCommand extends CommandBase{
 
     private final SK22Climb climb;
 
-    public StraightenSimpleArmCommand(SK22Climb climb)
+    public TiltSimpleArmCommand(SK22Climb climb)
     {
         this.climb = climb;
     }
@@ -15,7 +15,7 @@ public class StraightenSimpleArmCommand extends CommandBase{
     @Override
     public void initialize()
     {
-        this.climb.straighten();
+        this.climb.tilt();
     }
 
     @Override
@@ -29,5 +29,6 @@ public class StraightenSimpleArmCommand extends CommandBase{
     {
         return true;
     }
+
     
 }
