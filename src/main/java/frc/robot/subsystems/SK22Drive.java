@@ -13,7 +13,6 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
@@ -58,8 +57,6 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
 
     private SendableChooser<Boolean> testControlChooser = new SendableChooser<Boolean>();
 
-    private final DoubleSolenoid gearShiftSolenoid;
-
     private NetworkTableEntry leftLeaderEntry;
     private NetworkTableEntry leftFollowerEntry;
     private NetworkTableEntry rightLeaderEntry;
@@ -68,15 +65,10 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private NetworkTableEntry speedControllerGroupRightEntry;
 
     /**
-     * Creates a SK22Drive which accepts a double solenoid in order to gear shift
-     * 
-     * @param gearShiftSolenoid
-     *            This is the solenoid that will allow for the shift between more speed or
-     *            more torque
+     * Creates a SK22Drive subsystem controlling the drivetrain.
      */
-    public SK22Drive(DoubleSolenoid gearShiftSolenoid)
+    public SK22Drive()
     {
-        this.gearShiftSolenoid = gearShiftSolenoid;
         resetEncoders();
         gyro.reset();
 
@@ -276,19 +268,6 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         speedControllerGroupRightEntry = Shuffleboard.getTab("Drive")
             .add("SpeedControllerGroupRight", 1).withWidget(BuiltInWidgets.kNumberSlider)
             .withSize(2, 1).withPosition(2, 3).getEntry();
-    }
-
-    /**
-     * Sets the gear for both sides of the drivetrain.
-     * 
-     * @param newGear
-     *            The gear value that we want the robot to achieve.
-     */
-    public void setGear(Gear newGear)
-    {
-        DoubleSolenoid.Value check = (newGear == Gear.HIGH) ? DoubleSolenoid.Value.kForward
-            : DoubleSolenoid.Value.kReverse;
-        gearShiftSolenoid.set(check);
     }
 
     /**

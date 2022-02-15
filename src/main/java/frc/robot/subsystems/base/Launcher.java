@@ -11,13 +11,12 @@ public class Launcher
 
   private final MotorControllerGroup motorControllerGroup;
   private final MotorEncoder motorEncoder1;
-  // private final MotorEncoder motorEncoder2;
 
   private final PIDController Controller;
 
   private final double gearRatio;
 
-  /** Creates a new SK22Launcher
+  /** Creates a new Launcher
    * 
    * Note that we only pass one motor encoder here. Both motors are operated as a group. 
    * We don't control them independently but run one PID controller with input based on

@@ -51,6 +51,7 @@ import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
 import frc.robot.subsystems.SK22Vision;
+import frc.robot.subsystems.SK22Gearshift;
 import frc.robot.subsystems.base.DpadDownButton;
 import frc.robot.subsystems.base.DpadUpButton;
 import frc.robot.subsystems.base.Dpad;
@@ -85,16 +86,18 @@ public class RobotContainer
     private SendableChooser<Trajectory> splineCommandSelector = new SendableChooser<Trajectory>();
 
     // The robot's subsystems are defined here...
-    // TODO: Find which one is high gear and which one is low gear
-    private final SK22Drive driveSubsystem = new SK22Drive(new DoubleSolenoid(Ports.BASE_PCM,
-        Ports.PNEUMATICS_MODULE_TYPE, Ports.GEAR_SHIFT_HIGH, Ports.GEAR_SHIFT_LOW));
-    // These are currently empty and only created in the contructor
+
+    // Drivetrain is the only subsystem that is not optional.
+    private final SK22Drive driveSubsystem = new SK22Drive();
+
+    // These are currently empty and only created in the constructor
     // based on the Subsystem.json file
-    private Optional<SK22Intake>   intakeSubsystem   = Optional.empty();
-    private Optional<SK22Launcher> launcherSubsystem = Optional.empty();
-    private Optional<SK22Transfer> transferSubsystem = Optional.empty();
-    private Optional<SK22Climb>    climbSubsystem    = Optional.empty();
-    private Optional<SK22Vision>   visionSubsystem   = Optional.empty();
+    private Optional<SK22Intake>    intakeSubsystem    = Optional.empty();
+    private Optional<SK22Launcher>  launcherSubsystem  = Optional.empty();
+    private Optional<SK22Transfer>  transferSubsystem  = Optional.empty();
+    private Optional<SK22Climb>     climbSubsystem     = Optional.empty();
+    private Optional<SK22Vision>    visionSubsystem    = Optional.empty();
+    private Optional<SK22Gearshift> gearshiftSubsystem = Optional.empty();
 
     // Robot External Controllers (Joysticks and Logitech Controller)
     private final FilteredJoystick driverLeftJoystick  =
@@ -187,6 +190,11 @@ public class RobotContainer
             {
                 climbSubsystem = Optional.of(new SK22Climb());
             }
+            if (subsystems.isGearshiftPresent())
+            {
+                gearshiftSubsystem = Optional.of(new SK22Gearshift(new DoubleSolenoid(Ports.BASE_PCM,
+                Ports.PNEUMATICS_MODULE_TYPE, Ports.GEAR_SHIFT_HIGH, Ports.GEAR_SHIFT_LOW)));
+            }
         }
         catch (IOException e)
         {
@@ -257,11 +265,18 @@ public class RobotContainer
         driveSlowBtn.whenPressed(() -> driveSubsystem.setMaxOutput(0.5));
         driveSlowBtn.whenReleased(() -> driveSubsystem.setMaxOutput(1));
 
-        // Sets the gear to low when driver clicks setLowGear Buttons
-        driveLowGearBtn.whenPressed(() -> driveSubsystem.setGear(Gear.LOW));
+        // Drive train gearshift is controlled by a separate subsystem so that we
+        // can run the robot even when the pneumatics are not connected.
+        if (gearshiftSubsystem.isPresent())
+        {
+            SK22Gearshift gearshift = gearshiftSubsystem.get();
 
-        // Sets the gear to high when driver clicks setHighGear Buttons
-        driveHighGearBtn.whenPressed(() -> driveSubsystem.setGear(Gear.HIGH));
+            // Sets the gear to low when driver clicks setLowGear Buttons
+            driveLowGearBtn.whenPressed(() -> gearshift.setGear(Gear.LOW));
+
+            // Sets the gear to high when driver clicks setHighGear Buttons
+            driveHighGearBtn.whenPressed(() -> gearshift.setGear(Gear.HIGH));
+        }
 
         // User controls related to the ball intake subsystem
         if (intakeSubsystem.isPresent())

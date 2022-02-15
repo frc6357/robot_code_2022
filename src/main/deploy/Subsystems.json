@@ -3,5 +3,6 @@
     "transfer"  : false,
     "launcher"  : false,
     "climb"     : false,
-    "vision"    : false
+    "vision"    : false,
+    "gearshift" : false
 }
