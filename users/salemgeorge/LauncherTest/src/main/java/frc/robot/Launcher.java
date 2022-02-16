@@ -1,6 +1,7 @@
-package frc.robot.subsystems.base;
+package frc.robot;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 
 public class Launcher
@@ -11,17 +12,14 @@ public class Launcher
 
   private final MotorControllerGroup motorControllerGroup;
   private final MotorEncoder motorEncoder1;
+  // private final MotorEncoder motorEncoder2;
 
   private final PIDController Controller;
 
   private final double gearRatio;
 
-  /** Creates a new Launcher
-   * 
-   * Note that we only pass one motor encoder here. Both motors are operated as a group. 
-   * We don't control them independently but run one PID controller with input based on
-   * the reading from one encoder.
-  */
+  // TODO: When second motor is added to the launcher, make sure to add a motorEncoder2 to this constructor
+  /** Creates a new SK22Launcher */
   public Launcher(MotorControllerGroup motorControllerGroup, MotorEncoder motorEncoder1, double gearRatio, int encoderCPR, double KP, double KI, double KD)
   {
     this.motorControllerGroup = motorControllerGroup;
@@ -36,7 +34,10 @@ public class Launcher
   {
     double launcherRPM = getLauncherRPM();
 
-    System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
+    // System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
+
+    SmartDashboard.putNumber("Launcher RPM", launcherRPM);
+    SmartDashboard.putNumber("Launcher Set Point", targetRPM);
 
     if(launcherEnabled || (targetRPM == 0.0))
     {

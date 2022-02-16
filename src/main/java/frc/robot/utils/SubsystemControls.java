@@ -14,6 +14,7 @@ public class SubsystemControls
     private final boolean transfer;
     private final boolean climb;
     private final boolean vision;
+    private final boolean gearshift;
 
     /**
      * Constructs a new SubsystemControls object with the given subsystem presence.
@@ -28,6 +29,8 @@ public class SubsystemControls
      *            indicates if the climb system is present and should be enabled
      * @param vision
      *           indicates if the vision system is present and should be enabled
+     * @param gearshift
+     *           indicates if the gearshift system is present and should be enabled
      */
     public SubsystemControls(@JsonProperty(required = true, value = "intake")
                                 boolean intake,
@@ -38,13 +41,16 @@ public class SubsystemControls
                             @JsonProperty(required = true, value = "climb")
                                 boolean climb,
                             @JsonProperty(required = true, value = "vision")
-                                boolean vision)
+                                boolean vision,
+                            @JsonProperty(required = true, value = "gearshift")
+                                boolean gearshift)
     {
         this.intake = intake;
         this.launcher = launcher;
         this.transfer = transfer;
         this.climb = climb;
         this.vision = vision;
+        this.gearshift = gearshift;
     }
 
     /**
@@ -100,5 +106,16 @@ public class SubsystemControls
         public boolean isVisionPresent()
     {
         return vision;
+    }
+
+    /**
+     * Returns true if the drivetrain geatshift system is indicated as present and should be enabled.
+     * 
+     * @return true if the gearshift system is indicated as present and should be enabled;
+     *         false otherwise
+     */
+    public boolean isGearshiftPresent()
+    {
+        return gearshift;
     }
 }

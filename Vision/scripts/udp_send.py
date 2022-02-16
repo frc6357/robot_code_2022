@@ -19,29 +19,22 @@ local_port = 49153
 sock_s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 sock_s.bind(('0.0.0.0', local_port))
 
-# datagram format
-# Little Endian
-# 2 bytes Version ID | Length
-# 4 Bytes Frame ID
-# 4 Bytes Timestamp
-# 2 Bytes Distance in cm, divide int by 100 for decimal value 
-# 2 Bytes Horizontal Angle in degrees, divide int by 100 for decimal value
-# 2 Bytes Vertical Angle in degrees, divide int by 100 for decimal value
-# 8 Bytes Reserved
-# 2 Bytes Checksum
-struct_format = '<BBIIHhhQ'
+struct_format = '<BBIIHBhhQ'
+versionID = 1
+packetLength = 29
+timestamp = 0
 
-frameID = 0
-def sendPacket(distance, horiAngle, vertAngle, frameID):
-    versionID = 1
-    packetLength = 28
-    timestamp = 0
+def sendPacket(distance, adjVal, horiAngle, vertAngle, frameID):
     
-    # create a buffer that is 28 bytes long based off the above format
-    bufChecksum = bytearray(28)
+    if (((distance, adjVal, horiAngle, vertAngle, frameID) < (65536, 255, 32768, 32768, 4294967296)) and ((horiAngle, vertAngle) > (-32768,-32768))) != True:
+        return null
+        
+    
+    # create a buffer that is 28 bytes long based off the above format  
+    bufChecksum = bytearray(29)
     
     # pack into buffer the values represented as bytes
-    struct.pack_into(struct_format, bufChecksum, 0, versionID, packetLength, frameID, timestamp, distance, horiAngle, vertAngle, 0)
+    struct.pack_into(struct_format, bufChecksum, 0, versionID, packetLength, frameID, timestamp, distance, adjVal, horiAngle, vertAngle, 0)
 
     # creates datagram in the above format
     # Test Value:, 
@@ -50,10 +43,10 @@ def sendPacket(distance, horiAngle, vertAngle, frameID):
     # Vertical Angle, 63.0 deg, 0 out unsigned long long, Checksum: 1 initially
 
     # Calculate Checksum
-    checksum = zlib.crc32(bufChecksum[0:24])
+    checksum = zlib.crc32(bufChecksum[0:25])
     #print("checksum: " + "{:x}".format(checksum))
 
-    struct.pack_into("L", bufChecksum, 24, checksum)
+    struct.pack_into("L", bufChecksum, 25, checksum)
     
     #print("post checksum: " + str(binascii.hexlify(bytes(bufChecksum))))
 
