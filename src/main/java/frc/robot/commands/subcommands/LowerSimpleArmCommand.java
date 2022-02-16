@@ -16,7 +16,7 @@ public class LowerSimpleArmCommand extends CommandBase
     @Override
     public void initialize()
     {
-        this.climb.lower();
+        this.climb.lowerSimpleArm();
     }
 
     @Override

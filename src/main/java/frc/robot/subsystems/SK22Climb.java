@@ -39,16 +39,24 @@ public class SK22Climb extends SKSubsystemBase
         complexClimbArm = new ComplexClimbArm(complexBrakePivot, complexRatchetLift, climbEncoder);
     }
 
-    public void raise()
+    public void raiseSimpleArm()
     {
         simpleClimbArm.raise();
         // Extends arm from the simpleArm base class
     }
 
-    public void lower()
+    public void lowerSimpleArm()
     {
         simpleClimbArm.lower();
         // Pulls back the piston to retract the arm or have the hand pulled back in order to prevent crushing it while pulling up
+    }
+
+    public void raiseComplexArm(){
+
+    }
+
+    public void lowerComplexArm(){
+        
     }
 
     public void straighten(){

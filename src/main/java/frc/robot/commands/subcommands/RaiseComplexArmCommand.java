@@ -2,13 +2,12 @@ package frc.robot.commands.subcommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SK22Climb;
-import frc.robot.subsystems.base.SimpleClimbArm;
 
-public class RaiseSimpleArmCommand extends CommandBase
-{
+public class RaiseComplexArmCommand extends CommandBase{
+
     private final SK22Climb climb;
 
-    public RaiseSimpleArmCommand(SK22Climb climb)
+    public RaiseComplexArmCommand(SK22Climb climb)
     {
         this.climb = climb;
     }
@@ -16,7 +15,6 @@ public class RaiseSimpleArmCommand extends CommandBase
     @Override
     public void initialize()
     {
-        this.climb.raiseSimpleArm();
     }
 
     @Override
@@ -30,4 +28,6 @@ public class RaiseSimpleArmCommand extends CommandBase
     {
         return true;
     }
+
+    
 }
