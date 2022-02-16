@@ -9,7 +9,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.TimedRobot;
-import frc.robot.commands.moveBase;
 import frc.robot.subsystems.base.RotatingArm;
 
 
@@ -32,10 +31,10 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     //arm.update();
 
-    if(m_stick.getRawButton(12) == true){
+    if(m_stick.getRawButton(4) == true){
       arm.goToAngle(15);
     }
-    if(m_stick.getRawButton(12) == false){
+    if(m_stick.getRawButton(4) == false){
       arm.goToAngle(30);
     }
   }
