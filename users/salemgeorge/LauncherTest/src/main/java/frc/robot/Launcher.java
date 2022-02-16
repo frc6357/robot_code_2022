@@ -1,6 +1,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 
 public class Launcher
@@ -33,7 +34,10 @@ public class Launcher
   {
     double launcherRPM = getLauncherRPM();
 
-    System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
+    // System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
+
+    SmartDashboard.putNumber("Launcher RPM", launcherRPM);
+    SmartDashboard.putNumber("Launcher Set Point", targetRPM);
 
     if(launcherEnabled || (targetRPM == 0.0))
     {
