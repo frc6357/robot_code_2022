@@ -1,6 +1,7 @@
 package frc.robot.AutoTools;
 
-import edu.wpi.first.math.Drake;
+import org.ejml.simple.SimpleMatrix;
+
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
 import edu.wpi.first.math.Num;
@@ -37,7 +38,6 @@ import edu.wpi.first.math.system.LinearSystem;
  * @author Spring Konstant 6357
  */
 public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs extends Num>
-        extends KalmanFilter<States, Inputs, Outputs>
 {
     /** Identity Matrix (I)*/
     private Matrix<States, States> identity;
@@ -61,7 +61,7 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
     private Matrix<Outputs, N1> yTilda;
 
     /** Corrected Covariance (P)*/
-    private Matrix<States, States>   p;
+    private Matrix<States, States>   p = new Matrix<>(new SimpleMatrix(new double[][]{{0.0, 0.0}, {0.0, 0.0}}));
     /** Covarience of Measurement (S)*/
     private Matrix<Outputs, Outputs> s;
 
@@ -96,8 +96,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
         LinearSystem<States, Inputs, Outputs> plant, Matrix<States, N1> stateStdDevs,
         Matrix<Outputs, N1> measurementStdDevs, double dtSeconds)
     {
-        super(states, outputs, plant, stateStdDevs, measurementStdDevs, dtSeconds);
-
         this.states = states;
         this.plant = plant;
 
@@ -112,27 +110,8 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
 
         c = plant.getC();
 
-        // TODO: Figure out this black magic as well
-        p = new Matrix<>(
-            Drake.discreteAlgebraicRiccatiEquation(discA.transpose(), c.transpose(), discQ, discR));
-
-        // S = CPCᵀ + R
-        s = c.times(p).times(c.transpose()).plus(discR);
-
-        // We want to put K = PCᵀS⁻¹ into Ax = b form so we can solve it more
-        // efficiently.
-        //
-        // K = PCᵀS⁻¹
-        // KS = PCᵀ
-        // (KS)ᵀ = (PCᵀ)ᵀ
-        // SᵀKᵀ = CPᵀ
-        //
-        // The solution of Ax = b can be found via x = A.solve(b).
-        //
-        // Kᵀ = Sᵀ.solve(CPᵀ)
-        // K = (Sᵀ.solve(CPᵀ))ᵀ
-        k = new Matrix<>(s.transpose().getStorage()
-            .solve((c.times(p.transpose())).getStorage()).transpose());
+        // P = APAᵀ + Q
+        p = plant.getA().times(p).times(plant.getA().transpose()).plus(discQ);
 
         identity = Matrix.eye(states);
 
@@ -144,7 +123,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
      */
     public void reset()
     {
-        super.reset();
         xHat = new Matrix<>(states, Nat.N1());
     }
 
@@ -157,7 +135,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
      * @param u New control input from controller.
      * @param dtSeconds Timestep for prediction.
      */
-    @Override
     public void predict(Matrix<Inputs, N1> u, double dtSeconds)
     {
         // Guessing the state of the system
@@ -179,7 +156,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
      * @param u Same control input used in the last predict step.
      * @param z Measurement vector.
      */
-    @Override
     public void correct(Matrix<Inputs, N1> u, Matrix<Outputs, N1> z)
     {
         // Calculating Residual
@@ -212,7 +188,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
      *
      * @return The steady-state Kalman gain matrix K.
      */
-    @Override
     public Matrix<States, Outputs> getK()
     {
         return k;
@@ -227,7 +202,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
      *            Column of K.
      * @return the element (i, j) of the steady-state Kalman gain matrix K.
      */
-    @Override
     public double getK(int row, int col)
     {
         return k.get(row, col);
@@ -239,7 +213,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
      * @param xhat
      *            The state estimate x̂.
      */
-    @Override
     public void setXhat(Matrix<States, N1> xhat)
     {
         this.xHat = xhat;
@@ -253,7 +226,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
      * @param value
      *            Value for element of x̂.
      */
-    @Override
     public void setXhat(int row, double value)
     {
         xHat.set(row, 0, value);
@@ -264,7 +236,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
      *
      * @return The state estimate x̂.
      */
-    @Override
     public Matrix<States, N1> getXhat()
     {
         return xHat;
@@ -277,7 +248,6 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
      *            Row of x̂.
      * @return the state estimate x̂ at i.
      */
-    @Override
     public double getXhat(int row)
     {
         return xHat.get(row, 0);

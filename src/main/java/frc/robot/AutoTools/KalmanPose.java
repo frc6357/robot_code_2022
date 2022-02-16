@@ -43,23 +43,23 @@ public class KalmanPose
     /** "Plant" Matrix */
     private final LinearSystem<N2, N1, N1> linearSystem = new LinearSystem<N2, N1, N1>(a, b, c, d);
 
-    private KalmanFilter<N2, N1, N1> skObserver =
+    private SKKalmanFilter<N2, N1, N1> skObserver =
         new SKKalmanFilter<N2, N1, N1>(
-            Nat.N2(),
-            Nat.N1(),
-            linearSystem,
-            VecBuilder.fill(1.0, 0.0),  // How accurate we think our model is
-            VecBuilder.fill(1.0),      // How accurate we think our encoder
-            0.20);
-
-    private KalmanFilter<N2, N1, N1> observer =
-        new KalmanFilter<N2, N1, N1>(
             Nat.N2(),
             Nat.N1(),
             linearSystem,
             VecBuilder.fill(1.0, 1.0),  // How accurate we think our model is
             VecBuilder.fill(3.0),      // How accurate we think our encoder
             0.20);
+
+    // private KalmanFilter<N2, N1, N1> observer =
+    //     new KalmanFilter<N2, N1, N1>(
+    //         Nat.N2(),
+    //         Nat.N1(),
+    //         linearSystem,
+    //         VecBuilder.fill(1.0, 1.0),  // How accurate we think our model is
+    //         VecBuilder.fill(3.0),      // How accurate we think our encoder
+    //         0.20);
 
     private Matrix<N1, N1> u = new Matrix<N1, N1>(new SimpleMatrix(new double[][]{{0}}));
     private Matrix<N1, N1> z = new Matrix<N1, N1>(new SimpleMatrix(new double[][]{{0}}));
@@ -82,10 +82,10 @@ public class KalmanPose
         z.set(0, 0, zDouble);
 
         skObserver.predict(u, 0.020);
-        skObserver.correct(u, z);
+        // skObserver.correct(u, z);
 
-        observer.predict(u, 0.020);
-        observer.correct(u, z);
+        // observer.predict(u, 0.020);
+        // observer.correct(u, z);
     }
 
     /**
@@ -97,14 +97,14 @@ public class KalmanPose
         return skObserver.getXhat().get(0, 0);
     }
 
-    /**
-     * Gets the state as calculated by the WPILib {@link KalmanFilter}
-     * @return The calculated state of the system
-     */
-    public double getStateWPI()
-    {
-        return observer.getXhat().get(0, 0);
-    }
+    // /**
+    //  * Gets the state as calculated by the WPILib {@link KalmanFilter}
+    //  * @return The calculated state of the system
+    //  */
+    // public double getStateWPI()
+    // {
+    //     return observer.getXhat().get(0, 0);
+    // }
 
     /**
      * Sets the value of position of the robot
@@ -113,6 +113,16 @@ public class KalmanPose
     public void setPosition(double x)
     {
         skObserver.setXhat(0, x);
-        observer.setXhat(0, x);
+        // observer.setXhat(0, x);
+    }
+
+    /**
+     * Sets the value of position of the robot
+     * @param x The new position of the robot in meters
+     */
+    public void setInitialVel(double x)
+    {
+        skObserver.setXhat(1, x);
+        // observer.setXhat(0, x);
     }
 }
