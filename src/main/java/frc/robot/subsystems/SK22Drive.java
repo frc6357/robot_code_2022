@@ -5,7 +5,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,11 +12,12 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,7 +27,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Ports;
-import frc.robot.subsystems.base.SuperClasses.Gear;
+import frc.robot.AutoTools.KalmanPose;
 import frc.robot.utils.DifferentialDrivetrain;
 import frc.robot.utils.MotorEncoder;
 
@@ -50,7 +50,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private final MotorControllerGroup rightGroup        =
             new MotorControllerGroup(rightLeader, rightFollower);
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final ADIS16448_IMU gyro = new ADIS16448_IMU();
 
     private final DifferentialDrive         drive;
     private final DifferentialDriveOdometry odometry;
@@ -63,6 +63,15 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private NetworkTableEntry rightFollowerEntry;
     private NetworkTableEntry speedControllerGroupLeftEntry;
     private NetworkTableEntry speedControllerGroupRightEntry;
+
+    private KalmanPose kalmanX = new KalmanPose();
+    private KalmanPose kalmanY = new KalmanPose();
+    private double globalTheta = 0;
+    private double prevTheta = 0;
+
+    private Field2d odometryField = new Field2d();
+    private Field2d skKalmanField = new Field2d();
+    private Field2d KalmanField = new Field2d();
 
     /**
      * Creates a SK22Drive subsystem controlling the drivetrain.
@@ -84,6 +93,10 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
 
         drive = new DifferentialDrive(leftGroup, rightGroup);
         drive.setDeadband(DriveConstants.DEADBAND_TURN);
+
+        SmartDashboard.putData("Odometry Field", odometryField);
+        SmartDashboard.putData("Kalman Field", KalmanField);
+        SmartDashboard.putData("SKKalman Field", skKalmanField);
     }
 
     @Override
@@ -93,15 +106,54 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         double rightEncoderDistanceMeters = rightMotorEncoder.getPositionMeters();
         double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
         double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
+
+        double curTheta = gyro.getAngle();
+
+        // Add the change in angle to the global theta
+        globalTheta +=  curTheta - prevTheta;
+
+        double[] globalAccel = getGlobalAcceleration();
+        Pose2d odometryPos = odometry.getPoseMeters();
+
+        kalmanX.periodic(globalAccel[0], odometryPos.getX());
+        kalmanX.periodic(globalAccel[1], odometryPos.getY());
+
         // Update the odometry in the periodic block
-        odometry.update(Rotation2d.fromDegrees(this.getHeading()), leftEncoderDistanceMeters,
+        odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoderDistanceMeters,
             rightEncoderDistanceMeters);
 
         SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
         SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
         SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
         SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
-        SmartDashboard.putNumber("Gyro Angle", this.getHeading());
+        SmartDashboard.putNumber("Gyro Angle", getHeading());
+
+        // TODO: This is only for Kalman Filter Tests: Remove once tested
+        SmartDashboard.putNumber("Pose X", odometryPos.getX());
+        SmartDashboard.putNumber("Pose Y", odometryPos.getY());
+        odometryField.setRobotPose(odometryPos);
+
+        SmartDashboard.putNumber("SK Kalman X", kalmanX.getState());
+        SmartDashboard.putNumber("SK Kalman Y", kalmanY.getState());
+        skKalmanField.setRobotPose(
+                kalmanX.getState(), kalmanY.getState(), Rotation2d.fromDegrees(globalTheta));
+        
+        SmartDashboard.putNumber("WPI Kalman X", kalmanX.getStateWPI());
+        SmartDashboard.putNumber("WPI Kalman Y", kalmanY.getStateWPI());
+        KalmanField.setRobotPose(
+                kalmanX.getStateWPI(), kalmanY.getStateWPI(), Rotation2d.fromDegrees(globalTheta));
+        
+        SmartDashboard.putNumber("Global Angle", globalTheta);
+
+        SmartDashboard.putNumber("Relative X Accel", getRelativeAcceleration()[0]);
+        SmartDashboard.putNumber("Relative Y Accel", getRelativeAcceleration()[1]);
+
+        SmartDashboard.putNumber("Global X Accel", globalAccel[0]);
+        SmartDashboard.putNumber("Global Y Accel", globalAccel[1]);
+
+        // Set the previous angle to the current angle 
+        // to be used in the next loop
+        prevTheta = curTheta;
     }
 
     /**
@@ -135,32 +187,9 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     {
         resetEncoders();
         odometry.resetPosition(pose, Rotation2d.fromDegrees(gyro.getAngle()));
-    }
-
-    /**
-     * Drives the robot using arcade controls.
-     *
-     * @param fwd
-     *            the commanded forward movement
-     * @param rot
-     *            the commanded rotation
-     */
-    public void arcadeDrive(double fwd, double rot)
-    {
-        drive.arcadeDrive(fwd, rot);
-    }
-
-    /**
-     * Drives the robot using tank controls
-     * 
-     * @param leftSpeed
-     *            the speed of the left motors
-     * @param rightSpeed
-     *            the speed of the right motors
-     */
-    public void tankDrive(double leftSpeed, double rightSpeed)
-    {
-        drive.tankDrive(leftSpeed, rightSpeed);
+        kalmanX.setPosition(pose.getX());
+        kalmanY.setPosition(pose.getY());
+        globalTheta = pose.getRotation().getDegrees();
     }
 
     /**
@@ -202,18 +231,6 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         return (leftMotorEncoder.getPositionMeters() + rightMotorEncoder.getPositionMeters()) / 2.0;
     }
 
-    /**
-     * Sets the max output of the drive. Useful for scaling the drive to drive more
-     * slowly.
-     *
-     * @param maxOutput
-     *            the maximum output to which the drive will be constrained
-     */
-    public void setMaxOutput(double maxOutput)
-    {
-        drive.setMaxOutput(maxOutput);
-    }
-
     /** Zeroes the heading of the robot. */
     public void zeroHeading()
     {
@@ -231,6 +248,17 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     }
 
     /**
+     * Returns the global angle of the robot as defined by the coordinate
+     * system used Pathweaver
+     *
+     * @return the robot's heading in radians (CCW Positive)
+     */
+    public double getGlobalAngleRadians()
+    {
+        return Math.toRadians(globalTheta);
+    }
+
+    /**
      * Returns the turn rate of the robot.
      *
      * @return The turn rate of the robot, in degrees per second
@@ -238,6 +266,60 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     public double getTurnRate()
     {
         return -gyro.getRate();
+    }
+    
+    /**
+     * Gets the acceleration of the robot relative to itself
+     * @return A double array [x_accleration, y_acceleration]
+     */
+    public double[] getRelativeAcceleration()
+    {
+        return new double[]{gyro.getAccelX(), gyro.getAccelY()};
+    }
+
+    /**
+     * Gets the acceleration of the robot relative to the yaw angle
+     * @return A double array [x_accleration, y_acceleration]
+     */
+    public double[] getGlobalAcceleration()
+    {
+        double theta = getGlobalAngleRadians();
+        double xRelative = getRelativeAcceleration()[0];
+        double yRelative = getRelativeAcceleration()[1];
+
+        // Using a rotation matrix to set the relative accelerations
+        // to global acceleration with the pose rotation. This uses
+        // counterclockwise positive rotation.
+        return new double[]
+            {(Math.cos(theta) * xRelative) - (Math.sin(theta) * yRelative),
+                (Math.sin(theta) * xRelative) + (Math.cos(theta) * yRelative)};
+    }
+
+    /**
+     * Creates a command using a trajectory.
+     * 
+     * @param trajectory
+     *            The {@link Trajectory} to be made into a command
+     * @param resetOdometry
+     *            Whether the command should reset the odometry before starting the path
+     * @return The command that uses {@link SK22Drive} to run a path.
+     */
+    public Command makeTrajectoryCommand(Trajectory trajectory, boolean resetOdometry)
+    {
+        RamseteCommand ramseteCommand = new RamseteCommand(trajectory, this::getPose,
+            AutoConstants.RAMSETE_CONTROLLER, AutoConstants.SIMPLE_MOTOR_FEEDFORWARD,
+            DriveConstants.DRIVE_KINEMATICS, this::getWheelSpeeds, AutoConstants.PID_CONTROLLER,
+            AutoConstants.PID_CONTROLLER,
+            // RamseteCommand passes volts to the callback
+            this::tankDriveVolts, this);
+
+        // Tell the robot where it is starting from if this is the first trajectory of a path.
+        return resetOdometry ?
+        // Run path following command, then stop at the end.
+            new SequentialCommandGroup(
+                new InstantCommand(() -> this.resetOdometry(trajectory.getInitialPose()), this),
+                ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0)))
+            : ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0));
     }
 
     @Override
@@ -268,33 +350,6 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         speedControllerGroupRightEntry = Shuffleboard.getTab("Drive")
             .add("SpeedControllerGroupRight", 1).withWidget(BuiltInWidgets.kNumberSlider)
             .withSize(2, 1).withPosition(2, 3).getEntry();
-    }
-
-    /**
-     * Creates a command using a trajectory.
-     * 
-     * @param trajectory
-     *            The {@link Trajectory} to be made into a command
-     * @param resetOdometry
-     *            Whether the command should reset the odometry before starting the path
-     * @return The command that uses {@link SK22Drive} to run a path.
-     */
-    public Command makeTrajectoryCommand(Trajectory trajectory, boolean resetOdometry)
-    {
-        RamseteCommand ramseteCommand = new RamseteCommand(trajectory, this::getPose,
-            AutoConstants.RAMSETE_CONTROLLER, AutoConstants.SIMPLE_MOTOR_FEEDFORWARD,
-            DriveConstants.DRIVE_KINEMATICS, this::getWheelSpeeds, AutoConstants.PID_CONTROLLER,
-            AutoConstants.PID_CONTROLLER,
-            // RamseteCommand passes volts to the callback
-            this::tankDriveVolts, this);
-
-        // Tell the robot where it is starting from if this is the first trajectory of a path.
-        return resetOdometry ?
-        // Run path following command, then stop at the end.
-            new SequentialCommandGroup(
-                new InstantCommand(() -> this.resetOdometry(trajectory.getInitialPose()), this),
-                ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0)))
-            : ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0));
     }
 
     @Override

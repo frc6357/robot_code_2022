@@ -7,13 +7,6 @@
 
 package frc.robot;
 
-// TODO: Commented out after moving SK22Climb instantiation to RobotContainer.
-//import com.revrobotics.CANSparkMax;
-//import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-//import com.revrobotics.REVPhysicsSim;
-//import edu.wpi.first.math.system.plant.DCMotor;
-//import frc.robot.simulation.RobotSim;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -29,7 +22,6 @@ public class Robot extends TimedRobot
 {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
-    //private RobotSim robotSimulation;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -37,18 +29,11 @@ public class Robot extends TimedRobot
      */
     public Robot()
     {
-        // TODO: May want to build or load trajectories here?
         robotContainer = new RobotContainer();
     }
 
     @Override
-    public void robotInit()
-    {
-        // TODO: NO! We can't be making Climb a special case here. Why isn't it
-        // instantiated with all the other subsystems?
-        //robotContainer = new RobotContainer(climbSubsystem);
-        //robotSimulation = new RobotSim(complexBrakePivot, complexRatchetLift);
-    }
+    public void robotInit(){}
 
     /**
      * This function is called every robot packet, no matter the mode. Use this for items
@@ -102,7 +87,6 @@ public class Robot extends TimedRobot
     public void teleopInit()
     {
         robotContainer.resetDriveSubsystem();
-        robotContainer.resetDriveDefaultCommand();
 
         /*
          * This makes sure that the autonomous stops running when teleop starts running.
@@ -139,31 +123,13 @@ public class Robot extends TimedRobot
     {
         TestModeManager.testModePeriodic();
     }
-
-
     
     @Override
-    public void simulationInit()
-    {
-        // TODO: Commented out for now after moving SK22Climb instantiation into RobotContainer
-        // with the other subsystems.
-
-        //super.simulationInit();
-        //REVPhysicsSim.getInstance().addSparkMax(complexBrakePivot, DCMotor.getNEO(1));
-        //REVPhysicsSim.getInstance().addSparkMax(complexRatchetLift, DCMotor.getNEO(1));
-    }
+    public void simulationInit(){}
 
     /**
      * This function is called periodically during simulation.
      */
     @Override
-    public void simulationPeriodic()
-    {
-        // TODO: Commented out for now after moving SK22Climb instantiation into RobotContainer
-        // with the other subsystems.   
-        //complexBrakePivot.set(-.025);
-        //complexRatchetLift.set(.25);
-        //REVPhysicsSim.getInstance().run();
-        //robotSimulation.update();
-    }
+    public void simulationPeriodic() {}
 }

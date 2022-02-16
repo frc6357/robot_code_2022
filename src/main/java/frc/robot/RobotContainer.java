@@ -7,58 +7,17 @@
 
 package frc.robot;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.Optional;
 import java.util.Set;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.SK22CommandBuilder;
 import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.AutoTools.SK22Paths.RunJson;
-import frc.robot.commands.AcquireTargetCommand;
-import frc.robot.commands.DefaultArcadeDriveCommand;
-import frc.robot.commands.DefaultTankDriveCommand;
-import frc.robot.commands.EjectBallCommand;
-import frc.robot.commands.LoadBallVerticalCommand;
-import frc.robot.commands.SetIntakePositionCommand;
-import frc.robot.commands.ShootBallsCommand;
-import frc.robot.commands.subcommands.LowerSimpleArmCommand;
-import frc.robot.commands.subcommands.RaiseSimpleArmCommand;
-import frc.robot.subsystems.SK22Climb;
 import frc.robot.subsystems.SK22Drive;
-import frc.robot.subsystems.SK22Intake;
-import frc.robot.subsystems.SK22Launcher;
-import frc.robot.subsystems.SK22Transfer;
-import frc.robot.subsystems.SK22Vision;
-import frc.robot.subsystems.SK22Gearshift;
-import frc.robot.subsystems.base.DpadDownButton;
-import frc.robot.subsystems.base.DpadUpButton;
-import frc.robot.subsystems.base.Dpad;
-import frc.robot.subsystems.base.TriggerButton;
-import frc.robot.subsystems.base.SuperClasses.Gear;
-import frc.robot.utils.FilteredJoystick;
-import frc.robot.utils.SubsystemControls;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -69,13 +28,6 @@ import frc.robot.utils.SubsystemControls;
  */
 public class RobotContainer
 {
-    /**
-     * The USB Camera for the Robot.
-     */
-    private UsbCamera camera1;
-    private UsbCamera camera2;
-    NetworkTableEntry cameraSelection;
-
     private final TrajectoryBuilder    segmentCreator      =
             new TrajectoryBuilder(Constants.SPLINE_DIRECTORY);
     private final SK22CommandBuilder   pathBuilder         =
@@ -90,258 +42,21 @@ public class RobotContainer
     // Drivetrain is the only subsystem that is not optional.
     private final SK22Drive driveSubsystem = new SK22Drive();
 
-    // These are currently empty and only created in the constructor
-    // based on the Subsystem.json file
-    private Optional<SK22Intake>    intakeSubsystem    = Optional.empty();
-    private Optional<SK22Launcher>  launcherSubsystem  = Optional.empty();
-    private Optional<SK22Transfer>  transferSubsystem  = Optional.empty();
-    private Optional<SK22Climb>     climbSubsystem     = Optional.empty();
-    private Optional<SK22Vision>    visionSubsystem    = Optional.empty();
-    private Optional<SK22Gearshift> gearshiftSubsystem = Optional.empty();
-
-    // Robot External Controllers (Joysticks and Logitech Controller)
-    private final FilteredJoystick driverLeftJoystick  =
-            new FilteredJoystick(Ports.OI_DRIVER_LEFT_JOYSTICK);
-    private final FilteredJoystick driverRightJoystick =
-            new FilteredJoystick(Ports.OI_DRIVER_RIGHT_JOYSTICK);
-    private final Joystick         operatorJoystick    = new Joystick(Ports.OI_OPERATOR_CONTROLLER);
-
-    // Joystick buttons
-
-    // Note: If we want to continue allowing the choice of both tank drive and arcade drive, we can't use
-    // any buttons on the driverRightJoystick since this may not actually be present if arcade drive is
-    // chosen!!
-
-    // Verified according to 2022 Controller Mapping document on 2/12/2022 
-    private final JoystickButton driveAcquireTargetBtn =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
-    private final JoystickButton driveSlowBtn          =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SLOWMODE);
-    private final JoystickButton driveLowGearBtn       =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_LOW_GEAR);
-    private final JoystickButton driveHighGearBtn      =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_HIGH_GEAR);
-    private final JoystickButton driveShootBtn         =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SHOOT);
-    private final Dpad dpad = 
-            new Dpad(driverLeftJoystick, Ports.OI_DRIVER_REVERSE);
-    private final DpadDownButton reverseOnBtn     =
-            new DpadDownButton(dpad);
-    private final DpadUpButton   reverseOffBtn    = 
-            new DpadUpButton(dpad);
-    private final JoystickButton intakeExtendBtn       =
-            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_EXTEND);
-    private final JoystickButton intakeRetractBtn      =
-            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_RETRACT);
-    private final JoystickButton transferEjectBallBtn  =
-            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_EJECT);
-    private final JoystickButton transferLoadBallBtn   =
-            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_LOAD);
-    private final TriggerButton  climbExtendBtn        =
-            new TriggerButton(operatorJoystick, Ports.OI_OPERATOR_EXTEND_CLIMB);
-    private final JoystickButton climbRetractBtn       =
-            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_RETRACT_CLIMB);
-    private final JoystickButton climbOrchestrateBtn   =
-            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_ORCHESTRATE_CLIMB);
-
-    private final DefaultArcadeDriveCommand arcadeDrive =
-            new DefaultArcadeDriveCommand(driveSubsystem, driverLeftJoystick);
-    private final DefaultTankDriveCommand   tankDrive   =
-            new DefaultTankDriveCommand(driveSubsystem, driverLeftJoystick, driverRightJoystick);
-
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer()
     {
         configureShuffleboard();
-
-        File deployDirectory = Filesystem.getDeployDirectory();
-
-        ObjectMapper mapper = new ObjectMapper();
-        JsonFactory factory = new JsonFactory();
-
-        try
-        {
-            // Looking for the Subsystems.json file in the deploy directory
-            JsonParser parser =
-                    factory.createParser(new File(deployDirectory, Constants.SUBSYSTEM));
-            SubsystemControls subsystems = mapper.readValue(parser, SubsystemControls.class);
-
-            // Instantiating subsystems if they are present
-            // This is decided by looking at Subsystems.json
-            if (subsystems.isIntakePresent())
-            {
-                intakeSubsystem = Optional.of(new SK22Intake());
-            }
-            if (subsystems.isLauncherPresent())
-            {
-                launcherSubsystem = Optional.of(new SK22Launcher());
-            }
-            if (subsystems.isTransferPresent())
-            {
-                transferSubsystem = Optional.of(new SK22Transfer());
-            }
-            if (subsystems.isVisionPresent())
-            {
-                visionSubsystem = Optional.of(new SK22Vision());
-            }
-            if (subsystems.isClimbPresent())
-            {
-                climbSubsystem = Optional.of(new SK22Climb());
-            }
-            if (subsystems.isGearshiftPresent())
-            {
-                gearshiftSubsystem = Optional.of(new SK22Gearshift(new DoubleSolenoid(Ports.BASE_PCM,
-                Ports.PNEUMATICS_MODULE_TYPE, Ports.GEAR_SHIFT_HIGH, Ports.GEAR_SHIFT_LOW)));
-            }
-        }
-        catch (IOException e)
-        {
-            DriverStation.reportError("Failure to read Subsystem Control File!", e.getStackTrace());
-        }
-
-        // Configure the button bindings
-        configureButtonBindings();
-
-        resetDriveDefaultCommand();
-
-        // Driver camera configuration.
-        if (RobotBase.isReal())
-        {
-            camera1 = CameraServer.startAutomaticCapture("Driver Front Camera", 0);
-            camera1.setResolution(240, 240);
-            camera1.setFPS(15);
-
-            camera2 = CameraServer.startAutomaticCapture("Driver Rear Camera", 1);
-            camera2.setResolution(240, 240);
-            camera2.setFPS(15);
-
-            cameraSelection =
-                    NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
-
-            // to change camera displayed feed later on, use the following code
-            // cameraSelection.setString(camera2.getName());
-            // cameraSelection.setString(camera1.getName());
-        }
-    }
-
-    /**
-     * Used to reset the drive subsystem's default command to the one decided by the user
-     * through a Sendable Chooser
-     */
-    public void resetDriveDefaultCommand()
-    {
-        // Configure default commands
-        // Set the default drive command to split-stick arcade drive
-        driveSubsystem.setDefaultCommand(driveModeSelector.getSelected());
     }
 
     private void configureShuffleboard()
     {
         addPossibleAutos();
 
-        driveModeSelector.setDefaultOption("Arcade Drive", arcadeDrive);
-        driveModeSelector.addOption("Tank Drive", tankDrive);
-
         SmartDashboard.putData("Auto Chooser", autoCommandSelector);
         SmartDashboard.putData("Drive Mode", driveModeSelector);
         SmartDashboard.putData("JSON Selector", splineCommandSelector);
-    }
-
-    /**
-     * Use this method to define your button->command mappings. Buttons can be created by
-     * instantiating a {@link GenericHID} or one of its subclasses
-     * ({@link edu.wpi.first.wpilibj.Joystick} or {@link XboxController}), and then
-     * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
-     */
-    private void configureButtonBindings()
-    {
-        //TODO: add command to reverse the robot camera and controls.
-
-        // Turns on slowmode when driver presses slowmode button, giving more manueverability.
-        // TODO: Do we need slow mode now that we have a gear shift? Doesn't low gear achieve
-        // the same end?
-        driveSlowBtn.whenPressed(() -> driveSubsystem.setMaxOutput(0.5));
-        driveSlowBtn.whenReleased(() -> driveSubsystem.setMaxOutput(1));
-
-        // Drive train gearshift is controlled by a separate subsystem so that we
-        // can run the robot even when the pneumatics are not connected.
-        if (gearshiftSubsystem.isPresent())
-        {
-            SK22Gearshift gearshift = gearshiftSubsystem.get();
-
-            // Sets the gear to low when driver clicks setLowGear Buttons
-            driveLowGearBtn.whenPressed(() -> gearshift.setGear(Gear.LOW));
-
-            // Sets the gear to high when driver clicks setHighGear Buttons
-            driveHighGearBtn.whenPressed(() -> gearshift.setGear(Gear.HIGH));
-        }
-
-        // User controls related to the ball intake subsystem
-        if (intakeSubsystem.isPresent())
-        {
-            SK22Intake intake = intakeSubsystem.get();
-
-            // Extends the intake when the extendIntake Button is pressed
-            intakeExtendBtn.whenPressed(new SetIntakePositionCommand(intake, true));
-
-            // Retracts the intake when the retractIntake Button is pressed
-            intakeRetractBtn.whenPressed(new SetIntakePositionCommand(intake, false));
-        }
-
-        // User controls related to the ball transfer subsystem 
-        if (transferSubsystem.isPresent())
-        {
-            SK22Transfer transfer = transferSubsystem.get();
-
-            // Emergency override to eject balls from the horizontal transfer
-            transferEjectBallBtn.whenPressed(new EjectBallCommand(transfer, true));
-            transferEjectBallBtn.whenReleased(new EjectBallCommand(transfer, false));
-
-            // Emergency override to move ball from the horizontal transfer
-            // into the vertical loader.
-            transferLoadBallBtn.whenPressed(new LoadBallVerticalCommand(transfer, true));
-            transferLoadBallBtn.whenReleased(new LoadBallVerticalCommand(transfer, false));
-        }
-
-        if (visionSubsystem.isPresent())
-        {
-            SK22Vision vision = visionSubsystem.get();
-            driveAcquireTargetBtn.whenPressed(new AcquireTargetCommand(driveSubsystem, vision));
-            // TODO: How do we break out of this command if it fails to acquire the 
-            // target for some reason?
-        }
-
-        // User controls related to the ball launcher.
-        if (launcherSubsystem.isPresent() && visionSubsystem.isPresent())
-        {
-            // TODO: I don't think the shoot command should need anything
-            // in the vision subsystem. My assumption is that the launcher
-            // motor speed will be being set automatically whenever the
-            // target is acquired and that the driver will already have 
-            // aligned on the target. We should discuss this.
-            SK22Launcher launcher = launcherSubsystem.get();
-            SK22Vision vision = visionSubsystem.get();
-
-            // Shoots ball(s) using the vision system and the launcher
-            driveShootBtn.whenPressed(new ShootBallsCommand(launcher, vision));
-        }
-
-        // User controls related to the climbing function.
-        if (climbSubsystem.isPresent())
-        {
-            SK22Climb climb = climbSubsystem.get();
-
-            // Extends the climb arms
-            climbExtendBtn.whenPressed(new RaiseSimpleArmCommand(climb));
-
-            // Retracts the climb arms
-            climbRetractBtn.whenPressed(new LowerSimpleArmCommand(climb));
-
-            // Goes from one climb rung to the next highest rung
-            //climbOrchestrateBtn.whenPressed(climb::orchestra);
-        }
     }
 
     /**
