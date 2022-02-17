@@ -74,7 +74,7 @@ public class RobotContainer
      */
     private UsbCamera camera1;
     private UsbCamera camera2;
-    NetworkTableEntry cameraSelection;
+    private NetworkTableEntry cameraSelection;
 
     private final TrajectoryBuilder    segmentCreator      =
             new TrajectoryBuilder(Constants.SPLINE_DIRECTORY);
@@ -257,13 +257,22 @@ public class RobotContainer
      */
     private void configureButtonBindings()
     {
-        //TODO: add command to reverse the robot camera and controls.
-
         // Turns on slowmode when driver presses slowmode button, giving more manueverability.
         // TODO: Do we need slow mode now that we have a gear shift? Doesn't low gear achieve
         // the same end?
         driveSlowBtn.whenPressed(() -> driveSubsystem.setMaxOutput(0.5));
         driveSlowBtn.whenReleased(() -> driveSubsystem.setMaxOutput(1));
+
+        // TODO: Test that this functionality works as expected by ensuring that the 
+        // camera and direction of the robot are one and the same
+        // Sets the "directionality" of the robot
+        // Sets both the direction controls and the camera selection
+        reverseOffBtn
+            .whenPressed(() -> driveSubsystem.setBackwardsDirection(false))
+            .whenPressed(() -> cameraSelection.setString(camera1.getName()));
+        reverseOnBtn
+            .whenPressed(() -> driveSubsystem.setBackwardsDirection(true))
+            .whenPressed(() -> cameraSelection.setString(camera2.getName()));
 
         // Drive train gearshift is controlled by a separate subsystem so that we
         // can run the robot even when the pneumatics are not connected.
@@ -308,7 +317,7 @@ public class RobotContainer
         if (visionSubsystem.isPresent())
         {
             SK22Vision vision = visionSubsystem.get();
-            driveAcquireTargetBtn.whenPressed(new AcquireTargetCommand(driveSubsystem, vision));
+            driveAcquireTargetBtn.whenHeld(new AcquireTargetCommand(driveSubsystem, vision), true);
             // TODO: How do we break out of this command if it fails to acquire the 
             // target for some reason?
         }

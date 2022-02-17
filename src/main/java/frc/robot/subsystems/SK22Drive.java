@@ -27,7 +27,6 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Ports;
-import frc.robot.subsystems.base.SuperClasses.Gear;
 import frc.robot.utils.DifferentialDrivetrain;
 import frc.robot.utils.MotorEncoder;
 
@@ -63,6 +62,8 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private NetworkTableEntry rightFollowerEntry;
     private NetworkTableEntry speedControllerGroupLeftEntry;
     private NetworkTableEntry speedControllerGroupRightEntry;
+
+    private boolean reversed = false;
 
     /**
      * Creates a SK22Drive subsystem controlling the drivetrain.
@@ -102,6 +103,17 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
         SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
         SmartDashboard.putNumber("Gyro Angle", this.getHeading());
+    }
+
+    /**
+     * Sets whether or not the launcher should be the "forward"
+     * of the robot
+     * 
+     * @param reversed Whether the robot should be set launcher forward
+     */
+    public void setBackwardsDirection(boolean reversed)
+    {
+        this.reversed = reversed;
     }
 
     /**
@@ -147,7 +159,14 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
      */
     public void arcadeDrive(double fwd, double rot)
     {
-        drive.arcadeDrive(fwd, rot);
+        if (reversed)
+        {
+            drive.arcadeDrive(-fwd, rot);
+        }
+        else
+        {
+            drive.arcadeDrive(fwd, rot);
+        }
     }
 
     /**
@@ -160,7 +179,14 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
      */
     public void tankDrive(double leftSpeed, double rightSpeed)
     {
-        drive.tankDrive(leftSpeed, rightSpeed);
+        if (reversed)
+        {
+            drive.tankDrive(-rightSpeed, -leftSpeed);
+        }
+        else
+        {
+            drive.tankDrive(leftSpeed, rightSpeed);
+        }
     }
 
     /**
