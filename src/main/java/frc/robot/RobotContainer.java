@@ -317,7 +317,7 @@ public class RobotContainer
         if (visionSubsystem.isPresent())
         {
             SK22Vision vision = visionSubsystem.get();
-            driveAcquireTargetBtn.whenPressed(new AcquireTargetCommand(driveSubsystem, vision));
+            driveAcquireTargetBtn.whenHeld(new AcquireTargetCommand(driveSubsystem, vision), true);
             // TODO: How do we break out of this command if it fails to acquire the 
             // target for some reason?
         }
