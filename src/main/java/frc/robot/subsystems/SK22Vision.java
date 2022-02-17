@@ -20,6 +20,7 @@ import java.util.zip.CRC32;
 import javax.print.DocFlavor.BYTE_ARRAY;
 import javax.swing.text.StyledEditorKit;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 
 class Datagram{
@@ -170,15 +171,15 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     public void periodic()
     {
         boolean packetRecieved = getPacket(sSocket);
-        // check if packet is
+        // check if packet is valid
         if(packetRecieved)
         {
             packetDatagram = new Datagram(packetBuffer);
             if (packetDatagram.validPacket)
             {
-                System.out.println("Distance: " + packetDatagram.distance + 
-                                   "\n" + "Horizontal Angle: " + packetDatagram.horiAngle + 
-                                   "\n" + "Vertical Angle: " + packetDatagram.vertAngle);
+                SmartDashboard.putNumber("Distance",            packetDatagram.distance);
+                SmartDashboard.putNumber("Horizontal Angle",    packetDatagram.horiAngle);
+                SmartDashboard.putNumber("Vertical Angle",      packetDatagram.vertAngle);
             }
         }
     }   
