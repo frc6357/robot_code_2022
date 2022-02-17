@@ -138,9 +138,8 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
     public void predict(Matrix<Inputs, N1> u, double dtSeconds)
     {
         // Guessing the state of the system
-        // x̂(n+1) = Ax(n) + Bu
-        // TODO: I don't understand this black magic of a function
-        xHat = plant.calculateX(x, u, dtSeconds);
+        // x̂(n+1) = Ax̂(n) + Bu
+        xHat = plant.calculateX(xHat, u, dtSeconds);
         // Calculating Covariance
         // P̃ = AP(n)Aᵀ + Q
         p = plant.getA().times(p).times(plant.getA().transpose()).plus(contQ);
@@ -159,8 +158,8 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
     public void correct(Matrix<Inputs, N1> u, Matrix<Outputs, N1> z)
     {
         // Calculating Residual
-        // ỹ(n) = z(n) - Cx(n)
-        yTilda = z.minus(c.times(x));
+        // ỹ(n) = z(n) - Cx̂(n)
+        yTilda = z.minus(c.times(xHat));
 
         // Calculating Measurement Covariance
         // S(n) = CP̃(n)Cᵀ + R
@@ -171,8 +170,8 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
         k = p.times(c.transpose()).times(s.inv());
 
         // Updating the Corrected State
-        // x(n+1) = x̂(n+1) + K(n)ỹ(n)
-        x = xHat.plus(k.times(yTilda));
+        // x̂(n+1) = x̂(n+1) + K(n)ỹ(n)
+        xHat = xHat.plus(k.times(yTilda));
 
         // Updating Corrected Covariance
         // P(n+1) = (I - K(n)C)P̃(n+1)
@@ -180,7 +179,7 @@ public class SKKalmanFilter<States extends Num, Inputs extends Num, Outputs exte
 
         // Updating Post Residual
         // ỹ(n+1) = z(n) - Cx(n+1)
-        yTilda = z.minus(c.times(x));
+        yTilda = z.minus(c.times(xHat));
     }
 
     /**
