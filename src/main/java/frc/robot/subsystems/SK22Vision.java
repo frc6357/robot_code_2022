@@ -79,6 +79,9 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     ByteArrayInputStream byteArrayInputStream;
     DataInputStream dataInputStream;
 
+    // The packet containing the angle and distance values
+    Datagram packetDatagram;
+
     public SK22Vision()
     {
         try {
@@ -170,7 +173,7 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
         // check if packet is
         if(packetRecieved)
         {
-            Datagram packetDatagram = new Datagram(packetBuffer);
+            packetDatagram = new Datagram(packetBuffer);
             if (packetDatagram.validPacket)
             {
                 System.out.println("Distance: " + packetDatagram.distance + 
