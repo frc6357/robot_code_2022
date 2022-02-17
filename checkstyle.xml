@@ -77,9 +77,9 @@
     <module name="InterfaceIsType"/>
     <module name="VisibilityModifier"/>
     <module name="ArrayTypeStyle"/>
-    <module name="TodoComment">
+    <!--<module name="TodoComment">
       <property name="severity" value="info"/>
-    </module>
+    </module> -->
     <module name="UpperEll"/>
   </module>
   <module name="NewlineAtEndOfFile">
