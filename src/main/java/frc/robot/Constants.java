@@ -18,6 +18,12 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
 public final class Constants
 {
 
+    /** Constants related to the ColorSensor */
+    public static final class ColorSensor{
+        public static final int MAXIMUM_PRESENCE_DISTANCE = 150;
+        public static final int MINIMUM_PRSENCE_DISTANCE = 500;
+    }
+
     /** Constants related to the Transfer Subsystem */
     public static final class TransferConstants{
         public static final int DISTANCE_THRESHOLD = 70;
