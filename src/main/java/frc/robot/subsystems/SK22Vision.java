@@ -8,17 +8,10 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.net.SocketException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.channels.DatagramChannel;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.concurrent.TimeoutException;
 import java.util.zip.CRC32;
-
-import javax.print.DocFlavor.BYTE_ARRAY;
-import javax.swing.text.StyledEditorKit;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -120,12 +113,11 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
     {
         boolean receivedOne = false;
         SocketAddress SockRet;
-        int ReadCount = 0;
+        
 
         do
         {
             rDataBuffer.position(0);
-            ReadCount++;
 
             try
             {
