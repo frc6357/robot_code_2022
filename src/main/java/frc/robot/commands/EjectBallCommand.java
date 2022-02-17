@@ -21,6 +21,13 @@ public class EjectBallCommand extends CommandBase
      */
     private boolean exitToggle;
 
+    /**
+     * Manual override command allowing the operator to eject any ball
+     * currently in the horizontal portion of the transfer.
+     * 
+     * @param transferSubsystem The transfer subsystem the command operates on.
+     * @param exitToggle If true, this command runs the motors to eject a ball. If false, the motors are stopped.
+     */
     public EjectBallCommand(SK22Transfer transferSubsystem, boolean exitToggle)
     {
         this.transferSubsystem = transferSubsystem;
