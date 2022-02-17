@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 /**
  * Generic PID controlled rotating arm
@@ -18,6 +19,7 @@ public class RotatingArm
     private final double motorRotationsToDegrees;
     private double setPoint;
     private boolean armEnabled = false;
+    private final Joystick m_stick = new Joystick(0); 
     
     /**
      * Constructor method for rotating arm class
@@ -101,9 +103,22 @@ public class RotatingArm
       // TODO: Debug only, move to SK22Climb
       SmartDashboard.putNumber("Arm Set Point", setPoint);
       SmartDashboard.putNumber("Arm Position", position);
+
+      if(m_stick.getRawButton(5)){
+          armEnabled = true;
+      }
+      if(m_stick.getRawButton(6)){
+          armEnabled = false;
+      }
   
       if(armEnabled)
       {
+        if(m_stick.getRawButton(1)){
+            goToAngle(180);
+        }
+        else if(m_stick.getRawButton(2)){
+            goToAngle(70);
+        }
         motor.set(controller.calculate(position, setPoint));
       }
       else

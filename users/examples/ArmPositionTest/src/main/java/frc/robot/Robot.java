@@ -13,12 +13,12 @@ import frc.robot.subsystems.base.RotatingArm;
 
 
 public class Robot extends TimedRobot {
-  private final CANSparkMax motor = new CANSparkMax(2, MotorType.kBrushless);
+  private final CANSparkMax motor = new CANSparkMax(22, MotorType.kBrushless);
   private final RotatingArm arm;
   private final double motorRotationsToDegrees = (360.0 / 5.0); // 5 to 1 gearbox only 
-  private final double kP = 0.004;
-  private final double kI = 0.0;
-  private final double kD = 0.0;
+  private final double kP = (0.0045 * 0.6);
+  private final double kI = ((2 * kP) / 0.02217);
+  private final double kD =  (0.125 * kP) / 0.02217;
   private final Joystick m_stick = new Joystick(0); 
   private boolean hasBeenPressed;
 
@@ -29,13 +29,8 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    //arm.update();
+    arm.update();
 
-    if(m_stick.getRawButton(4) == true){
-      arm.goToAngle(15);
-    }
-    if(m_stick.getRawButton(4) == false){
-      arm.goToAngle(30);
-    }
+    
   }
 }
