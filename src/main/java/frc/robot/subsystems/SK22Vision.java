@@ -1,134 +1,196 @@
 package frc.robot.subsystems;
 
-import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
+import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
+import java.net.InetSocketAddress;
+import java.net.SocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.channels.DatagramChannel;
+import java.util.zip.CRC32;
 
-public class SK22Vision extends SKSubsystemBase implements AutoCloseable
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Constants;
+
+/** The Datagram Class defines and unpacks the contents of the packets sent by the Odroid-XU4 */
+class Datagram
+{
+    int versionID;
+    int packetLength;
+    long frameID;
+    long timestamp;
+    double distance;
+    int adjVal;
+    float horiAngle;
+    float vertAngle;
+    long reserved;
+    long checksum;
+    boolean validPacket = false;
+
+    Datagram(ByteBuffer byteBuffer)
+    {
+        byteBuffer.position(0);
+
+        byte versionIDSigned = byteBuffer.get();
+        versionID = Byte.toUnsignedInt(versionIDSigned);
+
+        byte packetLengthSigned = byteBuffer.get();
+        packetLength =  Byte.toUnsignedInt(packetLengthSigned);
+
+        int frameIDSigned = byteBuffer.getInt();
+        frameID = Integer.toUnsignedLong(frameIDSigned);
+
+        int timestampSigned = byteBuffer.getInt();
+        timestamp = Integer.toUnsignedLong(timestampSigned);
+
+        short distanceSigned = byteBuffer.getShort();
+        int distanceInt = Short.toUnsignedInt(distanceSigned);
+        distance = distanceInt/(Math.pow(10, adjVal));
+
+        byte adjValSigned = byteBuffer.get();
+        adjVal = Byte.toUnsignedInt(adjValSigned);
+
+        short shortHoriAngle = byteBuffer.getShort();
+        horiAngle = shortHoriAngle/100;
+
+        short shortVertAngle = byteBuffer.getShort();
+        vertAngle = shortVertAngle/100;
+
+        reserved = byteBuffer.getLong();
+        checksum = byteBuffer.getInt();
+
+        CRC32 crc = new CRC32();
+        crc.update(byteBuffer);
+        validPacket = (crc.getValue() == 0) ? true : false;
+    }
+}
+
+/** This class retrieves packets sent by the Odroid-XU4 at port 5800 and unpacks the 
+ *  data using the Datagram class above, within the periodic */
+public class SK22Vision extends SKSubsystemBase implements AutoCloseable 
 {
     // destination ports are required, but source ports are optional
-    final int odroidPort = 5005;
-    // this will change depending on the network connected
-    final String odroidIP = "";
-    final int roborioPort = 5800;
-    public DatagramSocket sSocket;
-    byte[] rDataBuffer;
-    byte[] sDataBuffer;
-
+    final int odroidPort = Constants.VisionConstants.ODROID_PORT;
+    
+    final int roborioPort = Constants.VisionConstants.ROBORIO_PORT;
+    
     private String caughtException = "";
+    
+    ByteBuffer rDataBuffer = ByteBuffer.allocate(Constants.VisionConstants.UDP_PACKET_LENGTH)
+                            .order(ByteOrder.LITTLE_ENDIAN);
+    ByteBuffer packetBuffer = ByteBuffer.allocate(Constants.VisionConstants.UDP_PACKET_LENGTH)
+                            .order(ByteOrder.LITTLE_ENDIAN);
+    
+    DatagramChannel sSocket;
+    ByteArrayInputStream byteArrayInputStream;
+    DataInputStream dataInputStream;
 
+    // The packet containing the angle and distance values
+    Datagram packetDatagram;
+
+    /** This constructor initializes the port 5800 on the roborio for reading UDP packets. 
+     *  Disables blocking so it can be used in periodic */
     public SK22Vision()
     {
-
-        try
+        try 
         {
-            // binds socket to specified port on computer
-            sSocket = new DatagramSocket(roborioPort);
-
-            // memory allocated for packets to be read on the computer
-            // ideally the memory is not hardcoded, but dynamic based on the packet size
-            rDataBuffer = new byte[1024];
-
-            // memory allocated for packets to be sent from the computer
-            // ideally the memory is not hardcoded, but dynamic based on the packet size
-            byte[] sDataBuffer = new byte[1024];
-
+            sSocket = DatagramChannel.open();
+            sSocket.configureBlocking(false);
+            sSocket.socket().bind(new InetSocketAddress(roborioPort));
+            
+        } 
+        
+        catch (Exception e) 
+        {
+            //TODO: handle exception
+            System.out.println(e.toString());
         }
 
-        catch (SocketException e)
-        {
-            caughtException = e.toString();
-        }
+        
+
+        // memory allocated for packets to be read on the computer
+        // ideally the memory is not hardcoded, but dynamic based on the packet size
+
+        // memory allocated for packets to be sent from the computer
+        // ideally the memory is not hardcoded, but dynamic based on the packet size
 
     }
-
-    // returns the boolean that represents whether or not an exception was caught
+    
+    /** returns the boolean that represents whether or not an exception was caught 
+     *  @param exceptionMessage
+     *          An exception .toString() within a try/catch block 
+     *  
+     *  @return Returns the string representation of an exception
+     * */ 
+    
     public String caughtException(String exceptionMessage)
     {
         return caughtException;
     }
 
-    public String getPacket(DatagramSocket sSocket, byte[] rDataBuffer)
+    /**  Receive the latest available UDP packet if any is available. Return
+    * true if a packet has been read, false if none is available.
+    *
+    * This method discards all but the latest received packet on the 
+    * socket.
+    * @param sSocket
+    *           A non-blocking DatagramChannel object that is used to initialize the 
+    *           packet receiving port on the roborio
+    * 
+    * @return   True/False if a packet was received at the DatagramChannel on the specified port
+    */
+    public boolean getPacket(DatagramChannel sSocket) 
     {
-        try
+        boolean receivedOne = false;
+        SocketAddress sockRet;
+        
+
+        do
         {
+            rDataBuffer.position(0);
 
-            // create Datagram packet with equal size to the 
-            DatagramPacket inputPacket = new DatagramPacket(rDataBuffer, rDataBuffer.length);
-            System.out.println("Waiting for message...");
+            try
+            {
+                // get the packet at the port defined by sSocket
+                sockRet = sSocket.receive(rDataBuffer);
+                if (sockRet != null)
+                {
+                    // We got a packet! Save it into a local buffer
+                    // for later.
+                    receivedOne = true;
+                    packetBuffer = rDataBuffer.duplicate();
+                    packetBuffer.order(ByteOrder.LITTLE_ENDIAN);
+                }
+            }
+            catch (Exception e) 
+            {
+                caughtException = e.toString();
+                System.out.println("Socket Excetion: " + caughtException);
+                sockRet = null;
+            }
+        } while (sockRet != null);
 
-            // get the packet at the port defined by sSocket
-            sSocket.receive(inputPacket);
-
-            // reads data from packet to string
-            String rData = new String(inputPacket.getData());
-
-            // refreshes memory to empty
-            this.rDataBuffer = new byte[1024];
-
-            return rData;
-
-        }
-        catch (SocketException e)
-        {
-            caughtException = e.toString();
-            return caughtException;
-        }
-
-        catch (IOException i)
-        {
-            caughtException = i.toString();
-            return caughtException;
-        }
-
+        return receivedOne;
     }
-
-    public void sendPacket(byte[] sDataBuffer, DatagramSocket sSocket, String message)
-    {
-        try
-        {
-            // converts string data to byte data and stores this in the Data Buffer to be sent
-            sDataBuffer = message.getBytes();
-            // takes byte data stored in sDataBuffer and sends it to the odroid's IP address at the specified port on the odroid
-            DatagramPacket outputPacket = new DatagramPacket(sDataBuffer, sDataBuffer.length,
-                InetAddress.getByName(odroidIP), odroidPort);
-            sSocket.send(outputPacket);
-        }
-        catch (IOException i)
-        {
-            System.out.println(i.toString());
-        }
-    }
-
-    /**
-     * Gets the relative horizontal angle of the hub
-     * 
-     * @return The relative horizontal angle
-     */
-    public double getHorizontalAngle()
-    {
-        return 0.0;
-    }
-
+    
     @Override
     public void periodic()
     {
-        try (SK22Vision m_Sk22Vision = new SK22Vision())
+        boolean packetRecieved = getPacket(sSocket);
+        // check if packet is valid
+        if (packetRecieved)
         {
-            // reads packet data and print to terminal
-            System.out.println(getPacket(m_Sk22Vision.sSocket, m_Sk22Vision.rDataBuffer));
-            // close the socket after reading data
-            m_Sk22Vision.sSocket.close();
+            packetDatagram = new Datagram(packetBuffer);
+            if (packetDatagram.validPacket)
+            {
+                SmartDashboard.putNumber("Distance",            packetDatagram.distance);
+                SmartDashboard.putNumber("Horizontal Angle",    packetDatagram.horiAngle);
+                SmartDashboard.putNumber("Vertical Angle",      packetDatagram.vertAngle);
+            }
         }
-        catch (Exception e)
-        {
-            // print exception message to log
-            System.out.println("Error in Vision2022 periodic: " + e.toString());
-        }
-    }
+    }   
 
+    
     @Override
     public void initializeTestMode()
     {
@@ -148,9 +210,10 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
     }
 
     @Override
-    public void close() throws Exception
+    public void close() throws Exception 
     {
 
     }
+
 
 }

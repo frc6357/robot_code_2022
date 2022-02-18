@@ -165,6 +165,21 @@ public final class Constants
         public static final int LIFT_MOTOR_GEAR_RATIO           = 9; // 9:1 gear ratio
     }
 
+    /**Constants related to Vision subsystem */
+    public static final class VisionConstants
+    {
+        /** Represents the port on the Odroid-XU4 that packets will be sent from */
+        public static final int ODROID_PORT         = 5005;
+
+        /** Represents the port on the RoboRio that packets will be read from */
+        public static final int ROBORIO_PORT        = 5800;
+
+        /** This is the length of the packet received that is defined in the Datagram class
+         *  within the SK22Vision subsystem file. This length must correspond to the same length
+         *  defined on Odroid. */
+        public static final int UDP_PACKET_LENGTH   = 29;
+    }
+
     public static final double INCH_PER_MILLIMETER    = 0.0393701;
     public static final int    SIM_TICS_PER_SECOND    = 50;
     public static final int    SECONDS_PER_MINUTE     = 60;
