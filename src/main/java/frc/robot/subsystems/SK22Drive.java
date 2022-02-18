@@ -13,11 +13,13 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.ADIS16448_IMU;
 import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -49,7 +51,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private final MotorControllerGroup rightGroup        =
             new MotorControllerGroup(rightLeader, rightFollower);
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final ADIS16448_IMU gyro = new ADIS16448_IMU();
 
     private final DifferentialDrive         drive;
     private final DifferentialDriveOdometry odometry;
@@ -249,11 +251,11 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     /**
      * Returns the heading of the robot.
      *
-     * @return the robot's heading in degrees, from -180 to 180
+     * @return yaw axis angle in degrees (CCW positive)
      */
     public double getHeading()
     {
-        return -gyro.getAngle();
+        return gyro.getAngle();
     }
 
     /**

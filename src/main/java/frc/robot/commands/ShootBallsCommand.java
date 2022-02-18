@@ -2,20 +2,27 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SK22Launcher;
-import frc.robot.subsystems.SK22Vision;
 
 // TODO: Write this command
 
-/** A class that shoots the balls that we possess using the launcher and vision system */
+/**
+ * A command that shoots the balls that we possess using the launcher
+ * 
+ */
 public class ShootBallsCommand extends CommandBase
 {
     private final SK22Launcher launcher;
-    private final SK22Vision vision;
 
-    public ShootBallsCommand(SK22Launcher launcher, SK22Vision vision)
+    /**
+     * Constructor for the ball shooter command.
+     * 
+     * @param launcher The launcher subsystem on which the command operates.
+     */
+    public ShootBallsCommand(SK22Launcher launcher)
     {
         this.launcher = launcher;
-        this.vision = vision;
+
+        addRequirements(launcher);
     }
 
     @Override

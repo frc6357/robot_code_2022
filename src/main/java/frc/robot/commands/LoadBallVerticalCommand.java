@@ -19,6 +19,14 @@ public class LoadBallVerticalCommand extends CommandBase
      */
     private boolean verticalToggle;
 
+    /**
+     * A manual override command that allows the operator to transfer balls from
+     * the horizontal to the vertical portion of the transfer subsystem.
+     * 
+     * @param transferSubsystem The transfer subsystem on which the command operates.
+     * @param verticalToggle If true, the motors are started to feed balls into the
+     * vertical transfer area. If false, the motors are stopped.
+     */
     public LoadBallVerticalCommand(SK22Transfer transferSubsystem, boolean verticalToggle)
     {
         this.transferSubsystem = transferSubsystem;
