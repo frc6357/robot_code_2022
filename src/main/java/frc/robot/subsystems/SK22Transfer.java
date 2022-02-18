@@ -56,8 +56,8 @@ public class SK22Transfer extends SKSubsystemBase
       exitTransferSensor = new SwitchSensor(Ports.EXIT_SENSOR, Constants.TransferConstants.EXIT_SENSONR_POLARITY);
       verticalTransferSensor = new SwitchSensor(Ports.VERTICAL_SENSOR, Constants.TransferConstants.VERTICAL_SENSOR_POLARITY);
 
-      verticalTransferMotor.setIdleMode(IdleMode.kCoast);
-      launcherTransferMotor.setIdleMode(IdleMode.kCoast);
+      verticalTransferMotor.setIdleMode(IdleMode.kBrake);
+      launcherTransferMotor.setIdleMode(IdleMode.kBrake);
 
       setDefaultCommand(new DefaultTransferCommand(this));
   }

@@ -34,6 +34,7 @@ public class DefaultTransferCommand extends CommandBase
     public void initialize()
     {
         transfer.setIntakeTransferMotor(-1.0);
+        transfer.setVerticalTransferMotor(Constants.TransferConstants.TRANSFER_BALL_VERTICAL_SHAFT_SPEED);
 
         // TODO: just for testing
         verticalFull = false;
@@ -45,18 +46,6 @@ public class DefaultTransferCommand extends CommandBase
         // Position one = the spot where the intake meets the transfer
         // Position two = the ejection port
         // Position three = the vertical shaft hold
-
-        // If there is a ball being held in the vertical shaft we need to make sure
-        // that the vertical shaft motor stays spinning that way the ball is held
-        // in place correctly
-        if(transfer.getPositionThreePresence() && !transfer.getVerticalTransferMotorEnabled())
-        {
-            transfer.setVerticalTransferMotor(Constants.TransferConstants.TRANSFER_BALL_VERTICAL_SHAFT_SPEED);
-        } 
-        else if(!transfer.getPositionThreePresence() && transfer.getVerticalTransferMotorEnabled())
-        {
-            transfer.setVerticalTransferMotor(0.0);
-        }
 
         // This detects if we have just received a ball from the intake
         if (transfer.getPositionOnePresence())
@@ -75,7 +64,6 @@ public class DefaultTransferCommand extends CommandBase
                     transfer.setIsRunningTimerEnabled(true);
 
                     transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
-                    transfer.setVerticalTransferMotor(Constants.TransferConstants.TRANSFER_BALL_VERTICAL_SHAFT_SPEED);
                 }
                 else if (transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled())
                 {
