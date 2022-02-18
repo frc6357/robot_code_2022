@@ -6,9 +6,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
-import org.ejml.simple.SimpleMatrix;
-
-import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
@@ -31,7 +28,6 @@ import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Ports;
 import frc.robot.AutoTools.KalmanPose;
-import frc.robot.AutoTools.SKKalmanFilter;
 import frc.robot.utils.DifferentialDrivetrain;
 import frc.robot.utils.MotorEncoder;
 
@@ -56,8 +52,8 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
 
     private final ADIS16448_IMU gyro = new ADIS16448_IMU();
 
-    // private final DifferentialDrive         drive;
-    // private final DifferentialDriveOdometry odometry;
+    private final DifferentialDrive         drive;
+    private final DifferentialDriveOdometry odometry;
 
     private SendableChooser<Boolean> testControlChooser = new SendableChooser<Boolean>();
 
@@ -84,18 +80,18 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         resetEncoders();
         gyro.reset();
 
-        // odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getHeading()));
-        // leftLeader.setNeutralMode(NeutralMode.Brake);
-        // leftFollower.setNeutralMode(NeutralMode.Brake);
-        // rightLeader.setNeutralMode(NeutralMode.Brake);
-        // rightFollower.setNeutralMode(NeutralMode.Brake);
+        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getHeading()));
+        leftLeader.setNeutralMode(NeutralMode.Brake);
+        leftFollower.setNeutralMode(NeutralMode.Brake);
+        rightLeader.setNeutralMode(NeutralMode.Brake);
+        rightFollower.setNeutralMode(NeutralMode.Brake);
 
         // The 2022 version of DifferentialDrive no longer automatically inverts one
         // side of the robot so we need to do this ourselves.
-        // rightGroup.setInverted(true);
+        rightGroup.setInverted(true);
 
-        // drive = new DifferentialDrive(leftGroup, rightGroup);
-        // drive.setDeadband(DriveConstants.DEADBAND_TURN);
+        drive = new DifferentialDrive(leftGroup, rightGroup);
+        drive.setDeadband(DriveConstants.DEADBAND_TURN);
 
         SmartDashboard.putData("Odometry Field", odometryField);
         SmartDashboard.putData("SKKalman Field", skKalmanField);
@@ -104,10 +100,10 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     @Override
     public void periodic()
     {
-        // double leftEncoderDistanceMeters = leftMotorEncoder.getPositionMeters();
-        // double rightEncoderDistanceMeters = rightMotorEncoder.getPositionMeters();
-        // double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
-        // double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
+        double leftEncoderDistanceMeters = leftMotorEncoder.getPositionMeters();
+        double rightEncoderDistanceMeters = rightMotorEncoder.getPositionMeters();
+        double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
+        double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
 
         double curTheta = gyro.getAngle();
 
@@ -115,37 +111,34 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         globalTheta +=  curTheta - prevTheta;
 
         double[] globalAccel = getGlobalAcceleration();
-        // Pose2d odometryPos = odometry.getPoseMeters();
+        Pose2d odometryPos = odometry.getPoseMeters();
 
+        // Predicts and Updates
         // kalmanX.periodic(globalAccel[0], odometryPos.getX());
         // kalmanX.periodic(globalAccel[1], odometryPos.getY());
+
+        // Predicts Position
         kalmanX.periodic(globalAccel[0], 0);
         kalmanX.periodic(globalAccel[1], 0);
 
         // Update the odometry in the periodic block
-        // odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoderDistanceMeters,
-        //     rightEncoderDistanceMeters);
+        odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoderDistanceMeters,
+            rightEncoderDistanceMeters);
 
-        // SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
-        // SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
-        // SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
-        // SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
+        SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
+        SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
+        SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
+        SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
         SmartDashboard.putNumber("Gyro Angle", getHeading());
 
-        // TODO: This is only for Kalman Filter Tests: Remove once tested
-        // SmartDashboard.putNumber("Pose X", odometryPos.getX());
-        // SmartDashboard.putNumber("Pose Y", odometryPos.getY());
-        // odometryField.setRobotPose(odometryPos);
+        SmartDashboard.putNumber("Pose X", odometryPos.getX());
+        SmartDashboard.putNumber("Pose Y", odometryPos.getY());
+        odometryField.setRobotPose(odometryPos);
 
         SmartDashboard.putNumber("SK Kalman X", kalmanX.getState());
         SmartDashboard.putNumber("SK Kalman Y", kalmanY.getState());
         skKalmanField.setRobotPose(
                 kalmanX.getState(), kalmanY.getState(), Rotation2d.fromDegrees(globalTheta));
-        
-        // SmartDashboard.putNumber("WPI Kalman X", kalmanX.getStateWPI());
-        // SmartDashboard.putNumber("WPI Kalman Y", kalmanY.getStateWPI());
-        // KalmanField.setRobotPose(
-        //         kalmanX.getStateWPI(), kalmanY.getStateWPI(), Rotation2d.fromDegrees(globalTheta));
         
         SmartDashboard.putNumber("Global Angle", globalTheta);
 
@@ -167,8 +160,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
      */
     public Pose2d getPose()
     {
-        // return odometry.getPoseMeters();
-        return new Pose2d(0, 0, new Rotation2d());
+        return odometry.getPoseMeters();
     }
 
     /**
@@ -191,7 +183,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     public void resetOdometry(Pose2d pose)
     {
         resetEncoders();
-        // odometry.resetPosition(pose, Rotation2d.fromDegrees(gyro.getAngle()));
+        odometry.resetPosition(pose, Rotation2d.fromDegrees(gyro.getAngle()));
         kalmanX.setPosition(pose.getX());
         kalmanY.setPosition(pose.getY());
         globalTheta = pose.getRotation().getDegrees();
@@ -232,7 +224,6 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
      */
     public double getAverageEncoderDistance()
     {
-        // return (m_leftEncoder.getDistance() + m_rightEncoder.getDistance()) / 2.0;
         return (leftMotorEncoder.getPositionMeters() + rightMotorEncoder.getPositionMeters()) / 2.0;
     }
 
