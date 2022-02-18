@@ -75,8 +75,6 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
     
     final int roborioPort = VisionConstants.ROBORIO_PORT;
     
-    private String caughtException = "";
-    
     ByteBuffer rDataBuffer = ByteBuffer.allocate(VisionConstants.UDP_PACKET_LENGTH)
                             .order(ByteOrder.LITTLE_ENDIAN);
     ByteBuffer packetBuffer = ByteBuffer.allocate(VisionConstants.UDP_PACKET_LENGTH)
