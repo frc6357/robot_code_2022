@@ -190,6 +190,45 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
         }
     }   
 
+    /**
+     * Gets the horizontal angle of the robot relative to
+     * the center of the hub.
+     * 
+     * @return The horizontal angle in degrees
+     */
+    // TODO: Correct has for correct documentation and
+    // make sure it is returning the correct value.
+    public double getHorizontalAngle()
+    {
+        return packetDatagram.horiAngle;
+    }
+
+    /**
+     * Gets the vertical angle of the robot relative to
+     * the top of the hub
+     * 
+     * @return The vertical angle in degrees
+     */
+    // TODO: Correct this has correct documentation and
+    // make sure it is returning the correct value.
+    public double getVerticalAngle()
+    {
+        return packetDatagram.vertAngle;
+    }
+
+    /**
+     * Gets the distance of the robot relative to the
+     * center of the hub.
+     * 
+     * @return The distance in meters
+     */
+    // TODO: Correct this has correct documentation and
+    // make sure it is returning the correct value.
+    public double getDistance()
+    {
+        return packetDatagram.distance;
+    }
+
     
     @Override
     public void initializeTestMode()
