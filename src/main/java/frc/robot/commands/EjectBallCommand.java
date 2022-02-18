@@ -5,9 +5,9 @@ import frc.robot.Constants.TransferConstants;
 import frc.robot.subsystems.SK22Transfer;
 
 /**
- * A command that ejects balls through the horizontal exit in case of an emergency
+ * A command that ejects balls through the horizontal exit in
+ * case of an emergency.
  */
-
 public class EjectBallCommand extends CommandBase
 {
 

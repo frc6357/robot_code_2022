@@ -25,7 +25,8 @@ public final class Constants
     }
 
     /** Constants related to the Transfer Subsystem */
-    public static final class TransferConstants{
+    public static final class TransferConstants
+    {
         public static final int DISTANCE_THRESHOLD = 70;
         public static final double INTAKE_MOTOR_SPEED = 0.2;
         public static final double EXIT_MOTOR_SPEED = 0.5;
@@ -155,8 +156,8 @@ public final class Constants
 
         //Converts motor revs to degrees based on gearing
         public static final double PIVOT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER  =
-                                                                ((360.0 * PIVOT_MOTOR_TEETH_PER_REVOLUTION) / 
-                                                                (PIVOT_MOTOR_GEAR_RATIO * PIVOT_ARC_TEETH_PER_REVOLUTION));
+                                            ((360.0 * PIVOT_MOTOR_TEETH_PER_REVOLUTION)
+                                            / (PIVOT_MOTOR_GEAR_RATIO * PIVOT_ARC_TEETH_PER_REVOLUTION));
         
 
         //Lift
