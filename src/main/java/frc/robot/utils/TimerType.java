@@ -1,5 +1,16 @@
 package frc.robot.utils;
 
-public enum TimerType {
-    VERTICAL, EJECT
+/**
+ * Identifiers for timers used in the transfer subsystem.
+ */
+public enum TimerType
+{
+    /**
+     * Vertical motor timer identifier.
+     */
+    VERTICAL,
+    /**
+     * Eject motor timer identifier.
+     */
+    EJECT
 }

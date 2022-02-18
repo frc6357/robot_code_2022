@@ -17,9 +17,15 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants
 {
+    private Constants()
+    {
+        // Not called. Needed to prevent "Utility classes should not have a public or
+        // default constructor" warning
+    }
 
     /** Constants related to the ColorSensor */
-    public static final class ColorSensor{
+    public static final class ColorSensor
+    {
         public static final int MAXIMUM_PRESENCE_DISTANCE = 150;
         public static final int MINIMUM_PRSENCE_DISTANCE = 500;
     }
@@ -187,6 +193,12 @@ public final class Constants
          *  within the SK22Vision subsystem file. This length must correspond to the same length
          *  defined on Odroid. */
         public static final int UDP_PACKET_LENGTH   = 29;
+
+        /**
+         * The tolerance for the angle in degrees for the robot to be considered to have
+         * acquired the hub.
+         */
+        public static final double TARGET_ACQUIRED_TOLERANCE = 7.5;
     }
 
     public static final double INCH_PER_MILLIMETER    = 0.0393701;

@@ -10,13 +10,15 @@ import frc.robot.Ports;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+/**
+ * The SK22Intake class is the subsytem that controls the intake of the Robot.
+ */
 public class SK22Intake extends SKSubsystemBase
 {
     private final DoubleSolenoid intakeMover = new DoubleSolenoid(Ports.INTAKE_PCM,
         Ports.INTAKE_MOVER_FORWARD, Ports.INTAKE_MOVER_BACKWARD);
 
     private final CANSparkMax intakeMotor = new CANSparkMax(Ports.INTAKE_MOTOR, MotorType.kBrushless);
-    private double motorSpeed = 0.0;
 
     /** Creates a new SK22Intake. */
     public SK22Intake()
@@ -24,43 +26,52 @@ public class SK22Intake extends SKSubsystemBase
         SmartDashboard.putString("Intake Extended", "IN");
     }
 
-    // This should be the safe and initial code that happens. nothing should move
+    /**
+     * Disables the motors of the and turns the double solenoid off
+     */
     public void disableIntake()
     {
-        motorSpeed = 0.0;
-        intakeMotor.set(motorSpeed);
+        intakeMotor.set(0.0);
         intakeMover.set(DoubleSolenoid.Value.kOff);
     }
 
-    // This will extend the double solenoids, moving the intake to the active
-    // position
+    /**
+     * Extends the intake position out of the robot
+     */
     public void extendIntake()
     {
         intakeMover.set(DoubleSolenoid.Value.kForward);
         SmartDashboard.putString("Intake Extended", "OUT");
     }
 
-    // This will retract the double solenoids, moving the intake to the inactive
-    // position
+    /**
+     * Retracts the intake position into the robot
+     */
     public void retractIntake()
     {
         intakeMover.set(DoubleSolenoid.Value.kReverse);
         SmartDashboard.putString("Intake Extended", "IN");
     }
 
-    // This will set the speed of the motor that powers the ball pulling part of the
-    // intake
+    /**
+     * Sets the speed of the motor of the intake that is intended to pick up balls
+     * 
+     * @param speed A value from -1.0 to 1.0
+     */
     public void setIntakeSpeed(double speed)
     {
-        motorSpeed = speed;
-        intakeMotor.set(motorSpeed);
+        intakeMotor.set(speed);
         SmartDashboard.putNumber("Intake Speed", speed);
     }
 
-    // This will return the current speed of the motor
+    /**
+     * Returns the current speed of the intake motor
+     * 
+     * @return A value between -1.0 and 1.0
+     */
     public double getIntakeSpeed()
     {
-        return motorSpeed;
+        return intakeMotor.get();
     }
 
     @Override

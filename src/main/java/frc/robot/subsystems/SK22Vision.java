@@ -9,8 +9,9 @@ import java.nio.ByteOrder;
 import java.nio.channels.DatagramChannel;
 import java.util.zip.CRC32;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.Constants;
+import frc.robot.Constants.VisionConstants;
 
 /** The Datagram Class defines and unpacks the contents of the packets sent by the Odroid-XU4 */
 class Datagram
@@ -70,15 +71,13 @@ class Datagram
 public class SK22Vision extends SKSubsystemBase implements AutoCloseable 
 {
     // destination ports are required, but source ports are optional
-    final int odroidPort = Constants.VisionConstants.ODROID_PORT;
+    final int odroidPort = VisionConstants.ODROID_PORT;
     
-    final int roborioPort = Constants.VisionConstants.ROBORIO_PORT;
+    final int roborioPort = VisionConstants.ROBORIO_PORT;
     
-    private String caughtException = "";
-    
-    ByteBuffer rDataBuffer = ByteBuffer.allocate(Constants.VisionConstants.UDP_PACKET_LENGTH)
+    ByteBuffer rDataBuffer = ByteBuffer.allocate(VisionConstants.UDP_PACKET_LENGTH)
                             .order(ByteOrder.LITTLE_ENDIAN);
-    ByteBuffer packetBuffer = ByteBuffer.allocate(Constants.VisionConstants.UDP_PACKET_LENGTH)
+    ByteBuffer packetBuffer = ByteBuffer.allocate(VisionConstants.UDP_PACKET_LENGTH)
                             .order(ByteOrder.LITTLE_ENDIAN);
     
     DatagramChannel sSocket;
@@ -96,14 +95,13 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
         {
             sSocket = DatagramChannel.open();
             sSocket.configureBlocking(false);
-            sSocket.socket().bind(new InetSocketAddress(roborioPort));
-            
+            sSocket.socket().bind(new InetSocketAddress(roborioPort));  
         } 
         
         catch (Exception e) 
         {
             //TODO: handle exception
-            System.out.println(e.toString());
+            DriverStation.reportError("Failed to Initialize Socket in Constructor", e.getStackTrace());
         }
 
         
@@ -114,18 +112,6 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
         // memory allocated for packets to be sent from the computer
         // ideally the memory is not hardcoded, but dynamic based on the packet size
 
-    }
-    
-    /** returns the boolean that represents whether or not an exception was caught 
-     *  @param exceptionMessage
-     *          An exception .toString() within a try/catch block 
-     *  
-     *  @return Returns the string representation of an exception
-     * */ 
-    
-    public String caughtException(String exceptionMessage)
-    {
-        return caughtException;
     }
 
     /**  Receive the latest available UDP packet if any is available. Return
@@ -164,8 +150,7 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
             }
             catch (Exception e) 
             {
-                caughtException = e.toString();
-                System.out.println("Socket Excetion: " + caughtException);
+                DriverStation.reportError("Packet Lost", e.getStackTrace());
                 sockRet = null;
             }
         } while (sockRet != null);
@@ -186,6 +171,8 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
                 SmartDashboard.putNumber("Distance",            packetDatagram.distance);
                 SmartDashboard.putNumber("Horizontal Angle",    packetDatagram.horiAngle);
                 SmartDashboard.putNumber("Vertical Angle",      packetDatagram.vertAngle);
+
+                SmartDashboard.putBoolean("Target Acquired", isTargetAcquired(packetDatagram.horiAngle));
             }
         }
     }   
@@ -227,6 +214,21 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
     public double getDistance()
     {
         return packetDatagram.distance;
+    }
+
+    /**
+     * Checks if the angle is within 0º ± tolerance
+     * 
+     * @param angle The measured angle in degrees
+     * @return Whether the angle is withing the tolerance
+     */
+    public boolean isTargetAcquired(double angle)
+    {
+        return
+            // Above 0º - Tolerance 
+            (angle >= -VisionConstants.TARGET_ACQUIRED_TOLERANCE
+            // Below 0º + Tolerance
+            && angle <= VisionConstants.TARGET_ACQUIRED_TOLERANCE);
     }
 
     

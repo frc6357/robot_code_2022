@@ -5,7 +5,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -14,12 +13,10 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADIS16448_IMU;
-import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -317,8 +314,9 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
             this::tankDriveVolts, this);
 
         // Tell the robot where it is starting from if this is the first trajectory of a path.
-        return resetOdometry ?
-        // Run path following command, then stop at the end.
+        return resetOdometry
+            ?
+            // Run path following command, then stop at the end.
             new SequentialCommandGroup(
                 new InstantCommand(() -> this.resetOdometry(trajectory.getInitialPose()), this),
                 ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0)))
