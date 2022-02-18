@@ -3,19 +3,16 @@ package frc.robot.subsystems.base;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.math.controller.PIDController;
 
-/**
- * A generic flywheel-based ball launcher
- */
 public class Launcher
 {
   private double targetRPM        = 0.0;
   private boolean launcherEnabled = false;
-  private double encoderCPR       = 0.0;
+  private double EncoderCPR       = 0.0;
 
   private final MotorControllerGroup motorControllerGroup;
   private final MotorEncoder motorEncoder1;
 
-  private final PIDController controller;
+  private final PIDController Controller;
 
   private final double gearRatio;
 
@@ -24,44 +21,26 @@ public class Launcher
    * Note that we only pass one motor encoder here. Both motors are operated as a group. 
    * We don't control them independently but run one PID controller with input based on
    * the reading from one encoder.
-   * 
-   * @param motorControllerGroup The motor controller group driving the flywheel
-   * @param motorEncoder1 The encoder used to measure flywheel speed
-   * @param gearRatio The gear reduction ration from motor to flywheel
-   * @param encoderCPR The encoder counts per revolution
-   * @param kP PID controlller proportional gain
-   * @param kI PID controller integral gain
-   * @param kD PID controller differential gain
-   */
-  public Launcher(MotorControllerGroup motorControllerGroup,
-                  MotorEncoder motorEncoder1,
-                  double gearRatio,
-                  int encoderCPR,
-                  double kP,
-                  double kI,
-                  double kD)
+  */
+  public Launcher(MotorControllerGroup motorControllerGroup, MotorEncoder motorEncoder1, double gearRatio, int encoderCPR, double KP, double KI, double KD)
   {
     this.motorControllerGroup = motorControllerGroup;
     this.motorEncoder1 = motorEncoder1;
     this.gearRatio = gearRatio;
-    this.encoderCPR   = encoderCPR;
+    this.EncoderCPR   = encoderCPR;
 
-    this.controller = new PIDController(kP, kI, kD);
+    this.Controller = new PIDController(KP, KI, KD);
   }
   
-  /**
-   * Periodic update function for the launcher. This must be called periodically
-   * (every 20mS or so) to run the launcher control loop.
-   */
   public void update()
   {
     double launcherRPM = getLauncherRPM();
 
     System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
 
-    if (launcherEnabled || (targetRPM == 0.0))
+    if(launcherEnabled || (targetRPM == 0.0))
     {
-      motorControllerGroup.set(controller.calculate(launcherRPM, targetRPM));
+      motorControllerGroup.set(Controller.calculate(launcherRPM, targetRPM));
     }
     else
     {
@@ -113,7 +92,7 @@ public class Launcher
    */
   public double getCurMotorRPM() 
   {
-    if (isLauncherEnabled()) 
+    if(isLauncherEnabled()) 
     {
       return targetRPM;
     } 
@@ -144,16 +123,12 @@ public class Launcher
     return targetRPM;
   }
 
-  /**
-   * Query the current speed of the launcher flywheel.
-   * @return The current launcher speed in revs per minute.
-   */
   public double getLauncherRPM() 
   {
     double pulsesPerMinute = motorEncoder1.getVelocityPulses() * 600;
-    double motorRevsPerMinute = pulsesPerMinute / encoderCPR;
-    double launcherRPM = motorRevsPerMinute / gearRatio;
+    double MotorRevsPerMinute = pulsesPerMinute / EncoderCPR;
+    double LauncherRPM = MotorRevsPerMinute / gearRatio;
 
-    return launcherRPM;
+    return LauncherRPM;
   }
 }
