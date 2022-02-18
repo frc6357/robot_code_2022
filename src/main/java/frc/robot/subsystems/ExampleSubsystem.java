@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+/**
+ * A sample, empty subsystem class that can be used as a template when
+ * creating other subsystems.
+ */
 public class ExampleSubsystem extends SKSubsystemBase
 {
   /** Creates a new ExampleSubsystem. */

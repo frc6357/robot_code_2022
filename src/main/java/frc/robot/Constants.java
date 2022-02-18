@@ -17,9 +17,15 @@ import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
  */
 public final class Constants
 {
+    private Constants()
+    {
+        // Not called. Needed to prevent "Utility classes should not have a public or
+        // default constructor" warning
+    }
 
     /** Constants related to the ColorSensor */
-    public static final class ColorSensor{
+    public static final class ColorSensor
+    {
         public static final int MAXIMUM_PRESENCE_DISTANCE = 150;
         public static final int MINIMUM_PRSENCE_DISTANCE = 500;
     }

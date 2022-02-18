@@ -314,8 +314,9 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
             this::tankDriveVolts, this);
 
         // Tell the robot where it is starting from if this is the first trajectory of a path.
-        return resetOdometry ?
-        // Run path following command, then stop at the end.
+        return resetOdometry
+            ?
+            // Run path following command, then stop at the end.
             new SequentialCommandGroup(
                 new InstantCommand(() -> this.resetOdometry(trajectory.getInitialPose()), this),
                 ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0)))
