@@ -323,18 +323,12 @@ public class RobotContainer
         }
 
         // User controls related to the ball launcher.
-        if (launcherSubsystem.isPresent() && visionSubsystem.isPresent())
+        if (launcherSubsystem.isPresent())
         {
-            // TODO: I don't think the shoot command should need anything
-            // in the vision subsystem. My assumption is that the launcher
-            // motor speed will be being set automatically whenever the
-            // target is acquired and that the driver will already have 
-            // aligned on the target. We should discuss this.
             SK22Launcher launcher = launcherSubsystem.get();
-            SK22Vision vision = visionSubsystem.get();
 
-            // Shoots ball(s) using the vision system and the launcher
-            driveShootBtn.whenPressed(new ShootBallsCommand(launcher, vision));
+            // Shoots ball(s) using the launcher
+            driveShootBtn.whenPressed(new ShootBallsCommand(launcher));
         }
 
         // User controls related to the climbing function.
