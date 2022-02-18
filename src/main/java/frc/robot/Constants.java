@@ -179,6 +179,12 @@ public final class Constants
          *  within the SK22Vision subsystem file. This length must correspond to the same length
          *  defined on Odroid. */
         public static final int UDP_PACKET_LENGTH   = 29;
+
+        /**
+         * The tolerance for the angle in degrees for the robot to be considered to have
+         * acquired the hub.
+         */
+        public static final double TARGET_ACQUIRED_TOLERANCE = 7.5;
     }
 
     public static final double INCH_PER_MILLIMETER    = 0.0393701;
