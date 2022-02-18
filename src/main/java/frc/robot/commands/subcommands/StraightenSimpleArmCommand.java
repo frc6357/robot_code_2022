@@ -24,7 +24,7 @@ public class StraightenSimpleArmCommand extends CommandBase
     @Override
     public void initialize()
     {
-        this.climb.straighten();
+        this.climb.straightenSimpleArm();
     }
 
     @Override

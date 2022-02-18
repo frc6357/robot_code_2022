@@ -164,6 +164,14 @@ public final class Constants
         public static final int LIFT_MOTOR_TEETH_PER_REVOLUTION = 20; // Check this!
         public static final int LIFT_RACK_TEETH_PER_INCH        = 20; // Check this!
         public static final int LIFT_MOTOR_GEAR_RATIO           = 9; // 9:1 gear ratio
+        public static final double LIFT_ARM_CONTROLLER_KP       = 0.005; // TODO: NEEDS TUNNING
+        public static final double LIFT_ARM_CONTROLLER_KI       = 0.0; // TODO: NEEDS TUNNING
+        public static final double LIFT_ARM_CONTROLLER_KD       = 0.0; // TODO: NEEDS TUNNING
+
+        //Converts motor revs to degrees based on gearing
+        public static final double LIFT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER  =
+                                            ((360.0 * PIVOT_MOTOR_TEETH_PER_REVOLUTION)
+                                            / (PIVOT_MOTOR_GEAR_RATIO * PIVOT_ARC_TEETH_PER_REVOLUTION));
     }
 
     /**Constants related to Vision subsystem */

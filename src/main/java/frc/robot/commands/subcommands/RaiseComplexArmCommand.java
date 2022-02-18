@@ -7,7 +7,7 @@ public class RaiseComplexArmCommand extends CommandBase{
 
     private final SK22Climb climb;
 
-    public RaiseComplexArmCommand(SK22Climb climb)
+    public RaiseComplexArmCommand(SK22Climb climb, double distance)
     {
         this.climb = climb;
     }
@@ -15,6 +15,7 @@ public class RaiseComplexArmCommand extends CommandBase{
     @Override
     public void initialize()
     {
+        
     }
 
     @Override

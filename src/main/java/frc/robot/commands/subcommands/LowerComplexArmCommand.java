@@ -2,21 +2,13 @@ package frc.robot.commands.subcommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SK22Climb;
+import frc.robot.subsystems.base.SimpleClimbArm;
 
-/**
- * A command that causes the simple climb arm to be moved to the tilted position.
- */
-public class TiltSimpleArmCommand extends CommandBase 
+public class LowerComplexArmCommand extends CommandBase
 {
-
     private final SK22Climb climb;
 
-    /**
-     * Constuctor for the simple arm tilt command.
-     * 
-     * @param climb The climb subsystem on which the command operates.
-     */
-    public TiltSimpleArmCommand(SK22Climb climb)
+    public LowerComplexArmCommand(SK22Climb climb)
     {
         this.climb = climb;
     }
@@ -24,7 +16,7 @@ public class TiltSimpleArmCommand extends CommandBase
     @Override
     public void initialize()
     {
-        this.climb.tiltSimpleArm();
+        this.climb.lowerSimpleArm();
     }
 
     @Override
@@ -38,6 +30,4 @@ public class TiltSimpleArmCommand extends CommandBase
     {
         return true;
     }
-
-    
 }
