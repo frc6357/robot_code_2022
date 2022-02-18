@@ -5,5 +5,9 @@ package frc.robot.subsystems.base.SuperClasses;
  */
 public enum ShiftPolarity
 {
-    PRESSURE_IS_LOW, PRESSURE_IS_HIGH
+    /** Enum representing piston is retracted */
+    PRESSURE_IS_LOW,
+    
+    /** Enum representing piston is extended */
+    PRESSURE_IS_HIGH
 };

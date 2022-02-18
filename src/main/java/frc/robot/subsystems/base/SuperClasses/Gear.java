@@ -5,5 +5,9 @@ package frc.robot.subsystems.base.SuperClasses;
  */
 public enum Gear
 {
-    LOW, HIGH
+    /** Enum representing low gear */
+    LOW,
+    
+    /** Enum representing high gear */
+    HIGH
 };
