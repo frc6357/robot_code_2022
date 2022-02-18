@@ -58,9 +58,13 @@ public class Ports
     //////////////////////////////
     // Transfer Addresses
     //////////////////////////////
-    public static final int exitTransferMotor           = 31; // Currently unknown Port
-    public static final int intakeTransferMotor         = 30; // Currently unknown Port
-    // public static final int verticalTransferMotor       = 12; // Currently unknown Port
+    public static final int EXIT_TRANSFER_MOTOR         = 31; // Currently unknown Port
+    public static final int INTAKE_TRANSFER_MOTOR       = 30; // Currently unknown Port
+    public static final int VERTICAL_TRANSFER_MOTOR     = 12; // Currently unknown Port 
+    public static final int LAUNCHER_TRANSFER_MOTOR     = 12; // Currently unknown Port
+    // TODO: Find out what these ports are
+    public static final int EXIT_SENSOR                 = 0;  // Currently unknown Port
+    public static final int VERTICAL_SENSOR             = 1;  // Currently unknown Port
 
     //////////////////////////////
     // Intake Addresses

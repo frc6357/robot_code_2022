@@ -39,7 +39,9 @@ public final class Constants
         public static final double VERTICAL_MOTOR_SPEED = 0.2;
         public static final double STOP_SPEED = 0.0;
         public static final double BALL_EJECTION_SPEED = 0.5;
-        public static final double BALL_VERTICAL_LOAD_SPEED = 0.5;
+        // TODO: this low of a speed is just for testing, will change later
+        public static final double TRANSFER_BALL_VERTICAL_SHAFT_SPEED = 0.1;
+        public static final double TRANSFER_TO_LAUNCHER_SPEED = 1.0;
 
         public static final int TRANSFER_TO_VERTICAL_SHAFT_DURATION = 100;
         public static final int EJECT_DURATION = 100;

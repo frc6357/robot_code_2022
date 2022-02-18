@@ -46,38 +46,45 @@ public class DefaultTransferCommand extends CommandBase
         // Position two = the ejection port
         // Position three = the vertical shaft hold
 
-        System.out.println(transfer.getColorSensor());
+        // If there is a ball being held in the vertical shaft we need to make sure
+        // that the vertical shaft motor stays spinning that way the ball is held
+        // in place correctly
+        if(transfer.getPositionThreePresence() && !transfer.getVerticalTransferMotorEnabled())
+        {
+            transfer.setVerticalTransferMotor(Constants.TransferConstants.TRANSFER_BALL_VERTICAL_SHAFT_SPEED);
+        } 
+        else if(!transfer.getPositionThreePresence() && transfer.getVerticalTransferMotorEnabled())
+        {
+            transfer.setVerticalTransferMotor(0.0);
+        }
 
         // This detects if we have just received a ball from the intake
         if (transfer.getPositionOnePresence())
         {
-            System.out.println("Presence detected in position one");
             // If the ball is the correct color
-            if (transfer.getColorSensor().equals(transfer.teamColor))
+            if (transfer.getColorSensor().equals(transfer.teamAlliance.toString()))
             {
                 // Handle storing the ball & locking the intake so we cannot
                 // intake any more balls while we are processing the one we
                 // already have in the system
                 // TODO: change this to "!transfer.getPositionThreePresence()" when done testing
-                if (!verticalFull)
+                if (!transfer.getPositionThreePresence())
                 {
                     // Transfer ball to the vertical hold
                     timerType = TimerType.VERTICAL;
                     transfer.setIsRunningTimerEnabled(true);
 
                     transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
+                    transfer.setVerticalTransferMotor(Constants.TransferConstants.TRANSFER_BALL_VERTICAL_SHAFT_SPEED);
                 }
-                else if (verticalFull && transfer.getIsRunningTimerEnabled())
+                else if (transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled())
                 {
                     transfer.setIsRunningTimerEnabled(false);
                     updateTimer();
                 }
-                // TODO: Create a case for when there is a ball in the launcher system and we
-                // want to keep the ball that we just picked up
             }
             else
             {
-                System.out.println("Wrong color, ejecting!");
                 timerType = TimerType.EJECT;
                 transfer.setIsRunningTimerEnabled(true);
 

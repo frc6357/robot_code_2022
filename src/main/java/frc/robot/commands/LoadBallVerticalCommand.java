@@ -47,7 +47,7 @@ public class LoadBallVerticalCommand extends CommandBase
             .setVerticalTransferMotor(verticalToggle ? TransferConstants.BALL_EJECTION_SPEED : 0);
         //Sets the intake transfer motor to ejectionspeed or zero based on user input
         this.transferSubsystem.setIntakeTransferMotor(
-            verticalToggle ? TransferConstants.BALL_VERTICAL_LOAD_SPEED : 0);
+            verticalToggle ? TransferConstants.TRANSFER_BALL_VERTICAL_SHAFT_SPEED : 0);
     }
 
     @Override

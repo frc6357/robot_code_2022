@@ -6,14 +6,16 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.ColorSensor;
 import frc.robot.Ports;
 import frc.robot.Constants.TransferConstants;
 
 public class SK22Transfer extends SKSubsystemBase
 {
-  public final String teamColor;
+  public final Alliance teamColor;
 
   private WPI_VictorSPX intakeTransferMotor;
   private WPI_VictorSPX exitTransferMotor;
@@ -35,8 +37,8 @@ public class SK22Transfer extends SKSubsystemBase
   public SK22Transfer()
   {
       // TODO: This is JUST FOR TESTING
-      teamColor = "Red";
-
+      teamColor = DriverStation.getAlliance();
+      
       intakeTransferMotor = new WPI_VictorSPX(Ports.intakeTransferMotor);
       exitTransferMotor = new WPI_VictorSPX(Ports.exitTransferMotor);
       //verticalTransferMotor = new WPI_VictorSPX(Ports.verticalTransferMotor);
@@ -69,12 +71,6 @@ public class SK22Transfer extends SKSubsystemBase
     //verticalTransferMotor.set(Speed);
   }
 
-  public String getColorSensor()
-  {
-    //return colorSensor.getColor();
-    return "jaofw";
-  }
-
   public boolean getPositionOnePresence() {
     //return colorSensor.getBallPresence();
     return false;
@@ -92,16 +88,14 @@ public class SK22Transfer extends SKSubsystemBase
     return false;
   }
 
-  public void setVerticalFull(boolean isFull)
-  {
-    verticalFull = isFull;
-  }
-
-  public void setHorizontalFull(boolean isFull)
-  {
-    horizontalFull = isFull;
-  }
-
+  // Set true if the transfer timer is active
+  // The transfer timer keeps track of how many method calls have
+  // occurred since the ball has begun changing it's position.
+  // For example, the ball is being transfered from intake to the
+  // vertical shaft for storage. The transfer timer will be enabled
+  // and while it is enabled, the motors required for transfering
+  // the ball to that position will be active. When the timer is over,
+  // those motors will be disabled.
   public void setIsRunningTimerEnabled(boolean isEnabled)
   {
     isRunningTimer = isEnabled;
