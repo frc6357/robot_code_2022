@@ -45,6 +45,9 @@ public final class Constants
 
         public static final int TRANSFER_TO_VERTICAL_SHAFT_DURATION = 100;
         public static final int EJECT_DURATION = 100;
+
+        public static final boolean EXIT_SENSONR_INVERTED = false;
+        public static final boolean VERTICAL_SENSOR_INVERTED = false;
     }
 
     /** Constants related to Driving the Robot. */

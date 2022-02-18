@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.motorcontrol.Spark;
 import frc.robot.ColorSensor;
+import frc.robot.Constants;
 import frc.robot.Constants.TransferConstants;
 import frc.robot.commands.DefaultTransferCommand;
+import frc.robot.subsystems.base.SwitchSensor;
 import frc.robot.Ports;
 
 public class SK22Transfer extends SKSubsystemBase
@@ -33,8 +35,8 @@ public class SK22Transfer extends SKSubsystemBase
   protected boolean isRunningTimer;
 
   ColorSensor colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
-  DigitalInput exitTransferSensor;
-  DigitalInput verticalTransferSensor;
+  SwitchSensor exitTransferSensor;
+  SwitchSensor verticalTransferSensor;
   private NetworkTable transferEntry;
   // private final I2C.Port i2c = Ports.i2cColorSensor;
   // private ColorSensorV3 colorsensor = new ColorSensorV3(i2c);
@@ -51,8 +53,8 @@ public class SK22Transfer extends SKSubsystemBase
       verticalTransferMotor = new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
       launcherTransferMotor = new CANSparkMax(Ports.LAUNCHER_TRANSFER_MOTOR, MotorType.kBrushless);
 
-      exitTransferSensor = new DigitalInput(Ports.EXIT_SENSOR);
-      verticalTransferSensor = new DigitalInput(Ports.VERTICAL_SENSOR);
+      exitTransferSensor = new SwitchSensor(Ports.EXIT_SENSOR, Constants.TransferConstants.EXIT_SENSONR_INVERTED);
+      verticalTransferSensor = new SwitchSensor(Ports.VERTICAL_SENSOR, Constants.TransferConstants.VERTICAL_SENSOR_INVERTED);
 
       verticalTransferMotor.setIdleMode(IdleMode.kCoast);
       launcherTransferMotor.setIdleMode(IdleMode.kCoast);
