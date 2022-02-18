@@ -53,8 +53,8 @@ public class SK22Transfer extends SKSubsystemBase
       verticalTransferMotor = new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
       launcherTransferMotor = new CANSparkMax(Ports.LAUNCHER_TRANSFER_MOTOR, MotorType.kBrushless);
 
-      exitTransferSensor = new SwitchSensor(Ports.EXIT_SENSOR, Constants.TransferConstants.EXIT_SENSONR_INVERTED);
-      verticalTransferSensor = new SwitchSensor(Ports.VERTICAL_SENSOR, Constants.TransferConstants.VERTICAL_SENSOR_INVERTED);
+      exitTransferSensor = new SwitchSensor(Ports.EXIT_SENSOR, Constants.TransferConstants.EXIT_SENSONR_POLARITY);
+      verticalTransferSensor = new SwitchSensor(Ports.VERTICAL_SENSOR, Constants.TransferConstants.VERTICAL_SENSOR_POLARITY);
 
       verticalTransferMotor.setIdleMode(IdleMode.kCoast);
       launcherTransferMotor.setIdleMode(IdleMode.kCoast);
