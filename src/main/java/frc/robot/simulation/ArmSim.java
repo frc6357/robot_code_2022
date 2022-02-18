@@ -101,21 +101,41 @@ public class ArmSim
         return extendLength;
     }
 
+    /**
+     * Gets the base length of the arm.
+     * 
+     * @return The base length of the arm
+     */
     public int getBaseLength()
     {
         return baseLength;
     }
 
+    /**
+     * Gets the total length of the arm.
+     * 
+     * @return The total length of the arm
+     */
     public double getTotalLength()
     {
         return extendLength + baseLength;
     }
 
+    /**
+     * Changes the angle of the arm.
+     * 
+     * @param deltaDegrees The change in angle required
+     */
     public void changeAngle(double deltaDegrees)
     {
         setAngle(degreeLocation + deltaDegrees);
     }
 
+    /**
+     * Sets the desired angle of the arm.
+     * 
+     * @param newDegreeLocation The desired arm position
+     */
     private void setAngle(double newDegreeLocation)
     {
         if (newDegreeLocation < minAngle)
@@ -132,6 +152,11 @@ public class ArmSim
         }
     }
 
+    /**
+     * Get the current arm angle.
+     * 
+     * @return The arm angle in degrees.
+     */
     public double getAngle()
     {
         return degreeLocation;

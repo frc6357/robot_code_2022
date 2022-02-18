@@ -137,5 +137,5 @@ public class Ports
     public static final int OI_OPERATOR_ORCHESTRATE_CLIMB = 5;  // Left Bumper
     public static final int OI_OPERATOR_STOP_CLIMB        = 2;  // Left Trigger Axis (TODO: Write this command)
 
-    public static Port i2c = Port.kOnboard;
+    public static final Port i2c = Port.kOnboard;
 }

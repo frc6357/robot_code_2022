@@ -11,6 +11,10 @@ import edu.wpi.first.wpilibj.util.Color8Bit;
 import frc.robot.Constants;
 import frc.robot.Constants.ClimbConstants;
 
+/**
+ * A class used in simulation of the complex arm used in our 2022 robot's
+ * climb mechanism.
+ */
 public class RobotSim
 {
     private final ArmSim armSim = new ArmSim(36, 24, 63, 90);
@@ -30,6 +34,12 @@ public class RobotSim
     private final CANSparkMax pivotMotor;
     private final CANSparkMax liftMotor;
 
+    /**
+     * Constructor for the robot simulation class.
+     * 
+     * @param pivot The motor controller associated with the pivot mechanism
+     * @param lift The motor controller associated with the lift mechanism
+     */
     public RobotSim(CANSparkMax pivot, CANSparkMax lift)
     {
         this.pivotMotor = pivot;
@@ -37,12 +47,18 @@ public class RobotSim
         SmartDashboard.putData("RobotPose", mech2d);
     }
 
+    /**
+     * Periodically-called update method for the simulation
+     */
     public void update()
     {
         updateExtend();
         updateArc();
     }
 
+    /**
+     * Periodically-called update method for the tilt portion of the model.
+     */
     public void updateArc()
     {
         double motorRPM = pivotMotor.get() * ClimbConstants.ARM_MOTOR_RPM;
@@ -63,6 +79,9 @@ public class RobotSim
         extendMech2d.setAngle(armSim.getAngle());
     }
 
+    /**
+     * Periodically-called update method for the extention portion of the model.
+     */
     public void updateExtend()
     {
         double motorRPM = liftMotor.get() * ClimbConstants.ARM_MOTOR_RPM;
