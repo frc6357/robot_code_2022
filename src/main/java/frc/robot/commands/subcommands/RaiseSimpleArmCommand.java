@@ -2,15 +2,23 @@ package frc.robot.commands.subcommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SK22Climb;
-import frc.robot.subsystems.base.SimpleClimbArm;
 
+/**
+ * A command to raise the pneumatically-controlled arm in the climb mechanism.
+ */
 public class RaiseSimpleArmCommand extends CommandBase
 {
     private final SK22Climb climb;
 
+    /**
+     * Constructor for the simple arm raising command.
+     * 
+     * @param climb The climb subsystem on which the command operates
+     */
     public RaiseSimpleArmCommand(SK22Climb climb)
     {
         this.climb = climb;
+        addRequirements(climb);
     }
 
     @Override
