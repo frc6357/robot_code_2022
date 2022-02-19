@@ -1,17 +1,8 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-<<<<<<< HEAD
-=======
-
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.CAN;
-import edu.wpi.first.wpilibj.DigitalInput;
->>>>>>> 4a1a3cf (Updated physical SparkMaxPro ports and Ports.java)
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.ColorSensor;
@@ -70,14 +61,7 @@ public class SK22Transfer extends SKSubsystemBase
 
       setDefaultCommand(new DefaultTransferCommand(this));
   }
-<<<<<<< HEAD
-
-  /**
-   *  Perform periodic processing needed by the subsystem.
-   */
-=======
 // set all motors, start and stop motors, queue all data
->>>>>>> 4a1a3cf (Updated physical SparkMaxPro ports and Ports.java)
   @Override
   public void periodic()
   {
