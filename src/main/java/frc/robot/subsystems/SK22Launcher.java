@@ -10,6 +10,9 @@ import frc.robot.Constants;
 import frc.robot.subsystems.base.Launcher;
 import frc.robot.subsystems.base.MotorEncoder;
 
+/**
+ * Class controlling the launcher subsystem in the 2022 robot.
+ */
 public class SK22Launcher extends SubsystemBase
 {
   private final WPI_TalonFX ballLauncher1 =
@@ -24,8 +27,8 @@ public class SK22Launcher extends SubsystemBase
         Constants.LauncherConstants.LEFT_ENCODER_REVERSED);
 
   // private final MotorEncoder motorEncoder2 = new MotorEncoder(ballLauncher2, 
-  //                                                                Constants.DriveConstants.ENCODER_DISTANCE_PER_PULSE, 
-  //                                                                Constants.DriveConstants.LEFT_ENCODER_REVERSED);
+  //                                      Constants.DriveConstants.ENCODER_DISTANCE_PER_PULSE, 
+  //                                      Constants.DriveConstants.LEFT_ENCODER_REVERSED);
 
   private final Launcher launcher;
 
@@ -62,16 +65,27 @@ public class SK22Launcher extends SubsystemBase
     // This method will be called once per scheduler run during simulation
   }
 
+  /**
+   * Start the launcher flywheel motor.
+   */
   public void enableLauncher()
   {
     launcher.enableLauncher();
   }
 
+  /**
+   * Stop the launcher flywheel motor.
+   */
   public void disableLauncher()
   {
     launcher.disableLauncher();
   }
 
+  /**
+   * Set the desired launcher flywheel speed.
+   * 
+   * @param rpm The speed that the launcher will be set to run at
+   */
   public void setLauncherRPM(double rpm)
   {
     launcher.setTargetMotorRPM(rpm);
