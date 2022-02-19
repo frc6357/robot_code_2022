@@ -20,15 +20,15 @@ import frc.robot.Constants.VisionConstants;
  */
 class Datagram
 {
-    int     versionID;
-    int     packetLength;
-    long    frameID;
-    long    timestamp;
-    Optional<Double>  distance = Optional.empty();
-    int     adjVal;
-    Optional<Float>   horiAngle = Optional.empty();
-    Optional<Float>   vertAngle = Optional.empty();
-    
+    int              versionID;
+    int              packetLength;
+    long             frameID;
+    long             timestamp;
+    Optional<Double> distance  = Optional.empty();
+    int              adjVal;
+    Optional<Float>  horiAngle = Optional.empty();
+    Optional<Float>  vertAngle = Optional.empty();
+
     long    reserved;
     long    checksum;
     boolean validPacket = false;
@@ -56,7 +56,6 @@ class Datagram
         adjVal = Byte.toUnsignedInt(adjValSigned);
 
         short shortHoriAngle = byteBuffer.getShort();
-        
 
         short shortVertAngle = byteBuffer.getShort();
 
@@ -96,6 +95,14 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
 
     // The packet containing the angle and distance values
     Datagram packetDatagram;
+
+    // Used to check changes in the acquired status of the target
+    private boolean lastAcquireState = false;
+    private boolean curAcquireState  = false;
+
+    // Used to check changes of the target being in frame status
+    private boolean lastInFrame = false;
+    private boolean curInFrame  = false;
 
     /**
      * This constructor initializes the port 5800 on the roborio for reading UDP packets.
@@ -181,13 +188,36 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
             packetDatagram = new Datagram(packetBuffer);
             if (packetDatagram.validPacket)
             {
+                // Update status of target being in frame
+                curInFrame = true;
+
+                // TODO: This is useful debugging use, but see if we really need it
+                // As this takes up bandwidth
                 SmartDashboard.putNumber("Distance", packetDatagram.distance.get());
                 SmartDashboard.putNumber("Horizontal Angle", packetDatagram.horiAngle.get());
                 SmartDashboard.putNumber("Vertical Angle", packetDatagram.vertAngle.get());
 
-                SmartDashboard.putBoolean("Target Acquired",
-                    isTargetAcquired(packetDatagram.horiAngle));
+                // If the target enters or leaves the center, update the SmartDashboard status
+                curAcquireState = isTargetAcquired(packetDatagram.horiAngle);
+                if (curAcquireState != lastAcquireState)
+                {
+                    SmartDashboard.putBoolean("Target Acquired", curAcquireState);
+                    lastAcquireState = curAcquireState;
+                }
+
             }
+            else
+            {
+                // Update status of target being in frame
+                curInFrame = false;
+            }
+        }
+
+        // If the target leaves or enters the frame, update the SmartDashboard status
+        if (curInFrame != lastInFrame)
+        {
+            SmartDashboard.putBoolean("Target In Frame", curInFrame);
+            lastInFrame = curInFrame;
         }
     }
 
