@@ -60,8 +60,7 @@ public class Ports
     //////////////////////////////
     public static final int EXIT_TRANSFER_MOTOR         = 31; // Currently unknown Port
     public static final int INTAKE_TRANSFER_MOTOR       = 30; // Currently unknown Port
-    public static final int VERTICAL_TRANSFER_MOTOR     = 12; // Currently unknown Port 
-    public static final int LAUNCHER_TRANSFER_MOTOR     = 12; // Currently unknown Port
+    public static final int VERTICAL_TRANSFER_MOTOR     = 32; // Currently unknown Port
     // TODO: Find out what these ports are
     public static final int EXIT_SENSOR                 = 0;  // Currently unknown Port
     public static final int VERTICAL_SENSOR             = 1;  // Currently unknown Port
@@ -69,7 +68,7 @@ public class Ports
     //////////////////////////////
     // Intake Addresses
     //////////////////////////////
-    public static final int INTAKE_MOTOR = 31; // CAN ID 
+    public static final int INTAKE_MOTOR = 40; // CAN ID 
 
     public static final int INTAKE_MOVER_FORWARD  = 0;  // PCM Channel 
     public static final int INTAKE_MOVER_BACKWARD = 1;  // PCM Channel 
@@ -83,8 +82,9 @@ public class Ports
     ///////////////////////////////
     // Ball Launcher Addresses
     ///////////////////////////////
-    public static final int BALL_LAUNCHER_1 = 23; // CAN ID
-    public static final int BALL_LAUNCHER_2 = 24; // CAN ID
+    public static final int BALL_LAUNCHER_1             = 23; // CAN ID
+    public static final int BALL_LAUNCHER_2             = 24; // CAN ID
+    public static final int LAUNCHER_TRANSFER_MOTOR     = 20; // CAN ID
 
     ///////////////////////////////
     // Climb Addresses

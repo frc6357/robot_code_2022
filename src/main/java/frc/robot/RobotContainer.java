@@ -31,14 +31,17 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.SK22CommandBuilder;
 import frc.robot.AutoTools.TrajectoryBuilder;
+import frc.robot.AutoTools.SK22Paths.DoNothing;
 import frc.robot.AutoTools.SK22Paths.RunJson;
 import frc.robot.commands.AcquireTargetCommand;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
+import frc.robot.commands.DoNothingCommand;
 import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.SetIntakePositionCommand;
@@ -317,7 +320,12 @@ public class RobotContainer
         if (visionSubsystem.isPresent())
         {
             SK22Vision vision = visionSubsystem.get();
-            driveAcquireTargetBtn.whenHeld(new AcquireTargetCommand(driveSubsystem, vision), true);
+            driveAcquireTargetBtn.whenHeld(
+                new ConditionalCommand(
+                    new AcquireTargetCommand(driveSubsystem, vision),
+                    new DoNothingCommand(), 
+                    () -> vision.getHorizontalAngle().isPresent()),
+                true);
             // TODO: How do we break out of this command if it fails to acquire the 
             // target for some reason?
         }
