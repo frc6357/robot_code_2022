@@ -1,68 +1,73 @@
 package frc.robot.subsystems;
 
-import com.revrobotics.CANEncoder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import frc.robot.Ports;
 import frc.robot.subsystems.base.ComplexClimbArm;
-import frc.robot.subsystems.base.MotorEncoder;
 import frc.robot.subsystems.base.SimpleClimbArm;
 
+/**
+ * A subsystem that characterizes climb
+ */
 public class SK22Climb extends SKSubsystemBase
 {
 
-    private final ComplexClimbArm leftComplexArm;
-    private final ComplexClimbArm rightComplexArm;
-    private final SimpleClimbArm leftSimpleArm;
-    private final SimpleClimbArm rightSimpleArm;
+    private final ComplexClimbArm complexArm;
+    private final SimpleClimbArm simpleArm;
 
 
-    // TODO: Updated to conform to convention of not passing objects into subsystem constructors
     // and to allow us to get the code to build after a breaking commit.
     /**
-     * 
+     *  The climb constructor initializes the variables
      */
     public SK22Climb()
     {
-        // TODO: Verify that these are correct
         final CANSparkMax complexBrakePivot = new CANSparkMax(Ports.COMPLEX_BRAKE_PIVOT, MotorType.kBrushless);
         final CANSparkMax complexRatchetLift = new CANSparkMax(Ports.COMPLEX_RATCHET_LIFT, MotorType.kBrushless);
-        final RelativeEncoder privotEncoder = complexBrakePivot.getEncoder();
+        final RelativeEncoder pivotEncoder = complexBrakePivot.getEncoder();
         final RelativeEncoder ratchetEncoder = complexRatchetLift.getEncoder();
 
-        leftComplexArm = new ComplexClimbArm(complexBrakePivot, complexRatchetLift, privotEncoder, ratchetEncoder);
-        rightComplexArm = new ComplexClimbArm(complexBrakePivot, complexRatchetLift, privotEncoder, ratchetEncoder);
-        leftSimpleArm = new SimpleClimbArm();
-        rightSimpleArm = new SimpleClimbArm();
+        complexArm = new ComplexClimbArm(complexBrakePivot, complexRatchetLift, pivotEncoder, ratchetEncoder);
+        simpleArm = new SimpleClimbArm();
     }
 
+    /**
+     * extends the simple arm
+     */
     public void raiseSimpleArm()
     {
-        leftSimpleArm.raise();
-        rightSimpleArm.raise();
+        simpleArm.raise();
         // Extends arm from the simpleArm base class
     }
 
+    /**
+     * retracts the simple arm
+     */
     public void lowerSimpleArm()
     {
-        leftSimpleArm.lower();
-        rightSimpleArm.lower();
-        // Pulls back the piston to retract the arm or have the hand pulled back in order to prevent crushing it while pulling up
+        simpleArm.lower();
+        // Pulls back the piston to retract the arm or have the hand pulled back in order 
+        //to prevent crushing it while pulling up
     }
 
+    /**
+     * sets the position of the complex arm
+     * @param degrees The position we want the arm to pivot to.
+     */
     public void setComplexArm(double degrees)
     {
-        leftComplexArm.setPivotArmPosition(degrees);
-        rightComplexArm.setPivotArmPosition(degrees);
+        complexArm.setPivotArmPosition(degrees);
     }
 
  
+    /**
+     * rotates simple arm so that it is perpendicular with the robot
+     */
     public void straightenSimpleArm()
     {
-        leftSimpleArm.straighten();
-        rightSimpleArm.straighten();
+        simpleArm.straighten();
         // Straighten the simpleclimbarm
     }
 
@@ -71,19 +76,16 @@ public class SK22Climb extends SKSubsystemBase
      */
     public void tiltSimpleArm()
     {
-        leftSimpleArm.tilt();
-        rightSimpleArm.tilt();
+        simpleArm.tilt();
     }
 
-    
-
-    public void orchestra()
+    /**
+     * gets voltage produced by the ratchet arm
+     * @return the voltage used by the ratchet motor
+     */
+    public double getMotorCurrent()
     {
-        /*
-         * Performs the motion of switichuing the rotation of the arm while retracting the
-         * arm to essentially have a linear motion. While this is happening we need to
-         * extent the back arm outward
-         */
+        return complexArm.getVoltage();
     }
 
     @Override

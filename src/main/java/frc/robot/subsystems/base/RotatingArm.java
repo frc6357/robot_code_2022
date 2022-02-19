@@ -66,7 +66,6 @@ public class RotatingArm
 
     /**
      * Return the value of the set point.
-     * 
      * @return current arm setpoint in degrees relative to the start position.
      */
     public double getSetPointAngle()

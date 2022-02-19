@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import frc.robot.Constants;
 import frc.robot.Ports;
-import edu.wpi.first.math.controller.PIDController;
 
 /**
  * SK22ComplexClimbArm is meant to serve as the robot's front climb arm in which it will reach for the high rung
@@ -77,14 +76,30 @@ public class ComplexClimbArm
         ratchetState = false;
     }
 
+    /**
+     * gets the degrees the complex arm is at
+     * @return double value of the angle
+     */
     public double getPivotArmPosition()
     {
         return pivotArm.getAngle();
     }
 
+    /**
+     * Gets the length the complex arm is at
+     * @return double value of the distance traveled
+     */
     public double getRachetArmPosition()
     {
         return ratchetArm.getAngle();
+    }
+
+    /**
+     * Gets the voltage used by the ratchet motor
+     * @return double value the voltage
+     */
+    public double getVoltage(){
+        return complexRatchetLift.getBusVoltage();
     }
 
     /**
@@ -105,7 +120,8 @@ public class ComplexClimbArm
      */
     public void setRatchetArmPosition(double distance)
     {
-        if(ratchetState == true && distance < 0.0)
+        // makes sure that the ratchet arm wouldn't try to go down in the case that it is going up
+        if (ratchetState == true && distance < 0.0)
         {
             return;   
         }
