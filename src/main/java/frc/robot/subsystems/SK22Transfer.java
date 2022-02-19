@@ -5,6 +5,13 @@ import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+<<<<<<< HEAD
+=======
+
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.CAN;
+import edu.wpi.first.wpilibj.DigitalInput;
+>>>>>>> 4a1a3cf (Updated physical SparkMaxPro ports and Ports.java)
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.ColorSensor;
@@ -22,8 +29,8 @@ public class SK22Transfer extends SKSubsystemBase
   // TODO: Don't use public members. Move this to the class that actually needs it.
   public final Alliance teamAlliance;
 
-  private VictorSPX intakeTransferMotor;
-  private VictorSPX exitTransferMotor;
+  private CANSparkMax intakeTransferMotor;
+  private CANSparkMax exitTransferMotor;
   // This is the motor that accepts the ball from the horizontal shaft
   private CANSparkMax verticalTransferMotor;
   // This is the motor that transfers the ball from the vertical shaft
@@ -48,9 +55,8 @@ public class SK22Transfer extends SKSubsystemBase
       // needs it (DefaultTransferCommand).
       teamAlliance = DriverStation.getAlliance();
 
-      intakeTransferMotor = new VictorSPX(Ports.INTAKE_TRANSFER_MOTOR);
-      exitTransferMotor = new VictorSPX(Ports.EXIT_TRANSFER_MOTOR);
-    
+      intakeTransferMotor = new CANSparkMax(Ports.INTAKE_TRANSFER_MOTOR, MotorType.kBrushless);
+      exitTransferMotor = new CANSparkMax(Ports.EXIT_TRANSFER_MOTOR, MotorType.kBrushless);
       verticalTransferMotor = new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
       launcherTransferMotor = new CANSparkMax(Ports.LAUNCHER_TRANSFER_MOTOR, MotorType.kBrushless);
 
@@ -64,10 +70,14 @@ public class SK22Transfer extends SKSubsystemBase
 
       setDefaultCommand(new DefaultTransferCommand(this));
   }
+<<<<<<< HEAD
 
   /**
    *  Perform periodic processing needed by the subsystem.
    */
+=======
+// set all motors, start and stop motors, queue all data
+>>>>>>> 4a1a3cf (Updated physical SparkMaxPro ports and Ports.java)
   @Override
   public void periodic()
   {
@@ -81,7 +91,7 @@ public class SK22Transfer extends SKSubsystemBase
    */
   public void setIntakeTransferMotor(double speed)
   {
-    intakeTransferMotor.set(VictorSPXControlMode.PercentOutput, speed);
+    intakeTransferMotor.set(speed);
   }
 
     /**
@@ -91,7 +101,7 @@ public class SK22Transfer extends SKSubsystemBase
    */
   public void setExitTransferMotor(double speed)
   {
-    exitTransferMotor.set(VictorSPXControlMode.PercentOutput, speed);
+    exitTransferMotor.set(speed);
   }
 
   /**
