@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import edu.wpi.first.wpilibj2.command.PIDCommand;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.subsystems.SK22Drive;
 import frc.robot.subsystems.SK22Vision;
@@ -17,6 +16,9 @@ public class AcquireTargetCommand extends CommandBase
     private final SK22Vision vision;
     private PIDController    pidController;
 
+    /** Desired angle of the drivetrain */
+    private double setpoint = 0.0;
+
     /**
      * Creates a new AcquireTargetCommand and sets the
      * 
@@ -30,28 +32,27 @@ public class AcquireTargetCommand extends CommandBase
     {
         this.drive = drive;
         this.vision = vision;
+
+        pidController = new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0);
+
+        pidController.enableContinuousInput(-180, 180);
+        pidController.setTolerance(DriveConstants.TURN_TOLERANCE,
+            DriveConstants.TURN_RATE_TOLERANCE);
+
         addRequirements(drive, vision);
     }
 
     @Override
     public void initialize()
     {
-        pidController = new PIDCommand(new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0),
-            drive::getHeading, vision.getHorizontalAngle(), output -> drive.arcadeDrive(0, output),
-            drive).getController();
-
-        pidController.enableContinuousInput(-180, 180);
-        pidController.setTolerance(DriveConstants.TURN_TOLERANCE,
-            DriveConstants.TURN_RATE_TOLERANCE);
-
+        setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
         pidController.reset();
     }
 
     @Override
     public void execute()
     {
-        drive.arcadeDrive(0,
-            pidController.calculate(drive.getHeading(), vision.getHorizontalAngle()));
+        drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), setpoint));
     }
 
     @Override
@@ -64,6 +65,6 @@ public class AcquireTargetCommand extends CommandBase
     public boolean isFinished()
     {
         // End when the controller is at the reference.
-        return pidController.atSetpoint();
+        return (pidController.atSetpoint());
     }
 }
