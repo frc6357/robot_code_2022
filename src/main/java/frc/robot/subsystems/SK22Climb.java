@@ -53,13 +53,22 @@ public class SK22Climb extends SKSubsystemBase
     }
 
     /**
-     * sets the position of the complex arm
+     * sets the angle position of the complex arm
      * @param degrees The position we want the arm to pivot to.
      */
-    public void setComplexArm(double degrees)
+    public void setComplexPivotPosition(double degrees)
     {
-        complexArm.setPivotArmPosition(degrees);
+        complexArm.setPivotPosition(degrees);
     }
+
+    /**
+     * sets the extension position of the complex arm
+     * @param distance The position we want the arm to extend to.
+     */
+    public void setComplexRatchetArmPosition(double distance)
+	{
+        complexArm.setRatchetArmPosition(distance);
+	}
 
  
     /**

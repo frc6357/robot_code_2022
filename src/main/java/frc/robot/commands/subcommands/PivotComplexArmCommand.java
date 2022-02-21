@@ -25,7 +25,7 @@ public class PivotComplexArmCommand extends CommandBase
     @Override
     public void initialize()
     {
-        this.climb.setComplexArm(this.degrees);
+        this.climb.setComplexPivotPosition(this.degrees);
     }
 
     @Override

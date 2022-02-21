@@ -17,7 +17,6 @@ public class ComplexClimbArm
     private final CANSparkMax complexBrakePivot;
     private final CANSparkMax complexRatchetLift;
 
-
     private final DoubleSolenoid complexRatchetPiston =
             new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE, PneumaticsModuleType.REVPH,
                 Ports.COMPLEX_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL,
@@ -106,7 +105,7 @@ public class ComplexClimbArm
      * This method would set position of the pivot to a certain number of degrees
      * @param degrees The specific number of degrees we want to the pivot to move
      */
-    public void setPivotArmPosition(double degrees)
+    public void setPivotPosition(double degrees)
     {
         pivotArm.goToAngle(degrees);
         pivotArm.enable();
@@ -121,7 +120,7 @@ public class ComplexClimbArm
     public void setRatchetArmPosition(double distance)
     {
         // makes sure that the ratchet arm wouldn't try to go down in the case that it is going up
-        if (ratchetState == true && distance < 0.0)
+        if (ratchetState && distance < 0.0)
         {
             return;   
         }

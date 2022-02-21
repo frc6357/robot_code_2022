@@ -41,7 +41,6 @@ public class RotatingArm
     public RotatingArm(CANSparkMax motor, RelativeEncoder encoder, double motorRotationsToDegrees,
         double kP, double kI, double kD)
     {
-
         setPoint = 0.0;
         this.motor = motor;
         this.encoder = encoder;

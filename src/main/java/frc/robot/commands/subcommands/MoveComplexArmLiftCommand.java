@@ -26,7 +26,7 @@ public class MoveComplexArmLiftCommand extends CommandBase
     @Override
     public void initialize()
     {
-        this.climb.setComplexArm(this.distance);
+        this.climb.setComplexRatchetArmPosition(this.distance);
     }
 
     @Override
