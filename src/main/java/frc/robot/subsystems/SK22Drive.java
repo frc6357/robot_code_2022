@@ -84,8 +84,10 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
 
         drive = new DifferentialDrive(leftGroup, rightGroup);
         drive.setDeadband(DriveConstants.DEADBAND_TURN);
-    }
 
+        SmartDashboard.putString("Direction", "Intake");
+    }
+    
     @Override
     public void periodic()
     {
@@ -97,13 +99,13 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         odometry.update(Rotation2d.fromDegrees(this.getHeading()), leftEncoderDistanceMeters,
             rightEncoderDistanceMeters);
 
-        SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
+            SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
         SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
         SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
         SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
         SmartDashboard.putNumber("Gyro Angle", this.getHeading());
     }
-
+    
     /**
      * Sets whether or not the launcher should be the "forward"
      * of the robot
@@ -113,6 +115,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     public void setBackwardsDirection(boolean reversed)
     {
         this.reversed = reversed;
+        SmartDashboard.putString("Direction", reversed ? "Launcher" : "Intake");
     }
 
     /**
