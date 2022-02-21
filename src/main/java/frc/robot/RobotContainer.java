@@ -36,9 +36,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.SK22CommandBuilder;
 import frc.robot.AutoTools.TrajectoryBuilder;
-import frc.robot.AutoTools.SK22Paths.DoNothing;
 import frc.robot.AutoTools.SK22Paths.RunJson;
 import frc.robot.commands.AcquireTargetCommand;
+import frc.robot.commands.ClimbSequence;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.DoNothingCommand;
@@ -47,17 +47,16 @@ import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
 import frc.robot.commands.subcommands.LowerSimpleArmCommand;
-import frc.robot.commands.subcommands.RaiseSimpleArmCommand;
 import frc.robot.subsystems.SK22Climb;
 import frc.robot.subsystems.SK22Drive;
+import frc.robot.subsystems.SK22Gearshift;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
 import frc.robot.subsystems.SK22Vision;
-import frc.robot.subsystems.SK22Gearshift;
+import frc.robot.subsystems.base.Dpad;
 import frc.robot.subsystems.base.DpadDownButton;
 import frc.robot.subsystems.base.DpadUpButton;
-import frc.robot.subsystems.base.Dpad;
 import frc.robot.subsystems.base.TriggerButton;
 import frc.robot.subsystems.base.SuperClasses.Gear;
 import frc.robot.utils.FilteredJoystick;
@@ -75,8 +74,8 @@ public class RobotContainer
     /**
      * The USB Camera for the Robot.
      */
-    private UsbCamera camera1;
-    private UsbCamera camera2;
+    private UsbCamera         camera1;
+    private UsbCamera         camera2;
     private NetworkTableEntry cameraSelection;
 
     private final TrajectoryBuilder    segmentCreator      =
@@ -101,6 +100,7 @@ public class RobotContainer
     private Optional<SK22Climb>     climbSubsystem     = Optional.empty();
     private Optional<SK22Vision>    visionSubsystem    = Optional.empty();
     private Optional<SK22Gearshift> gearshiftSubsystem = Optional.empty();
+    private Optional<Joystick>      climbtestJoystick  = Optional.empty();
 
     // Robot External Controllers (Joysticks and Logitech Controller)
     private final FilteredJoystick driverLeftJoystick  =
@@ -126,12 +126,10 @@ public class RobotContainer
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_HIGH_GEAR);
     private final JoystickButton driveShootBtn         =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SHOOT);
-    private final Dpad dpad = 
+    private final Dpad           dpad                  =
             new Dpad(driverLeftJoystick, Ports.OI_DRIVER_REVERSE);
-    private final DpadDownButton reverseOnBtn     =
-            new DpadDownButton(dpad);
-    private final DpadUpButton   reverseOffBtn    = 
-            new DpadUpButton(dpad);
+    private final DpadDownButton reverseOnBtn          = new DpadDownButton(dpad);
+    private final DpadUpButton   reverseOffBtn         = new DpadUpButton(dpad);
     private final JoystickButton intakeExtendBtn       =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_EXTEND);
     private final JoystickButton intakeRetractBtn      =
@@ -195,8 +193,13 @@ public class RobotContainer
             }
             if (subsystems.isGearshiftPresent())
             {
-                gearshiftSubsystem = Optional.of(new SK22Gearshift(new DoubleSolenoid(Ports.BASE_PCM,
-                Ports.PNEUMATICS_MODULE_TYPE, Ports.GEAR_SHIFT_HIGH, Ports.GEAR_SHIFT_LOW)));
+                gearshiftSubsystem = Optional.of(new SK22Gearshift(
+                    new DoubleSolenoid(Ports.BASE_PCM, Ports.PNEUMATICS_MODULE_TYPE,
+                        Ports.GEAR_SHIFT_HIGH, Ports.GEAR_SHIFT_LOW)));
+            }
+            if (subsystems.isClimbtestPresent())
+            {
+                climbtestJoystick = Optional.of(new Joystick(Ports.OI_CLIMBTEST_JOYSTICK));
             }
         }
         catch (IOException e)
@@ -270,11 +273,9 @@ public class RobotContainer
         // camera and direction of the robot are one and the same
         // Sets the "directionality" of the robot
         // Sets both the direction controls and the camera selection
-        reverseOffBtn
-            .whenPressed(() -> driveSubsystem.setBackwardsDirection(false))
+        reverseOffBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(false))
             .whenPressed(() -> cameraSelection.setString(camera1.getName()));
-        reverseOnBtn
-            .whenPressed(() -> driveSubsystem.setBackwardsDirection(true))
+        reverseOnBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(true))
             .whenPressed(() -> cameraSelection.setString(camera2.getName()));
 
         // Drive train gearshift is controlled by a separate subsystem so that we
@@ -320,12 +321,11 @@ public class RobotContainer
         if (visionSubsystem.isPresent())
         {
             SK22Vision vision = visionSubsystem.get();
-            driveAcquireTargetBtn.whenHeld(
-                new ConditionalCommand(
-                    new AcquireTargetCommand(driveSubsystem, vision),
-                    new DoNothingCommand(), 
-                    () -> vision.getHorizontalAngle().isPresent()),
-                true);
+            driveAcquireTargetBtn
+                .whenHeld(
+                    new ConditionalCommand(new AcquireTargetCommand(driveSubsystem, vision),
+                        new DoNothingCommand(), () -> vision.getHorizontalAngle().isPresent()),
+                    true);
             // TODO: How do we break out of this command if it fails to acquire the 
             // target for some reason?
         }
@@ -345,13 +345,30 @@ public class RobotContainer
             SK22Climb climb = climbSubsystem.get();
 
             // Extends the climb arms
-            climbExtendBtn.whenPressed(new RaiseSimpleArmCommand(climb));
+            climbExtendBtn.whenPressed(ClimbSequence.getStep1(climb));
 
             // Retracts the climb arms
-            climbRetractBtn.whenPressed(new LowerSimpleArmCommand(climb));
+            climbRetractBtn.whenPressed(ClimbSequence.getStep2(climb));
 
             // Goes from one climb rung to the next highest rung
             //climbOrchestrateBtn.whenPressed(climb::orchestra);
+            if (climbtestJoystick.isPresent())
+            {
+                Joystick testJoystick = climbtestJoystick.get();
+                new JoystickButton(testJoystick, 1).whenPressed(ClimbSequence.getStep3(climb));
+                //new JoystickButton(testJoystick, 2).whenPressed(ClimbSequence.getStep4(climb));
+                new JoystickButton(testJoystick, 3).whenPressed(ClimbSequence.getStep5(climb));
+                new JoystickButton(testJoystick, 4).whenPressed(ClimbSequence.getStep6(climb));
+                new JoystickButton(testJoystick, 5).whenPressed(ClimbSequence.getStep7(climb));
+                new JoystickButton(testJoystick, 6).whenPressed(ClimbSequence.getStep8(climb));
+                new JoystickButton(testJoystick, 7).whenPressed(ClimbSequence.getStep9(climb));
+                new JoystickButton(testJoystick, 8).whenPressed(ClimbSequence.getStep10(climb));
+                new JoystickButton(testJoystick, 9).whenPressed(ClimbSequence.getStep11(climb));
+                new JoystickButton(testJoystick, 10).whenPressed(ClimbSequence.getStep12(climb));
+                new JoystickButton(testJoystick, 11).whenPressed(ClimbSequence.getStep13(climb));
+                
+                
+            }
         }
     }
 

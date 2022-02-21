@@ -116,6 +116,7 @@ public class Ports
     public static final int OI_DRIVER_LEFT_JOYSTICK  = 0;
     public static final int OI_DRIVER_RIGHT_JOYSTICK = 1;
     public static final int OI_OPERATOR_CONTROLLER   = 2;
+    public static final int OI_CLIMBTEST_JOYSTICK    = 5;
 
     // Controls set for Arcade Drive - left stick turn, right stick throttle.
     public static final int OI_DRIVER_TURN = 2;  // Z Axis for Extreme 3D Pro

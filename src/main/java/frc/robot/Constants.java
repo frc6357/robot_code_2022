@@ -190,11 +190,11 @@ public final class Constants
         public static final double COMPLEX_FULL_RETRACT         = 0;
         public static final double COMPLEX_PARTIAL_STRAIGHTEN   = 25;  //TODO: Needs Tuning
         public static final double COMPLEX_PARTIAL_EXTEND       = 5;   //TODO: Needs Tuning
-        public static final long   STEP6_DELAY_MILLIS           = 1000;//TODO: Needs Tuning
-        public static final long   STEP7_DELAY_MILLIS           = 1000;//TODO: Needs Tuning
-        public static final long   STEP8_DELAY_MILLIS           = 1000;//TODO: Needs Tuning
-        public static final long   STEP9_DELAY_MILLIS           = 1000;//TODO: Needs Tuning
-        public static final long   STEP10_DELAY_MILLIS          = 1000;//TODO: Needs Tuning
+        public static final long   STEP6_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
+        public static final long   STEP7_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
+        public static final long   STEP8_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
+        public static final long   STEP9_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
+        public static final long   STEP10_DELAY_MILLIS          = 1000; //TODO: Needs Tuning
     }
 
     /**Constants related to Vision subsystem */
