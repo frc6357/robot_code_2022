@@ -2,13 +2,13 @@ package frc.robot.commands.subcommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class TimeDelay extends CommandBase
+public class TimeDelayCommand extends CommandBase
 {
 
     private long       startTime;
     private final long delayTime;
 
-    public TimeDelay(long delayTimeMillis)
+    public TimeDelayCommand(long delayTimeMillis)
     {
         delayTime = delayTimeMillis;
     }
