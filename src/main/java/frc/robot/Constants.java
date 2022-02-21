@@ -183,6 +183,18 @@ public final class Constants
         public static final double LIFT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER  =
                                             ((360.0 * PIVOT_MOTOR_TEETH_PER_REVOLUTION)
                                             / (PIVOT_MOTOR_GEAR_RATIO * PIVOT_ARC_TEETH_PER_REVOLUTION));
+
+        public static final double COMPLEX_FULL_TILT            = 30;  //TODO: Needs tuning
+        public static final double COMPLEX_FULL_STRAIGHTEN      = 0;
+        public static final double COMPLEX_FULL_EXTEND          = 20;  //TODO: Needs Tuning
+        public static final double COMPLEX_FULL_RETRACT         = 0;
+        public static final double COMPLEX_PARTIAL_STRAIGHTEN   = 25;  //TODO: Needs Tuning
+        public static final double COMPLEX_PARTIAL_EXTEND       = 5;   //TODO: Needs Tuning
+        public static final long   STEP6_DELAY_MILLIS           = 1000;//TODO: Needs Tuning
+        public static final long   STEP7_DELAY_MILLIS           = 1000;//TODO: Needs Tuning
+        public static final long   STEP8_DELAY_MILLIS           = 1000;//TODO: Needs Tuning
+        public static final long   STEP9_DELAY_MILLIS           = 1000;//TODO: Needs Tuning
+        public static final long   STEP10_DELAY_MILLIS          = 1000;//TODO: Needs Tuning
     }
 
     /**Constants related to Vision subsystem */

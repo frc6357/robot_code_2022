@@ -120,4 +120,14 @@ public class SK22Climb extends SKSubsystemBase
     {
 
     }
+
+    public void makeTiltSimpleArmNeutral()
+    {
+        simpleArm.tiltNeutral();
+    }
+
+    public void makeRaiseSimpleArmNeutral()
+    {
+        simpleArm.liftNeutral();
+    }
 }

@@ -1,7 +1,7 @@
 package frc.robot.subsystems.base;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.Ports;
 
 /**
@@ -10,13 +10,15 @@ import frc.robot.Ports;
  */
 public class SimpleClimbArm
 {
-    private final DoubleSolenoid simpleLiftPiston = new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE,
-        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_LIFT_PISTON_FORWARD_CHANNEL,
-        Ports.SIMPLE_CLIMB_LIFT_PISTON_REVERSE_CHANNEL);
+    private final Solenoid raisePiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_RAISE_CHANNEL);
+        private final Solenoid lowerPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+        PneumaticsModuleType.REVPH,Ports.SIMPLE_CLIMB_LOWER_CHANNEL);
 
-    private final DoubleSolenoid simpleTiltPiston = new DoubleSolenoid(Ports.CLIMB_PNEUMATIC_MODULE,
-        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_TILT_PISTON_FORWARD_CHANNEL,
-        Ports.SIMPLE_CLIMB_TILT_PISTON_REVERSE_CHANNEL);
+    private final Solenoid tiltPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_TILT_CHANNEL);
+    private final Solenoid straightenPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+        PneumaticsModuleType.REVPH,Ports.SIMPLE_CLIMB_STRAIGHTEN_CHANNEL);
 
     /**
      * Constructor for the SimpleClimbArm
@@ -31,7 +33,8 @@ public class SimpleClimbArm
      */
     public void raise()
     {
-        simpleLiftPiston.set(DoubleSolenoid.Value.kForward);
+        raisePiston.set(true);
+        lowerPiston.set(false);
     }
 
     /**
@@ -39,15 +42,25 @@ public class SimpleClimbArm
      */
     public void lower()
     {
-        simpleLiftPiston.set(DoubleSolenoid.Value.kReverse);
+        lowerPiston.set(true);
+        raisePiston.set(false);
     }
 
+    /**
+     * Neutral mode for lift Solenoids
+     */
+    public void liftNeutral()
+    {
+        raisePiston.set(false);
+        lowerPiston.set(false);
+    }
     /**
      * Activate the solenoid required to tilt the arm away from the vertical position.
      */
     public void tilt()
     {
-        simpleTiltPiston.set(DoubleSolenoid.Value.kForward);
+        tiltPiston.set(true);
+        straightenPiston.set(false);
     }
 
     /**
@@ -55,6 +68,16 @@ public class SimpleClimbArm
      */
     public void straighten()
     {
-        simpleTiltPiston.set(DoubleSolenoid.Value.kReverse);
+        straightenPiston.set(true);
+        tiltPiston.set(false);
+    }
+
+    /**
+     * Neutral mode for tilt Solenoids
+     */
+    public void tiltNeutral()
+    {
+        straightenPiston.set(false);
+        tiltPiston.set(false);
     }
 }

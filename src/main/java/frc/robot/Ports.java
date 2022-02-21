@@ -93,10 +93,10 @@ public class Ports
     public static final int COMPLEX_RATCHET_LIFT                         = 2; // Currently unknown Port
     public static final int COMPLEX_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL = 8;
     public static final int COMPLEX_CLIMB_RATCHET_PISTON_REVERSE_CHANNEL = 9;
-    public static final int SIMPLE_CLIMB_TILT_PISTON_FORWARD_CHANNEL     = 10;
-    public static final int SIMPLE_CLIMB_TILT_PISTON_REVERSE_CHANNEL     = 11;
-    public static final int SIMPLE_CLIMB_LIFT_PISTON_FORWARD_CHANNEL     = 12;
-    public static final int SIMPLE_CLIMB_LIFT_PISTON_REVERSE_CHANNEL     = 13;
+    public static final int SIMPLE_CLIMB_TILT_CHANNEL     = 10;
+    public static final int SIMPLE_CLIMB_STRAIGHTEN_CHANNEL     = 11;
+    public static final int SIMPLE_CLIMB_RAISE_CHANNEL     = 12;
+    public static final int SIMPLE_CLIMB_LOWER_CHANNEL     = 13;
 
     ///////////////////////////////
     // Additional hardware
