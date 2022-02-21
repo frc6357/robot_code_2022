@@ -47,10 +47,10 @@ public class Ports
     //////////////////////////////
     // Drivetrain Addresses
     //////////////////////////////
-    public static final int FRONT_LEFT_DRIVE  = 11; // CAN ID
-    public static final int FRONT_RIGHT_DRIVE = 13; // CAN ID
-    public static final int BACK_LEFT_DRIVE   = 10; // CAN ID
-    public static final int BACK_RIGHT_DRIVE  = 12; // CAN ID
+    public static final int FRONT_LEFT_DRIVE  = 13; // CAN ID
+    public static final int FRONT_RIGHT_DRIVE = 10; // CAN ID
+    public static final int BACK_LEFT_DRIVE   = 12; // CAN ID
+    public static final int BACK_RIGHT_DRIVE  = 11; // CAN ID
 
     public static final int GEAR_SHIFT_HIGH = 2;
     public static final int GEAR_SHIFT_LOW  = 3;
@@ -73,7 +73,7 @@ public class Ports
     public static final int INTAKE_MOVER_FORWARD  = 0;  // PCM Channel 
     public static final int INTAKE_MOVER_BACKWARD = 1;  // PCM Channel 
 
-    public static final PneumaticsModuleType INTAKE_PCM = PneumaticsModuleType.CTREPCM;
+    public static final PneumaticsModuleType INTAKE_PCM = PneumaticsModuleType.REVPH;
 
     ///////////////////////////////
     // Ball Indexer Addresses
