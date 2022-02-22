@@ -125,6 +125,8 @@ public final class Constants
                 // Assumes the encoders are directly mounted on the wheel shafts
                 (LAUNCHER_WHEEL_DIAMETER * Math.PI)
                     / ((double) LAUNCHER_ENCODER_CPR * LAUNCH_GEAR_RATIO);
+
+        public static final double LAUNCHER_TRANSFER_SPEED = 0.75;
     }
 
     /** Constants related to Intake */
