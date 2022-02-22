@@ -29,14 +29,14 @@
               "imageHeight": -1
             }
           },
-          "32,11": {
+          "30,11": {
             "size": [
-              2,
-              3
+              4,
+              4
             ],
             "content": {
               "_type": "Boolean Box",
-              "_title": "",
+              "_title": "Target Aquired",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
@@ -44,7 +44,7 @@
           "11,11": {
             "size": [
               4,
-              3
+              4
             ],
             "content": {
               "_type": "ComboBox Chooser",
@@ -52,10 +52,10 @@
               "_title": "Auto Paths"
             }
           },
-          "23,11": {
+          "21,11": {
             "size": [
               9,
-              3
+              4
             ],
             "content": {
               "_type": "Number Bar",
@@ -70,8 +70,8 @@
           },
           "15,11": {
             "size": [
-              8,
-              2
+              6,
+              3
             ],
             "content": {
               "_type": "Boolean Box",
@@ -80,56 +80,10 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "5,6": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_title": "Gear Shift",
-              "Colors/Color when true": "#00FF00FF",
-              "Colors/Color when false": "#008000FF"
-            }
-          },
-          "2,6": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_title": "Slow Mode",
-              "Colors/Color when true": "#FFB366FF",
-              "Colors/Color when false": "#4AC04AFF"
-            }
-          },
-          "8,6": {
-            "size": [
-              3,
-              3
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_title": "Reverse",
-              "Colors/Color when true": "#4AC04AFF",
-              "Colors/Color when false": "#FF0000FF"
-            }
-          },
-          "7,9": {
-            "size": [
-              4,
-              5
-            ],
-            "content": {
-              "_type": "Network Table Tree",
-              "_title": "Transfer info"
-            }
-          },
-          "2,9": {
+          "0,4": {
             "size": [
               5,
-              5
+              4
             ],
             "content": {
               "_type": "Boolean Box",
@@ -138,22 +92,10 @@
               "Colors/Color when false": "#FF0000FF"
             }
           },
-          "0,6": {
+          "0,0": {
             "size": [
-              2,
-              8
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_title": "Intake ",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "1,0": {
-            "size": [
-              10,
-              3
+              11,
+              4
             ],
             "content": {
               "_type": "Basic FMS Info",
@@ -161,7 +103,7 @@
               "_title": "Basic FMS Info"
             }
           },
-          "0,4": {
+          "5,4": {
             "size": [
               3,
               2
@@ -269,9 +211,9 @@
               "_title": "Launcher RPM"
             }
           },
-          "15,13": {
+          "15,14": {
             "size": [
-              8,
+              6,
               1
             ],
             "content": {
@@ -288,15 +230,146 @@
               "_type": "Graph",
               "_source0": "network_table:///SmartDashboard/Launcher Setpoint RPM",
               "_source1": "network_table:///SmartDashboard/Launcher RPM",
-              "_title": "Graph",
+              "_title": "Launcher Speed",
               "Graph/Visible time": 30.0,
               "Graph/X-axis auto scrolling": true,
               "Y-axis/Automatic bounds": true,
-              "Y-axis/Upper bound": 1.0,
-              "Y-axis/Lower bound": -1.0,
-              "Y-axis/Unit": "ul",
-              "Visible data/SmartDashboard/Launcher RPM": true,
-              "Visible data/SmartDashboard/Launcher Setpoint RPM": true
+              "Y-axis/Upper bound": 4200.0,
+              "Y-axis/Lower bound": 0.0,
+              "Y-axis/Unit": "RPM"
+            }
+          },
+          "8,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_title": "Gear Shift"
+            }
+          },
+          "5,6": {
+            "size": [
+              3,
+              2
+            ],
+            "content": {
+              "_type": "Text View",
+              "_title": "Slow mode"
+            }
+          },
+          "52,0": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "Boolean Box",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "40,1": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "Boolean Box",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "44,1": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "Boolean Box",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "48,1": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_title": "Boolean Box",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,8": {
+            "size": [
+              11,
+              7
+            ],
+            "content": {
+              "_type": "Grid Layout",
+              "_title": "Grid Layout",
+              "Layout/Number of columns": 5,
+              "Layout/Number of rows": 3,
+              "Layout/Label position": "HIDDEN",
+              "_children": {
+                "0,2": {
+                  "_type": "Boolean Box",
+                  "_title": "Boolean Box",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                "0,1": {
+                  "_type": "Text View",
+                  "_title": ""
+                },
+                "0,0": {
+                  "_type": "Text View",
+                  "_title": ""
+                },
+                "2,1": {
+                  "_type": "Boolean Box",
+                  "_title": "Boolean Box",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                "3,1": {
+                  "_type": "Text View",
+                  "_title": ""
+                },
+                "2,0": {
+                  "_type": "Boolean Box",
+                  "_title": "Boolean Box",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                "3,0": {
+                  "_type": "Text View",
+                  "_title": ""
+                },
+                "1,2": {
+                  "_type": "Boolean Box",
+                  "_title": "Boolean Box",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                "2,2": {
+                  "_type": "Boolean Box",
+                  "_title": "",
+                  "Colors/Color when true": "#7CFC00FF",
+                  "Colors/Color when false": "#8B0000FF"
+                },
+                "3,2": {
+                  "_type": "Text View",
+                  "_title": ""
+                }
+              }
             }
           }
         }
