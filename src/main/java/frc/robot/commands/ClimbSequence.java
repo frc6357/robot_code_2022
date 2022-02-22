@@ -3,6 +3,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.ClimbConstants;
+import frc.robot.commands.subcommands.CurrentChangeCommand;
 import frc.robot.commands.subcommands.LowerSimpleArmCommand;
 import frc.robot.commands.subcommands.MoveComplexArmLiftCommand;
 import frc.robot.commands.subcommands.NeutralRaiseSimpleArmCommand;
@@ -14,6 +15,9 @@ import frc.robot.commands.subcommands.TiltSimpleArmCommand;
 import frc.robot.commands.subcommands.TimeDelayCommand;
 import frc.robot.subsystems.SK22Climb;
 
+/**
+ * Sequence of climb commands
+ */
 public final class ClimbSequence
 {
     private ClimbSequence()
@@ -57,7 +61,19 @@ public final class ClimbSequence
         return new PivotComplexArmCommand(climb, ClimbConstants.COMPLEX_PARTIAL_STRAIGHTEN);
     }
 
-    //TODO: Need command for step 4 (retract to current change)
+    /**
+     * Command sequence for climb step 4
+     * @param climb SK22Climb Subsystem
+     * @return The command containing the actions for step 4
+     */
+    public static Command getStep4(SK22Climb climb)
+    {
+        ParallelCommandGroup step4 = new ParallelCommandGroup();
+        step4.addCommands(new MoveComplexArmLiftCommand(climb, ClimbConstants.COMPLEX_FULL_RETRACT));
+        step4.addCommands(new TimeDelayCommand(ClimbConstants.STEP4_DELAY_MILLIS));
+        step4.addCommands(new CurrentChangeCommand(climb, ClimbConstants.CURRENT_THRESHOLD));
+        return step4;
+    }
 
     /**
      * Command sequence for climb step 5

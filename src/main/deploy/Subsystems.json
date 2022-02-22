@@ -4,5 +4,6 @@
     "launcher"  : false,
     "climb"     : false,
     "vision"    : false,
-    "gearshift" : false
+    "gearshift" : false,
+    "climbtest" : false,
 }

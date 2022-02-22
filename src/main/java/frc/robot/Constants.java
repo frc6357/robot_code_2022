@@ -125,6 +125,8 @@ public final class Constants
                 // Assumes the encoders are directly mounted on the wheel shafts
                 (LAUNCHER_WHEEL_DIAMETER * Math.PI)
                     / ((double) LAUNCHER_ENCODER_CPR * LAUNCH_GEAR_RATIO);
+
+        public static final double LAUNCHER_TRANSFER_SPEED = 0.75;
     }
 
     /** Constants related to Intake */
@@ -195,6 +197,9 @@ public final class Constants
         public static final long   STEP8_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
         public static final long   STEP9_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
         public static final long   STEP10_DELAY_MILLIS          = 1000; //TODO: Needs Tuning
+        public static final long   STEP4_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
+
+        public static final double CURRENT_THRESHOLD            = 1000.0; //TODO: Needs Tuning
     }
 
     /**Constants related to Vision subsystem */
