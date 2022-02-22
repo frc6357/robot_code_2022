@@ -94,7 +94,7 @@ public class SK22Climb extends SKSubsystemBase
      */
     public double getMotorCurrent()
     {
-        return complexArm.getVoltage();
+        return complexArm.getCurrent();
     }
 
     @Override

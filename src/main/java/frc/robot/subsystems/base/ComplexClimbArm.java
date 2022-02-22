@@ -97,7 +97,7 @@ public class ComplexClimbArm
      * Gets the voltage used by the ratchet motor
      * @return double value the voltage
      */
-    public double getVoltage()
+    public double getCurrent()
     {
         return complexRatchetLift.getBusVoltage();
     }
