@@ -24,44 +24,40 @@ public class SK22Transfer extends SKSubsystemBase
   private CANSparkMax exitTransferMotor;
   // This is the motor that accepts the ball from the horizontal shaft
   private CANSparkMax verticalTransferMotor;
-  // This is the motor that transfers the ball from the vertical shaft
-  // into the launcher
-  private CANSparkMax launcherTransferMotor;
 
   protected boolean isRunningTimer = false;
 
-  ColorSensor colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
+  ColorSensor  colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
   SwitchSensor exitTransferSensor;
   SwitchSensor verticalTransferSensor;
-  
+
   // private final I2C.Port i2c = Ports.i2cColorSensor;
   // private ColorSensorV3 colorsensor = new ColorSensorV3(i2c);
 
-  /** 
+  /**
    * Constructor for the ball transfer subsystem class.
    */
   public SK22Transfer()
   {
-      // TODO: This is not used by this class. Move it to the class that actually
-      // needs it (DefaultTransferCommand).
-      teamAlliance = DriverStation.getAlliance();
+    // TODO: This is not used by this class. Move it to the class that actually
+    // needs it (DefaultTransferCommand).
+    teamAlliance = DriverStation.getAlliance();
 
-      intakeTransferMotor = new CANSparkMax(Ports.INTAKE_TRANSFER_MOTOR, MotorType.kBrushless);
-      exitTransferMotor = new CANSparkMax(Ports.EXIT_TRANSFER_MOTOR, MotorType.kBrushless);
-      verticalTransferMotor = new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
-      launcherTransferMotor = new CANSparkMax(Ports.LAUNCHER_TRANSFER_MOTOR, MotorType.kBrushless);
+    intakeTransferMotor = new CANSparkMax(Ports.INTAKE_TRANSFER_MOTOR, MotorType.kBrushless);
+    exitTransferMotor = new CANSparkMax(Ports.EXIT_TRANSFER_MOTOR, MotorType.kBrushless);
+    verticalTransferMotor = new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
 
-      exitTransferSensor = new SwitchSensor(Ports.EXIT_SENSOR,
-                                            Constants.TransferConstants.EXIT_SENSONR_POLARITY);
-      verticalTransferSensor = new SwitchSensor(Ports.VERTICAL_SENSOR,
-                                                Constants.TransferConstants.VERTICAL_SENSOR_POLARITY);
+    exitTransferSensor =
+        new SwitchSensor(Ports.EXIT_SENSOR, Constants.TransferConstants.EXIT_SENSONR_POLARITY);
+    verticalTransferSensor = new SwitchSensor(Ports.VERTICAL_SENSOR,
+      Constants.TransferConstants.VERTICAL_SENSOR_POLARITY);
 
-      verticalTransferMotor.setIdleMode(IdleMode.kBrake);
-      launcherTransferMotor.setIdleMode(IdleMode.kBrake);
+    verticalTransferMotor.setIdleMode(IdleMode.kBrake);
 
-      setDefaultCommand(new DefaultTransferCommand(this));
+    setDefaultCommand(new DefaultTransferCommand(this));
   }
-// set all motors, start and stop motors, queue all data
+
+  // set all motors, start and stop motors, queue all data
   @Override
   public void periodic()
   {
@@ -71,17 +67,19 @@ public class SK22Transfer extends SKSubsystemBase
   /**
    * Set the speed of the intake-side transfer motor.
    * 
-   * @param speed Motor speed in the range [-1, 1].
+   * @param speed
+   *          Motor speed in the range [-1, 1].
    */
   public void setIntakeTransferMotor(double speed)
   {
     intakeTransferMotor.set(speed);
   }
 
-    /**
+  /**
    * Set the speed of the exit-side transfer motor.
    * 
-   * @param speed Motor speed in the range [-1, 1].
+   * @param speed
+   *          Motor speed in the range [-1, 1].
    */
   public void setExitTransferMotor(double speed)
   {
@@ -91,7 +89,8 @@ public class SK22Transfer extends SKSubsystemBase
   /**
    * Set the speed of the vertical transfer motor.
    * 
-   * @param speed Motor speed in the range [-1, 1].
+   * @param speed
+   *          Motor speed in the range [-1, 1].
    */
   public void setVerticalTransferMotor(double speed)
   {
@@ -111,16 +110,6 @@ public class SK22Transfer extends SKSubsystemBase
   // TODO: This should be owned by the launcher class now assuming its operation is
   // independent of the vertical transfer motor and is only needed to control moving
   // a ball into the launcher proper.
-
-  /**
-   * Set the speed of the launcher transfer motor.
-   * 
-   * @param speed Motor speed in the range [-1, 1].
-   */
-  public void setLauncherTransferMotor(double speed)
-  {
-    launcherTransferMotor.set(speed);
-  }
 
   /**
    * Query the current color detected by the color sensor.
@@ -147,6 +136,7 @@ public class SK22Transfer extends SKSubsystemBase
 
   /**
    * States if there is a ball in the eject part of the transfer
+   * 
    * @return Whether there is a ball in position two.
    */
   public boolean getPositionTwoPresence()
@@ -156,6 +146,7 @@ public class SK22Transfer extends SKSubsystemBase
 
   /**
    * States if there is a ball in the launcher part of the transfer
+   * 
    * @return Whether there is a ball in position three.
    */
   public boolean getPositionThreePresence()
@@ -168,18 +159,17 @@ public class SK22Transfer extends SKSubsystemBase
   // a query. What does this do? Also, I don't see anything in the
   // periodic method that updates a timer counter.
 
-  /** 
+  /**
    * Set true if the transfer timer is active
    * 
-   * The transfer timer keeps track of how many periodic method calls
-   * have occurred since the ball has begun changing its position.
-   * For example, the ball is being transfered from intake to the
-   * vertical shaft for storage. The transfer timer will be enabled
-   * and while it is enabled, the motors required for transfering
-   * the ball to that position will be active. When the timer is over,
-   * those motors will be disabled.
+   * The transfer timer keeps track of how many periodic method calls have occurred since
+   * the ball has begun changing its position. For example, the ball is being transfered
+   * from intake to the vertical shaft for storage. The transfer timer will be enabled and
+   * while it is enabled, the motors required for transfering the ball to that position
+   * will be active. When the timer is over, those motors will be disabled.
    * 
-   * @param isEnabled Unclear what this is for
+   * @param isEnabled
+   *          Unclear what this is for
    */
   public void setIsRunningTimerEnabled(boolean isEnabled)
   {
@@ -190,7 +180,7 @@ public class SK22Transfer extends SKSubsystemBase
    * 
    * @return True of the timer is enabled, False if disabled.
    */
-  public boolean getIsRunningTimerEnabled() 
+  public boolean getIsRunningTimerEnabled()
   {
     return isRunningTimer;
   }
