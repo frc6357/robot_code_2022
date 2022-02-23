@@ -35,18 +35,19 @@ public final class Constants
     {
         public static final int DISTANCE_THRESHOLD = 70;
         public static final double INTAKE_MOTOR_SPEED = 0.2;
+        // Ejects the ball out of the robot
         public static final double EXIT_MOTOR_SPEED = 0.5;
+        // Speed of the vertical section of the ball
         public static final double VERTICAL_MOTOR_SPEED = 0.2;
-        public static final double STOP_SPEED = 0.0;
+
         public static final double BALL_EJECTION_SPEED = 0.5;
-        // TODO: this low of a speed is just for testing, will change later
-        public static final double TRANSFER_BALL_VERTICAL_SHAFT_SPEED = 0.1;
-        public static final double TRANSFER_TO_LAUNCHER_SPEED = 1.0;
+        // Uses the exit motor to move ball into the vertical portion
+        public static final double LOAD_BALL_VERTICAL_SPEED = -0.1;
 
         public static final int TRANSFER_TO_VERTICAL_SHAFT_DURATION = 100;
         public static final int EJECT_DURATION = 100;
 
-        public static final boolean EXIT_SENSONR_POLARITY = false;
+        public static final boolean EXIT_SENSOR_POLARITY = false;
         public static final boolean VERTICAL_SENSOR_POLARITY = false;
     }
 
