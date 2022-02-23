@@ -38,6 +38,7 @@ import frc.robot.AutoTools.SK22CommandBuilder;
 import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.AutoTools.SK22Paths.RunJson;
 import frc.robot.commands.AcquireTargetCommand;
+import frc.robot.commands.AutomaticTransferCommand;
 import frc.robot.commands.ClimbSequence;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
@@ -134,6 +135,8 @@ public class RobotContainer
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_EXTEND);
     private final JoystickButton intakeRetractBtn      =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_RETRACT);
+    private final JoystickButton transferStartBtn  =
+            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_START);
     private final JoystickButton transferEjectBallBtn  =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_EJECT);
     private final JoystickButton transferLoadBallBtn   =
@@ -308,14 +311,14 @@ public class RobotContainer
         {
             SK22Transfer transfer = transferSubsystem.get();
 
+            transferStartBtn.whenPressed(new AutomaticTransferCommand(transfer));
+
             // Emergency override to eject balls from the horizontal transfer
-            transferEjectBallBtn.whenPressed(new EjectBallCommand(transfer, true));
-            transferEjectBallBtn.whenReleased(new EjectBallCommand(transfer, false));
+            transferEjectBallBtn.whenHeld(new EjectBallCommand(transfer), true);
 
             // Emergency override to move ball from the horizontal transfer
             // into the vertical loader.
-            transferLoadBallBtn.whenPressed(new LoadBallVerticalCommand(transfer, true));
-            transferLoadBallBtn.whenReleased(new LoadBallVerticalCommand(transfer, false));
+            transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer), true);
         }
 
         if (visionSubsystem.isPresent())
@@ -336,7 +339,7 @@ public class RobotContainer
             SK22Launcher launcher = launcherSubsystem.get();
 
             // Shoots ball(s) using the launcher
-            driveShootBtn.whenPressed(new ShootBallsCommand(launcher));
+            driveShootBtn.whenHeld(new ShootBallsCommand(launcher), true);
         }
 
         // User controls related to the climbing function.
