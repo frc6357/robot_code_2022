@@ -3,6 +3,9 @@ package frc.robot.commands.subcommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SK22Climb;
 
+/**
+ * Sets the extension arms to be in the neutral position
+ */
 public class NeutralRaiseSimpleArmCommand extends CommandBase
 {
     private final SK22Climb climb;

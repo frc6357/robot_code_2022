@@ -121,11 +121,17 @@ public class SK22Climb extends SKSubsystemBase
 
     }
 
+    /**
+     * Makes the tilt arm command go into the neutral position
+     */
     public void makeTiltSimpleArmNeutral()
     {
         simpleArm.tiltNeutral();
     }
 
+    /**
+     * Makes the lift arm command go into a neutral position
+     */
     public void makeRaiseSimpleArmNeutral()
     {
         simpleArm.liftNeutral();

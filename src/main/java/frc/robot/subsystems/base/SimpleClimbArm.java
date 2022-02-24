@@ -13,13 +13,14 @@ public class SimpleClimbArm
     private final Solenoid raisePiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
         PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_RAISE_CHANNEL);
         private final Solenoid lowerPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
-        PneumaticsModuleType.REVPH,Ports.SIMPLE_CLIMB_LOWER_CHANNEL);
+        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_LOWER_CHANNEL);
 
     private final Solenoid tiltPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
         PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_TILT_CHANNEL);
     private final Solenoid straightenPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
-        PneumaticsModuleType.REVPH,Ports.SIMPLE_CLIMB_STRAIGHTEN_CHANNEL);
+        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_STRAIGHTEN_CHANNEL);
 
+    
     /**
      * Constructor for the SimpleClimbArm
      */

@@ -3,7 +3,11 @@ package frc.robot.commands.subcommands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SK22Climb;
 
-public class NeutralTiltSimpleArmCommand extends CommandBase{
+/**
+ * Sets the tilt arm to be in the neutral position
+ */
+public class NeutralTiltSimpleArmCommand extends CommandBase 
+{
     private final SK22Climb climb;
      /**
      * Constructor for the simple arm neutral tilt command.

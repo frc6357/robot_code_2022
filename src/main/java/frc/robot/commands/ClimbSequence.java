@@ -26,7 +26,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 1 
+     * The simple arms would raise to go under the bar while the complex pivot forward so they are out of the way
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 1 
      */
@@ -39,7 +39,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 2
+     * Once under the bar the simple arm will lower picking the robot up while the complex would extend past the arm
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 2
      */
@@ -52,7 +52,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 3
+     * The complex arm would pivot downwards to the bar
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 3
      */
@@ -62,7 +62,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 4
+     * The complex arms would retract slowly and ratchet until the current threshold is meet
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 4
      */
@@ -76,7 +76,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 5
+     * Once the arm hits it would retract quickly and straighten the complex arms. The simple will be put into neutral
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 5
      */
@@ -93,7 +93,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 6
+     * The simple arm would raise to be released from the first bar
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 6
      */
@@ -106,7 +106,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 7
+     * The simple arm would tilt back so it can be released from the first bar
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 7
      */
@@ -119,7 +119,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 8
+     * The simple arm would be lowered for arm clearence
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 8
      */
@@ -132,20 +132,21 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 9
+     * Pressure would released from the simple arm and the arm would also be straightened
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 9
      */
     public static Command getStep9(SK22Climb climb)
     {
         ParallelCommandGroup step9 = new ParallelCommandGroup();
+        //TODO: Check if this would be the correct command to use in this situation
         step9.addCommands(new NeutralRaiseSimpleArmCommand(climb));
         step9.addCommands(new StraightenSimpleArmCommand(climb));
         return step9;
     }
 
     /**
-     * Command sequence for climb step 10
+     * The simple arm would be lowered down so to raise the robot/
      * @param climb SK22Climb Subsystem
      * @return The command containing the actions for step 10
      */
@@ -158,7 +159,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 11
+     * Partaily extend the arm so it has clearence
      * @param climb SK22Climb Subsystem
      * @return The command containing the action for step 11
      */
@@ -168,7 +169,7 @@ public final class ClimbSequence
     }
 
     /**
-     * Command sequence for climb step 12
+     * Pivot the complex arm backwards so it can go underneath the bar
      * @param climb SK22Climb Subsystem
      * @return The command containing the action for step 12
      */
@@ -178,7 +179,7 @@ public final class ClimbSequence
     }
     
     /**
-     * Command sequence for climb step 13
+     * Pivot arm forwards so it would be in the same situation as it was before.
      * @param climb SK22Climb Subsystem
      * @return The command containing the action for step 13
      */
