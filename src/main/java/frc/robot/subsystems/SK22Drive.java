@@ -103,6 +103,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
         SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
         SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
+        SmartDashboard.putNumber("Left Wheel Pulses", leftMotorEncoder.getPositionPulses());
         SmartDashboard.putNumber("Gyro Angle", this.getHeading());
     }
     
