@@ -36,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.SK22CommandBuilder;
 import frc.robot.AutoTools.TrajectoryBuilder;
+import frc.robot.AutoTools.SK22Paths.Drive1mForwardBackward;
 import frc.robot.AutoTools.SK22Paths.RunJson;
 import frc.robot.commands.AcquireTargetCommand;
 import frc.robot.commands.AutomaticTransferCommand;
@@ -403,6 +404,7 @@ public class RobotContainer
         splineCommandSelector.setDefaultOption(firstJSON, segmentCreator.getTrajectory(firstJSON));
 
         autoCommandSelector.addOption("Run Json", new RunJson(splineCommandSelector));
+        autoCommandSelector.addOption("1m forwards backwards", new Drive1mForwardBackward());
 
         // Checking dependencies for autos before giving option to run
         // Adds a majority of autos that have multiple segments

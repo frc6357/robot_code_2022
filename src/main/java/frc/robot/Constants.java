@@ -61,18 +61,18 @@ public final class Constants
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS =
                 new DifferentialDriveKinematics(TRACKWIDTH);
 
-        public static final double GEAR_REDUCTION             = (72.0 / 22.0);
+        public static final double GEAR_REDUCTION             = 12.27;
         public static final int    ENCODER_CPR                = 2048;
         public static final double WHEEL_DIAMETER             = 0.1524;    // 6" in Meters
         public static final double ENCODER_DISTANCE_PER_PULSE =
                 // Assumes the encoders are directly mounted on the wheel shafts
                 (WHEEL_DIAMETER * Math.PI) / ((double) ENCODER_CPR * GEAR_REDUCTION);
 
-        // Data taken from characterization analysis on 02/23/2022
-        public static final double KS                = 0.61823;     // Volts
-        public static final double KV                = 0.74525;     // Volt Seconds Per Meter
-        public static final double KA                = 0.061925;    // Volt Seconds Squared Per Meter
-        public static final double KP_DRIVE_VELOCITY = 0.88364;
+        // Data taken from characterization analysis on 03/02/2021
+        public static final double KS                = 0.651; // Volts
+        public static final double KV                = 2.3;   // Volt Seconds Per Meter
+        public static final double KA                = 0.217; // Volt Seconds Squared Per Meter
+        public static final double KP_DRIVE_VELOCITY = 2.26;
 
         public static final double DEADBAND_TURN    = 0.01;
         public static final double SLEW_FILTER_RATE = 2;     // per second
@@ -95,7 +95,10 @@ public final class Constants
                 new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA);
         public static final SimpleMotorFeedforward SIMPLE_MOTOR_FEEDFORWARD =
                 new SimpleMotorFeedforward(DriveConstants.KS, DriveConstants.KV, DriveConstants.KA);
-        public static final PIDController          PID_CONTROLLER           =
+
+        public static final PIDController          PID_CONTROLLER_LEFT           =
+                new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0);
+        public static final PIDController          PID_CONTROLLER_RIGHT           =
                 new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0);
     }
 

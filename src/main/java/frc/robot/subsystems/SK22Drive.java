@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,6 +63,8 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private NetworkTableEntry speedControllerGroupLeftEntry;
     private NetworkTableEntry speedControllerGroupRightEntry;
 
+    private Field2d field = new Field2d();
+
     private boolean reversed = false;
 
     /**
@@ -103,8 +106,10 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
         SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
         SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
-        SmartDashboard.putNumber("Left Wheel Pulses", leftMotorEncoder.getPositionPulses());
         SmartDashboard.putNumber("Gyro Angle", this.getHeading());
+
+        field.setRobotPose(odometry.getPoseMeters());
+        SmartDashboard.putData("Field", field);
     }
     
     /**
@@ -312,8 +317,8 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     {
         RamseteCommand ramseteCommand = new RamseteCommand(trajectory, this::getPose,
             AutoConstants.RAMSETE_CONTROLLER, AutoConstants.SIMPLE_MOTOR_FEEDFORWARD,
-            DriveConstants.DRIVE_KINEMATICS, this::getWheelSpeeds, AutoConstants.PID_CONTROLLER,
-            AutoConstants.PID_CONTROLLER,
+            DriveConstants.DRIVE_KINEMATICS, this::getWheelSpeeds, AutoConstants.PID_CONTROLLER_LEFT,
+            AutoConstants.PID_CONTROLLER_RIGHT,
             // RamseteCommand passes volts to the callback
             this::tankDriveVolts, this);
 

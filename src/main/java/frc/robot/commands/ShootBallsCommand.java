@@ -32,6 +32,9 @@ public class ShootBallsCommand extends CommandBase
     {
         // Turn on the launcher transfer motor.
         launcher.setLauncherTransferMotor(Constants.LauncherConstants.LAUNCHER_TRANSFER_SPEED);
+        // TODO: Remove this; Testing launcher direction only
+        launcher.setLauncherRPM(6000);
+        launcher.enableLauncher();
     }
 
     @Override
@@ -45,6 +48,7 @@ public class ShootBallsCommand extends CommandBase
     {
         // Turn on the launcher transfer motor.
         launcher.setLauncherTransferMotor(0.0);
+        launcher.disableLauncher();
     }
 
     @Override
