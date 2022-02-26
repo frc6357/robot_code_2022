@@ -45,6 +45,7 @@ public class SK22Launcher extends SubsystemBase
     ballLauncher2.setInverted(false);
 
     launcherTransferMotor.setIdleMode(IdleMode.kBrake);
+    launcherTransferMotor.setInverted(true);
 
     launcher =
         new Launcher(launcherGroup, motorEncoder1, Constants.LauncherConstants.LAUNCH_GEAR_RATIO,

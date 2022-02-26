@@ -57,8 +57,6 @@ public class Launcher
   {
     double launcherRPM = getLauncherRPM();
 
-    System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
-
     if (launcherEnabled || (targetRPM == 0.0))
     {
       motorControllerGroup.set(controller.calculate(launcherRPM, targetRPM));

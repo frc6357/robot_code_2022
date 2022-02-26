@@ -78,6 +78,7 @@ public class SK22CommandBuilder
         autoPaths.add(new FourBallTerminal2BLHHH());
         autoPaths.add(new FourBallTerminalRadial1AHHHH());
         autoPaths.add(new FourBallTerminalRadial2BHHHH());
+        autoPaths.add(new Drive1mForwardBackward());
 
     }
 
@@ -127,7 +128,7 @@ public class SK22CommandBuilder
 
         displayMethod.addOption("Drive canned path", new DriveSplineCanned());
 
-        if (possibleAutos.contains("Drive1mForwardBackward"))
+        if (possibleAutos.contains("Drive1mForwardsBackwards"))
         {
             displayMethod.addOption("Drive forwards then backwards 1m",
                 new Drive1mForwardBackward());

@@ -38,7 +38,7 @@ public final class Constants
         // Ejects the ball out of the robot
         public static final double EXIT_MOTOR_SPEED = 0.5;
         // Speed of the vertical section of the ball
-        public static final double VERTICAL_MOTOR_SPEED = 0.2;
+        public static final double VERTICAL_MOTOR_SPEED = 1.0;
 
         public static final double BALL_EJECTION_SPEED = 0.5;
         // Uses the exit motor to move ball into the vertical portion
@@ -57,13 +57,13 @@ public final class Constants
         public static final boolean LEFT_ENCODER_REVERSED  = false;
         public static final boolean RIGHT_ENCODER_REVERSED = true;
 
-        public static final double                      TRACKWIDTH       = 0.69;   // Meters
+        public static final double                      TRACKWIDTH       = 0.635;   // Meters
         public static final DifferentialDriveKinematics DRIVE_KINEMATICS =
                 new DifferentialDriveKinematics(TRACKWIDTH);
 
-        public static final double GEAR_REDUCTION             = 12.412;
+        public static final double GEAR_REDUCTION             = 12.27;
         public static final int    ENCODER_CPR                = 2048;
-        public static final double WHEEL_DIAMETER             = 0.18375;    // Meters
+        public static final double WHEEL_DIAMETER             = 0.1524;    // 6" in Meters
         public static final double ENCODER_DISTANCE_PER_PULSE =
                 // Assumes the encoders are directly mounted on the wheel shafts
                 (WHEEL_DIAMETER * Math.PI) / ((double) ENCODER_CPR * GEAR_REDUCTION);
@@ -72,7 +72,7 @@ public final class Constants
         public static final double KS                = 0.651; // Volts
         public static final double KV                = 2.3;   // Volt Seconds Per Meter
         public static final double KA                = 0.217; // Volt Seconds Squared Per Meter
-        public static final double KP_DRIVE_VELOCITY = 2.26;  // TODO: Check units for this value
+        public static final double KP_DRIVE_VELOCITY = 2.26;
 
         public static final double DEADBAND_TURN    = 0.01;
         public static final double SLEW_FILTER_RATE = 2;     // per second
@@ -95,7 +95,10 @@ public final class Constants
                 new RamseteController(AutoConstants.RAMSETE_B, AutoConstants.RAMSETE_ZETA);
         public static final SimpleMotorFeedforward SIMPLE_MOTOR_FEEDFORWARD =
                 new SimpleMotorFeedforward(DriveConstants.KS, DriveConstants.KV, DriveConstants.KA);
-        public static final PIDController          PID_CONTROLLER           =
+
+        public static final PIDController          PID_CONTROLLER_LEFT           =
+                new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0);
+        public static final PIDController          PID_CONTROLLER_RIGHT           =
                 new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0);
     }
 
@@ -127,7 +130,7 @@ public final class Constants
                 (LAUNCHER_WHEEL_DIAMETER * Math.PI)
                     / ((double) LAUNCHER_ENCODER_CPR * LAUNCH_GEAR_RATIO);
 
-        public static final double LAUNCHER_TRANSFER_SPEED = 0.75;
+        public static final double LAUNCHER_TRANSFER_SPEED = 1;
     }
 
     /** Constants related to Intake */
