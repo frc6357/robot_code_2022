@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
@@ -154,6 +156,8 @@ public class RobotContainer
     private final DefaultTankDriveCommand   tankDrive   =
             new DefaultTankDriveCommand(driveSubsystem, driverLeftJoystick, driverRightJoystick);
 
+    private VideoSink server;
+
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -227,12 +231,10 @@ public class RobotContainer
             camera2.setResolution(240, 240);
             camera2.setFPS(15);
 
-            cameraSelection =
-                    NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
+            server = CameraServer.getServer();
 
-            // to change camera displayed feed later on, use the following code
-            // cameraSelection.setString(camera2.getName());
-            // cameraSelection.setString(camera1.getName());
+            camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+            camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
         }
     }
 
@@ -278,9 +280,9 @@ public class RobotContainer
         // Sets the "directionality" of the robot
         // Sets both the direction controls and the camera selection
         reverseOffBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(false))
-            .whenPressed(() -> cameraSelection.setString(camera1.getName()));
+            .whenPressed(() -> server.setSource(camera1));
         reverseOnBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(true))
-            .whenPressed(() -> cameraSelection.setString(camera2.getName()));
+            .whenPressed(() -> server.setSource(camera2));
 
         // Drive train gearshift is controlled by a separate subsystem so that we
         // can run the robot even when the pneumatics are not connected.
