@@ -14,6 +14,8 @@ public class Launcher
   private final MotorEncoder motorEncoder1;
   // private final MotorEncoder motorEncoder2;
 
+  private double motorOutput;
+
   private final PIDController Controller;
 
   private final double gearRatio;
@@ -37,11 +39,16 @@ public class Launcher
     // System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
 
     SmartDashboard.putNumber("Launcher RPM", launcherRPM);
-    SmartDashboard.putNumber("Launcher Set Point", targetRPM);
+    
 
     if(launcherEnabled || (targetRPM == 0.0))
     {
-      motorControllerGroup.set(Controller.calculate(launcherRPM, targetRPM));
+      
+      motorOutput = Controller.calculate(launcherRPM, targetRPM);
+      if(motorOutput < 0.0){
+        motorOutput = 0.0;
+      }
+      motorControllerGroup.set(motorOutput);
     }
     else
     {
@@ -58,6 +65,15 @@ public class Launcher
   public void enableLauncher() 
   {
     launcherEnabled = true;
+  }
+
+  public void resetController(double kP, double kI, double kD){
+    Controller.setPID(kP, kI, kD);
+    
+  }
+
+  public void reset(){
+    Controller.reset();
   }
 
   /**
