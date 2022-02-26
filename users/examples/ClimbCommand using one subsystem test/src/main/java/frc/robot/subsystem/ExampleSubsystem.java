@@ -1,6 +1,8 @@
 package frc.robot.subsystem;
 
-public class ExampleSubsystem {
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class ExampleSubsystem extends SubsystemBase{
 
     public ExampleSubsystem(){
 
@@ -9,7 +11,5 @@ public class ExampleSubsystem {
         System.out.println("Did something One");
     }
 
-    public void doSomethingTwo(){
-        System.out.println("Did something Two");
-    }
+    
 }
