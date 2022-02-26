@@ -115,9 +115,9 @@ public final class Constants
         public static final int HIGHT_SPEED_PRESET = 3600;
         public static final int MAX_SPEED_PRESET   = 4200;
 
-        public static final double LAUNCHER_KP = 0.0005;
-        public static final double LAUNCHER_KI = 0.0004;
-        public static final double LAUNCHER_KD = 0.0;
+        public static final double LAUNCHER_KP = 0.0003;
+        public static final double LAUNCHER_KI = 0.0008;
+        public static final double LAUNCHER_KD = 0.0001;
 
         public static final int    LAUNCHER_ENCODER_CPR    = 2048;
         public static final double LAUNCH_GEAR_RATIO       = 24.0 / 16.0;

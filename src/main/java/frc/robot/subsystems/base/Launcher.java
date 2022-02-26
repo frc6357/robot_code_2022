@@ -1,6 +1,7 @@
 package frc.robot.subsystems.base;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 
 /**
@@ -57,9 +58,18 @@ public class Launcher
   {
     double launcherRPM = getLauncherRPM();
 
-    if (launcherEnabled || (targetRPM == 0.0))
+    // System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
+
+    SmartDashboard.putNumber("Launcher RPM", launcherRPM);
+    
+    if(launcherEnabled || (targetRPM == 0.0))
     {
-      motorControllerGroup.set(controller.calculate(launcherRPM, targetRPM));
+      
+      double motorOutput = controller.calculate(launcherRPM, targetRPM);
+      if(motorOutput < 0.0){
+        motorOutput = 0.0;
+      }
+      motorControllerGroup.set(motorOutput);
     }
     else
     {
@@ -76,6 +86,15 @@ public class Launcher
   public void enableLauncher() 
   {
     launcherEnabled = true;
+  }
+
+  public void resetController(double kP, double kI, double kD){
+    controller.setPID(kP, kI, kD);
+    
+  }
+
+  public void reset(){
+    controller.reset();
   }
 
   /**
@@ -111,7 +130,7 @@ public class Launcher
    */
   public double getCurMotorRPM() 
   {
-    if (isLauncherEnabled()) 
+    if(isLauncherEnabled()) 
     {
       return targetRPM;
     } 
