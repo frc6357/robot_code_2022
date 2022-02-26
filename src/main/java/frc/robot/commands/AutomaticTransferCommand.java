@@ -1,9 +1,17 @@
 package frc.robot.commands;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.revrobotics.CANSparkMax;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
+import frc.robot.Constants.TransferConstants;
 import frc.robot.subsystems.SK22Transfer;
-import frc.robot.utils.TimerType;
+import frc.robot.utils.TimerShtuff.TimerBase;
+import frc.robot.utils.TimerShtuff.TimerType;
+import frc.robot.utils.TimerShtuff.VerticalTimer;
 
 /**
  * Command to automatically manage moving balls through the transfer subsystem.
@@ -16,6 +24,8 @@ public class AutomaticTransferCommand extends CommandBase
     private int timerElapsed = 0;
 
     private TimerType timerType;
+
+    private TimerBase curTimer;
 
     /**
      * Constructor for the default transfer command
@@ -34,7 +44,7 @@ public class AutomaticTransferCommand extends CommandBase
     public void initialize()
     {
         transfer.setIntakeTransferMotor(-1.0);
-        transfer.setVerticalTransferMotor(Constants.TransferConstants.LOAD_BALL_VERTICAL_SPEED);
+        // transfer.setVerticalTransferMotor(Constants.TransferConstants.LOAD_BALL_VERTICAL_SPEED);
 
         // TODO: just for testing
         verticalFull = false;
@@ -61,22 +71,33 @@ public class AutomaticTransferCommand extends CommandBase
                 {
                     // Transfer ball to the vertical hold
                     timerType = TimerType.VERTICAL;
-                    transfer.setIsRunningTimerEnabled(true);
 
-                    transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
+                    if(curTimer == null)
+                    {
+                        List<CANSparkMax> motors = new ArrayList<>();
+                        List<Double> speeds = new ArrayList<>();
+
+                        motors.add(transfer.getIntakeTransferMotor());
+                        motors.add(transfer.getExitTransferMotor());
+                        motors.add(transfer.getVerticalShaftMotor());
+
+                        // curTimer = new VerticalTimer();
+                    }
+
+                    transfer.setTimerState(true);
+
+                    // transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
                 }
                 else if (transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled())
                 {
-                    transfer.setIsRunningTimerEnabled(false);
+                    transfer.setTimerState(false);
                     updateTimer();
                 }
             }
             else
             {
                 timerType = TimerType.EJECT;
-                transfer.setIsRunningTimerEnabled(true);
-
-                transfer.setExitTransferMotor(Constants.TransferConstants.EXIT_MOTOR_SPEED);
+                transfer.setTimerState(true);
             }
         }
 
@@ -99,7 +120,12 @@ public class AutomaticTransferCommand extends CommandBase
     {
         if (timerType == TimerType.VERTICAL)
         {
-            if (timerElapsed < Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION
+            if(timerElapsed == 0)
+            {
+                transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
+                timerElapsed++;
+            }
+            else if (timerElapsed < Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION
                 && transfer.getIsRunningTimerEnabled())
             {
                 timerElapsed++;
@@ -107,7 +133,7 @@ public class AutomaticTransferCommand extends CommandBase
             else if (timerElapsed >= Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION)
             {
                 timerElapsed = 0;
-                transfer.setIsRunningTimerEnabled(false);
+                transfer.setTimerState(false);
 
                 transfer.setExitTransferMotor(0);
             }
@@ -120,7 +146,12 @@ public class AutomaticTransferCommand extends CommandBase
         }
         else
         {
-            if (timerElapsed < Constants.TransferConstants.EJECT_DURATION
+            if(timerElapsed == 0) 
+            {
+                transfer.setExitTransferMotor(Constants.TransferConstants.EXIT_MOTOR_SPEED);
+                timerElapsed++;
+            }
+            else if (timerElapsed < Constants.TransferConstants.EJECT_DURATION
                 && transfer.getIsRunningTimerEnabled())
             {
                 timerElapsed++;
@@ -128,7 +159,7 @@ public class AutomaticTransferCommand extends CommandBase
             else if (timerElapsed >= Constants.TransferConstants.EJECT_DURATION)
             {
                 timerElapsed = 0;
-                transfer.setIsRunningTimerEnabled(false);
+                transfer.setTimerState(false);
 
                 transfer.setExitTransferMotor(0);
             }

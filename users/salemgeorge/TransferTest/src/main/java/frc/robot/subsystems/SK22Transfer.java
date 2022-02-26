@@ -96,7 +96,7 @@ public class SK22Transfer extends SKSubsystemBase
   // and while it is enabled, the motors required for transfering
   // the ball to that position will be active. When the timer is over,
   // those motors will be disabled.
-  public void setIsRunningTimerEnabled(boolean isEnabled)
+  public void setTimerState(boolean isEnabled)
   {
     isRunningTimer = isEnabled;
   }

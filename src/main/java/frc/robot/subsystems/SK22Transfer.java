@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import javax.print.CancelablePrintJob;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -101,10 +103,25 @@ public class SK22Transfer extends SKSubsystemBase
         verticalTransferMotor.set(speed);
     }
 
+    public CANSparkMax getIntakeTransferMotor()
+    {
+        return intakeTransferMotor;
+    }
+
+    public CANSparkMax getExitTransferMotor()
+    {
+        return exitTransferMotor;
+    }
+
+    public CANSparkMax getVerticalShaftMotor()
+    {
+        return verticalTransferMotor;
+    }
+
     /**
      * Query whether the vertical transfer motor is running.
      * 
-     * @return true if the motor has non-zero speec, false otherwise.
+     * @return true if the motor has non-zero speed, false otherwise.
      */
     public boolean getVerticalTransferMotorEnabled()
     {
@@ -176,7 +193,7 @@ public class SK22Transfer extends SKSubsystemBase
      * @param isEnabled
      *            Unclear what this is for
      */
-    public void setIsRunningTimerEnabled(boolean isEnabled)
+    public void setTimerState(boolean isEnabled)
     {
         isRunningTimer = isEnabled;
     }
