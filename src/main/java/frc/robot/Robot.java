@@ -125,6 +125,12 @@ public class Robot extends TimedRobot
     }
 
     @Override
+    public void teleopExit()
+    {
+        
+    }
+
+    @Override
     public void testInit()
     {
         TestModeManager.initializeTestMode();

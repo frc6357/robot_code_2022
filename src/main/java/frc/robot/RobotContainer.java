@@ -341,6 +341,8 @@ public class RobotContainer
 
             // Shoots ball(s) using the launcher
             driveShootBtn.whenHeld(new ShootBallsCommand(launcher), true);
+            launcher.setLauncherRPM(0.0);
+            launcher.enableLauncher();
         }
 
         // User controls related to the climbing function.
@@ -384,6 +386,14 @@ public class RobotContainer
     {
         driveSubsystem.resetEncoders();
         driveSubsystem.resetGyro();
+    }
+
+    public void disableLauncher(){
+        if (launcherSubsystem.isPresent())
+        {
+            SK22Launcher launcher = launcherSubsystem.get();
+            launcher.disableLauncher();
+        }
     }
 
     /**

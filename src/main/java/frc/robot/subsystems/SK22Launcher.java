@@ -44,6 +44,8 @@ public class SK22Launcher extends SubsystemBase
     ballLauncher2.setNeutralMode(NeutralMode.Coast);
     ballLauncher2.setInverted(false);
 
+    SmartDashboard.putNumber("Launcher Setpoint RPM", 0.0);
+
     launcherTransferMotor.setIdleMode(IdleMode.kBrake);
     launcherTransferMotor.setInverted(true);
 
@@ -51,6 +53,8 @@ public class SK22Launcher extends SubsystemBase
         new Launcher(launcherGroup, motorEncoder1, Constants.LauncherConstants.LAUNCH_GEAR_RATIO,
           Constants.LauncherConstants.LAUNCHER_ENCODER_CPR, Constants.LauncherConstants.LAUNCHER_KP,
           Constants.LauncherConstants.LAUNCHER_KI, Constants.LauncherConstants.LAUNCHER_KD);
+
+    launcher.setTargetMotorRPM(0.0);
   }
 
   @Override
@@ -62,7 +66,8 @@ public class SK22Launcher extends SubsystemBase
     double speed = launcher.getCurMotorRPM();
 
     SmartDashboard.putNumber("Launcher RPM", speed);
-    SmartDashboard.putNumber("Launcher Setpoint RPM", setpoint);
+    setpoint = SmartDashboard.getNumber("Launcher Setpoint RPM", setpoint);
+    launcher.setTargetMotorRPM(setpoint);
   }
 
   @Override
