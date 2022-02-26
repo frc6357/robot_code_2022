@@ -49,9 +49,9 @@ public class ThreeBallTerminal2A implements AutoPaths
         return new SequentialCommandGroup(
             new ParallelCommandGroup(new DoNothingCommand(), new DoNothingCommand(),
                 trajectoryCreator
-                    .createTrajectory(segmentCreator.getTrajectory("Low to Ball 2 (LH)"), true)),
+                    .createTrajectory(segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true)),
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Ball 2 to Terminal"),
-                false),
+                true),
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Terminal to Shoot"),
                 false),
             new DoNothingCommand());
