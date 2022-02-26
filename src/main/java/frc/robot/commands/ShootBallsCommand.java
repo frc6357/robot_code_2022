@@ -46,7 +46,6 @@ public class ShootBallsCommand extends CommandBase
     {
         // Turn on the launcher transfer motor.
         launcher.setLauncherTransferMotor(0.0);
-        launcher.disableLauncher();
     }
 
     @Override

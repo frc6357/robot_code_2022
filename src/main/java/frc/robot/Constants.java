@@ -34,7 +34,7 @@ public final class Constants
     public static final class TransferConstants
     {
         public static final int DISTANCE_THRESHOLD = 70;
-        public static final double INTAKE_MOTOR_SPEED = 0.2;
+        public static final double INTAKE_MOTOR_SPEED = 0.5;
         // Ejects the ball out of the robot
         public static final double EXIT_MOTOR_SPEED = 0.5;
         // Speed of the vertical section of the ball
@@ -42,7 +42,7 @@ public final class Constants
 
         public static final double BALL_EJECTION_SPEED = 0.5;
         // Uses the exit motor to move ball into the vertical portion
-        public static final double LOAD_BALL_VERTICAL_SPEED = -0.1;
+        public static final double LOAD_BALL_VERTICAL_SPEED = -0.5;
 
         public static final int TRANSFER_TO_VERTICAL_SHAFT_DURATION = 100;
         public static final int EJECT_DURATION = 100;
@@ -130,7 +130,7 @@ public final class Constants
                 (LAUNCHER_WHEEL_DIAMETER * Math.PI)
                     / ((double) LAUNCHER_ENCODER_CPR * LAUNCH_GEAR_RATIO);
 
-        public static final double LAUNCHER_TRANSFER_SPEED = 1;
+        public static final double LAUNCHER_TRANSFER_SPEED = 1.0;
     }
 
     /** Constants related to Intake */

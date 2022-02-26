@@ -63,7 +63,7 @@ public class SK22Launcher extends SubsystemBase
     // This method will be called once per scheduler run
     launcher.update();
     double setpoint = launcher.getTargetMotorRPM();
-    double speed = launcher.getCurMotorRPM();
+    double speed = launcher.getLauncherRPM();
 
     SmartDashboard.putNumber("Launcher RPM", speed);
     setpoint = SmartDashboard.getNumber("Launcher Setpoint RPM", setpoint);
