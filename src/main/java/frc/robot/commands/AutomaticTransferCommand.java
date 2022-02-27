@@ -77,11 +77,21 @@ public class AutomaticTransferCommand extends CommandBase
                         List<CANSparkMax> motors = new ArrayList<>();
                         List<Double> speeds = new ArrayList<>();
 
+                        // TODO: While this (grabbing the motor controllers from the
+                        // subsystem and manipulating them directly) will work, it gives
+                        // me the shivers since you now have 2 separate classes independently
+                        // manipulating the low level objects and this feels horribly
+                        // wrong and potentially dangerous. I would be 100% happier if you
+                        // called transfer class methods to manipulate the motors so that
+                        // only one object interacts with them directly and can, hence,
+                        // track their state.
                         motors.add(transfer.getIntakeTransferMotor());
                         motors.add(transfer.getExitTransferMotor());
                         motors.add(transfer.getVerticalShaftMotor());
 
                         // curTimer = new VerticalTimer();
+                        // TODO: I suspect this is incomplete and that you intend to do
+                        // something with the motors you just queried?
                     }
 
                     transfer.setTimerState(true);
