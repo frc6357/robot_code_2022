@@ -12,7 +12,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.ADIS16448_IMU;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -49,7 +49,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private final MotorControllerGroup rightGroup        =
             new MotorControllerGroup(rightLeader, rightFollower);
 
-    private final ADIS16448_IMU gyro = new ADIS16448_IMU();
+    private final ADIS16470_IMU gyro = new ADIS16470_IMU();
 
     private final DifferentialDrive         drive;
     private final DifferentialDriveOdometry odometry;
@@ -63,8 +63,6 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private NetworkTableEntry speedControllerGroupLeftEntry;
     private NetworkTableEntry speedControllerGroupRightEntry;
 
-    private Field2d field = new Field2d();
-
     private boolean reversed = false;
 
     /**
@@ -73,7 +71,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     public SK22Drive()
     {
         resetEncoders();
-        gyro.reset();
+        resetGyro();
 
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getHeading()));
         leftLeader.setNeutralMode(NeutralMode.Brake);
@@ -99,17 +97,14 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
         double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
         // Update the odometry in the periodic block
-        odometry.update(Rotation2d.fromDegrees(this.getHeading()), leftEncoderDistanceMeters,
+        odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoderDistanceMeters,
             rightEncoderDistanceMeters);
 
-            SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
+        SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
         SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
         SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
         SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
-        SmartDashboard.putNumber("Gyro Angle", this.getHeading());
-
-        field.setRobotPose(odometry.getPoseMeters());
-        SmartDashboard.putData("Field", field);
+        SmartDashboard.putNumber("Gyro Angle", getHeading());
     }
     
     /**
@@ -271,7 +266,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
      */
     public double getTurnRate()
     {
-        return -gyro.getRate();
+        return gyro.getRate();
     }
 
     @Override
