@@ -22,6 +22,7 @@ class Datagram{
     long frameID;
     long timestamp;
     int distance;
+    int adjVal;
     int horiAngle;
     int vertAngle;
     long reserved;
@@ -46,6 +47,9 @@ class Datagram{
 
         short distanceSigned = byteBuffer.getShort();
         distance = Short.toUnsignedInt(distanceSigned);
+
+        byte adjValSigned = byteBuffer.get();
+        adjVal = Byte.toUnsignedInt(adjValSigned);
 
         horiAngle = byteBuffer.getShort();
         vertAngle = byteBuffer.getShort();
@@ -169,9 +173,12 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable {
             packetDatagram = new Datagram(packetBuffer);
             if (packetDatagram.validPacket)
             {
-                SmartDashboard.putNumber("Distance",            packetDatagram.distance);
-                SmartDashboard.putNumber("Horizontal Angle",    packetDatagram.horiAngle);
-                SmartDashboard.putNumber("Vertical Angle",      packetDatagram.vertAngle);
+                SmartDashboard.putNumber("Distance",            packetDatagram.distance/(Math.pow(10, packetDatagram.adjVal)));
+                SmartDashboard.putNumber("Horizontal Angle",    packetDatagram.horiAngle/100);
+                SmartDashboard.putNumber("Vertical Angle",      packetDatagram.vertAngle/100);
+                // System.out.println("Distance: " + packetDatagram.distance);
+                // System.out.println("Horizontal Angle: " + packetDatagram.horiAngle);
+                // System.out.println("Vertical Angle: " + packetDatagram.vertAngle);
             }
         }
     }   

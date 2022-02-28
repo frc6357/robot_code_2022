@@ -73,37 +73,38 @@ public class SK21Drive extends SKSubsystemBase implements AutoCloseable
     {
         resetEncoders();
         gyro.reset();
+        drive = null;
+        odometry = null;
+        // odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getHeading()));
+        // leftLeader.setNeutralMode(NeutralMode.Brake);
+        // leftFollower.setNeutralMode(NeutralMode.Brake);
+        // rightLeader.setNeutralMode(NeutralMode.Brake);
+        // rightFollower.setNeutralMode(NeutralMode.Brake);
 
-        odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getHeading()));
-        leftLeader.setNeutralMode(NeutralMode.Brake);
-        leftFollower.setNeutralMode(NeutralMode.Brake);
-        rightLeader.setNeutralMode(NeutralMode.Brake);
-        rightFollower.setNeutralMode(NeutralMode.Brake);
+        // // The 2022 version of DifferentialDrive no longer automatically inverts one
+        // // side of the robot so we need to do this ourselves.
+        // rightGroup.setInverted(true);
 
-        // The 2022 version of DifferentialDrive no longer automatically inverts one
-        // side of the robot so we need to do this ourselves.
-        rightGroup.setInverted(true);
-
-        drive = new DifferentialDrive(leftGroup, rightGroup);
-        drive.setDeadband(DriveConstants.DEADBAND_TURN);
+        // drive = new DifferentialDrive(leftGroup, rightGroup);
+        // drive.setDeadband(DriveConstants.DEADBAND_TURN);
     }
 
     @Override
     public void periodic()
     {
-        double leftEncoderDistanceMeters = leftMotorEncoder.getPositionMeters();
-        double rightEncoderDistanceMeters = rightMotorEncoder.getPositionMeters();
-        double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
-        double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
-        // Update the odometry in the periodic block
-        odometry.update(Rotation2d.fromDegrees(this.getHeading()), leftEncoderDistanceMeters,
-            rightEncoderDistanceMeters);
+        // double leftEncoderDistanceMeters = leftMotorEncoder.getPositionMeters();
+        // double rightEncoderDistanceMeters = rightMotorEncoder.getPositionMeters();
+        // double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
+        // double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
+        // // Update the odometry in the periodic block
+        // odometry.update(Rotation2d.fromDegrees(this.getHeading()), leftEncoderDistanceMeters,
+        //     rightEncoderDistanceMeters);
 
-        SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
-        SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
-        SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
-        SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
-        SmartDashboard.putNumber("Gyro Angle", this.getHeading());
+        // SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
+        // SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
+        // SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
+        // SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
+        // SmartDashboard.putNumber("Gyro Angle", this.getHeading());
     }
 
     /**
