@@ -1,7 +1,7 @@
 package frc.robot.commands.subcommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SK22Climb;
+import frc.robot.subsystems.SK22ComplexClimb;
 
 /**
  * A command that causes the simple climb arm to be moved to the tilted position.
@@ -9,7 +9,7 @@ import frc.robot.subsystems.SK22Climb;
 public class CurrentChangeCommand extends CommandBase 
 {
 
-    private final SK22Climb climb;
+    private final SK22ComplexClimb climb;
 
     private double threshold;
 
@@ -21,7 +21,7 @@ public class CurrentChangeCommand extends CommandBase
      * @param climb The climb subsystem on which the command operates.
      * @param threshold The current level on which we should stop the ratchet.
      */
-    public CurrentChangeCommand(SK22Climb climb, double threshold)
+    public CurrentChangeCommand(SK22ComplexClimb climb, double threshold)
     {
         this.climb = climb;
         this.threshold = threshold;

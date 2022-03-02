@@ -12,7 +12,8 @@ public class SubsystemControls
     private final boolean intake;
     private final boolean launcher;
     private final boolean transfer;
-    private final boolean climb;
+    private final boolean complexClimb;
+    private final boolean simpleClimb;
     private final boolean vision;
     private final boolean gearshift;
     private final boolean climbtest;
@@ -26,8 +27,10 @@ public class SubsystemControls
      *            indicates if the launcher system is present and should be enabled
      * @param transfer
      *            indictes if the indexer system is present and should be enabled
-     * @param climb
-     *            indicates if the climb system is present and should be enabled
+     * @param complexClimb
+     *            indicates if the complexClimb system is present and should be enabled
+     * @param simpleClimb
+     *            indicates if the simpleClimb system is present and should be enabled
      * @param vision
      *           indicates if the vision system is present and should be enabled
      * @param gearshift
@@ -41,8 +44,10 @@ public class SubsystemControls
                                 boolean transfer,
                             @JsonProperty(required = true, value = "launcher")
                                 boolean launcher,
-                            @JsonProperty(required = true, value = "climb")
-                                boolean climb,
+                            @JsonProperty(required = true, value = "complexClimb")
+                                boolean complexClimb,
+                            @JsonProperty(required = true, value = "simpleClimb")
+                                boolean simpleClimb,
                             @JsonProperty(required = true, value = "vision")
                                 boolean vision,
                             @JsonProperty(required = true, value = "gearshift")
@@ -53,7 +58,8 @@ public class SubsystemControls
         this.intake = intake;
         this.launcher = launcher;
         this.transfer = transfer;
-        this.climb = climb;
+        this.complexClimb = complexClimb;
+        this.simpleClimb = simpleClimb;
         this.vision = vision;
         this.gearshift = gearshift;
         this.climbtest = climbtest;
@@ -93,14 +99,25 @@ public class SubsystemControls
     }
 
     /**
+     * Returns true if the complexClimb system is indicated as present and should be enabled.
+     * 
+     * @return true if the complexClimb system is indicated as present and should be enabled;
+     *         false otherwise
+     */
+        public boolean isComplexClimbPresent()
+    {
+        return complexClimb;
+    }
+
+    /**
      * Returns true if the climb system is indicated as present and should be enabled.
      * 
      * @return true if the climb system is indicated as present and should be enabled;
      *         false otherwise
      */
-        public boolean isClimbPresent()
+    public boolean isSimpleClimbPresent()
     {
-        return climb;
+        return simpleClimb;
     }
 
     /**

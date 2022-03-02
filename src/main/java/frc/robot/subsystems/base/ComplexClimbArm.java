@@ -147,4 +147,22 @@ public class ComplexClimbArm
     {
         ratchetArm.disable();
     }
+
+    /**
+     * returns the position of the pivot encoder
+     * @return position of the pivot encoder
+     */
+    public RelativeEncoder getPivotEncoder()
+    {
+        return brakePivotEncoder;
+    }
+
+    /**
+     * returns the position of the lift encoder
+     * @return position of the lift encoder
+     */
+    public RelativeEncoder getLiftEncoder()
+    {
+        return ratchetLiftEncoder;
+    }
 }
