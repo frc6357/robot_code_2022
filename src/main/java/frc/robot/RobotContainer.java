@@ -42,6 +42,7 @@ import frc.robot.AutoTools.SK22Paths.Drive1mForwardBackward;
 import frc.robot.AutoTools.SK22Paths.RunJson;
 import frc.robot.commands.AcquireTargetCommand;
 import frc.robot.commands.AutomaticTransferCommand;
+import frc.robot.commands.ClimbCommandGroup;
 import frc.robot.commands.ClimbSequence;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
@@ -150,8 +151,8 @@ public class RobotContainer
             new TriggerButton(operatorJoystick, Ports.OI_OPERATOR_EXTEND_CLIMB);
     private final JoystickButton climbRetractBtn       =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_RETRACT_CLIMB);
-    private final JoystickButton climbOrchestrateBtn   =
-            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_ORCHESTRATE_CLIMB);
+    private final JoystickButton climbSequenceBtn   =
+            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_SEQUENCE_CLIMB);
 
     private final DefaultArcadeDriveCommand arcadeDrive =
             new DefaultArcadeDriveCommand(driveSubsystem, driverLeftJoystick);
@@ -358,6 +359,7 @@ public class RobotContainer
         {
             SK22ComplexClimb complexClimb = complexClimbSubsystem.get();
             SK22SimpleClimb simpleClimb = simpleClimbSubsystem.get();
+            ClimbSequence climbSequence = new ClimbSequence();
 
             // Extends the climb arms
             climbExtendBtn.whenPressed(ClimbSequence.getStep1(complexClimb, simpleClimb));
@@ -367,6 +369,10 @@ public class RobotContainer
 
             // Goes from one climb rung to the next highest rung
             //climbOrchestrateBtn.whenPressed(climb::orchestra);
+
+            climbSequenceBtn.whenPressed(new ClimbCommandGroup(complexClimb, simpleClimb, climbSequence));
+
+
             if (climbtestJoystick.isPresent())
             {
                 Joystick testJoystick = climbtestJoystick.get();
