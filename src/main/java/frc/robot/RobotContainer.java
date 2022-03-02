@@ -22,7 +22,6 @@ import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -51,7 +50,6 @@ import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
-import frc.robot.commands.subcommands.LowerSimpleArmCommand;
 import frc.robot.subsystems.SK22ComplexClimb;
 import frc.robot.subsystems.SK22SimpleClimb;
 import frc.robot.subsystems.SK22Drive;
@@ -403,7 +401,11 @@ public class RobotContainer
         driveSubsystem.resetGyro();
     }
 
-    public void disableLauncher(){
+    /**
+     * sets the launcher speed to zero
+     */
+    public void disableLauncher()
+    {
         if (launcherSubsystem.isPresent())
         {
             SK22Launcher launcher = launcherSubsystem.get();
