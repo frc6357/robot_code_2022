@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import javax.print.CancelablePrintJob;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -21,6 +19,9 @@ import frc.robot.subsystems.base.SwitchSensor;
 public class SK22Transfer extends SKSubsystemBase
 {
     // TODO: Don't use public members. Move this to the class that actually needs it.
+    /**
+     * Value shows the team alliance
+     */
     public final Alliance teamAlliance;
 
     private CANSparkMax intakeTransferMotor;
@@ -103,16 +104,28 @@ public class SK22Transfer extends SKSubsystemBase
         verticalTransferMotor.set(speed);
     }
 
+    /**
+     * returns the value of the transfer intake motor
+     * @return Value of the transfer intake motor
+     */
     public CANSparkMax getIntakeTransferMotor()
     {
         return intakeTransferMotor;
     }
 
+    /**
+     * returns the value of the transfer exit motor
+     * @return value of the transfer exit motor
+     */
     public CANSparkMax getExitTransferMotor()
     {
         return exitTransferMotor;
     }
 
+    /**
+     * return the value of the transfer vertical shaft motor
+     * @return value of the transfer vertical shaft motor
+     */
     public CANSparkMax getVerticalShaftMotor()
     {
         return verticalTransferMotor;

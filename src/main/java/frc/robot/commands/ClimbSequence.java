@@ -21,6 +21,9 @@ import frc.robot.subsystems.SK22ComplexClimb;
  */
 public final class ClimbSequence
 {
+    /**
+     * 
+     */
     public ClimbSequence()
     {
         // Do nothing here
