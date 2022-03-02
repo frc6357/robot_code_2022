@@ -1,7 +1,7 @@
 package frc.robot.commands.subcommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.subsystems.SK22Climb;
+import frc.robot.subsystems.SK22ComplexClimb;
 
 
 /**
@@ -9,7 +9,7 @@ import frc.robot.subsystems.SK22Climb;
  */
 public class MoveComplexArmLiftCommand extends CommandBase
 {
-    private final SK22Climb climb;
+    private final SK22ComplexClimb climb;
     private double distance;
 
     /**
@@ -17,7 +17,7 @@ public class MoveComplexArmLiftCommand extends CommandBase
      * @param climb The SK22Climb subsytem
      * @param distance The amount of distance the ratchet would cover
      */
-    public MoveComplexArmLiftCommand(SK22Climb climb, double distance)
+    public MoveComplexArmLiftCommand(SK22ComplexClimb climb, double distance)
     {
         this.climb = climb;
         this.distance = distance;
