@@ -130,6 +130,10 @@ public class RobotContainer
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_HIGH_GEAR);
     private final JoystickButton driveShootBtn         =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SHOOT);
+    private final JoystickButton driverLauncherOnBtn   =
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_ON);
+    private final JoystickButton driverLauncherOffBtn  =
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_OFF);
     private final Dpad           dpad                  =
             new Dpad(driverLeftJoystick, Ports.OI_DRIVER_REVERSE);
     private final DpadDownButton reverseOnBtn          = new DpadDownButton(dpad);
@@ -315,13 +319,6 @@ public class RobotContainer
             SK22Transfer transfer = transferSubsystem.get();
 
             transferStartBtn.whenPressed(new AutomaticTransferCommand(transfer));
-
-            // Emergency override to eject balls from the horizontal transfer
-            transferEjectBallBtn.whenHeld(new EjectBallCommand(transfer), true);
-
-            // Emergency override to move ball from the horizontal transfer
-            // into the vertical loader.
-            transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer), true);
         }
 
         if (visionSubsystem.isPresent())
@@ -336,15 +333,27 @@ public class RobotContainer
             // target for some reason?
         }
 
-        // User controls related to the ball launcher.
-        if (launcherSubsystem.isPresent())
+        // User controls related to the ball launcher and transfer related things.
+        if (launcherSubsystem.isPresent() && transferSubsystem.isPresent())
         {
             SK22Launcher launcher = launcherSubsystem.get();
+            SK22Transfer transfer = transferSubsystem.get();
+
+            // Emergency override to eject balls from the horizontal transfer
+            transferEjectBallBtn.whenHeld(new EjectBallCommand(transfer), true);
+
+            // Emergency override to move ball from the horizontal transfer
+            // into the vertical loader.
+            transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer), true);
 
             // Shoots ball(s) using the launcher
-            driveShootBtn.whenHeld(new ShootBallsCommand(launcher), true);
+            driveShootBtn.whenHeld(new ShootBallsCommand(launcher, transfer), true);
             launcher.setLauncherRPM(0.0);
             launcher.enableLauncher();
+
+            // Buttons to turn on and off the launcher flywheel
+            driverLauncherOffBtn.whenPressed(() -> launcher.setLauncherRPM(0.0));
+            driverLauncherOnBtn.whenPressed(() -> launcher.setLauncherRPM(Constants.LauncherConstants.MAX_SPEED_PRESET));
         }
 
         // User controls related to the climbing function.

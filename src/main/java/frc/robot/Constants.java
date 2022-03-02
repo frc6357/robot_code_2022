@@ -42,7 +42,7 @@ public final class Constants
 
         public static final double BALL_EJECTION_SPEED = 0.5;
         // Uses the exit motor to move ball into the vertical portion
-        public static final double LOAD_BALL_VERTICAL_SPEED = -0.5;
+        public static final double LOAD_BALL_VERTICAL_SPEED = -1.0;
 
         public static final int TRANSFER_TO_VERTICAL_SHAFT_DURATION = 100;
         public static final int EJECT_DURATION = 100;
@@ -113,7 +113,7 @@ public final class Constants
         public static final int LOW_SPEED_PRESET   = 3000;
         public static final int MID_SPEED_PRESET   = 3400;
         public static final int HIGHT_SPEED_PRESET = 3600;
-        public static final int MAX_SPEED_PRESET   = 4200;
+        public static final int MAX_SPEED_PRESET   = 4500;
 
         public static final double LAUNCHER_KP = 0.0003;
         public static final double LAUNCHER_KI = 0.0008;

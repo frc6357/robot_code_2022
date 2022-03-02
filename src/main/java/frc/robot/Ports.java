@@ -132,6 +132,8 @@ public class Ports
     public static final int OI_DRIVER_SLOWMODE       = 4;  // Joystick Button 4
     public static final int OI_DRIVER_ACQUIRE_TARGET = 1;  // Joystick Trigger Button
     public static final int OI_DRIVER_REVERSE        = 0;  // Joystick POV number
+    public static final int OI_DRIVER_LAUNCHER_ON    = 12;
+    public static final int OI_DRIVER_LAUNCHER_OFF   = 11;
 
     // TODO: Update documentation for this button
     public static final int OI_OPERATOR_TRANSFER_START    = 7;  // BACK Button
