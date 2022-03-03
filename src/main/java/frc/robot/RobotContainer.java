@@ -22,6 +22,7 @@ import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -50,6 +51,7 @@ import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
+import frc.robot.commands.subcommands.LowerSimpleArmCommand;
 import frc.robot.subsystems.SK22ComplexClimb;
 import frc.robot.subsystems.SK22SimpleClimb;
 import frc.robot.subsystems.SK22Drive;
@@ -82,10 +84,9 @@ public class RobotContainer
     private UsbCamera         camera2;
     private NetworkTableEntry cameraSelection;
 
+    private final SK22CommandBuilder pathBuilder;
     private final TrajectoryBuilder    segmentCreator      =
             new TrajectoryBuilder(Constants.SPLINE_DIRECTORY);
-    private final SK22CommandBuilder   pathBuilder         =
-            new SK22CommandBuilder(Constants.AUTOS_FOLDER_DIRECTORY, segmentCreator);
     private SendableChooser<AutoPaths> autoCommandSelector = new SendableChooser<AutoPaths>();
     private SendableChooser<Command>   driveModeSelector   = new SendableChooser<Command>();
 
@@ -98,14 +99,14 @@ public class RobotContainer
 
     // These are currently empty and only created in the constructor
     // based on the Subsystem.json file
-    private Optional<SK22Intake>        intakeSubsystem         = Optional.empty();
-    private Optional<SK22Launcher>      launcherSubsystem       = Optional.empty();
-    private Optional<SK22Transfer>      transferSubsystem       = Optional.empty();
-    private Optional<SK22ComplexClimb>  complexClimbSubsystem   = Optional.empty();
-    private Optional<SK22SimpleClimb>   simpleClimbSubsystem    = Optional.empty();
-    private Optional<SK22Vision>        visionSubsystem         = Optional.empty();
-    private Optional<SK22Gearshift>     gearshiftSubsystem      = Optional.empty();
-    private Optional<Joystick>          climbtestJoystick       = Optional.empty();
+    private Optional<SK22Intake>       intakeSubsystem       = Optional.empty();
+    private Optional<SK22Launcher>     launcherSubsystem     = Optional.empty();
+    private Optional<SK22Transfer>     transferSubsystem     = Optional.empty();
+    private Optional<SK22ComplexClimb> complexClimbSubsystem = Optional.empty();
+    private Optional<SK22SimpleClimb>  simpleClimbSubsystem  = Optional.empty();
+    private Optional<SK22Vision>       visionSubsystem       = Optional.empty();
+    private Optional<SK22Gearshift>    gearshiftSubsystem    = Optional.empty();
+    private Optional<Joystick>         climbtestJoystick     = Optional.empty();
 
     // Robot External Controllers (Joysticks and Logitech Controller)
     private final FilteredJoystick driverLeftJoystick  =
@@ -143,7 +144,7 @@ public class RobotContainer
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_EXTEND);
     private final JoystickButton intakeRetractBtn      =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_RETRACT);
-    private final JoystickButton transferStartBtn  =
+    private final JoystickButton transferStartBtn      =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_START);
     private final JoystickButton transferEjectBallBtn  =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_EJECT);
@@ -153,7 +154,7 @@ public class RobotContainer
             new TriggerButton(operatorJoystick, Ports.OI_OPERATOR_EXTEND_CLIMB);
     private final JoystickButton climbRetractBtn       =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_RETRACT_CLIMB);
-    private final JoystickButton climbSequenceBtn   =
+    private final JoystickButton climbSequenceBtn      =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_SEQUENCE_CLIMB);
 
     private final DefaultArcadeDriveCommand arcadeDrive =
@@ -168,8 +169,6 @@ public class RobotContainer
      */
     public RobotContainer()
     {
-        configureShuffleboard();
-
         File deployDirectory = Filesystem.getDeployDirectory();
 
         ObjectMapper mapper = new ObjectMapper();
@@ -224,8 +223,14 @@ public class RobotContainer
             DriverStation.reportError("Failure to read Subsystem Control File!", e.getStackTrace());
         }
 
+        pathBuilder =
+                new SK22CommandBuilder(Constants.AUTOS_FOLDER_DIRECTORY, segmentCreator,
+                    intakeSubsystem, transferSubsystem, launcherSubsystem);
+
         // Configure the button bindings
         configureButtonBindings();
+
+        configureShuffleboard();
 
         resetDriveDefaultCommand();
 
@@ -334,8 +339,6 @@ public class RobotContainer
                     new ConditionalCommand(new AcquireTargetCommand(driveSubsystem, vision),
                         new DoNothingCommand(), () -> vision.getHorizontalAngle().isPresent()),
                     true);
-            // TODO: How do we break out of this command if it fails to acquire the 
-            // target for some reason?
         }
 
         // User controls related to the ball launcher and transfer related things.
@@ -358,7 +361,8 @@ public class RobotContainer
 
             // Buttons to turn on and off the launcher flywheel
             driverLauncherOffBtn.whenPressed(() -> launcher.setLauncherRPM(0.0));
-            driverLauncherOnBtn.whenPressed(() -> launcher.setLauncherRPM(Constants.LauncherConstants.MAX_SPEED_PRESET));
+            driverLauncherOnBtn.whenPressed(
+                () -> launcher.setLauncherRPM(Constants.LauncherConstants.MAX_SPEED_PRESET));
         }
 
         // User controls related to the climbing function.
@@ -377,25 +381,34 @@ public class RobotContainer
             // Goes from one climb rung to the next highest rung
             //climbOrchestrateBtn.whenPressed(climb::orchestra);
 
-            climbSequenceBtn.whenPressed(new ClimbCommandGroup(complexClimb, simpleClimb, climbSequence));
-
+            climbSequenceBtn
+                .whenPressed(new ClimbCommandGroup(complexClimb, simpleClimb, climbSequence));
 
             if (climbtestJoystick.isPresent())
             {
                 Joystick testJoystick = climbtestJoystick.get();
-                new JoystickButton(testJoystick, 1).whenPressed(ClimbSequence.getStep3(complexClimb));
+                new JoystickButton(testJoystick, 1)
+                    .whenPressed(ClimbSequence.getStep3(complexClimb));
                 //new JoystickButton(testJoystick, 2).whenPressed(ClimbSequence.getStep4(complexClimb));
-                new JoystickButton(testJoystick, 3).whenPressed(ClimbSequence.getStep5(complexClimb, simpleClimb));
-                new JoystickButton(testJoystick, 4).whenPressed(ClimbSequence.getStep6(complexClimb, simpleClimb));
-                new JoystickButton(testJoystick, 5).whenPressed(ClimbSequence.getStep7(simpleClimb));
-                new JoystickButton(testJoystick, 6).whenPressed(ClimbSequence.getStep8(simpleClimb));
-                new JoystickButton(testJoystick, 7).whenPressed(ClimbSequence.getStep9(simpleClimb));
-                new JoystickButton(testJoystick, 8).whenPressed(ClimbSequence.getStep10(simpleClimb));
-                new JoystickButton(testJoystick, 9).whenPressed(ClimbSequence.getStep11(complexClimb));
-                new JoystickButton(testJoystick, 10).whenPressed(ClimbSequence.getStep12(complexClimb));
-                new JoystickButton(testJoystick, 11).whenPressed(ClimbSequence.getStep13(complexClimb));
-                
-                
+                new JoystickButton(testJoystick, 3)
+                    .whenPressed(ClimbSequence.getStep5(complexClimb, simpleClimb));
+                new JoystickButton(testJoystick, 4)
+                    .whenPressed(ClimbSequence.getStep6(complexClimb, simpleClimb));
+                new JoystickButton(testJoystick, 5)
+                    .whenPressed(ClimbSequence.getStep7(simpleClimb));
+                new JoystickButton(testJoystick, 6)
+                    .whenPressed(ClimbSequence.getStep8(simpleClimb));
+                new JoystickButton(testJoystick, 7)
+                    .whenPressed(ClimbSequence.getStep9(simpleClimb));
+                new JoystickButton(testJoystick, 8)
+                    .whenPressed(ClimbSequence.getStep10(simpleClimb));
+                new JoystickButton(testJoystick, 9)
+                    .whenPressed(ClimbSequence.getStep11(complexClimb));
+                new JoystickButton(testJoystick, 10)
+                    .whenPressed(ClimbSequence.getStep12(complexClimb));
+                new JoystickButton(testJoystick, 11)
+                    .whenPressed(ClimbSequence.getStep13(complexClimb));
+
             }
         }
     }
@@ -410,9 +423,6 @@ public class RobotContainer
         driveSubsystem.resetGyro();
     }
 
-    /**
-     * sets the launcher speed to zero
-     */
     public void disableLauncher()
     {
         if (launcherSubsystem.isPresent())
