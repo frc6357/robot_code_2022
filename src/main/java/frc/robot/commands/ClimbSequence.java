@@ -35,7 +35,7 @@ public final class ClimbSequence
      * @param simpleClimb SK22SimpleClimb Subsystem
      * @return The command containing the actions for step 1 
      */
-    public static Command getStep1(SK22ComplexClimb complexClimb, SK22SimpleClimb simpleClimb)
+    public Command getStep1(SK22ComplexClimb complexClimb, SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step1 = new ParallelCommandGroup();
         step1.addCommands(new RaiseSimpleArmCommand(simpleClimb));
@@ -49,7 +49,7 @@ public final class ClimbSequence
      * @param simpleClimb SK22SimpleClimb Subsystem
      * @return The command containing the actions for step 2
      */
-    public static Command getStep2(SK22ComplexClimb complexClimb, SK22SimpleClimb simpleClimb)
+    public Command getStep2(SK22ComplexClimb complexClimb, SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step2 = new ParallelCommandGroup();
         step2.addCommands(new LowerSimpleArmCommand(simpleClimb));
@@ -62,7 +62,7 @@ public final class ClimbSequence
      * @param complexClimb SK22ComplexClimb Subsystem
      * @return The command containing the actions for step 3
      */
-    public static Command getStep3(SK22ComplexClimb complexClimb)
+    public Command getStep3(SK22ComplexClimb complexClimb)
     {
         return new PivotComplexArmCommand(complexClimb, ClimbConstants.COMPLEX_PARTIAL_STRAIGHTEN);
     }
@@ -72,7 +72,7 @@ public final class ClimbSequence
      * @param complexClimb SK22ComplexClimb Subsystem
      * @return The command containing the actions for step 4
      */
-    public static Command getStep4(SK22ComplexClimb complexClimb)
+    public Command getStep4(SK22ComplexClimb complexClimb)
     {
         ParallelCommandGroup step4 = new ParallelCommandGroup();
         step4.addCommands(new MoveComplexArmLiftCommand(complexClimb, ClimbConstants.COMPLEX_FULL_RETRACT));
@@ -87,7 +87,7 @@ public final class ClimbSequence
      * @param simpleClimb SK22SimpleClimb Subystem
      * @return The command containing the actions for step 5
      */
-    public static Command getStep5(SK22ComplexClimb complexClimb, SK22SimpleClimb simpleClimb)
+    public Command getStep5(SK22ComplexClimb complexClimb, SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step5 = new ParallelCommandGroup();
         step5.addCommands(new NeutralTiltSimpleArmCommand(simpleClimb));
@@ -105,7 +105,7 @@ public final class ClimbSequence
      * @param simpleClimb SK22SimpleClimb Subsystem
      * @return The command containing the actions for step 6
      */
-    public static Command getStep6(SK22ComplexClimb complexClimb, SK22SimpleClimb simpleClimb)
+    public Command getStep6(SK22ComplexClimb complexClimb, SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step6 = new ParallelCommandGroup();
         step6.addCommands(new RaiseSimpleArmCommand(simpleClimb));
@@ -118,7 +118,7 @@ public final class ClimbSequence
      * @param simpleClimb SK22simpleClimb Subsystem
      * @return The command containing the actions for step 7
      */
-    public static Command getStep7(SK22SimpleClimb simpleClimb)
+    public Command getStep7(SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step7 = new ParallelCommandGroup();
         step7.addCommands(new TiltSimpleArmCommand(simpleClimb));
@@ -131,7 +131,7 @@ public final class ClimbSequence
      * @param simpleClimb SK22Climb Subsystem
      * @return The command containing the actions for step 8
      */
-    public static Command getStep8(SK22SimpleClimb simpleClimb)
+    public Command getStep8(SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step8 = new ParallelCommandGroup();
         step8.addCommands(new LowerSimpleArmCommand(simpleClimb));
@@ -144,7 +144,7 @@ public final class ClimbSequence
      * @param simpleClimb SK22Climb Subsystem
      * @return The command containing the actions for step 9
      */
-    public static Command getStep9(SK22SimpleClimb simpleClimb)
+    public Command getStep9(SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step9 = new ParallelCommandGroup();
         //TODO: Check if this would be the correct command to use in this situation
@@ -158,7 +158,7 @@ public final class ClimbSequence
      * @param simpleClimb SK22Climb Subsystem
      * @return The command containing the actions for step 10
      */
-    public static Command getStep10(SK22SimpleClimb simpleClimb)
+    public Command getStep10(SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step10 = new ParallelCommandGroup();
         step10.addCommands(new LowerSimpleArmCommand(simpleClimb));
@@ -171,7 +171,7 @@ public final class ClimbSequence
      * @param complexClimb SK22Climb Subsystem
      * @return The command containing the action for step 11
      */
-    public static Command getStep11(SK22ComplexClimb complexClimb)
+    public Command getStep11(SK22ComplexClimb complexClimb)
     {
         return new MoveComplexArmLiftCommand(complexClimb, ClimbConstants.COMPLEX_PARTIAL_EXTEND);
     }
@@ -181,7 +181,7 @@ public final class ClimbSequence
      * @param complexClimb SK22Climb Subsystem
      * @return The command containing the action for step 12
      */
-    public static Command getStep12(SK22ComplexClimb complexClimb)
+    public Command getStep12(SK22ComplexClimb complexClimb)
     {
         return new PivotComplexArmCommand(complexClimb, ClimbConstants.COMPLEX_FULL_TILT);
     }
@@ -191,7 +191,7 @@ public final class ClimbSequence
      * @param complexClimb SK22ComplexClimb Subsystem
      * @return The command containing the action for step 13
      */
-    public static Command getStep13(SK22ComplexClimb complexClimb)
+    public Command getStep13(SK22ComplexClimb complexClimb)
     {
         return new MoveComplexArmLiftCommand(complexClimb, ClimbConstants.COMPLEX_FULL_EXTEND);
     }

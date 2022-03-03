@@ -373,10 +373,10 @@ public class RobotContainer
             ClimbSequence climbSequence = new ClimbSequence();
 
             // Extends the climb arms
-            climbExtendBtn.whenPressed(ClimbSequence.getStep1(complexClimb, simpleClimb));
+            climbExtendBtn.whenPressed(climbSequence.getStep1(complexClimb, simpleClimb));
 
             // Retracts the climb arms
-            climbRetractBtn.whenPressed(ClimbSequence.getStep2(complexClimb, simpleClimb));
+            climbRetractBtn.whenPressed(climbSequence.getStep2(complexClimb, simpleClimb));
 
             // Goes from one climb rung to the next highest rung
             //climbOrchestrateBtn.whenPressed(climb::orchestra);
@@ -388,26 +388,26 @@ public class RobotContainer
             {
                 Joystick testJoystick = climbtestJoystick.get();
                 new JoystickButton(testJoystick, 1)
-                    .whenPressed(ClimbSequence.getStep3(complexClimb));
+                    .whenPressed(climbSequence.getStep3(complexClimb));
                 //new JoystickButton(testJoystick, 2).whenPressed(ClimbSequence.getStep4(complexClimb));
                 new JoystickButton(testJoystick, 3)
-                    .whenPressed(ClimbSequence.getStep5(complexClimb, simpleClimb));
+                    .whenPressed(climbSequence.getStep5(complexClimb, simpleClimb));
                 new JoystickButton(testJoystick, 4)
-                    .whenPressed(ClimbSequence.getStep6(complexClimb, simpleClimb));
+                    .whenPressed(climbSequence.getStep6(complexClimb, simpleClimb));
                 new JoystickButton(testJoystick, 5)
-                    .whenPressed(ClimbSequence.getStep7(simpleClimb));
+                    .whenPressed(climbSequence.getStep7(simpleClimb));
                 new JoystickButton(testJoystick, 6)
-                    .whenPressed(ClimbSequence.getStep8(simpleClimb));
+                    .whenPressed(climbSequence.getStep8(simpleClimb));
                 new JoystickButton(testJoystick, 7)
-                    .whenPressed(ClimbSequence.getStep9(simpleClimb));
+                    .whenPressed(climbSequence.getStep9(simpleClimb));
                 new JoystickButton(testJoystick, 8)
-                    .whenPressed(ClimbSequence.getStep10(simpleClimb));
+                    .whenPressed(climbSequence.getStep10(simpleClimb));
                 new JoystickButton(testJoystick, 9)
-                    .whenPressed(ClimbSequence.getStep11(complexClimb));
+                    .whenPressed(climbSequence.getStep11(complexClimb));
                 new JoystickButton(testJoystick, 10)
-                    .whenPressed(ClimbSequence.getStep12(complexClimb));
+                    .whenPressed(climbSequence.getStep12(complexClimb));
                 new JoystickButton(testJoystick, 11)
-                    .whenPressed(ClimbSequence.getStep13(complexClimb));
+                    .whenPressed(climbSequence.getStep13(complexClimb));
 
             }
         }
