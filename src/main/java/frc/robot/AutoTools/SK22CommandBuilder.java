@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.Set;
 
@@ -13,14 +14,17 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.AutoTools.SK22Paths.DoNothing;
 import frc.robot.AutoTools.SK22Paths.Drive1mForwardBackward;
 import frc.robot.AutoTools.SK22Paths.DriveSplineCanned;
-import frc.robot.AutoTools.SK22Paths.TwoBallRadialHH;
-import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal1A;
-import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal2A;
-import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial1AHHHH;
-import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial2BHHHH;
 import frc.robot.AutoTools.SK22Paths.FourBallTerminal1ALHHH;
 import frc.robot.AutoTools.SK22Paths.FourBallTerminal2BLHHH;
+import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial1AHHHH;
+import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial2BHHHH;
 import frc.robot.AutoTools.SK22Paths.Taxi;
+import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal1A;
+import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal2A;
+import frc.robot.AutoTools.SK22Paths.TwoBallRadialHH;
+import frc.robot.subsystems.SK22Intake;
+import frc.robot.subsystems.SK22Launcher;
+import frc.robot.subsystems.SK22Transfer;
 
 /**
  * A class that adds auto path options to smart dashboard if the segments to create the
@@ -33,6 +37,10 @@ public class SK22CommandBuilder
     private Map<String, Set<String>> dependencies = new HashMap<String, Set<String>>();
     private TrajectoryBuilder        pathBuilder;
 
+    private Optional<SK22Intake>   intake;
+    private Optional<SK22Transfer> transfer;
+    private Optional<SK22Launcher> launcher;
+
     private Set<AutoPaths> autoPaths = new HashSet<AutoPaths>();
 
     /**
@@ -44,8 +52,16 @@ public class SK22CommandBuilder
      *            The file path to get to the Autos directory made by Pathweaver
      * @param pathBuilder
      *            A {@link TrajectoryBuilder} that contains the generated path segments
+     * @param intake
+     *            The subsystem needed to get cargo
+     * @param transfer
+     *            The subsystem needed to transfer cargo from the intake to the launcher
+     * @param launcher
+     *            The subsystem needed to launch the cargo
      */
-    public SK22CommandBuilder(String directory, TrajectoryBuilder pathBuilder)
+    public SK22CommandBuilder(String directory, TrajectoryBuilder pathBuilder,
+        Optional<SK22Intake> intake, Optional<SK22Transfer> transfer,
+        Optional<SK22Launcher> launcher)
     {
         this.pathBuilder = pathBuilder;
         pathDirectory = new File(Filesystem.getDeployDirectory(), directory);
@@ -69,9 +85,13 @@ public class SK22CommandBuilder
             }
         }
 
+        this.intake = intake;
+        this.transfer = transfer;
+        this.launcher = launcher;
+
         // Adding all the auto paths to the set
         autoPaths.add(new Taxi());
-        autoPaths.add(new TwoBallRadialHH());
+        autoPaths.add(new TwoBallRadialHH(intake, transfer, launcher));
         autoPaths.add(new ThreeBallTerminal1A());
         autoPaths.add(new ThreeBallTerminal2A());
         autoPaths.add(new FourBallTerminal1ALHHH());
