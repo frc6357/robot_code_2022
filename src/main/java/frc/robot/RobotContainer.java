@@ -423,15 +423,6 @@ public class RobotContainer
         driveSubsystem.resetGyro();
     }
 
-    public void disableLauncher()
-    {
-        if (launcherSubsystem.isPresent())
-        {
-            SK22Launcher launcher = launcherSubsystem.get();
-            launcher.disableLauncher();
-        }
-    }
-
     /**
      * Adds the possible auto commands to the Shuffleboard list depending on the auto
      * segments that are present according to the {@link TrajectoryBuilder}. Adds the auto
