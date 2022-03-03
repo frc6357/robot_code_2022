@@ -36,6 +36,9 @@ public class SK22Launcher extends SubsystemBase
 
   private final Launcher launcher;
 
+  private double setpoint = 0.0;
+  private double speed = 0.0;
+
   /** Creates a new ExampleSubsystem. */
   public SK22Launcher()
   {
@@ -62,8 +65,8 @@ public class SK22Launcher extends SubsystemBase
   {
     // This method will be called once per scheduler run
     launcher.update();
-    double setpoint = launcher.getTargetMotorRPM();
-    double speed = launcher.getLauncherRPM();
+    setpoint = launcher.getTargetMotorRPM();
+    speed = launcher.getLauncherRPM();
 
     SmartDashboard.putNumber("Launcher RPM", speed);
     setpoint = SmartDashboard.getNumber("Launcher Setpoint RPM", setpoint);
@@ -112,6 +115,24 @@ public class SK22Launcher extends SubsystemBase
   public void setLauncherTransferMotor(double speed)
   {
     launcherTransferMotor.set(speed);
+  }
+
+  /**
+   * Gets the last set speed 
+   * @return The value of the last set speed in RPM
+   */
+  public double getLauncherRPMSetpoint()
+  {
+    return setpoint;
+  }
+
+  /**
+   * Gets the current speed of the launcher
+   * @return The value of the speed in RPM
+   */
+  public double getLauncherRPM()
+  {
+    return speed;
   }
 
 }
