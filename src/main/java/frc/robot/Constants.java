@@ -77,8 +77,8 @@ public final class Constants
         public static final double DEADBAND_TURN    = 0.01;
         public static final double SLEW_FILTER_RATE = 2;     // per second
 
-        public static final double TURN_TOLERANCE      = 5;    // Degrees
-        public static final double TURN_RATE_TOLERANCE = 5;    // Degrees per Second
+        public static final double TURN_TOLERANCE      = 2;    // Degrees
+        public static final double TURN_RATE_TOLERANCE = 3;    // Degrees per Second
     }
 
     /** Constants related to the Autonomous operation mode for the Robot. */
@@ -224,7 +224,7 @@ public final class Constants
          * The tolerance for the angle in degrees for the robot to be considered to have
          * acquired the hub.
          */
-        public static final double TARGET_ACQUIRED_TOLERANCE = 7.5;
+        public static final double TARGET_ACQUIRED_TOLERANCE = 10;
     }
 
     public static final double INCH_PER_MILLIMETER    = 0.0393701;

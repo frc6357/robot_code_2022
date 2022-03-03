@@ -122,7 +122,6 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
             sSocket.configureBlocking(false);
             sSocket.socket().bind(new InetSocketAddress(roborioPort));
         }
-
         catch (Exception e)
         {
             //TODO: handle exception
@@ -289,11 +288,13 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
      */
     public boolean isTargetAcquired(Optional<Float> horiAngle)
     {
-        return
+        return horiAngle.isPresent() ?
         // Above 0º - Tolerance 
         (horiAngle.get() >= -VisionConstants.TARGET_ACQUIRED_TOLERANCE
             // Below 0º + Tolerance
-            && horiAngle.get() <= VisionConstants.TARGET_ACQUIRED_TOLERANCE);
+            && horiAngle.get() <= VisionConstants.TARGET_ACQUIRED_TOLERANCE)
+        :
+        false;
     }
 
     @Override

@@ -33,9 +33,11 @@ public class AcquireTargetCommand extends CommandBase
         this.drive = drive;
         this.vision = vision;
 
+        // TODO: Need to tune this value so as to not destroy the robot when turning
         pidController = new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0);
 
         pidController.enableContinuousInput(-180, 180);
+        // TODO: Need to tune constraints as well to make sure we don't overshoot or undershoot
         pidController.setTolerance(DriveConstants.TURN_TOLERANCE,
             DriveConstants.TURN_RATE_TOLERANCE);
 
@@ -52,7 +54,15 @@ public class AcquireTargetCommand extends CommandBase
     @Override
     public void execute()
     {
-        drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), setpoint));
+        if (vision.isTargetInFrame())
+        {
+            drive.arcadeDrive(0, pidController.calculate(vision.getHorizontalAngle().get(), 0));
+            setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
+        }
+        else
+        {
+            drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), setpoint));
+        }
     }
 
     @Override
@@ -65,6 +75,6 @@ public class AcquireTargetCommand extends CommandBase
     public boolean isFinished()
     {
         // End when the controller is at the reference.
-        return (pidController.atSetpoint());
+        return (vision.isTargetAcquired(vision.getHorizontalAngle()));
     }
 }
