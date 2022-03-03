@@ -62,13 +62,16 @@ class Datagram
         reserved = byteBuffer.getLong();
         checksum = byteBuffer.getInt();
 
+        validPacket = false;
+
         CRC32 crc = new CRC32();
         crc.update(byteBuffer);
-        if (crc.getValue() == 0 || distanceInt == 0)
+        if (crc.getValue() == 0 && distanceInt != 0)
         {
             distance = Optional.of(distanceInt / (Math.pow(10, adjVal)));
             horiAngle = Optional.of((float) shortHoriAngle / 100);
             vertAngle = Optional.of((float) shortVertAngle / 100);
+            validPacket = true;
         }
     }
 }
@@ -110,6 +113,9 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
      */
     public SK22Vision()
     {
+        SmartDashboard.putBoolean("Target In Frame", false);
+        SmartDashboard.putBoolean("Target Acquired", false);
+
         try
         {
             sSocket = DatagramChannel.open();
@@ -195,7 +201,7 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
                 // As this takes up bandwidth
                 SmartDashboard.putNumber("Distance", packetDatagram.distance.get());
                 SmartDashboard.putNumber("Horizontal Angle", packetDatagram.horiAngle.get());
-                SmartDashboard.putNumber("Vertical Angle", packetDatagram.vertAngle.get());
+                SmartDashboard.putNumber("Vertical Angle", getVerticalAngle().get());
 
                 // If the target enters or leaves the center, update the SmartDashboard status
                 curAcquireState = isTargetAcquired(packetDatagram.horiAngle);
@@ -218,6 +224,13 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
         {
             SmartDashboard.putBoolean("Target In Frame", curInFrame);
             lastInFrame = curInFrame;
+
+            if (!curInFrame)
+            {
+                lastAcquireState = false;
+                SmartDashboard.putBoolean("Target Acquired", lastAcquireState);
+            }
+
         }
     }
 
@@ -243,6 +256,16 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
     public Optional<Float> getVerticalAngle()
     {
         return packetDatagram.vertAngle;
+    }
+
+    /**
+     * Check if the retroreflective target is currently in the vision camera's frame/FOV
+     * 
+     * @return Whether the target is in frame
+     */
+    public boolean isTargetInFrame()
+    {
+        return curInFrame;
     }
 
     /**
