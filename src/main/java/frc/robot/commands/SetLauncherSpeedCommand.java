@@ -1,11 +1,9 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
-import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.subsystems.SK22Launcher;
-import frc.robot.subsystems.SK22Transfer;
 
 /**
  * Sets the launcher to a specified speed and ends when the launcher
