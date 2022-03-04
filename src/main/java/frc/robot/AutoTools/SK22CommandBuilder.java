@@ -37,10 +37,6 @@ public class SK22CommandBuilder
     private Map<String, Set<String>> dependencies = new HashMap<String, Set<String>>();
     private TrajectoryBuilder        pathBuilder;
 
-    private Optional<SK22Intake>   intake;
-    private Optional<SK22Transfer> transfer;
-    private Optional<SK22Launcher> launcher;
-
     private Set<AutoPaths> autoPaths = new HashSet<AutoPaths>();
 
     /**
@@ -84,10 +80,6 @@ public class SK22CommandBuilder
                 System.out.println(e);
             }
         }
-
-        this.intake = intake;
-        this.transfer = transfer;
-        this.launcher = launcher;
 
         // Adding all the auto paths to the set
         autoPaths.add(new Taxi());
