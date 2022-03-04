@@ -22,7 +22,6 @@ import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -35,6 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.LauncherConstants;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.SK22CommandBuilder;
 import frc.robot.AutoTools.TrajectoryBuilder;
@@ -51,13 +51,12 @@ import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
-import frc.robot.commands.subcommands.LowerSimpleArmCommand;
 import frc.robot.subsystems.SK22ComplexClimb;
-import frc.robot.subsystems.SK22SimpleClimb;
 import frc.robot.subsystems.SK22Drive;
 import frc.robot.subsystems.SK22Gearshift;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
+import frc.robot.subsystems.SK22SimpleClimb;
 import frc.robot.subsystems.SK22Transfer;
 import frc.robot.subsystems.SK22Vision;
 import frc.robot.subsystems.base.Dpad;
@@ -132,8 +131,10 @@ public class RobotContainer
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_HIGH_GEAR);
     private final JoystickButton driveShootBtn         =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SHOOT);
-    private final JoystickButton driverLauncherOnBtn   =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_ON);
+    private final JoystickButton driverLauncherLowBtn   =
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_LOW);
+    private final JoystickButton driverLauncherMaxBtn   =
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_MAX);
     private final JoystickButton driverLauncherOffBtn  =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_OFF);
     private final Dpad           dpad                  =
@@ -361,10 +362,14 @@ public class RobotContainer
             launcher.setLauncherRPM(0.0);
             launcher.enableLauncher();
 
-            // Buttons to turn on and off the launcher flywheel
+            // Buttons to turn off the launcher flywheel
             driverLauncherOffBtn.whenPressed(() -> launcher.setLauncherRPM(0.0));
-            driverLauncherOnBtn.whenPressed(
-                () -> launcher.setLauncherRPM(Constants.LauncherConstants.MAX_SPEED_PRESET));
+
+            // Buttons to turn on the launcher to preset rpms
+            driverLauncherLowBtn.whenPressed(
+                () -> launcher.setLauncherRPM(LauncherConstants.LOW_SPEED_PRESET));
+            driverLauncherMaxBtn.whenPressed(
+                () -> launcher.setLauncherRPM(LauncherConstants.MAX_SPEED_PRESET));
         }
 
         // User controls related to the climbing function.

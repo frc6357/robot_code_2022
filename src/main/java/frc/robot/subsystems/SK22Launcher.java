@@ -44,8 +44,10 @@ public class SK22Launcher extends SubsystemBase
   {
     ballLauncher1.setNeutralMode(NeutralMode.Coast);
     ballLauncher1.setInverted(true);
+    ballLauncher1.configOpenloopRamp(2);
     ballLauncher2.setNeutralMode(NeutralMode.Coast);
     ballLauncher2.setInverted(false);
+    ballLauncher2.configOpenloopRamp(2);
 
     SmartDashboard.putNumber("Launcher Setpoint RPM", 0.0);
 
