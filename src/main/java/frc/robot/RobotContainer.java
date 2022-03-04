@@ -330,6 +330,13 @@ public class RobotContainer
             SK22Transfer transfer = transferSubsystem.get();
 
             transferStartBtn.whenPressed(new AutomaticTransferCommand(transfer));
+        
+            // Emergency override to eject balls from the horizontal transfer
+            transferEjectBallBtn.whenHeld(new EjectBallCommand(transfer), true);
+
+            // Emergency override to move ball from the horizontal transfer
+            // into the vertical loader.
+            transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer), true);
         }
 
         if (visionSubsystem.isPresent())
@@ -348,13 +355,7 @@ public class RobotContainer
             SK22Launcher launcher = launcherSubsystem.get();
             SK22Transfer transfer = transferSubsystem.get();
 
-            // Emergency override to eject balls from the horizontal transfer
-            transferEjectBallBtn.whenHeld(new EjectBallCommand(transfer), true);
-
-            // Emergency override to move ball from the horizontal transfer
-            // into the vertical loader.
-            transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer), true);
-
+            
             // Shoots ball(s) using the launcher
             driveShootBtn.whenHeld(new ShootBallsCommand(launcher, transfer), true);
             launcher.setLauncherRPM(0.0);
