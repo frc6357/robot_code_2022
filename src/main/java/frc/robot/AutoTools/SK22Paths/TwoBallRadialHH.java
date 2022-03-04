@@ -81,11 +81,14 @@ public class TwoBallRadialHH implements AutoPaths
             new ParallelCommandGroup(
                 trajectoryCreator
                     .createTrajectory(segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
-                (intake.isPresent() && transfer.isPresent()) ?
-                    new SetIntakePositionCommand(intake.get(), transfer.get(), true) : new DoNothingCommand(),
-                (launcher.isPresent()) ?
-                    (new SetLauncherSpeedCommand(launcher.get())) : new DoNothingCommand()),
-            (launcher.isPresent() && transfer.isPresent()) ?
-                    new ShootBallsCommand(launcher.get(), transfer.get()) : new DoNothingCommand());
+                    
+                (intake.isPresent() && transfer.isPresent())
+                ? new SetIntakePositionCommand(intake.get(), transfer.get(), true) : new DoNothingCommand(),
+
+                (launcher.isPresent()) 
+                ? (new SetLauncherSpeedCommand(launcher.get())) : new DoNothingCommand()),
+
+            (launcher.isPresent() && transfer.isPresent())
+            ? new ShootBallsCommand(launcher.get(), transfer.get()) : new DoNothingCommand());
     }
 }

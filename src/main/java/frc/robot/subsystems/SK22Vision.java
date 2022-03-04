@@ -236,10 +236,8 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
     /**
      * Gets the horizontal angle of the robot relative to the center of the hub.
      * 
-     * @return The horizontal angle in degrees
+     * @return The horizontal angle in degrees (CCW Positive)
      */
-    // TODO: Correct this has for correct documentation and
-    // make sure it is returning the correct value.
     public Optional<Float> getHorizontalAngle()
     {
         return packetDatagram.horiAngle;
@@ -250,8 +248,6 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
      * 
      * @return The vertical angle in degrees
      */
-    // TODO: Correct this has correct documentation and
-    // make sure it is returning the correct value.
     public Optional<Float> getVerticalAngle()
     {
         return packetDatagram.vertAngle;
@@ -268,12 +264,11 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
     }
 
     /**
-     * Gets the distance of the robot relative to the center of the hub.
+     * Gets the distance of the robot relative to the edge of the hub.
      * 
-     * @return The distance in meters
+     * @return The distance in inches
      */
-    // TODO: Correct this has correct documentation and
-    // make sure it is returning the correct value.
+    // TODO: Check units with vivek
     public Optional<Double> getDistance()
     {
         return packetDatagram.distance;
@@ -288,13 +283,12 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
      */
     public boolean isTargetAcquired(Optional<Float> horiAngle)
     {
-        return horiAngle.isPresent() ?
+        return horiAngle.isPresent()
         // Above 0º - Tolerance 
-        (horiAngle.get() >= -VisionConstants.TARGET_ACQUIRED_TOLERANCE
+        ? (horiAngle.get() >= -VisionConstants.TARGET_ACQUIRED_TOLERANCE
             // Below 0º + Tolerance
             && horiAngle.get() <= VisionConstants.TARGET_ACQUIRED_TOLERANCE)
-        :
-        false;
+        : false;
     }
 
     @Override
