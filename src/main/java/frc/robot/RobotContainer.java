@@ -312,15 +312,16 @@ public class RobotContainer
         }
 
         // User controls related to the ball intake subsystem
-        if (intakeSubsystem.isPresent())
+        if (intakeSubsystem.isPresent() && transferSubsystem.isPresent())
         {
             SK22Intake intake = intakeSubsystem.get();
+            SK22Transfer transfer = transferSubsystem.get();
 
             // Extends the intake when the extendIntake Button is pressed
-            intakeExtendBtn.whenPressed(new SetIntakePositionCommand(intake, true));
+            intakeExtendBtn.whenPressed(new SetIntakePositionCommand(intake, transfer, true));
 
             // Retracts the intake when the retractIntake Button is pressed
-            intakeRetractBtn.whenPressed(new SetIntakePositionCommand(intake, false));
+            intakeRetractBtn.whenPressed(new SetIntakePositionCommand(intake, transfer, false));
         }
 
         // User controls related to the ball transfer subsystem 

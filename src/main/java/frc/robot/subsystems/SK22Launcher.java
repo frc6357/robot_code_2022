@@ -69,8 +69,6 @@ public class SK22Launcher extends SubsystemBase
     speed = launcher.getLauncherRPM();
 
     SmartDashboard.putNumber("Launcher RPM", speed);
-    setpoint = SmartDashboard.getNumber("Launcher Setpoint RPM", setpoint);
-    launcher.setTargetMotorRPM(setpoint);
   }
 
   @Override

@@ -42,7 +42,8 @@ public final class Constants
 
         public static final double BALL_EJECTION_SPEED = 0.5;
         // Uses the exit motor to move ball into the vertical portion
-        public static final double LOAD_BALL_VERTICAL_SPEED = -1.0;
+        public static final double LOAD_BALL_VERTICAL_SPEED = 1.0;
+        public static final double EXIT_MOTOR_SHOOT_SPEED = -1.0;
 
         public static final int TRANSFER_TO_VERTICAL_SHAFT_DURATION = 100;
         public static final int EJECT_DURATION = 100;
@@ -79,6 +80,8 @@ public final class Constants
 
         public static final double TURN_TOLERANCE      = 2;    // Degrees
         public static final double TURN_RATE_TOLERANCE = 3;    // Degrees per Second
+
+        public static final double ACQUIRE_TARGET_TOLERANCE = 7.5; // Degrees
     }
 
     /** Constants related to the Autonomous operation mode for the Robot. */
@@ -86,6 +89,8 @@ public final class Constants
     {
         public static final double MAX_SPEED        = 2;     // Meters Per Second
         public static final double MAX_ACCELERATION = 0.50;  // Meters Per Seconds Squared
+
+        public static final double AUTO_LAUNCH_SPEED = 4000; // RPM
 
         // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
         public static final double RAMSETE_B    = 2;
@@ -131,6 +136,8 @@ public final class Constants
                     / ((double) LAUNCHER_ENCODER_CPR * LAUNCH_GEAR_RATIO);
 
         public static final double LAUNCHER_TRANSFER_SPEED = 1.0;
+
+        public static final double LAUNCHER_RPM_ERROR_TOLERANCE = 20.0;
     }
 
     /** Constants related to Intake */

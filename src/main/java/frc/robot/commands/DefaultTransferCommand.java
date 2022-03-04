@@ -26,9 +26,9 @@ public class DefaultTransferCommand extends CommandBase
     @Override
     public void initialize()
     {
-        transfer.setIntakeTransferMotor(0.0);
-        transfer.setVerticalTransferMotor(0.0);
-        transfer.setExitTransferMotor(0.0);
+        //transfer.setIntakeTransferMotor(0.0);
+        //transfer.setVerticalTransferMotor(0.0);
+        //transfer.setExitTransferMotor(0.0);
     }
 
     @Override
