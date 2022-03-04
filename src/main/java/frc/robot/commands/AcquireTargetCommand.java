@@ -15,7 +15,6 @@ public class AcquireTargetCommand extends CommandBase
     private final SK22Drive  drive;
     private final SK22Vision vision;
     private PIDController    pidController;
-    private double           initHeading = 0.0;
 
     /** Desired angle of the drivetrain */
     private double setpoint = 0.0;
@@ -48,7 +47,6 @@ public class AcquireTargetCommand extends CommandBase
     @Override
     public void initialize()
     {
-        initHeading = drive.getHeading();
         setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
         pidController.reset();
     }
