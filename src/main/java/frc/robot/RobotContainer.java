@@ -52,6 +52,7 @@ import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.DoNothingCommand;
 import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.LoadBallVerticalCommand;
+import frc.robot.commands.ReverseVerticalTransferCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
 import frc.robot.subsystems.SK22ComplexClimb;
@@ -159,6 +160,9 @@ public class RobotContainer
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_LOAD);
     private final TriggerButton  climbExtendBtn        =
             new TriggerButton(operatorJoystick, Ports.OI_OPERATOR_EXTEND_CLIMB);
+    // TODO: Just for competition
+    private final JoystickButton reverseVerticalTransferBtn =
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VERTICAL_TRANSFER_REVERSE);
     private final JoystickButton climbRetractBtn       =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_RETRACT_CLIMB);
     private final JoystickButton climbSequenceBtn      =
@@ -347,6 +351,8 @@ public class RobotContainer
             // Emergency override to move ball from the horizontal transfer
             // into the vertical loader.
             transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer), true);
+
+            reverseVerticalTransferBtn.whenHeld(new ReverseVerticalTransferCommand(transfer), true);
         }
 
         if (visionSubsystem.isPresent())
