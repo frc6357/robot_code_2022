@@ -50,6 +50,7 @@ public class SK22Launcher extends SubsystemBase
     ballLauncher2.configOpenloopRamp(2);
 
     SmartDashboard.putNumber("Launcher Setpoint RPM", 0.0);
+    SmartDashboard.putBoolean("Launcher at Setpoint RPM", false);
 
     launcherTransferMotor.setIdleMode(IdleMode.kBrake);
     launcherTransferMotor.setInverted(true);
@@ -68,9 +69,10 @@ public class SK22Launcher extends SubsystemBase
     // This method will be called once per scheduler run
     launcher.update();
     setpoint = launcher.getTargetMotorRPM();
-    speed = launcher.getLauncherRPM();
+    // speed = launcher.getLauncherRPM();
 
     SmartDashboard.putNumber("Launcher RPM", speed);
+    SmartDashboard.putBoolean("Launcher at Setpoint RPM", Math.abs(launcher.getTargetMotorRPM() - getLauncherRPM()) < 100.0);
   }
 
   @Override

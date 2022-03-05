@@ -22,11 +22,14 @@ import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -114,6 +117,9 @@ public class RobotContainer
             new FilteredJoystick(Ports.OI_DRIVER_RIGHT_JOYSTICK);
     private final Joystick         operatorJoystick    = new Joystick(Ports.OI_OPERATOR_CONTROLLER);
 
+    private final PneumaticHub pneumaticHubIntake = new PneumaticHub(2);
+    // private final Compressor phCompressor = new Compressor(2, PneumaticsModuleType.REVPH);
+
     // Joystick buttons
 
     // Note: If we want to continue allowing the choice of both tank drive and arcade drive, we can't use
@@ -170,11 +176,14 @@ public class RobotContainer
      */
     public RobotContainer()
     {
+        // phCompressor.enableAnalog(0, 120);
+        pneumaticHubIntake.enableCompressorDigital();
+        
         File deployDirectory = Filesystem.getDeployDirectory();
 
         ObjectMapper mapper = new ObjectMapper();
         JsonFactory factory = new JsonFactory();
-
+ 
         try
         {
             // Looking for the Subsystems.json file in the deploy directory
@@ -236,21 +245,21 @@ public class RobotContainer
         resetDriveDefaultCommand();
 
         // Driver camera configuration.
-        if (RobotBase.isReal())
-        {
-            camera1 = CameraServer.startAutomaticCapture("Driver Front Camera", 0);
-            camera1.setResolution(240, 240);
-            camera1.setFPS(15);
+        // if (RobotBase.isReal())
+        // {
+        //     camera1 = CameraServer.startAutomaticCapture("Driver Front Camera", 0);
+        //     camera1.setResolution(240, 240);
+        //     camera1.setFPS(15);
 
-            camera2 = CameraServer.startAutomaticCapture("Driver Rear Camera", 1);
-            camera2.setResolution(240, 240);
-            camera2.setFPS(15);
+        //     camera2 = CameraServer.startAutomaticCapture("Driver Rear Camera", 1);
+        //     camera2.setResolution(240, 240);
+        //     camera2.setFPS(15);
 
-            server = CameraServer.getServer();
+        //     server = CameraServer.getServer();
 
-            camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-            camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-        }
+        //     camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+        //     camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+        // }
     }
 
     /**
@@ -294,10 +303,10 @@ public class RobotContainer
         // camera and direction of the robot are one and the same
         // Sets the "directionality" of the robot
         // Sets both the direction controls and the camera selection
-        reverseOffBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(false))
-            .whenPressed(() -> server.setSource(camera1));
-        reverseOnBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(true))
-            .whenPressed(() -> server.setSource(camera2));
+        reverseOffBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(false));
+            // .whenPressed(() -> server.setSource(camera1));
+        reverseOnBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(true));
+            // .whenPressed(() -> server.setSource(camera2));
 
         // Drive train gearshift is controlled by a separate subsystem so that we
         // can run the robot even when the pneumatics are not connected.

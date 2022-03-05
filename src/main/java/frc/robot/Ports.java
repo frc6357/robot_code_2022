@@ -34,8 +34,8 @@ public class Ports
     //////////////////////////////
     // Robot Infrastructure
     //////////////////////////////
-    public static final int BASE_PCM               = 1;  // CAN ID
-    public static final int CLIMB_PNEUMATIC_MODULE = 2;
+    public static final int BASE_PCM               = 2;  // CAN ID
+    public static final int CLIMB_PNEUMATIC_MODULE = 3;
 
     public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
 
@@ -70,8 +70,8 @@ public class Ports
     //////////////////////////////
     public static final int INTAKE_MOTOR = 40; // CAN ID 
 
-    public static final int INTAKE_MOVER_FORWARD  = 0;  // PCM Channel 
-    public static final int INTAKE_MOVER_BACKWARD = 1;  // PCM Channel 
+    public static final int INTAKE_MOVER_FORWARD  = 9;  // PCM Channel 
+    public static final int INTAKE_MOVER_BACKWARD = 8;  // PCM Channel 
 
     public static final PneumaticsModuleType INTAKE_PCM = PneumaticsModuleType.REVPH;
 

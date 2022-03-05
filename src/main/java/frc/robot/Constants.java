@@ -118,7 +118,7 @@ public final class Constants
         public static final int LOW_SPEED_PRESET   = 3000;
         public static final int MID_SPEED_PRESET   = 3400;
         public static final int HIGHT_SPEED_PRESET = 3600;
-        public static final int MAX_SPEED_PRESET   = 4500;
+        public static final int MAX_SPEED_PRESET   = 4000;
 
         public static final double LAUNCHER_KP = 0.0003;
         public static final double LAUNCHER_KI = 0.0008;

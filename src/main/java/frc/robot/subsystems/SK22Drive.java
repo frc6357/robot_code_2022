@@ -93,17 +93,9 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     {
         double leftEncoderDistanceMeters = leftMotorEncoder.getPositionMeters();
         double rightEncoderDistanceMeters = rightMotorEncoder.getPositionMeters();
-        double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
-        double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
         // Update the odometry in the periodic block
         odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoderDistanceMeters,
             rightEncoderDistanceMeters);
-
-        SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
-        SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
-        SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
-        SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
-        SmartDashboard.putNumber("Gyro Angle", getHeading());
     }
     
     /**

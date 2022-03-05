@@ -1,7 +1,7 @@
 {
     "intake"        : true,
     "transfer"      : true,
-    "launcher"      : true,
+    "launcher"      : true, 
     "simpleClimb"   : false,
     "complexClimb"  : false,
     "vision"        : false,

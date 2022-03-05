@@ -236,7 +236,9 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 4200.0,
               "Y-axis/Lower bound": 0.0,
-              "Y-axis/Unit": "RPM"
+              "Y-axis/Unit": "RPM",
+              "Visible data/SmartDashboard/Launcher RPM": true,
+              "Visible data/SmartDashboard/Launcher Setpoint RPM": true
             }
           },
           "8,6": {
@@ -371,6 +373,28 @@
                 }
               }
             }
+          },
+          "34,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Intake Extended",
+              "_title": "Intake Extended"
+            }
+          },
+          "34,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Direction",
+              "_title": "Direction"
+            }
           }
         }
       }
@@ -469,15 +493,80 @@
               "_title": "Ungrouped/MotorControllerGroup[3]",
               "Visuals/Orientation": "HORIZONTAL"
             }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DigitalOutput[28]/Value",
+              "_title": "Ungrouped/DigitalOutput[28]/Value",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "8,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[0]/Value",
+              "_title": "Ungrouped/DigitalInput[0]/Value",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[27]/Value",
+              "_title": "Ungrouped/DigitalInput[27]/Value",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[26]/Value",
+              "_title": "Ungrouped/DigitalInput[26]/Value",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DigitalInput[1]/Value",
+              "_title": "Ungrouped/DigitalInput[1]/Value",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": -7.333333492279053,
-    "y": -7.333333492279053,
-    "width": 1294.6666259765625,
-    "height": 686.6666870117188
+    "x": -7.0,
+    "y": -7.0,
+    "width": 1295.0,
+    "height": 687.0
   }
 }

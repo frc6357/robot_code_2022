@@ -22,6 +22,7 @@ import frc.robot.AutoTools.SK22Paths.Taxi;
 import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal1A;
 import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal2A;
 import frc.robot.AutoTools.SK22Paths.TwoBallRadialHH;
+import frc.robot.commands.DoNothingCommand;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
@@ -36,6 +37,8 @@ public class SK22CommandBuilder
     private File[]                   files;
     private Map<String, Set<String>> dependencies = new HashMap<String, Set<String>>();
     private TrajectoryBuilder        pathBuilder;
+
+    private AutoPaths defaultAuto;
 
     private Set<AutoPaths> autoPaths = new HashSet<AutoPaths>();
 
@@ -81,9 +84,11 @@ public class SK22CommandBuilder
             }
         }
 
+
+        defaultAuto = new TwoBallRadialHH(intake, transfer, launcher);
         // Adding all the auto paths to the set
         autoPaths.add(new Taxi());
-        autoPaths.add(new TwoBallRadialHH(intake, transfer, launcher));
+        // autoPaths.add(new TwoBallRadialHH(intake, transfer, launcher));
         autoPaths.add(new ThreeBallTerminal1A());
         autoPaths.add(new ThreeBallTerminal2A());
         autoPaths.add(new FourBallTerminal1ALHHH());
@@ -153,6 +158,8 @@ public class SK22CommandBuilder
             {
                 displayMethod.addOption(auto.getName(), auto);
             }
+
+            displayMethod.setDefaultOption(defaultAuto.getName(), defaultAuto);
         }
     }
 }

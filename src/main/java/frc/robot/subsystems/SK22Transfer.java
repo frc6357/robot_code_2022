@@ -31,7 +31,7 @@ public class SK22Transfer extends SKSubsystemBase
 
     protected boolean isRunningTimer = false;
 
-    ColorSensor  colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
+    // ColorSensor  colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
     SwitchSensor exitTransferSensor;
     SwitchSensor verticalTransferSensor;
 
@@ -68,7 +68,7 @@ public class SK22Transfer extends SKSubsystemBase
     @Override
     public void periodic()
     {
-        colorSensor.periodic();
+        // colorSensor.periodic();
     }
 
     /**
@@ -152,7 +152,8 @@ public class SK22Transfer extends SKSubsystemBase
      */
     public String getColorSensor()
     {
-        return colorSensor.getColor();
+        return null;
+        // return colorSensor.getColor();
     }
 
     /**
@@ -162,7 +163,8 @@ public class SK22Transfer extends SKSubsystemBase
      */
     public boolean getPositionOnePresence()
     {
-        return colorSensor.getBallPresence();
+        return false;
+        // return colorSensor.getBallPresence();
     }
 
     // TODO: Rename these methods to make it clear which positions "PositionTwo"
