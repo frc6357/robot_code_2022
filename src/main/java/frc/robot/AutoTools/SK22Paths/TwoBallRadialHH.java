@@ -5,6 +5,7 @@ import java.util.Optional;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.RamseteTrajectoryMethod;
 import frc.robot.AutoTools.TrajectoryBuilder;
@@ -78,20 +79,39 @@ public class TwoBallRadialHH implements AutoPaths
     public Command getCommand(TrajectoryBuilder segmentCreator,
         RamseteTrajectoryMethod trajectoryCreator)
     {
-        return new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                trajectoryCreator
-                    .createTrajectory(segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
-                    
-                (intake.isPresent() && transfer.isPresent())
-                ? new SetIntakePositionCommand(intake.get(), transfer.get(), true) : new DoNothingCommand(),
+        return new SequentialCommandGroup(new SetLauncherSpeedCommand(launcher.get(), 0.0),
+            getParallelCommand(segmentCreator, trajectoryCreator), getShootCommand());
+    }
 
-                (launcher.isPresent()) 
-                ? (new SetLauncherSpeedCommand(launcher.get())) : new DoNothingCommand(),
-                
-                new TimeDelayCommand(5000)),
+    private Command getParallelCommand(TrajectoryBuilder segmentCreator,
+        RamseteTrajectoryMethod trajectoryCreator)
+    {
+        return new ParallelCommandGroup(
+            trajectoryCreator
+                .createTrajectory(segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
+            getIntakeCommand(), 
+            getLauncherCommand(), 
+            new TimeDelayCommand(5000));
 
-            (launcher.isPresent() && transfer.isPresent())
-            ? new ShootBallsCommand(launcher.get(), transfer.get()) : new DoNothingCommand());
+    }
+
+    private Command getIntakeCommand()
+    {
+        return (intake.isPresent() && transfer.isPresent())
+            ? new SetIntakePositionCommand(intake.get(), transfer.get(), true)
+            : new DoNothingCommand();
+    }
+
+    private Command getLauncherCommand()
+    {
+        return (launcher.isPresent())
+            ? (new SetLauncherSpeedCommand(launcher.get(), AutoConstants.AUTO_LAUNCH_SPEED))
+            : new DoNothingCommand();
+    }
+
+    private Command getShootCommand()
+    {
+        return (launcher.isPresent() && transfer.isPresent())
+            ? new ShootBallsCommand(launcher.get(), transfer.get()) : new DoNothingCommand();
     }
 }

@@ -6,9 +6,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.ColorSensor;
 import frc.robot.Constants;
-import frc.robot.Constants.TransferConstants;
 import frc.robot.Ports;
 import frc.robot.commands.DefaultTransferCommand;
 import frc.robot.subsystems.base.SwitchSensor;
