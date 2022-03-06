@@ -30,16 +30,12 @@ public class SetLauncherSpeedCommand extends CommandBase
     public void initialize()
     {
         launcher.setLauncherRPM(AutoConstants.AUTO_LAUNCH_SPEED);
-        launcher.enableLauncher();
     }
 
     @Override
     public void end(boolean interrupted)
     {
-        if (interrupted)
-        {
-            launcher.disableLauncher();
-        }
+        
     }
 
     @Override

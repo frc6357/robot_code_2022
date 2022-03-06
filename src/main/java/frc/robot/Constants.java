@@ -137,7 +137,7 @@ public final class Constants
 
         public static final double LAUNCHER_TRANSFER_SPEED = 1.0;
 
-        public static final double LAUNCHER_RPM_ERROR_TOLERANCE = 20.0;
+        public static final double LAUNCHER_RPM_ERROR_TOLERANCE = 200.0;
     }
 
     /** Constants related to Intake */
