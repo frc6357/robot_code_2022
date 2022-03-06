@@ -45,8 +45,6 @@ public class SetLauncherSpeedCommand extends CommandBase
     @Override
     public boolean isFinished()
     {
-        // Check if difference between setpoint and actual rpm is within tolerance
-        return Math.abs(launcher.getLauncherRPMSetpoint() - launcher.getLauncherRPM())
-            <= LauncherConstants.LAUNCHER_RPM_ERROR_TOLERANCE;
+        return true;
     }
 }

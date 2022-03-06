@@ -135,6 +135,7 @@ public class Ports
     public static final int OI_DRIVER_LAUNCHER_LOW   = 10; // Joystick Button 10
     public static final int OI_DRIVER_LAUNCHER_MAX   = 12; // Joystick Button 12
     public static final int OI_DRIVER_LAUNCHER_OFF   = 11; // Joystick Button 11
+    public static final int OI_DRIVER_VERTICAL_TRANSFER_REVERSE = 7;
 
     // TODO: Update documentation for this button
     public static final int OI_OPERATOR_TRANSFER_START    = 7;  // BACK Button

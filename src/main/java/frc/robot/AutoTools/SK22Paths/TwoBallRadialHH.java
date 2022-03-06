@@ -12,6 +12,7 @@ import frc.robot.commands.DoNothingCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.SetLauncherSpeedCommand;
 import frc.robot.commands.ShootBallsCommand;
+import frc.robot.commands.subcommands.TimeDelayCommand;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
@@ -86,7 +87,9 @@ public class TwoBallRadialHH implements AutoPaths
                 ? new SetIntakePositionCommand(intake.get(), transfer.get(), true) : new DoNothingCommand(),
 
                 (launcher.isPresent()) 
-                ? (new SetLauncherSpeedCommand(launcher.get())) : new DoNothingCommand()),
+                ? (new SetLauncherSpeedCommand(launcher.get())) : new DoNothingCommand(),
+                
+                new TimeDelayCommand(5000)),
 
             (launcher.isPresent() && transfer.isPresent())
             ? new ShootBallsCommand(launcher.get(), transfer.get()) : new DoNothingCommand());
