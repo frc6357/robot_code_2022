@@ -26,6 +26,7 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Ports;
+import frc.robot.AutoTools.KalmanPose;
 import frc.robot.utils.DifferentialDrivetrain;
 import frc.robot.utils.MotorEncoder;
 
@@ -64,6 +65,9 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
 
     private boolean reversed = false;
 
+    private KalmanPose kalmanX = new KalmanPose();
+    private KalmanPose kalmanY = new KalmanPose();
+
     /**
      * Creates a SK22Drive subsystem controlling the drivetrain.
      */
@@ -96,6 +100,19 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         // Update the odometry in the periodic block
         odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoderDistanceMeters,
             rightEncoderDistanceMeters);
+
+        // Predicts Position
+        double[] globalAccel = getGlobalAcceleration();
+        double[] robotAccel = getRelativeAcceleration();
+        kalmanX.periodic(globalAccel[0], 0);
+        kalmanY.periodic(globalAccel[1], 0);
+
+        SmartDashboard.putNumber("Robot X Accel", robotAccel[0]);
+        SmartDashboard.putNumber("Robot Y Accel", robotAccel[1]);
+
+        SmartDashboard.putNumber("Kalman X", kalmanX.getState());
+        SmartDashboard.putNumber("Kalman Y", kalmanY.getState());
+        SmartDashboard.putNumber("Pose Theta", odometry.getPoseMeters().getRotation().getDegrees());
     }
     
     /**
@@ -140,6 +157,8 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     public void resetOdometry(Pose2d pose)
     {
         resetEncoders();
+        kalmanX.setPosition(pose.getX());
+        kalmanY.setPosition(pose.getY());
         odometry.resetPosition(pose, Rotation2d.fromDegrees(gyro.getAngle()));
     }
 
@@ -258,6 +277,44 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     public double getTurnRate()
     {
         return gyro.getRate();
+    }
+
+    /**
+     * Returns the global angle of the robot as defined by the coordinate
+     * system used Pathweaver
+     *
+     * @return the robot's heading in radians (CCW Positive)
+     */
+    public double getGlobalAngleRadians()
+    {
+        return getPose().getRotation().getRadians();
+    }
+    
+    /**
+     * Gets the acceleration of the robot relative to itself
+     * @return A double array [x_accleration, y_acceleration]
+     */
+    public double[] getRelativeAcceleration()
+    {
+        return new double[]{gyro.getAccelX() + 0.04, gyro.getAccelY() + 0.28};
+    }
+
+    /**
+     * Gets the acceleration of the robot relative to the yaw angle
+     * @return A double array [x_accleration, y_acceleration]
+     */
+    public double[] getGlobalAcceleration()
+    {
+        double theta = getGlobalAngleRadians();
+        double xRelative = getRelativeAcceleration()[0];
+        double yRelative = getRelativeAcceleration()[1];
+
+        // Using a rotation matrix to set the relative accelerations
+        // to global acceleration with the pose rotation. This uses
+        // counterclockwise positive rotation.
+        return new double[]
+            {(Math.cos(theta) * xRelative) - (Math.sin(theta) * yRelative),
+                (Math.sin(theta) * xRelative) + (Math.cos(theta) * yRelative)};
     }
 
     @Override

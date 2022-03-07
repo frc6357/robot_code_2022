@@ -18,6 +18,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -438,6 +440,7 @@ public class RobotContainer
     {
         driveSubsystem.resetEncoders();
         driveSubsystem.resetGyro();
+        driveSubsystem.resetOdometry(new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)));
     }
 
     /**
