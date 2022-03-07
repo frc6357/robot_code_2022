@@ -90,7 +90,7 @@ public final class Constants
         public static final double MAX_SPEED        = 2;     // Meters Per Second
         public static final double MAX_ACCELERATION = 0.50;  // Meters Per Seconds Squared
 
-        public static final double AUTO_LAUNCH_SPEED = 4000; // RPM
+        public static final double AUTO_LAUNCH_SPEED = 3300; // RPM
 
         // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
         public static final double RAMSETE_B    = 2;

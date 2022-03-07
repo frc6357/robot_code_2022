@@ -37,7 +37,7 @@ public class EjectBallCommand extends CommandBase
     public void initialize()
     {
         //Sets the exist transfer motor to ejectionspeed
-        transfer.setExitTransferMotor(TransferConstants.BALL_EJECTION_SPEED);
+        transfer.setExitTransferMotor(-TransferConstants.BALL_EJECTION_SPEED);
         //Sets the intake transfer motor to ejectionspeed
         transfer.setIntakeTransferMotor(TransferConstants.BALL_EJECTION_SPEED);
     }
