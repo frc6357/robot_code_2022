@@ -4,7 +4,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.subsystems.SK22Transfer;
 
-public interface TimerBase {
+public interface TimerBase
+{
     public final TimerType timerType = TimerType.DEFAULT;
     public int timerDuration = 0;
     public int timerProgress = 0;
