@@ -395,6 +395,30 @@
               "_source0": "network_table:///SmartDashboard/Direction",
               "_title": "Direction"
             }
+          },
+          "34,2": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Launcher at Setpoint RPM",
+              "_title": "Launcher at Setpoint RPM",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "56,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Intake Speed",
+              "_title": "Intake Speed"
+            }
           }
         }
       }
@@ -558,6 +582,39 @@
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
+          },
+          "5,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/DoubleSolenoid[2,9]/Value",
+              "_title": "Ungrouped/DoubleSolenoid[2,9]/Value"
+            }
+          },
+          "6,2": {
+            "size": [
+              1,
+              2
+            ],
+            "content": {
+              "_type": "PID Controller",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[2]",
+              "_title": "Ungrouped/PIDController[2]"
+            }
+          },
+          "7,2": {
+            "size": [
+              1,
+              2
+            ],
+            "content": {
+              "_type": "PID Controller",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[3]",
+              "_title": "Ungrouped/PIDController[3]"
+            }
           }
         }
       }
@@ -565,8 +622,8 @@
   ],
   "windowGeometry": {
     "x": -7.0,
-    "y": -7.0,
-    "width": 1295.0,
+    "y": 0.0,
+    "width": 1377.0,
     "height": 687.0
   }
 }

@@ -118,6 +118,7 @@ public class RotatingArm
         }
         else
         {
+            System.out.println("Motor not currently set");
             motor.set(0.0);
         }
     }

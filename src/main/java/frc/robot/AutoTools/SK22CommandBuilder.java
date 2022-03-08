@@ -85,10 +85,10 @@ public class SK22CommandBuilder
         }
 
 
-        defaultAuto = new Taxi();
+        defaultAuto = new TwoBallRadialHH(intake, transfer, launcher);
         // Adding all the auto paths to the set
-        // autoPaths.add(new Taxi());
-        autoPaths.add(new TwoBallRadialHH(intake, transfer, launcher));
+        autoPaths.add(new Taxi());
+        // autoPaths.add(new TwoBallRadialHH(intake, transfer, launcher));
         autoPaths.add(new ThreeBallTerminal1A());
         autoPaths.add(new ThreeBallTerminal2A());
         autoPaths.add(new FourBallTerminal1ALHHH());
