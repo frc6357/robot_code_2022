@@ -5,7 +5,8 @@ import com.revrobotics.CANSparkMax;
 
 import frc.robot.subsystems.SK22Transfer;
 
-public class VerticalTimer implements TimerBase {
+public class VerticalTimer implements TimerBase
+{
 
     public final TimerType timerType = TimerType.VERTICAL;
     private final int timerDuration;
@@ -54,21 +55,22 @@ public class VerticalTimer implements TimerBase {
     @Override
     public TimerStatus periodic(SK22Transfer transfer)
     {
-        if(timerProgress == 0)
+        if (timerProgress == 0)
         {
             int index = 0;
-            for (CANSparkMax motor : motors) {
+            for (CANSparkMax motor : motors)
+            {
                 motor.setVoltage(speeds[index]);
                 index++;
             }
 
             // transfer.setTimerState(true);
         }
-        else if(timerProgress < timerDuration)
+        else if (timerProgress < timerDuration)
         {
             timerProgress++;
         }
-        else if(timerProgress >= timerDuration)
+        else if (timerProgress >= timerDuration)
         {
             timerProgress = 0;
 
@@ -76,10 +78,11 @@ public class VerticalTimer implements TimerBase {
 
             return TimerStatus.FINSIHED;
         }
-        else if(!transfer.getIsRunningTimerEnabled() && timerProgress > 0)
+        else if (!transfer.getIsRunningTimerEnabled() && timerProgress > 0)
         {
             timerProgress = 0;
-            for (CANSparkMax motor : motors) {
+            for (CANSparkMax motor : motors)
+            {
                 motor.setVoltage(0.0);
             }
 

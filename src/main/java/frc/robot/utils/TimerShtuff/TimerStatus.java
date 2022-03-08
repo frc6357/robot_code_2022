@@ -1,6 +1,7 @@
 package frc.robot.utils.TimerShtuff;
 
-public enum TimerStatus {
+public enum TimerStatus
+{
     IN_PROGRESS,
     FINSIHED
 }

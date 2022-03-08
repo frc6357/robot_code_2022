@@ -4,7 +4,8 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TransferConstants;
 import frc.robot.subsystems.SK22Transfer;
 
-public class ReverseVerticalTransferCommand extends CommandBase {
+public class ReverseVerticalTransferCommand extends CommandBase
+{
     /**
      * Transfer subsystem for the LoadBallVertical Command
      */

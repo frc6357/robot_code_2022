@@ -62,11 +62,12 @@ public class Launcher
 
     SmartDashboard.putNumber("Launcher RPM", launcherRPM);
     
-    if(launcherEnabled || (targetRPM == 0.0))
+    if (launcherEnabled || (targetRPM == 0.0))
     {
       
       double motorOutput = controller.calculate(launcherRPM, targetRPM);
-      if(motorOutput < 0.0){
+      if (motorOutput < 0.0)
+      {
         motorOutput = 0.0;
       }
       motorControllerGroup.set(motorOutput);
@@ -88,12 +89,13 @@ public class Launcher
     launcherEnabled = true;
   }
 
-  public void resetController(double kP, double kI, double kD){
+  public void resetController(double kP, double kI, double kD)
+  {
     controller.setPID(kP, kI, kD);
-    
   }
 
-  public void reset(){
+  public void reset()
+  {
     controller.reset();
   }
 
@@ -130,7 +132,7 @@ public class Launcher
    */
   public double getCurMotorRPM() 
   {
-    if(isLauncherEnabled()) 
+    if (isLauncherEnabled()) 
     {
       return targetRPM;
     } 
