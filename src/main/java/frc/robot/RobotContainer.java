@@ -16,10 +16,11 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.wpi.first.cscore.UsbCamera;
-import edu.wpi.first.cscore.VideoSink;
+// TODO: Reinstate driver cameras.
+// import edu.wpi.first.cscore.UsbCamera;
+// import edu.wpi.first.networktables.NetworkTableEntry;
+// import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -78,9 +79,10 @@ public class RobotContainer
     /**
      * The USB Camera for the Robot.
      */
-    private UsbCamera         camera1;
-    private UsbCamera         camera2;
-    private NetworkTableEntry cameraSelection;
+    // private UsbCamera         camera1;
+    // private UsbCamera         camera2;
+    // private NetworkTableEntry cameraSelection;
+    // private VideoSink         server;
 
     private final SK22CommandBuilder pathBuilder;
     private final TrajectoryBuilder    segmentCreator      =
@@ -155,7 +157,6 @@ public class RobotContainer
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_LOAD);
     private final TriggerButton  climbExtendBtn        =
             new TriggerButton(operatorJoystick, Ports.OI_OPERATOR_EXTEND_CLIMB);
-    // TODO: Just for competition
     private final JoystickButton reverseVerticalTransferBtn =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VERTICAL_TRANSFER_REVERSE);
     private final JoystickButton climbRetractBtn       =
@@ -167,8 +168,6 @@ public class RobotContainer
             new DefaultArcadeDriveCommand(driveSubsystem, driverLeftJoystick);
     private final DefaultTankDriveCommand   tankDrive   =
             new DefaultTankDriveCommand(driveSubsystem, driverLeftJoystick, driverRightJoystick);
-
-    private VideoSink server;
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -293,8 +292,6 @@ public class RobotContainer
     private void configureButtonBindings()
     {
         // Turns on slowmode when driver presses slowmode button, giving more manueverability.
-        // TODO: Do we need slow mode now that we have a gear shift? Doesn't low gear achieve
-        // the same end?
         driveSlowBtn.whenPressed(() -> driveSubsystem.setMaxOutput(0.5));
         driveSlowBtn.whenReleased(() -> driveSubsystem.setMaxOutput(1));
 
