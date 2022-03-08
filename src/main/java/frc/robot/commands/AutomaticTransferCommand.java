@@ -7,11 +7,9 @@ import com.revrobotics.CANSparkMax;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
-import frc.robot.Constants.TransferConstants;
 import frc.robot.subsystems.SK22Transfer;
 import frc.robot.utils.TimerShtuff.TimerBase;
 import frc.robot.utils.TimerShtuff.TimerType;
-import frc.robot.utils.TimerShtuff.VerticalTimer;
 
 /**
  * Command to automatically manage moving balls through the transfer subsystem.
@@ -72,7 +70,7 @@ public class AutomaticTransferCommand extends CommandBase
                     // Transfer ball to the vertical hold
                     timerType = TimerType.VERTICAL;
 
-                    if(curTimer == null)
+                    if (curTimer == null)
                     {
                         List<CANSparkMax> motors = new ArrayList<>();
                         List<Double> speeds = new ArrayList<>();
@@ -130,7 +128,7 @@ public class AutomaticTransferCommand extends CommandBase
     {
         if (timerType == TimerType.VERTICAL)
         {
-            if(timerElapsed == 0)
+            if (timerElapsed == 0)
             {
                 transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
                 timerElapsed++;
@@ -156,7 +154,7 @@ public class AutomaticTransferCommand extends CommandBase
         }
         else
         {
-            if(timerElapsed == 0) 
+            if (timerElapsed == 0) 
             {
                 transfer.setExitTransferMotor(Constants.TransferConstants.EXIT_MOTOR_SPEED);
                 timerElapsed++;

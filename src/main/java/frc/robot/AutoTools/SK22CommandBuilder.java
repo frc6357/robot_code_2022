@@ -22,7 +22,6 @@ import frc.robot.AutoTools.SK22Paths.Taxi;
 import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal1A;
 import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal2A;
 import frc.robot.AutoTools.SK22Paths.TwoBallRadialHH;
-import frc.robot.commands.DoNothingCommand;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
