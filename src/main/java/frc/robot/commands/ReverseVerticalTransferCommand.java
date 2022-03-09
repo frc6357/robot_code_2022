@@ -4,6 +4,9 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TransferConstants;
 import frc.robot.subsystems.SK22Transfer;
 
+/**
+ * A command allowing the vertical ball transfer motor to be run backwards.
+ */
 public class ReverseVerticalTransferCommand extends CommandBase
 {
     /**

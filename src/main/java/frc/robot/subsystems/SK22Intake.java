@@ -15,7 +15,6 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 public class SK22Intake extends SKSubsystemBase
 {
-    // TODO: Remove commenting on pneumatics!
     private final DoubleSolenoid intakeMover = new DoubleSolenoid(Ports.BASE_PCM, Ports.INTAKE_PCM,
         Ports.INTAKE_MOVER_FORWARD, Ports.INTAKE_MOVER_BACKWARD);
 

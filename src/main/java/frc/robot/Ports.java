@@ -61,7 +61,7 @@ public class Ports
     public static final int EXIT_TRANSFER_MOTOR         = 31; // Currently unknown Port
     public static final int INTAKE_TRANSFER_MOTOR       = 30; // Currently unknown Port
     public static final int VERTICAL_TRANSFER_MOTOR     = 32; // Currently unknown Port
-    // TODO: Find out what these ports are
+    // TODO: Remove sensors that are not populated on the robot
     public static final int EXIT_SENSOR                 = 0;  // Currently unknown Port
     public static final int VERTICAL_SENSOR             = 1;  // Currently unknown Port
 
@@ -137,7 +137,7 @@ public class Ports
     public static final int OI_DRIVER_LAUNCHER_MAX   = 12; // Joystick Button 12
     public static final int OI_DRIVER_LAUNCHER_OFF   = 11; // Joystick Button 11
 
-    // TODO: Update documentation for this button
+    // TODO: Remove buttons related to automatic transfer control.
     public static final int OI_OPERATOR_TRANSFER_START    = 7;  // BACK Button
     public static final int OI_OPERATOR_TRANSFER_EJECT    = 4;  // Y button
     public static final int OI_OPERATOR_TRANSFER_LOAD     = 3;  // X button
@@ -145,8 +145,9 @@ public class Ports
     public static final int OI_OPERATOR_INTAKE_RETRACT    = 2;  // B Button
     public static final int OI_OPERATOR_EXTEND_CLIMB      = 3;  // Right Trigger Axis
     public static final int OI_OPERATOR_RETRACT_CLIMB     = 6;  // Right Bumper
-    public static final int OI_OPERATOR_SEQUENCE_CLIMB = 5;  // Left Bumper
-    public static final int OI_OPERATOR_STOP_CLIMB        = 2;  // Left Trigger Axis (TODO: Write this command)
+    public static final int OI_OPERATOR_SEQUENCE_CLIMB    = 5;  // Left Bumper
+    // TODO: Write emergency stop command for climb
+    public static final int OI_OPERATOR_STOP_CLIMB        = 2;  // Left Trigger Axis
 
     public static final Port i2c = Port.kOnboard;
 }

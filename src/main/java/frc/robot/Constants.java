@@ -1,4 +1,4 @@
-// 
+//
 // Constants used in the software build for FRC Team 6357's 2022 robot.
 //
 
@@ -143,7 +143,6 @@ public final class Constants
     /** Constants related to Intake */
     public static final class IntakeConstants
     {
-        // TODO: Tune this value
         public static final double INTAKE_MOTOR_SPEED = 1.0;
     }
 
@@ -168,15 +167,14 @@ public final class Constants
 
         public static final double ARM_MOTOR_RPM = 5000; //Guess???
 
-        
-
         //Pivot
         public static final int PIVOT_MOTOR_TEETH_PER_REVOLUTION = 20; //Per De E
         public static final int PIVOT_MOTOR_GEAR_RATIO           = 25;  // 2x 5:1 Gearbox
         public static final int PIVOT_ARC_TEETH_PER_REVOLUTION   = 303; //59 teeth in a 70 degreee arc
-        public static final double PIVOT_ARM_CONTROLLER_KP       = 0.005; // TODO: NEEDS TUNNING
-        public static final double PIVOT_ARM_CONTROLLER_KI       = 0.0; // TODO: NEEDS TUNNING
-        public static final double PIVOT_ARM_CONTROLLER_KD       = 0.0; // TODO: NEEDS TUNNING
+        // TODO: Tune PID coefficients for the pivot arm.
+        public static final double PIVOT_ARM_CONTROLLER_KP       = 0.005;
+        public static final double PIVOT_ARM_CONTROLLER_KI       = 0.0; 
+        public static final double PIVOT_ARM_CONTROLLER_KD       = 0.0; 
 
         //Converts motor revs to degrees based on gearing
         public static final double PIVOT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER  =
@@ -188,29 +186,31 @@ public final class Constants
         public static final int LIFT_MOTOR_TEETH_PER_REVOLUTION = 20; // Check this!
         public static final int LIFT_RACK_TEETH_PER_INCH        = 20; // Check this!
         public static final int LIFT_MOTOR_GEAR_RATIO           = 9; // 9:1 gear ratio
-        public static final double LIFT_ARM_CONTROLLER_KP       = 0.005; // TODO: NEEDS TUNNING
-        public static final double LIFT_ARM_CONTROLLER_KI       = 0.0; // TODO: NEEDS TUNNING
-        public static final double LIFT_ARM_CONTROLLER_KD       = 0.0; // TODO: NEEDS TUNNING
+        // TODO: Tune PID coefficients for the rotating climb arm. Is this the extending arm controller?
+        public static final double LIFT_ARM_CONTROLLER_KP       = 0.005;
+        public static final double LIFT_ARM_CONTROLLER_KI       = 0.0;
+        public static final double LIFT_ARM_CONTROLLER_KD       = 0.0;
 
         //Converts motor revs to degrees based on gearing
         public static final double LIFT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER  =
                                             ((360.0 * PIVOT_MOTOR_TEETH_PER_REVOLUTION)
                                             / (PIVOT_MOTOR_GEAR_RATIO * PIVOT_ARC_TEETH_PER_REVOLUTION));
 
-        public static final double COMPLEX_FULL_TILT            = 30;  //TODO: Needs tuning
+        // TODO: Tune all time and distance constants for the complex climb arm
+        public static final double COMPLEX_FULL_TILT            = 30;
         public static final double COMPLEX_FULL_STRAIGHTEN      = 0;
-        public static final double COMPLEX_FULL_EXTEND          = 20;  //TODO: Needs Tuning
+        public static final double COMPLEX_FULL_EXTEND          = 20;
         public static final double COMPLEX_FULL_RETRACT         = 0;
-        public static final double COMPLEX_PARTIAL_STRAIGHTEN   = 25;  //TODO: Needs Tuning
-        public static final double COMPLEX_PARTIAL_EXTEND       = 5;   //TODO: Needs Tuning
-        public static final long   STEP6_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
-        public static final long   STEP7_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
-        public static final long   STEP8_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
-        public static final long   STEP9_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
-        public static final long   STEP10_DELAY_MILLIS          = 1000; //TODO: Needs Tuning
-        public static final long   STEP4_DELAY_MILLIS           = 1000; //TODO: Needs Tuning
+        public static final double COMPLEX_PARTIAL_STRAIGHTEN   = 25;
+        public static final double COMPLEX_PARTIAL_EXTEND       = 5;
+        public static final long   STEP6_DELAY_MILLIS           = 1000;
+        public static final long   STEP7_DELAY_MILLIS           = 1000;
+        public static final long   STEP8_DELAY_MILLIS           = 1000;
+        public static final long   STEP9_DELAY_MILLIS           = 1000;
+        public static final long   STEP10_DELAY_MILLIS          = 1000;
+        public static final long   STEP4_DELAY_MILLIS           = 1000;
 
-        public static final double CURRENT_THRESHOLD            = 1000.0; //TODO: Needs Tuning
+        public static final double CURRENT_THRESHOLD            = 1000.0;
     }
 
     /**Constants related to Vision subsystem */

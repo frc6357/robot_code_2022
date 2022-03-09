@@ -7,7 +7,7 @@
 
 package frc.robot;
 
-// TODO: Commented out after moving SK22Climb instantiation to RobotContainer.
+// DW: Commented out after moving SK22Climb instantiation to RobotContainer.
 //import com.revrobotics.CANSparkMax;
 //import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 //import com.revrobotics.REVPhysicsSim;
@@ -37,15 +37,15 @@ public class Robot extends TimedRobot
      */
     public Robot()
     {
-        // TODO: May want to build or load trajectories here?
         robotContainer = new RobotContainer();
     }
 
     @Override
     public void robotInit()
     {
-        // TODO: NO! We can't be making Climb a special case here. Why isn't it
+        // DW: NO! We can't be making Climb a special case here. Why isn't it
         // instantiated with all the other subsystems?
+
         //robotContainer = new RobotContainer(climbSubsystem);
         //robotSimulation = new RobotSim(complexBrakePivot, complexRatchetLift);
     }
@@ -165,8 +165,9 @@ public class Robot extends TimedRobot
     @Override
     public void simulationPeriodic()
     {
-        // TODO: Commented out for now after moving SK22Climb instantiation into RobotContainer
-        // with the other subsystems.   
+        // Commented out for now after moving SK22Climb instantiation into RobotContainer
+        // with the other subsystems. 
+
         //complexBrakePivot.set(-.025);
         //complexRatchetLift.set(.25);
         //REVPhysicsSim.getInstance().run();

@@ -10,6 +10,7 @@
     <suppress checks="ConstantNameCheck" files="Ports\.java" />
     <suppress checks="HideUtilityClassConstructorCheck" files="Ports\.java" />
     <suppress checks="VisibilityModifierCheck" files="SK22.*\.java" />
+    <suppress checks="ParameterNumberCheck" files="SubsystemControls\.java" />
 </suppressions>
 
         
