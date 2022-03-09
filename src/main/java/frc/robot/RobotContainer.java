@@ -336,15 +336,6 @@ public class RobotContainer
             SK22Transfer transfer = transferSubsystem.get();
 
             transferStartBtn.whenPressed(new AutomaticTransferCommand(transfer));
-        
-            // Emergency override to eject balls from the horizontal transfer
-            transferEjectBallBtn.whenHeld(new EjectBallCommand(transfer), true);
-
-            // Emergency override to move ball from the horizontal transfer
-            // into the vertical loader.
-            transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer), true);
-
-            reverseVerticalTransferBtn.whenHeld(new ReverseVerticalTransferCommand(transfer), true);
         }
 
         if (visionSubsystem.isPresent())
@@ -377,6 +368,15 @@ public class RobotContainer
                 () -> launcher.setLauncherRPM(LauncherConstants.LOW_SPEED_PRESET));
             driverLauncherMaxBtn.whenPressed(
                 () -> launcher.setLauncherRPM(LauncherConstants.MAX_SPEED_PRESET));
+
+            reverseVerticalTransferBtn.whenHeld(new ReverseVerticalTransferCommand(launcher), true);
+
+            // Emergency override to move ball from the horizontal transfer
+            // into the vertical loader.
+            transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer, launcher), true);
+
+            // Emergency override to eject balls from the horizontal transfer
+            transferEjectBallBtn.whenHeld(new EjectBallCommand(transfer, launcher), true);
         }
 
         // User controls related to the climbing function.

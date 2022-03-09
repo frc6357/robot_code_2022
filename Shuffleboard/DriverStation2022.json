@@ -419,6 +419,61 @@
               "_source0": "network_table:///SmartDashboard/Intake Speed",
               "_title": "Intake Speed"
             }
+          },
+          "58,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Kalman X",
+              "_title": "Kalman X"
+            }
+          },
+          "56,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Kalman Y",
+              "_title": "Kalman Y"
+            }
+          },
+          "58,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Pose Theta",
+              "_title": "Pose Theta"
+            }
+          },
+          "38,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Robot X Accel",
+              "_title": "Robot X Accel"
+            }
+          },
+          "56,2": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Robot Y Accel",
+              "_title": "Robot Y Accel"
+            }
           }
         }
       }

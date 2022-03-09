@@ -2,7 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TransferConstants;
+import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
+import frc.robot.subsystems.base.Launcher;
 
 /**
  * A command that ejects balls through the horizontal exit in
@@ -16,15 +18,18 @@ public class EjectBallCommand extends CommandBase
      */
     private final SK22Transfer transfer;
 
+    private final SK22Launcher launcher;
+
     /**
      * Manual override command allowing the operator to eject any ball
      * currently in the horizontal portion of the transfer.
      * 
      * @param transfer The transfer subsystem the command operates on.
      */
-    public EjectBallCommand(SK22Transfer transfer)
+    public EjectBallCommand(SK22Transfer transfer, SK22Launcher launcher)
     {
         this.transfer = transfer;
+        this.launcher = launcher;
 
         addRequirements(transfer);
     }
@@ -37,7 +42,7 @@ public class EjectBallCommand extends CommandBase
     public void initialize()
     {
         //Sets the exist transfer motor to ejectionspeed
-        transfer.setExitTransferMotor(-TransferConstants.BALL_EJECTION_SPEED);
+        launcher.setExitTransferMotor(-TransferConstants.BALL_EJECTION_SPEED);
         //Sets the intake transfer motor to ejectionspeed
         transfer.setIntakeTransferMotor(TransferConstants.BALL_EJECTION_SPEED);
     }
@@ -47,7 +52,7 @@ public class EjectBallCommand extends CommandBase
     public void end(boolean interrupted)
     {
         // Turns off the exit transfer motor 
-        transfer.setExitTransferMotor(0.0);
+        launcher.setExitTransferMotor(0.0);
         // Turns off the intake transfer motor
         transfer.setIntakeTransferMotor(0.0);
     }

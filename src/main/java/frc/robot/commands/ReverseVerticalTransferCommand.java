@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TransferConstants;
+import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
 
 /**
@@ -12,7 +13,7 @@ public class ReverseVerticalTransferCommand extends CommandBase
     /**
      * Transfer subsystem for the LoadBallVertical Command
      */
-    private final SK22Transfer transfer;
+    private final SK22Launcher launcher;
 
     /**
      * A manual override command that allows the operator to reverse the
@@ -20,13 +21,13 @@ public class ReverseVerticalTransferCommand extends CommandBase
      * 
      * @param transfer The transfer subsystem on which the command operates.
      */
-    public ReverseVerticalTransferCommand(SK22Transfer transfer)
+    public ReverseVerticalTransferCommand(SK22Launcher launcher)
     {
-        this.transfer = transfer;
+        this.launcher = launcher; 
 
-        transfer.setVerticalTransferMotor(0.0);
+        launcher.setVerticalTransferMotor(0.0);
 
-        addRequirements(transfer);
+        addRequirements(launcher);
     }
 
     /**
@@ -37,7 +38,7 @@ public class ReverseVerticalTransferCommand extends CommandBase
     public void initialize()
     {
         // Sets the vertical transfer motor speed
-        transfer.setVerticalTransferMotor(-TransferConstants.VERTICAL_MOTOR_SPEED);
+        launcher.setVerticalTransferMotor(-TransferConstants.VERTICAL_MOTOR_SPEED);
     }
 
     /** {@inheritDoc} */
@@ -45,7 +46,7 @@ public class ReverseVerticalTransferCommand extends CommandBase
     public void end(boolean bInterrupted)
     {
         // Turns off the vertical transfer motor
-        transfer.setVerticalTransferMotor(0.0);
+        launcher.setVerticalTransferMotor(0.0);
     }
 
     /** {@inheritDoc} */

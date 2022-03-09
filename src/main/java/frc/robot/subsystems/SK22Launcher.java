@@ -22,6 +22,10 @@ public class SK22Launcher extends SubsystemBase
   private final WPI_TalonFX ballLauncher1 = new WPI_TalonFX(Ports.BALL_LAUNCHER_1);
   private final WPI_TalonFX ballLauncher2 = new WPI_TalonFX(Ports.BALL_LAUNCHER_2);
 
+  private CANSparkMax exitTransferMotor;
+  // This is the motor that accepts the ball from the horizontal shaft
+  private CANSparkMax verticalTransferMotor;
+
   private final MotorControllerGroup launcherGroup =
       new MotorControllerGroup(ballLauncher1, ballLauncher2);
 
@@ -42,12 +46,18 @@ public class SK22Launcher extends SubsystemBase
   /** Creates a new ExampleSubsystem. */
   public SK22Launcher()
   {
+    exitTransferMotor = new CANSparkMax(Ports.EXIT_TRANSFER_MOTOR, MotorType.kBrushless);
+    verticalTransferMotor =
+            new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
+
     ballLauncher1.setNeutralMode(NeutralMode.Coast);
     ballLauncher1.setInverted(true);
     ballLauncher1.configOpenloopRamp(2);
     ballLauncher2.setNeutralMode(NeutralMode.Coast);
     ballLauncher2.setInverted(false);
     ballLauncher2.configOpenloopRamp(2);
+
+    verticalTransferMotor.setIdleMode(IdleMode.kBrake);
 
     SmartDashboard.putNumber("Launcher Setpoint RPM", 0.0);
     SmartDashboard.putBoolean("Launcher at Setpoint RPM", false);
@@ -137,4 +147,55 @@ public class SK22Launcher extends SubsystemBase
     return speed;
   }
 
+    /**
+   * Set the speed of the exit-side transfer motor.
+   * 
+   * @param speed
+   *            Motor speed in the range [-1, 1].
+   */
+  public void setExitTransferMotor(double speed)
+  {
+      exitTransferMotor.set(speed);
+  }
+
+    /**
+   * Set the speed of the vertical transfer motor.
+   * 
+   * @param speed
+   *            Motor speed in the range [-1, 1].
+   */
+  public void setVerticalTransferMotor(double speed)
+  {
+      verticalTransferMotor.set(speed);
+  }
+
+    /**
+   * returns the value of the transfer exit motor
+   * @return value of the transfer exit motor
+   */
+  public CANSparkMax getExitTransferMotor()
+  {
+      return exitTransferMotor;
+  }
+
+  /**
+   * return the value of the transfer vertical shaft motor
+   * @return value of the transfer vertical shaft motor
+   */
+  public CANSparkMax getVerticalShaftMotor()
+  {
+      return verticalTransferMotor;
+  }
+
+  /**
+   * Query whether the vertical transfer motor is running.
+   * 
+   * @return true if the motor has non-zero speed, false otherwise.
+   */
+  public boolean getVerticalTransferMotorEnabled()
+  {
+      return verticalTransferMotor.get() != 0;
+  }
+
+  
 }

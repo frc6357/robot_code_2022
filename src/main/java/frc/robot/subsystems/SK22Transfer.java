@@ -23,9 +23,6 @@ public class SK22Transfer extends SKSubsystemBase
     public final Alliance teamAlliance;
 
     private CANSparkMax intakeTransferMotor;
-    private CANSparkMax exitTransferMotor;
-    // This is the motor that accepts the ball from the horizontal shaft
-    private CANSparkMax verticalTransferMotor;
 
     protected boolean isRunningTimer = false;
 
@@ -46,16 +43,11 @@ public class SK22Transfer extends SKSubsystemBase
         teamAlliance = DriverStation.getAlliance();
 
         intakeTransferMotor = new CANSparkMax(Ports.INTAKE_TRANSFER_MOTOR, MotorType.kBrushless);
-        exitTransferMotor = new CANSparkMax(Ports.EXIT_TRANSFER_MOTOR, MotorType.kBrushless);
-        verticalTransferMotor =
-                new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
 
         exitTransferSensor = new SwitchSensor(Ports.EXIT_SENSOR,
             Constants.TransferConstants.EXIT_SENSOR_POLARITY);
         verticalTransferSensor = new SwitchSensor(Ports.VERTICAL_SENSOR,
             Constants.TransferConstants.VERTICAL_SENSOR_POLARITY);
-
-        verticalTransferMotor.setIdleMode(IdleMode.kBrake);
 
         intakeTransferMotor.setInverted(true);
 
@@ -80,27 +72,7 @@ public class SK22Transfer extends SKSubsystemBase
         intakeTransferMotor.set(speed);
     }
 
-    /**
-     * Set the speed of the exit-side transfer motor.
-     * 
-     * @param speed
-     *            Motor speed in the range [-1, 1].
-     */
-    public void setExitTransferMotor(double speed)
-    {
-        exitTransferMotor.set(speed);
-    }
 
-    /**
-     * Set the speed of the vertical transfer motor.
-     * 
-     * @param speed
-     *            Motor speed in the range [-1, 1].
-     */
-    public void setVerticalTransferMotor(double speed)
-    {
-        verticalTransferMotor.set(speed);
-    }
 
     /**
      * returns the value of the transfer intake motor
@@ -109,34 +81,6 @@ public class SK22Transfer extends SKSubsystemBase
     public CANSparkMax getIntakeTransferMotor()
     {
         return intakeTransferMotor;
-    }
-
-    /**
-     * returns the value of the transfer exit motor
-     * @return value of the transfer exit motor
-     */
-    public CANSparkMax getExitTransferMotor()
-    {
-        return exitTransferMotor;
-    }
-
-    /**
-     * return the value of the transfer vertical shaft motor
-     * @return value of the transfer vertical shaft motor
-     */
-    public CANSparkMax getVerticalShaftMotor()
-    {
-        return verticalTransferMotor;
-    }
-
-    /**
-     * Query whether the vertical transfer motor is running.
-     * 
-     * @return true if the motor has non-zero speed, false otherwise.
-     */
-    public boolean getVerticalTransferMotorEnabled()
-    {
-        return verticalTransferMotor.get() != 0;
     }
 
     // TODO: This should be owned by the launcher class now assuming its operation is

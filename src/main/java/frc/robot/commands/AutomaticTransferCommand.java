@@ -83,9 +83,9 @@ public class AutomaticTransferCommand extends CommandBase
                         // called transfer class methods to manipulate the motors so that
                         // only one object interacts with them directly and can, hence,
                         // track their state.
-                        motors.add(transfer.getIntakeTransferMotor());
-                        motors.add(transfer.getExitTransferMotor());
-                        motors.add(transfer.getVerticalShaftMotor());
+                        // motors.add(transfer.getIntakeTransferMotor());
+                        // motors.add(transfer.getExitTransferMotor());
+                        // motors.add(transfer.getVerticalShaftMotor());
 
                         // curTimer = new VerticalTimer();
                         // TODO: I suspect this is incomplete and that you intend to do
@@ -93,7 +93,7 @@ public class AutomaticTransferCommand extends CommandBase
                     }
 
                     transfer.setTimerState(true);
-
+                    
                     // transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
                 }
                 else if (transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled())
@@ -126,57 +126,57 @@ public class AutomaticTransferCommand extends CommandBase
      */
     private void updateTimer()
     {
-        if (timerType == TimerType.VERTICAL)
-        {
-            if (timerElapsed == 0)
-            {
-                transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
-                timerElapsed++;
-            }
-            else if (timerElapsed < Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION
-                && transfer.getIsRunningTimerEnabled())
-            {
-                timerElapsed++;
-            }
-            else if (timerElapsed >= Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION)
-            {
-                timerElapsed = 0;
-                transfer.setTimerState(false);
+        // if (timerType == TimerType.VERTICAL)
+        // {
+        //     if (timerElapsed == 0)
+        //     {
+        //         transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
+        //         timerElapsed++;
+        //     }
+        //     else if (timerElapsed < Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION
+        //         && transfer.getIsRunningTimerEnabled())
+        //     {
+        //         timerElapsed++;
+        //     }
+        //     else if (timerElapsed >= Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION)
+        //     {
+        //         timerElapsed = 0;
+        //         transfer.setTimerState(false);
 
-                transfer.setExitTransferMotor(0);
-            }
-            else if (!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
-            {
-                timerElapsed = 0;
+        //         transfer.setExitTransferMotor(0);
+        //     }
+        //     else if (!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
+        //     {
+        //         timerElapsed = 0;
 
-                transfer.setExitTransferMotor(0);
-            }
-        }
-        else
-        {
-            if (timerElapsed == 0) 
-            {
-                transfer.setExitTransferMotor(Constants.TransferConstants.EXIT_MOTOR_SPEED);
-                timerElapsed++;
-            }
-            else if (timerElapsed < Constants.TransferConstants.EJECT_DURATION
-                && transfer.getIsRunningTimerEnabled())
-            {
-                timerElapsed++;
-            }
-            else if (timerElapsed >= Constants.TransferConstants.EJECT_DURATION)
-            {
-                timerElapsed = 0;
-                transfer.setTimerState(false);
+        //         transfer.setExitTransferMotor(0);
+        //     }
+        // }
+        // else
+        // {
+        //     if (timerElapsed == 0) 
+        //     {
+        //         transfer.setExitTransferMotor(Constants.TransferConstants.EXIT_MOTOR_SPEED);
+        //         timerElapsed++;
+        //     }
+        //     else if (timerElapsed < Constants.TransferConstants.EJECT_DURATION
+        //         && transfer.getIsRunningTimerEnabled())
+        //     {
+        //         timerElapsed++;
+        //     }
+        //     else if (timerElapsed >= Constants.TransferConstants.EJECT_DURATION)
+        //     {
+        //         timerElapsed = 0;
+        //         transfer.setTimerState(false);
 
-                transfer.setExitTransferMotor(0);
-            }
-            else if (!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
-            {
-                timerElapsed = 0;
+        //         transfer.setExitTransferMotor(0);
+        //     }
+        //     else if (!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
+        //     {
+        //         timerElapsed = 0;
 
-                transfer.setExitTransferMotor(0);
-            }
-        }
+        //         transfer.setExitTransferMotor(0);
+        //     }
+        // }
     }
 }
