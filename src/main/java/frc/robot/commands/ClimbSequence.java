@@ -7,15 +7,16 @@ import frc.robot.commands.subcommands.CurrentChangeCommand;
 import frc.robot.commands.subcommands.LowerSimpleArmCommand;
 import frc.robot.commands.subcommands.MoveComplexArmLiftCommand;
 import frc.robot.commands.subcommands.NeutralRaiseSimpleArmCommand;
-import frc.robot.commands.subcommands.NeutralTiltSimpleArmCommand;
+//import frc.robot.commands.subcommands.NeutralTiltSimpleArmCommand;
 import frc.robot.commands.subcommands.PivotComplexArmCommand;
 import frc.robot.commands.subcommands.RaiseSimpleArmCommand;
-import frc.robot.commands.subcommands.StraightenSimpleArmCommand;
-import frc.robot.commands.subcommands.TiltSimpleArmCommand;
+//import frc.robot.commands.subcommands.StraightenSimpleArmCommand;
+//import frc.robot.commands.subcommands.TiltSimpleArmCommand;
 import frc.robot.commands.subcommands.TimeDelayCommand;
 import frc.robot.subsystems.SK22SimpleClimb;
 import frc.robot.subsystems.SK22ComplexClimb;
 
+// TODO: As this sequence is most likely redundant now, make sure to redo if Complex arm is added back
 /**
  * Sequence of climb commands
  */
@@ -90,7 +91,7 @@ public final class ClimbSequence
     public Command getStep5(SK22ComplexClimb complexClimb, SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step5 = new ParallelCommandGroup();
-        step5.addCommands(new NeutralTiltSimpleArmCommand(simpleClimb));
+        //step5.addCommands(new NeutralTiltSimpleArmCommand(simpleClimb));
         step5.addCommands(new NeutralRaiseSimpleArmCommand(simpleClimb));
         step5
             .addCommands(new MoveComplexArmLiftCommand(complexClimb, ClimbConstants.COMPLEX_FULL_RETRACT));
@@ -121,7 +122,7 @@ public final class ClimbSequence
     public Command getStep7(SK22SimpleClimb simpleClimb)
     {
         ParallelCommandGroup step7 = new ParallelCommandGroup();
-        step7.addCommands(new TiltSimpleArmCommand(simpleClimb));
+        //step7.addCommands(new TiltSimpleArmCommand(simpleClimb));
         step7.addCommands(new TimeDelayCommand(ClimbConstants.STEP7_DELAY_MILLIS));
         return step7;
     }
@@ -149,7 +150,7 @@ public final class ClimbSequence
         ParallelCommandGroup step9 = new ParallelCommandGroup();
         //TODO: Check if this would be the correct command to use in this situation
         step9.addCommands(new NeutralRaiseSimpleArmCommand(simpleClimb));
-        step9.addCommands(new StraightenSimpleArmCommand(simpleClimb));
+        //step9.addCommands(new StraightenSimpleArmCommand(simpleClimb));
         return step9;
     }
 

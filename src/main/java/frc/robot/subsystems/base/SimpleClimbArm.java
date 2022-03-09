@@ -10,24 +10,16 @@ import frc.robot.Ports;
  */
 public class SimpleClimbArm
 {
-    // TODO: Hardware no longer supports the tilt function. Remove this from the class.
     private final Solenoid raisePiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
         PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_RAISE_CHANNEL);
         private final Solenoid lowerPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
         PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_LOWER_CHANNEL);
 
-    private final Solenoid tiltPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
-        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_TILT_CHANNEL);
-    private final Solenoid straightenPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
-        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_STRAIGHTEN_CHANNEL);
-
-    
     /**
      * Constructor for the SimpleClimbArm
      */
     public SimpleClimbArm()
     {
-
     }
 
     /**
@@ -51,35 +43,9 @@ public class SimpleClimbArm
     /**
      * Neutral mode for lift Solenoids
      */
-    public void liftNeutral()
+    public void neutral()
     {
         raisePiston.set(false);
         lowerPiston.set(false);
-    }
-    /**
-     * Activate the solenoid required to tilt the arm away from the vertical position.
-     */
-    public void tilt()
-    {
-        tiltPiston.set(true);
-        straightenPiston.set(false);
-    }
-
-    /**
-     * Activate the solenoid required to return the arm to the vertical position.
-     */
-    public void straighten()
-    {
-        straightenPiston.set(true);
-        tiltPiston.set(false);
-    }
-
-    /**
-     * Neutral mode for tilt Solenoids
-     */
-    public void tiltNeutral()
-    {
-        straightenPiston.set(false);
-        tiltPiston.set(false);
     }
 }

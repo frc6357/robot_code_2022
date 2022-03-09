@@ -37,37 +37,12 @@ public class SK22SimpleClimb extends SubsystemBase
         //to prevent crushing it while pulling up
     }
 
-     /**
-     * rotates simple arm so that it is perpendicular with the robot
-     */
-    public void straightenSimpleArm()
-    {
-        simpleArm.straighten();
-        // Straighten the simpleclimbarm
-    }
-
-    /**
-     * Moves the the simple arm back into a non perpendicular state
-     */
-    public void tiltSimpleArm()
-    {
-        simpleArm.tilt();
-    }
-
-    /**
-     * Makes the tilt arm command go into the neutral position
-     */
-    public void makeTiltSimpleArmNeutral()
-    {
-        simpleArm.tiltNeutral();
-    }
-
     /**
      * Makes the lift arm command go into a neutral position
      */
     public void makeRaiseSimpleArmNeutral()
     {
-        simpleArm.liftNeutral();
+        simpleArm.neutral();
     }
 
     
