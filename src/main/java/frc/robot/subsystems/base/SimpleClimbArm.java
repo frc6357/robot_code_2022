@@ -10,6 +10,7 @@ import frc.robot.Ports;
  */
 public class SimpleClimbArm
 {
+    // TODO: Hardware no longer supports the tilt function. Remove this from the class.
     private final Solenoid raisePiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
         PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_RAISE_CHANNEL);
         private final Solenoid lowerPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
