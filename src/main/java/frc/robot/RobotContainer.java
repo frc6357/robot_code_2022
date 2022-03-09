@@ -40,7 +40,6 @@ import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.AutoTools.SK22Paths.Drive1mForwardBackward;
 import frc.robot.AutoTools.SK22Paths.RunJson;
 import frc.robot.commands.AcquireTargetCommand;
-import frc.robot.commands.AutomaticTransferCommand;
 import frc.robot.commands.ClimbCommandGroup;
 import frc.robot.commands.ClimbSequence;
 import frc.robot.commands.DefaultArcadeDriveCommand;
@@ -333,9 +332,7 @@ public class RobotContainer
         // User controls related to the ball transfer subsystem 
         if (transferSubsystem.isPresent())
         {
-            SK22Transfer transfer = transferSubsystem.get();
-
-            transferStartBtn.whenPressed(new AutomaticTransferCommand(transfer));
+            // SK22Transfer transfer = transferSubsystem.get();
         }
 
         if (visionSubsystem.isPresent())

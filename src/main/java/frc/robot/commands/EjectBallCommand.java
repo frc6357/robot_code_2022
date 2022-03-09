@@ -4,7 +4,6 @@ import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TransferConstants;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
-import frc.robot.subsystems.base.Launcher;
 
 /**
  * A command that ejects balls through the horizontal exit in
@@ -25,6 +24,7 @@ public class EjectBallCommand extends CommandBase
      * currently in the horizontal portion of the transfer.
      * 
      * @param transfer The transfer subsystem the command operates on.
+     * @param launcher The launcher subsystem the command operates on.
      */
     public EjectBallCommand(SK22Transfer transfer, SK22Launcher launcher)
     {
