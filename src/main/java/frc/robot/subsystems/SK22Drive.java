@@ -3,6 +3,10 @@
 //
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
@@ -13,6 +17,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -68,6 +73,15 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private KalmanPose kalmanX = new KalmanPose();
     private KalmanPose kalmanY = new KalmanPose();
 
+    private double[] robotAccel = {0.0, 0.0};
+    private double[] globalAccel = {0.0, 0.0};
+
+    private Queue<Double> accelOffsetListX = new LinkedList<>();
+    private Queue<Double> accelOffsetListY = new LinkedList<>();
+
+    private double accelOffsetX = 0.0;
+    private double accelOffsetY = 0.0;
+
     /**
      * Creates a SK22Drive subsystem controlling the drivetrain.
      */
@@ -102,17 +116,27 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
             rightEncoderDistanceMeters);
 
         // Predicts Position
-        double[] globalAccel = getGlobalAcceleration();
-        double[] robotAccel = getRelativeAcceleration();
+        globalAccel = getGlobalAcceleration();
+        robotAccel = getRelativeAcceleration();
+
         kalmanX.periodic(globalAccel[0], 0);
         kalmanY.periodic(globalAccel[1], 0);
 
         SmartDashboard.putNumber("Robot X Accel", robotAccel[0]);
         SmartDashboard.putNumber("Robot Y Accel", robotAccel[1]);
 
+        SmartDashboard.putNumber("Global X Accel", globalAccel[0]);
+        SmartDashboard.putNumber("Global Y Accel", globalAccel[1]);
+
         SmartDashboard.putNumber("Kalman X", kalmanX.getPosition());
         SmartDashboard.putNumber("Kalman Y", kalmanY.getPosition());
         SmartDashboard.putNumber("Pose Theta", odometry.getPoseMeters().getRotation().getDegrees());
+
+        if (DriverStation.isDisabled())
+        {
+            updateOffsetList(accelOffsetListX, robotAccel[0]);
+            updateOffsetList(accelOffsetListY, robotAccel[1]);
+        }
     }
     
     /**
@@ -305,7 +329,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
      */
     public double[] getRelativeAcceleration()
     {
-        return new double[]{gyro.getAccelX() + 0.04, gyro.getAccelY() + 0.28};
+        return new double[]{gyro.getAccelX() + accelOffsetX, gyro.getAccelY() + accelOffsetY};
     }
 
     /**
@@ -324,6 +348,45 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         return new double[]
             {(Math.cos(theta) * xRelative) - (Math.sin(theta) * yRelative),
                 (Math.sin(theta) * xRelative) + (Math.cos(theta) * yRelative)};
+    }
+
+    /**
+     * Updates the ArrayList with the value given
+     * @param array The array list to be updated
+     * @param value The value to be updated with
+     */
+    private void updateOffsetList(Queue<Double> array, Double value)
+    {
+        array.add(value);
+        if (array.size() > 100)
+        {
+            array.remove();
+        }
+    }
+
+
+    /**
+     * Averages the values in an array
+     * @param array The array with the values to be averaged
+     * @return The average
+     */
+    private double calculateAvg(Queue<Double> array)
+    {
+        double total = 0.0;
+        for (double num : array)
+        {
+            total += num;
+        }
+        return (total / array.size());
+    }
+
+    /**
+     * Updates the offsets that the has based on recent samples
+     */
+    public void updateOffsets()
+    {
+        accelOffsetX = calculateAvg(accelOffsetListX);
+        accelOffsetY = calculateAvg(accelOffsetListY);
     }
 
     @Override

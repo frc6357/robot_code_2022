@@ -444,6 +444,14 @@ public class RobotContainer
     }
 
     /**
+     * Updates the values of the gyro offsets based on sampling while the robot was disabled.
+     */
+    public void resetDriveGyroOffset()
+    {
+        driveSubsystem.updateOffsets();
+    }
+
+    /**
      * Adds the possible auto commands to the Shuffleboard list depending on the auto
      * segments that are present according to the {@link TrajectoryBuilder}. Adds the auto
      * commands to their respective {@link SendableChooser} to be used by
