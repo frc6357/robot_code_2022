@@ -110,8 +110,8 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
         SmartDashboard.putNumber("Robot X Accel", robotAccel[0]);
         SmartDashboard.putNumber("Robot Y Accel", robotAccel[1]);
 
-        SmartDashboard.putNumber("Kalman X", kalmanX.getState());
-        SmartDashboard.putNumber("Kalman Y", kalmanY.getState());
+        SmartDashboard.putNumber("Kalman X", kalmanX.getPosition());
+        SmartDashboard.putNumber("Kalman Y", kalmanY.getPosition());
         SmartDashboard.putNumber("Pose Theta", odometry.getPoseMeters().getRotation().getDegrees());
     }
     
@@ -157,9 +157,18 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     public void resetOdometry(Pose2d pose)
     {
         resetEncoders();
-        kalmanX.setPosition(pose.getX());
-        kalmanY.setPosition(pose.getY());
+        kalmanX.setState(pose.getX(), 0.0);
+        kalmanY.setState(pose.getY(), 0.0);
         odometry.resetPosition(pose, Rotation2d.fromDegrees(gyro.getAngle()));
+    }
+
+    /**
+     * Resets the Kalman states to zero for both poistion and velocity
+     */
+    public void resetKalmanState()
+    {
+        kalmanX.resetState();
+        kalmanY.resetState();
     }
 
     /**

@@ -89,11 +89,20 @@ public class KalmanPose
 
     /**
      * Gets the state as calculated by {@link SKKalmanFilter}
-     * @return The calculated state of the system
+     * @return The calculated position of the system
      */
-    public double getState()
+    public double getPosition()
     {
         return skObserver.getXhat().get(0, 0);
+    }
+
+    /**
+     * Gets the state as calculated by {@link SKKalmanFilter}
+     * @return The calculated velocity of the system
+     */
+    public double getVelocity()
+    {
+        return skObserver.getXhat().get(1, 0);
     }
 
     // /**
@@ -106,6 +115,26 @@ public class KalmanPose
     // }
 
     /**
+     * Sets the state of the system
+     * 
+     * @param position The new position of the robot
+     * @param velocity The new velocity of the robot
+     */
+    public void setState(double position, double velocity)
+    {
+        setPosition(position);
+        setVelocity(velocity);
+    }
+    
+    /**
+     * Sets the position and velocity to zero
+     */
+    public void resetState()
+    {
+        setState(0.0, 0.0);
+    }
+
+    /**
      * Sets the value of position of the robot
      * @param x The new position of the robot in meters
      */
@@ -116,10 +145,10 @@ public class KalmanPose
     }
 
     /**
-     * Sets the value of position of the robot
-     * @param x The new position of the robot in meters
+     * Sets the value of velocity of the robot
+     * @param x The new velocity of the robot in meters per second
      */
-    public void setInitialVel(double x)
+    public void setVelocity(double x)
     {
         skObserver.setXhat(1, x);
         // observer.setXhat(0, x);
