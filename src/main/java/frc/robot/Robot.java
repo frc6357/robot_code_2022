@@ -81,7 +81,7 @@ public class Robot extends TimedRobot
     public void autonomousInit()
     {
         robotContainer.resetDriveSubsystem();
-        robotContainer.resetDriveGyroOffset();
+        robotContainer.updateDriveGyroOffset();
 
         autonomousCommand = robotContainer.getAutonomousCommand();
 
@@ -105,7 +105,7 @@ public class Robot extends TimedRobot
     {
         robotContainer.resetDriveSubsystem();
         // TODO: Remove this after testing
-        robotContainer.resetDriveGyroOffset();
+        robotContainer.updateDriveGyroOffset();
         robotContainer.resetDriveDefaultCommand();
 
         /*
@@ -131,7 +131,7 @@ public class Robot extends TimedRobot
     @Override
     public void teleopExit()
     {
-        
+        robotContainer.resetDriveGyroOffset();
     }
 
     @Override

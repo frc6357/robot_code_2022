@@ -446,9 +446,14 @@ public class RobotContainer
     /**
      * Updates the values of the gyro offsets based on sampling while the robot was disabled.
      */
-    public void resetDriveGyroOffset()
+    public void updateDriveGyroOffset()
     {
         driveSubsystem.updateOffsets();
+    }
+
+    public void resetDriveGyroOffset()
+    {
+        driveSubsystem.resetOffset();
     }
 
     /**

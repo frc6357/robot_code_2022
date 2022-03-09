@@ -329,7 +329,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
      */
     public double[] getRelativeAcceleration()
     {
-        return new double[]{gyro.getAccelX() + accelOffsetX, gyro.getAccelY() + accelOffsetY};
+        return new double[]{gyro.getAccelX() - accelOffsetX, gyro.getAccelY() - accelOffsetY};
     }
 
     /**
@@ -387,6 +387,12 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     {
         accelOffsetX = calculateAvg(accelOffsetListX);
         accelOffsetY = calculateAvg(accelOffsetListY);
+    }
+
+    public void resetOffset()
+    {
+        accelOffsetX = 0.0;
+        accelOffsetY = 0.0;
     }
 
     @Override
