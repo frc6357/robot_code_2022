@@ -313,10 +313,7 @@ public class RobotContainer
         {
             SK22Vision vision = visionSubsystem.get();
             driveAcquireTargetBtn
-                .whenHeld(
-                    new ConditionalCommand(new AcquireTargetCommand(driveSubsystem, vision),
-                        new DoNothingCommand(), () -> vision.getHorizontalAngle().isPresent()),
-                    true);
+                .whenHeld(new AcquireTargetCommand(driveSubsystem, vision), true);
         }
 
         // User controls related to the ball launcher and transfer related things.

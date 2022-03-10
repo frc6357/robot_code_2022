@@ -75,6 +75,9 @@ public final class Constants
         public static final double KA                = 0.217; // Volt Seconds Squared Per Meter
         public static final double KP_DRIVE_VELOCITY = 2.26;
 
+        // TODO: Data not characterized
+        public static final double KP_TURN_DEGREES   = 0.01;  // Uses degrees as unit in SysID
+
         public static final double DEADBAND_TURN    = 0.01;
         public static final double SLEW_FILTER_RATE = 2;     // per second
 

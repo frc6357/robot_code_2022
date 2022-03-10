@@ -8,7 +8,7 @@ import frc.robot.subsystems.SK22Vision;
 
 /**
  * Uses the vision acquisition system to put the drivetrain into the correct rotation to
- * face the target. This uses
+ * face the target. This uses a PID controller to set the speeds of the drivetrain.
  */
 public class AcquireTargetCommand extends CommandBase
 {
@@ -18,6 +18,8 @@ public class AcquireTargetCommand extends CommandBase
 
     /** Desired angle of the drivetrain */
     private double setpoint = 0.0;
+    
+    private boolean validSetpoint = false;
 
     /**
      * Creates a new AcquireTargetCommand and sets the
@@ -34,7 +36,7 @@ public class AcquireTargetCommand extends CommandBase
         this.vision = vision;
 
         // TODO: Need to tune this value so as to not destroy the robot when turning
-        pidController = new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0);
+        pidController = new PIDController(DriveConstants.KP_TURN_DEGREES, 0, 0);
 
         pidController.enableContinuousInput(-180, 180);
         // TODO: Need to tune constraints as well to make sure we don't overshoot or undershoot
@@ -47,7 +49,7 @@ public class AcquireTargetCommand extends CommandBase
     @Override
     public void initialize()
     {
-        setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
+        validSetpoint = false;
         pidController.reset();
     }
 
@@ -56,10 +58,13 @@ public class AcquireTargetCommand extends CommandBase
     {
         if (vision.isTargetInFrame())
         {
-            drive.arcadeDrive(0, pidController.calculate(vision.getHorizontalAngle().get(), 0));
             setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
+            validSetpoint = true;
+
+            drive.arcadeDrive(0, pidController.calculate(vision.getHorizontalAngle().get(), 0));
         }
-        else
+        
+        if (validSetpoint)
         {
             drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), setpoint));
         }
@@ -69,6 +74,7 @@ public class AcquireTargetCommand extends CommandBase
     public void end(boolean interrupted)
     {
         drive.arcadeDrive(0, 0);
+        validSetpoint = false;
     }
 
     @Override
