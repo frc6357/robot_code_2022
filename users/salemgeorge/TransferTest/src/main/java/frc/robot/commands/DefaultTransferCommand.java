@@ -57,7 +57,7 @@ public class DefaultTransferCommand extends CommandBase{
                     timerType = TimerType.VERTICAL;
                     transfer.setTimerState(true);
 
-                    transfer.setIntakeTransferMotor(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
+                    transfer.setIntakeTransferMotorSpeed(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
                     transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
                 } 
                 else if(testVerticalFull && transfer.getIsRunningTimerEnabled())
@@ -76,7 +76,7 @@ public class DefaultTransferCommand extends CommandBase{
                 timerType = TimerType.EJECT;
                 transfer.setTimerState(true);
 
-                transfer.setIntakeTransferMotor(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
+                transfer.setIntakeTransferMotorSpeed(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
                 transfer.setExitTransferMotor(Constants.TransferConstants.EXIT_MOTOR_SPEED);
             }
         }
@@ -104,13 +104,13 @@ public class DefaultTransferCommand extends CommandBase{
                 timerElapsed = 0;
                 transfer.setTimerState(false);
 
-                transfer.setIntakeTransferMotor(0);
+                transfer.setIntakeTransferMotorSpeed(0);
                 transfer.setExitTransferMotor(0);
             } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
             {
                 timerElapsed = 0;
 
-                transfer.setIntakeTransferMotor(0);
+                transfer.setIntakeTransferMotorSpeed(0);
                 transfer.setExitTransferMotor(0);
             }
         }
@@ -126,13 +126,13 @@ public class DefaultTransferCommand extends CommandBase{
                 timerElapsed = 0;
                 transfer.setTimerState(false);
 
-                transfer.setIntakeTransferMotor(0);
+                transfer.setIntakeTransferMotorSpeed(0);
                 transfer.setExitTransferMotor(0);
             } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
             {
                 timerElapsed = 0;
 
-                transfer.setIntakeTransferMotor(0);
+                transfer.setIntakeTransferMotorSpeed(0);
                 transfer.setExitTransferMotor(0);
             }
         }

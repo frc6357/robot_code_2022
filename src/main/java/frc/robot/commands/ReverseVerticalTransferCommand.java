@@ -3,7 +3,6 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TransferConstants;
 import frc.robot.subsystems.SK22Launcher;
-import frc.robot.subsystems.SK22Transfer;
 
 /**
  * A command allowing the vertical ball transfer motor to be run backwards.
@@ -19,7 +18,7 @@ public class ReverseVerticalTransferCommand extends CommandBase
      * A manual override command that allows the operator to reverse the
      * vertical transfer belt if a ball gets jammed
      * 
-     * @param transfer The transfer subsystem on which the command operates.
+     * @param launcher The launcher subsystem on which the command operates.
      */
     public ReverseVerticalTransferCommand(SK22Launcher launcher)
     {

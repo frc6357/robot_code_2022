@@ -151,7 +151,7 @@ public class Robot extends TimedRobot
     @Override
     public void simulationInit()
     {
-        // TODO: Commented out for now after moving SK22Climb instantiation into RobotContainer
+        // DW: Commented out for now after moving SK22Climb instantiation into RobotContainer
         // with the other subsystems.
 
         //super.simulationInit();

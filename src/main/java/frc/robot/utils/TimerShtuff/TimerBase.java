@@ -4,6 +4,8 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 
 import frc.robot.subsystems.SK22Transfer;
 
+// TODO: This is a general purpose interface so it MUST be documented so that other people can use it.
+
 public interface TimerBase
 {
     public final TimerType timerType = TimerType.DEFAULT;

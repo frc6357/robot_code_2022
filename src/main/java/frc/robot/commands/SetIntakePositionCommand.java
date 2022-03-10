@@ -43,12 +43,12 @@ public class SetIntakePositionCommand extends CommandBase
         {
             intake.extendIntake();
             intake.setIntakeSpeed(-IntakeConstants.INTAKE_MOTOR_SPEED);
-            transfer.setIntakeTransferMotor(TransferConstants.INTAKE_MOTOR_SPEED);
+            transfer.setIntakeTransferMotorSpeed(TransferConstants.INTAKE_MOTOR_SPEED);
         }
         else
         {
             intake.setIntakeSpeed(0.0);
-            transfer.setIntakeTransferMotor(0.0);
+            transfer.setIntakeTransferMotorSpeed(0.0);
             intake.retractIntake();
         }
     }

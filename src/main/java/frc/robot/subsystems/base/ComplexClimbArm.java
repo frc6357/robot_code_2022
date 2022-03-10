@@ -44,13 +44,13 @@ public class ComplexClimbArm
         this.brakePivotEncoder = brakePivotEncoder;
         this.ratchetLiftEncoder = ratchetLiftEncoder;
         ratchetState = false;
-        pivotArm = new RotatingArm(complexBrakePivot, brakePivotEncoder, 
+        pivotArm = new RotatingArm(this.complexBrakePivot, brakePivotEncoder, 
                                    Constants.ClimbConstants.PIVOT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER, 
                                    Constants.ClimbConstants.PIVOT_ARM_CONTROLLER_KP, 
                                    Constants.ClimbConstants.PIVOT_ARM_CONTROLLER_KI,
                                    Constants.ClimbConstants.PIVOT_ARM_CONTROLLER_KD);
 
-        ratchetArm = new RotatingArm(complexRatchetLift, ratchetLiftEncoder, 
+        ratchetArm = new RotatingArm(this.complexRatchetLift, ratchetLiftEncoder, 
                                    Constants.ClimbConstants.LIFT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER,
                                    Constants.ClimbConstants.LIFT_ARM_CONTROLLER_KP, 
                                    Constants.ClimbConstants.LIFT_ARM_CONTROLLER_KI,

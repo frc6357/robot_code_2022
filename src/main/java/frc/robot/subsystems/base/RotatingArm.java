@@ -5,7 +5,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Generic PID controlled rotating arm
@@ -107,10 +106,6 @@ public class RotatingArm
     public void update()
     {
         double position = getAngle();
-
-        // TODO: Debug only, move to SK22Climb
-        SmartDashboard.putNumber("Arm Set Point", setPoint);
-        SmartDashboard.putNumber("Arm Position", position);
 
         if (armEnabled)
         {

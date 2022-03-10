@@ -1,12 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import frc.robot.Constants;
 import frc.robot.Ports;
 import frc.robot.commands.DefaultTransferCommand;
 import frc.robot.subsystems.base.SwitchSensor;
@@ -16,12 +11,6 @@ import frc.robot.subsystems.base.SwitchSensor;
  */
 public class SK22Transfer extends SKSubsystemBase
 {
-    // TODO: Don't use public members. Move this to the class that actually needs it.
-    /**
-     * Value shows the team alliance
-     */
-    public final Alliance teamAlliance;
-
     private CANSparkMax intakeTransferMotor;
 
     protected boolean isRunningTimer = false;
@@ -38,19 +27,8 @@ public class SK22Transfer extends SKSubsystemBase
      */
     public SK22Transfer()
     {
-        // TODO: This is not used by this class. Move it to the class that actually
-        // needs it (DefaultTransferCommand).
-        teamAlliance = DriverStation.getAlliance();
-
         intakeTransferMotor = new CANSparkMax(Ports.INTAKE_TRANSFER_MOTOR, MotorType.kBrushless);
-
-        exitTransferSensor = new SwitchSensor(Ports.EXIT_SENSOR,
-            Constants.TransferConstants.EXIT_SENSOR_POLARITY);
-        verticalTransferSensor = new SwitchSensor(Ports.VERTICAL_SENSOR,
-            Constants.TransferConstants.VERTICAL_SENSOR_POLARITY);
-
         intakeTransferMotor.setInverted(true);
-
         setDefaultCommand(new DefaultTransferCommand(this));
     }
 
@@ -67,7 +45,7 @@ public class SK22Transfer extends SKSubsystemBase
      * @param speed
      *            Motor speed in the range [-1, 1].
      */
-    public void setIntakeTransferMotor(double speed)
+    public void setIntakeTransferMotorSpeed(double speed)
     {
         intakeTransferMotor.set(speed);
     }
@@ -83,10 +61,6 @@ public class SK22Transfer extends SKSubsystemBase
         return intakeTransferMotor;
     }
 
-    // TODO: This should be owned by the launcher class now assuming its operation is
-    // independent of the vertical transfer motor and is only needed to control moving
-    // a ball into the launcher proper.
-
     /**
      * Query the current color detected by the color sensor.
      * 
@@ -97,45 +71,6 @@ public class SK22Transfer extends SKSubsystemBase
         return null;
         // return colorSensor.getColor();
     }
-
-    /**
-     * States if there is a ball in the intake part of the transfer
-     * 
-     * @return Whether there is a ball in position one.
-     */
-    public boolean getPositionOnePresence()
-    {
-        return false;
-        // return colorSensor.getBallPresence();
-    }
-
-    // TODO: Rename these methods to make it clear which positions "PositionTwo"
-    // and "PositionThree" refer to. 
-
-    /**
-     * States if there is a ball in the eject part of the transfer
-     * 
-     * @return Whether there is a ball in position two.
-     */
-    public boolean getPositionTwoPresence()
-    {
-        return exitTransferSensor.get();
-    }
-
-    /**
-     * States if there is a ball in the launcher part of the transfer
-     * 
-     * @return Whether there is a ball in position three.
-     */
-    public boolean getPositionThreePresence()
-    {
-        return verticalTransferSensor.get();
-    }
-
-    // TODO: The name of this method is weird. "set" implies a method
-    // that changes something but "IsRunningTimerEnabled" sounds like
-    // a query. What does this do? Also, I don't see anything in the
-    // periodic method that updates a timer counter.
 
     /**
      * Set true if the transfer timer is active

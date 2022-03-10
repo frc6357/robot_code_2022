@@ -21,7 +21,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 // import edu.wpi.first.networktables.NetworkTableEntry;
 // import edu.wpi.first.cscore.VideoSink;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -52,7 +51,6 @@ import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
 import frc.robot.subsystems.SK22ComplexClimb;
 import frc.robot.subsystems.SK22Drive;
-import frc.robot.subsystems.SK22Gearshift;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22SimpleClimb;
@@ -62,7 +60,6 @@ import frc.robot.subsystems.base.Dpad;
 import frc.robot.subsystems.base.DpadDownButton;
 import frc.robot.subsystems.base.DpadUpButton;
 import frc.robot.subsystems.base.TriggerButton;
-import frc.robot.subsystems.base.SuperClasses.Gear;
 import frc.robot.utils.FilteredJoystick;
 import frc.robot.utils.SubsystemControls;
 
@@ -104,7 +101,6 @@ public class RobotContainer
     private Optional<SK22ComplexClimb> complexClimbSubsystem = Optional.empty();
     private Optional<SK22SimpleClimb>  simpleClimbSubsystem  = Optional.empty();
     private Optional<SK22Vision>       visionSubsystem       = Optional.empty();
-    private Optional<SK22Gearshift>    gearshiftSubsystem    = Optional.empty();
     private Optional<Joystick>         climbtestJoystick     = Optional.empty();
 
     // Robot External Controllers (Joysticks and Logitech Controller)
@@ -128,10 +124,6 @@ public class RobotContainer
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
     private final JoystickButton driveSlowBtn          =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SLOWMODE);
-    private final JoystickButton driveLowGearBtn       =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_LOW_GEAR);
-    private final JoystickButton driveHighGearBtn      =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SET_HIGH_GEAR);
     private final JoystickButton driveShootBtn         =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SHOOT);
     private final JoystickButton driverLauncherLowBtn   =
@@ -148,8 +140,6 @@ public class RobotContainer
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_EXTEND);
     private final JoystickButton intakeRetractBtn      =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_RETRACT);
-    private final JoystickButton transferStartBtn      =
-            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_START);
     private final JoystickButton transferEjectBallBtn  =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_EJECT);
     private final JoystickButton transferLoadBallBtn   =
@@ -213,12 +203,6 @@ public class RobotContainer
             if (subsystems.isSimpleClimbPresent())
             {
                 simpleClimbSubsystem = Optional.of(new SK22SimpleClimb());
-            }
-            if (subsystems.isGearshiftPresent())
-            {
-                gearshiftSubsystem = Optional.of(new SK22Gearshift(
-                    new DoubleSolenoid(Ports.BASE_PCM, Ports.PNEUMATICS_MODULE_TYPE,
-                        Ports.GEAR_SHIFT_HIGH, Ports.GEAR_SHIFT_LOW)));
             }
             if (subsystems.isClimbtestPresent())
             {
@@ -303,19 +287,6 @@ public class RobotContainer
         reverseOnBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(true));
             // .whenPressed(() -> server.setSource(camera2));
 
-        // Drive train gearshift is controlled by a separate subsystem so that we
-        // can run the robot even when the pneumatics are not connected.
-        if (gearshiftSubsystem.isPresent())
-        {
-            SK22Gearshift gearshift = gearshiftSubsystem.get();
-
-            // Sets the gear to low when driver clicks setLowGear Buttons
-            driveLowGearBtn.whenPressed(() -> gearshift.setGear(Gear.LOW));
-
-            // Sets the gear to high when driver clicks setHighGear Buttons
-            driveHighGearBtn.whenPressed(() -> gearshift.setGear(Gear.HIGH));
-        }
-
         // User controls related to the ball intake subsystem
         if (intakeSubsystem.isPresent() && transferSubsystem.isPresent())
         {
@@ -332,7 +303,10 @@ public class RobotContainer
         // User controls related to the ball transfer subsystem 
         if (transferSubsystem.isPresent())
         {
-            // SK22Transfer transfer = transferSubsystem.get();
+            SK22Transfer transfer = transferSubsystem.get();
+
+            // Move ball through the horizontal transfer to the base of the vertical shaft.
+            transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer), true);
         }
 
         if (visionSubsystem.isPresent())
@@ -351,7 +325,6 @@ public class RobotContainer
             SK22Launcher launcher = launcherSubsystem.get();
             SK22Transfer transfer = transferSubsystem.get();
 
-            
             // Shoots ball(s) using the launcher
             driveShootBtn.whenHeld(new ShootBallsCommand(launcher, transfer), true);
             launcher.setLauncherRPM(0.0);
@@ -367,10 +340,6 @@ public class RobotContainer
                 () -> launcher.setLauncherRPM(LauncherConstants.MAX_SPEED_PRESET));
 
             reverseVerticalTransferBtn.whenHeld(new ReverseVerticalTransferCommand(launcher), true);
-
-            // Emergency override to move ball from the horizontal transfer
-            // into the vertical loader.
-            transferLoadBallBtn.whenHeld(new LoadBallVerticalCommand(transfer, launcher), true);
 
             // Emergency override to eject balls from the horizontal transfer
             transferEjectBallBtn.whenHeld(new EjectBallCommand(transfer, launcher), true);

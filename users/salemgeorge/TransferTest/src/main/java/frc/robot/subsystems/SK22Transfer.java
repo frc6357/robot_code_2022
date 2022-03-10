@@ -54,7 +54,7 @@ public class SK22Transfer extends SKSubsystemBase
     // This method will be called once per scheduler run
   }
 
-  public void setIntakeTransferMotor(double Speed)
+  public void setIntakeTransferMotorSpeed(double Speed)
   {
     intakeTransferMotor.set(Speed);
     System.out.println("Intake: " + Speed);

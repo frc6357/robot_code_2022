@@ -22,9 +22,15 @@ public class SK22Launcher extends SubsystemBase
   private final WPI_TalonFX ballLauncher1 = new WPI_TalonFX(Ports.BALL_LAUNCHER_1);
   private final WPI_TalonFX ballLauncher2 = new WPI_TalonFX(Ports.BALL_LAUNCHER_2);
 
+  // This is the motor at the base of the vertical transfer shaft.
   private CANSparkMax exitTransferMotor;
-  // This is the motor that accepts the ball from the horizontal shaft
+
+  // This is the motor that moves the ball up the vertical transfer shaft
   private CANSparkMax verticalTransferMotor;
+
+  // This is the motor that transfers the ball from the vertical shaft
+  // into the launcher
+  private CANSparkMax launcherTransferMotor;
 
   private final MotorControllerGroup launcherGroup =
       new MotorControllerGroup(ballLauncher1, ballLauncher2);
@@ -32,11 +38,6 @@ public class SK22Launcher extends SubsystemBase
   private final MotorEncoder motorEncoder1 =
       new MotorEncoder(ballLauncher1, Constants.LauncherConstants.ENCODER_DISTANCE_PER_PULSE,
         Constants.LauncherConstants.LEFT_ENCODER_REVERSED);
-
-  // This is the motor that transfers the ball from the vertical shaft
-  // into the launcher
-  private CANSparkMax launcherTransferMotor =
-      new CANSparkMax(Ports.LAUNCHER_TRANSFER_MOTOR, MotorType.kBrushless);
 
   private final Launcher launcher;
 
@@ -46,9 +47,9 @@ public class SK22Launcher extends SubsystemBase
   /** Creates a new ExampleSubsystem. */
   public SK22Launcher()
   {
-    exitTransferMotor = new CANSparkMax(Ports.EXIT_TRANSFER_MOTOR, MotorType.kBrushless);
-    verticalTransferMotor =
-            new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
+    exitTransferMotor     = new CANSparkMax(Ports.EXIT_TRANSFER_MOTOR,     MotorType.kBrushless);
+    verticalTransferMotor = new CANSparkMax(Ports.VERTICAL_TRANSFER_MOTOR, MotorType.kBrushless);
+    launcherTransferMotor = new CANSparkMax(Ports.LAUNCHER_TRANSFER_MOTOR, MotorType.kBrushless);
 
     ballLauncher1.setNeutralMode(NeutralMode.Coast);
     ballLauncher1.setInverted(true);
@@ -119,17 +120,6 @@ public class SK22Launcher extends SubsystemBase
   }
 
   /**
-   * Set the speed of the launcher transfer motor.
-   * 
-   * @param speed
-   *          Motor speed in the range [-1, 1].
-   */
-  public void setLauncherTransferMotor(double speed)
-  {
-    launcherTransferMotor.set(speed);
-  }
-
-  /**
    * Gets the last set speed 
    * @return The value of the last set speed in RPM
    */
@@ -169,24 +159,17 @@ public class SK22Launcher extends SubsystemBase
       verticalTransferMotor.set(speed);
   }
 
-    /**
-   * returns the value of the transfer exit motor
-   * @return value of the transfer exit motor
-   */
-  public CANSparkMax getExitTransferMotor()
-  {
-      return exitTransferMotor;
-  }
-
   /**
-   * return the value of the transfer vertical shaft motor
-   * @return value of the transfer vertical shaft motor
+   * Set the speed of the launcher transfer motor.
+   * 
+   * @param speed
+   *          Motor speed in the range [-1, 1].
    */
-  public CANSparkMax getVerticalShaftMotor()
+  public void setLauncherTransferMotor(double speed)
   {
-      return verticalTransferMotor;
+    launcherTransferMotor.set(speed);
   }
-
+  
   /**
    * Query whether the vertical transfer motor is running.
    * 

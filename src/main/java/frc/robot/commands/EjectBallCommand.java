@@ -44,7 +44,7 @@ public class EjectBallCommand extends CommandBase
         //Sets the exist transfer motor to ejectionspeed
         launcher.setExitTransferMotor(-TransferConstants.BALL_EJECTION_SPEED);
         //Sets the intake transfer motor to ejectionspeed
-        transfer.setIntakeTransferMotor(TransferConstants.BALL_EJECTION_SPEED);
+        transfer.setIntakeTransferMotorSpeed(TransferConstants.BALL_EJECTION_SPEED);
     }
     
     /** {@inheritDoc} */
@@ -54,7 +54,7 @@ public class EjectBallCommand extends CommandBase
         // Turns off the exit transfer motor 
         launcher.setExitTransferMotor(0.0);
         // Turns off the intake transfer motor
-        transfer.setIntakeTransferMotor(0.0);
+        transfer.setIntakeTransferMotorSpeed(0.0);
     }
 
     /** {@inheritdoc} */

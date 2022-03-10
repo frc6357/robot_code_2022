@@ -89,11 +89,21 @@ public class Launcher
     launcherEnabled = true;
   }
 
+  /**
+   * Reset the PID controller and apply new coefficients.
+   * 
+   * @param kP PID controller proportional gain
+   * @param kI PID controller integral gain
+   * @param kD PID controller derivative gain
+   */
   public void resetController(double kP, double kI, double kD)
   {
     controller.setPID(kP, kI, kD);
   }
 
+  /**
+   * Reset the PID controller for the launcher.
+   */
   public void reset()
   {
     controller.reset();

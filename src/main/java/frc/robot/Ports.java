@@ -52,18 +52,10 @@ public class Ports
     public static final int BACK_LEFT_DRIVE   = 11; // CAN ID
     public static final int BACK_RIGHT_DRIVE  = 13; // CAN ID
 
-    public static final int GEAR_SHIFT_HIGH = 2;
-    public static final int GEAR_SHIFT_LOW  = 3;
-
     //////////////////////////////
     // Transfer Addresses
     //////////////////////////////
-    public static final int EXIT_TRANSFER_MOTOR         = 31; // Currently unknown Port
-    public static final int INTAKE_TRANSFER_MOTOR       = 30; // Currently unknown Port
-    public static final int VERTICAL_TRANSFER_MOTOR     = 32; // Currently unknown Port
-    // TODO: Remove sensors that are not populated on the robot
-    public static final int EXIT_SENSOR                 = 0;  // Currently unknown Port
-    public static final int VERTICAL_SENSOR             = 1;  // Currently unknown Port
+    public static final int INTAKE_TRANSFER_MOTOR       = 30;
 
     //////////////////////////////
     // Intake Addresses
@@ -76,12 +68,11 @@ public class Ports
     public static final PneumaticsModuleType INTAKE_PCM = PneumaticsModuleType.REVPH;
 
     ///////////////////////////////
-    // Ball Indexer Addresses
-    ///////////////////////////////
-
-    ///////////////////////////////
     // Ball Launcher Addresses
     ///////////////////////////////
+    public static final int VERTICAL_TRANSFER_MOTOR     = 32;
+    public static final int EXIT_TRANSFER_MOTOR         = 31;
+
     public static final int BALL_LAUNCHER_1             = 23; // CAN ID
     public static final int BALL_LAUNCHER_2             = 24; // CAN ID
     public static final int LAUNCHER_TRANSFER_MOTOR     = 20; // CAN ID
@@ -137,8 +128,6 @@ public class Ports
     public static final int OI_DRIVER_LAUNCHER_MAX   = 12; // Joystick Button 12
     public static final int OI_DRIVER_LAUNCHER_OFF   = 11; // Joystick Button 11
 
-    // TODO: Remove buttons related to automatic transfer control.
-    public static final int OI_OPERATOR_TRANSFER_START    = 7;  // BACK Button
     public static final int OI_OPERATOR_TRANSFER_EJECT    = 4;  // Y button
     public static final int OI_OPERATOR_TRANSFER_LOAD     = 3;  // X button
     public static final int OI_OPERATOR_INTAKE_EXTEND     = 1;  // A Button

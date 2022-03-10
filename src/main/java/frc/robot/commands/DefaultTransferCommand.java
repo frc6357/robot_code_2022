@@ -20,13 +20,13 @@ public class DefaultTransferCommand extends CommandBase
     {
         this.transfer = transfer;
 
-        addRequirements(transfer);
+        addRequirements(this.transfer);
     }
 
     @Override
     public void initialize()
     {
-        //transfer.setIntakeTransferMotor(0.0);
+        //transfer.setIntakeTransferMotorSpeed(0.0);
         //transfer.setVerticalTransferMotor(0.0);
         //transfer.setExitTransferMotor(0.0);
     }

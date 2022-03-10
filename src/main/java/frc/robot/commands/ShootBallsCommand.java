@@ -43,7 +43,7 @@ public class ShootBallsCommand extends CommandBase
         // Turn on the vertical transfer motor.
         launcher.setVerticalTransferMotor(Constants.TransferConstants.LOAD_BALL_VERTICAL_SPEED);
         // Turn ont the transfer intake motor.
-        transfer.setIntakeTransferMotor(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
+        transfer.setIntakeTransferMotorSpeed(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class ShootBallsCommand extends CommandBase
         // Turn off the vertical transfer motor.
         launcher.setVerticalTransferMotor(0.0);
         // Turn off the transfer intake motor.
-        transfer.setIntakeTransferMotor(0.0);
+        transfer.setIntakeTransferMotorSpeed(0.0);
     }
 
     @Override

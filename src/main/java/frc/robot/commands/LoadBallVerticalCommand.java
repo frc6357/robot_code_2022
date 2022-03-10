@@ -2,7 +2,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TransferConstants;
-import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
 
 /**
@@ -16,19 +15,15 @@ public class LoadBallVerticalCommand extends CommandBase
      */
     private final SK22Transfer transfer;
 
-    private final SK22Launcher launcher;
-
     /**
      * A manual override command that allows the operator to transfer balls from
      * the intake to the base of the vertical shaft of the transfer subsystem.
      * 
      * @param transfer The transfer subsystem on which the command operates.
      */
-    public LoadBallVerticalCommand(SK22Transfer transfer, SK22Launcher launcher)
+    public LoadBallVerticalCommand(SK22Transfer transfer)
     {
         this.transfer = transfer;
-        this.launcher = launcher;
-
         addRequirements(transfer);
     }
 
@@ -39,10 +34,8 @@ public class LoadBallVerticalCommand extends CommandBase
     @Override
     public void initialize()
     {
-        // Turns of the exit transfer motor
-        launcher.setExitTransferMotor(0.0);
         // Sets the intake transfer motor to ejectionspeed
-        transfer.setIntakeTransferMotor(TransferConstants.INTAKE_MOTOR_SPEED);
+        transfer.setIntakeTransferMotorSpeed(TransferConstants.INTAKE_MOTOR_SPEED);
     }
 
     /** {@inheritDoc} */
@@ -50,7 +43,7 @@ public class LoadBallVerticalCommand extends CommandBase
     public void end(boolean interrupted)
     {
         // Turns off the intake transfer motor
-        transfer.setIntakeTransferMotor(0.0);
+        transfer.setIntakeTransferMotorSpeed(0.0);
     }
 
     /** {@inheritDoc} */

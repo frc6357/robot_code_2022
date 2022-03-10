@@ -7,14 +7,14 @@ import frc.robot.subsystems.SK22Transfer;
 
 public class VerticalTimer implements TimerBase
 {
-
-    public final TimerType timerType = TimerType.VERTICAL;
+    private final TimerType timerType = TimerType.VERTICAL;
     private final int timerDuration;
     private int timerProgress = 0;
 
     private CANSparkMax[] motors;
     private double[] speeds;
 
+    // TODO: What units is "speeds"? RPM, [-1,1]? Looking later, you use it with motor.setVoltage which seems very odd!
     public VerticalTimer(int timerDuration, CANSparkMax[] motors, double[] speeds)
     {
         this.timerDuration = timerDuration;
@@ -76,7 +76,7 @@ public class VerticalTimer implements TimerBase
 
             // transfer.setTimerState(false);
 
-            return TimerStatus.FINSIHED;
+            return TimerStatus.FINISHED;
         }
         else if (!transfer.getIsRunningTimerEnabled() && timerProgress > 0)
         {
@@ -88,7 +88,7 @@ public class VerticalTimer implements TimerBase
 
             // transfer.setTimerState(false);
 
-            return TimerStatus.FINSIHED;
+            return TimerStatus.FINISHED;
         }
 
         timerProgress++;
