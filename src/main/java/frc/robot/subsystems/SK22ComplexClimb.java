@@ -28,6 +28,31 @@ public class SK22ComplexClimb extends SubsystemBase
         complexArm = new ComplexClimbArm(complexBrakePivot, complexRatchetLift, pivotEncoder, ratchetEncoder);
     }
 
+    /**
+     * Extends the complex arms
+     */
+    public void raiseComplexArm()
+    {
+        complexArm.raise();
+    }
+
+    /**
+     * Retracts the complex arms
+     */
+    public void lowerComplexArm()
+    {
+        complexArm.lower();
+    }
+
+    /**
+     * Rotates the complex arms either upwards or downwards
+     * @param direction the way in which the complex arms turn (true = upwards) (false = downwards)
+     */
+    public void rotateComplexArm(boolean direction)
+    {
+        complexArm.rotate(direction);
+    }
+
      /**
      * sets the angle position of the complex arm
      * @param degrees The position we want the arm to pivot to.

@@ -214,6 +214,9 @@ public final class Constants
         public static final long   STEP4_DELAY_MILLIS           = 1000;
 
         public static final double CURRENT_THRESHOLD            = 1000.0;
+
+        public static final boolean COMPLEX_UPWARD_ROTATION     = true;
+        public static final boolean COMPLEX_DOWNWARD_ROTATION    = false;
     }
 
     /**Constants related to Vision subsystem */

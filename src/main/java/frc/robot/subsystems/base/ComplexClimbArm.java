@@ -1,10 +1,13 @@
 package frc.robot.subsystems.base;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
+import edu.wpi.first.wpilibj.Solenoid;
 import frc.robot.Constants;
 import frc.robot.Ports;
 
@@ -27,6 +30,14 @@ public class ComplexClimbArm
     private final RotatingArm pivotArm;
     private final RotatingArm ratchetArm;
     private boolean ratchetState;
+
+    private final Solenoid raisePiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+    PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_RAISE_CHANNEL);
+    private final Solenoid lowerPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+    PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_LOWER_CHANNEL);
+
+    private final Solenoid rotatePiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
+    PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_LOWER_CHANNEL);
 
     /**
      * The constructor requires the two CANSparkMax motors for rotation of the arm and the extending vertically
@@ -56,6 +67,34 @@ public class ComplexClimbArm
                                    Constants.ClimbConstants.LIFT_ARM_CONTROLLER_KI,
                                    Constants.ClimbConstants.LIFT_ARM_CONTROLLER_KD);
     }
+
+    /**
+     * Extends the complex arms
+     */
+    public void raise()
+    {
+        raisePiston.set(true);
+        lowerPiston.set(false);
+    }
+
+    /**
+     * Retracts the complex arms
+     */
+    public void lower()
+    {
+        raisePiston.set(false);
+        lowerPiston.set(true);
+    }
+
+    /**
+     * based on the direction the method either rotates upwards or downwards the structure of the complex arms
+     * @param direction the direction in which the arm rotates(true being upwards, false being downwards)
+     */
+    public void rotate(boolean direction)
+    {
+        rotatePiston.set(direction);
+    }
+
     /**
      * The turnRatchetPistonOn method will turn on the piston to extend the hand in order to grab a rung
      */

@@ -5,11 +5,12 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import frc.robot.Constants.ClimbConstants;
 import frc.robot.commands.subcommands.CurrentChangeCommand;
 import frc.robot.commands.subcommands.LowerSimpleArmCommand;
-import frc.robot.commands.subcommands.MoveComplexArmLiftCommand;
+import frc.robot.commands.subcommands.RotateComplexArmCommand;
 import frc.robot.commands.subcommands.NeutralRaiseSimpleArmCommand;
 //import frc.robot.commands.subcommands.NeutralTiltSimpleArmCommand;
 import frc.robot.commands.subcommands.PivotComplexArmCommand;
 import frc.robot.commands.subcommands.RaiseSimpleArmCommand;
+import frc.robot.commands.subcommands.RotateComplexArmCommand;
 //import frc.robot.commands.subcommands.StraightenSimpleArmCommand;
 //import frc.robot.commands.subcommands.TiltSimpleArmCommand;
 import frc.robot.commands.subcommands.TimeDelayCommand;
@@ -54,7 +55,7 @@ public final class ClimbSequence
     {
         ParallelCommandGroup step2 = new ParallelCommandGroup();
         step2.addCommands(new LowerSimpleArmCommand(simpleClimb));
-        step2.addCommands(new MoveComplexArmLiftCommand(complexClimb, ClimbConstants.COMPLEX_FULL_EXTEND));
+        step2.addCommands(new RotateComplexArmCommand(complexClimb, ClimbConstants.COMPLEX_UPWARD_ROTATION));
         return step2;
     }
 
@@ -76,7 +77,7 @@ public final class ClimbSequence
     public Command getStep4(SK22ComplexClimb complexClimb)
     {
         ParallelCommandGroup step4 = new ParallelCommandGroup();
-        step4.addCommands(new MoveComplexArmLiftCommand(complexClimb, ClimbConstants.COMPLEX_FULL_RETRACT));
+        step4.addCommands(new RotateComplexArmCommand(complexClimb, ClimbConstants.COMPLEX_DOWNWARD_ROTATION));
         step4.addCommands(new TimeDelayCommand(ClimbConstants.STEP4_DELAY_MILLIS));
         step4.addCommands(new CurrentChangeCommand(complexClimb, ClimbConstants.CURRENT_THRESHOLD));
         return step4;
@@ -94,7 +95,7 @@ public final class ClimbSequence
         //step5.addCommands(new NeutralTiltSimpleArmCommand(simpleClimb));
         step5.addCommands(new NeutralRaiseSimpleArmCommand(simpleClimb));
         step5
-            .addCommands(new MoveComplexArmLiftCommand(complexClimb, ClimbConstants.COMPLEX_FULL_RETRACT));
+            .addCommands(new RotateComplexArmCommand(complexClimb, ClimbConstants.COMPLEX_DOWNWARD_ROTATION));
         step5
             .addCommands(new PivotComplexArmCommand(complexClimb, ClimbConstants.COMPLEX_FULL_STRAIGHTEN));
         return step5;
@@ -174,7 +175,7 @@ public final class ClimbSequence
      */
     public Command getStep11(SK22ComplexClimb complexClimb)
     {
-        return new MoveComplexArmLiftCommand(complexClimb, ClimbConstants.COMPLEX_PARTIAL_EXTEND);
+        return new RotateComplexArmCommand(complexClimb, ClimbConstants.COMPLEX_UPWARD_ROTATION);
     }
 
     /**
@@ -194,6 +195,6 @@ public final class ClimbSequence
      */
     public Command getStep13(SK22ComplexClimb complexClimb)
     {
-        return new MoveComplexArmLiftCommand(complexClimb, ClimbConstants.COMPLEX_FULL_EXTEND);
+        return new RotateComplexArmCommand(complexClimb, ClimbConstants.COMPLEX_UPWARD_ROTATION);
     }
 }

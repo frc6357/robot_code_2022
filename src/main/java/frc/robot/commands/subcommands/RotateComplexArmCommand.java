@@ -7,26 +7,26 @@ import frc.robot.subsystems.SK22ComplexClimb;
 /**
  * Command that allows the ratchet to a set distance
  */
-public class MoveComplexArmLiftCommand extends CommandBase
+public class RotateComplexArmCommand extends CommandBase
 {
     private final SK22ComplexClimb climb;
-    private double distance;
+    private boolean direction;
 
     /**
      * The constructor instantiates all the member variables for the Move Complex arm lift command
      * @param climb The SK22Climb subsytem
-     * @param distance The amount of distance the ratchet would cover
+     * @param direction The direction in which the complex structure moves 
      */
-    public MoveComplexArmLiftCommand(SK22ComplexClimb climb, double distance)
+    public RotateComplexArmCommand(SK22ComplexClimb climb, boolean direction)
     {
         this.climb = climb;
-        this.distance = distance;
+        this.direction = direction;
     }
 
     @Override
     public void initialize()
     {
-        this.climb.setComplexRatchetArmPosition(this.distance);
+        this.climb.rotateComplexArm(this.direction);
     }
 
     @Override

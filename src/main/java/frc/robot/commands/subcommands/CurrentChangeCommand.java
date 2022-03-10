@@ -2,7 +2,7 @@ package frc.robot.commands.subcommands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.SK22ComplexClimb;
-
+//TODO: This class is not needed anymore, however the code is still useful for other projects
 /**
  * A command that causes the simple climb arm to be moved to the tilted position.
  */
