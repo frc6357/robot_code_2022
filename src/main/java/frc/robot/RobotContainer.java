@@ -16,21 +16,21 @@ import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-// TODO: Reinstate driver cameras.
-// import edu.wpi.first.cscore.UsbCamera;
-// import edu.wpi.first.networktables.NetworkTableEntry;
-// import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
+import edu.wpi.first.cscore.VideoSink;
+import edu.wpi.first.cscore.VideoSource.ConnectionStrategy;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.AutoTools.AutoPaths;
@@ -43,7 +43,6 @@ import frc.robot.commands.ClimbCommandGroup;
 import frc.robot.commands.ClimbSequence;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
-import frc.robot.commands.DoNothingCommand;
 import frc.robot.commands.EjectBallCommand;
 import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.ReverseVerticalTransferCommand;
@@ -75,10 +74,9 @@ public class RobotContainer
     /**
      * The USB Camera for the Robot.
      */
-    // private UsbCamera         camera1;
-    // private UsbCamera         camera2;
-    // private NetworkTableEntry cameraSelection;
-    // private VideoSink         server;
+    private UsbCamera         camera1;
+    private UsbCamera         camera2;
+    private VideoSink         server;
 
     private final SK22CommandBuilder pathBuilder;
     private final TrajectoryBuilder    segmentCreator      =
@@ -225,22 +223,22 @@ public class RobotContainer
 
         resetDriveDefaultCommand();
 
-        // Driver camera configuration.
-        // if (RobotBase.isReal())
-        // {
-        //     camera1 = CameraServer.startAutomaticCapture("Driver Front Camera", 0);
-        //     camera1.setResolution(240, 240);
-        //     camera1.setFPS(15);
+        // Driver camera configuration
+        if (RobotBase.isReal())
+        {
+            camera1 = CameraServer.startAutomaticCapture("Driver Front Camera", 0);
+            camera1.setResolution(240, 240);
+            camera1.setFPS(15);
 
-        //     camera2 = CameraServer.startAutomaticCapture("Driver Rear Camera", 1);
-        //     camera2.setResolution(240, 240);
-        //     camera2.setFPS(15);
+            camera2 = CameraServer.startAutomaticCapture("Driver Rear Camera", 1);
+            camera2.setResolution(240, 240);
+            camera2.setFPS(15);
 
-        //     server = CameraServer.getServer();
+            server = CameraServer.getServer();
 
-        //     camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-        //     camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-        // }
+            camera1.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+            camera2.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+        }
     }
 
     /**
@@ -278,14 +276,11 @@ public class RobotContainer
         driveSlowBtn.whenPressed(() -> driveSubsystem.setMaxOutput(0.5));
         driveSlowBtn.whenReleased(() -> driveSubsystem.setMaxOutput(1));
 
-        // TODO: Test that this functionality works as expected by ensuring that the 
-        // camera and direction of the robot are one and the same
-        // Sets the "directionality" of the robot
         // Sets both the direction controls and the camera selection
-        reverseOffBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(false));
-            // .whenPressed(() -> server.setSource(camera1));
-        reverseOnBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(true));
-            // .whenPressed(() -> server.setSource(camera2));
+        reverseOffBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(false))
+            .whenPressed(() -> server.setSource(camera1));
+        reverseOnBtn.whenPressed(() -> driveSubsystem.setBackwardsDirection(true))
+            .whenPressed(() -> server.setSource(camera2));
 
         // User controls related to the ball intake subsystem
         if (intakeSubsystem.isPresent() && transferSubsystem.isPresent())

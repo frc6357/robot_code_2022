@@ -5,6 +5,9 @@ import com.revrobotics.CANSparkMax;
 
 import frc.robot.subsystems.SK22Transfer;
 
+/**
+ * Document this!
+ */
 public class VerticalTimer implements TimerBase
 {
     private final TimerType timerType = TimerType.VERTICAL;
@@ -15,6 +18,12 @@ public class VerticalTimer implements TimerBase
     private double[] speeds;
 
     // TODO: What units is "speeds"? RPM, [-1,1]? Looking later, you use it with motor.setVoltage which seems very odd!
+    /**
+     * Document this!
+     * @param timerDuration ?
+     * @param motors ?
+     * @param speeds ?
+     */
     public VerticalTimer(int timerDuration, CANSparkMax[] motors, double[] speeds)
     {
         this.timerDuration = timerDuration;

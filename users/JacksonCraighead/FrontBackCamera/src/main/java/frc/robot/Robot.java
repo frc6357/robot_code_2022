@@ -16,31 +16,39 @@ import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
 
-public class Robot extends TimedRobot {
-  private final Joystick joy1 = new Joystick(0);
-  private final JoystickButton frontSelect = new JoystickButton(joy1, 1); // A
-  private final JoystickButton backSelect = new JoystickButton(joy1, 2); // B
+/** Main robot class */
+public class Robot extends TimedRobot
+{
+    private final Joystick       joy1        = new Joystick(0);
+    private final JoystickButton frontSelect = new JoystickButton(joy1, 1); // A
+    private final JoystickButton backSelect  = new JoystickButton(joy1, 2); // B
 
-  UsbCamera camera1;
-  UsbCamera camera2;
-  NetworkTableEntry cameraSelection;
+    private UsbCamera         camera1;
+    private UsbCamera         camera2;
+    private NetworkTableEntry cameraSelection;
 
-@Override
-public void robotInit() {
-    camera1 = CameraServer.startAutomaticCapture(0);
-    camera2 = CameraServer.startAutomaticCapture(1);
+    @Override
+    public void robotInit()
+    {
+        camera1 = CameraServer.startAutomaticCapture(0);
+        camera2 = CameraServer.startAutomaticCapture(1);
 
-    cameraSelection = NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
-}
-
-@Override
-public void teleopPeriodic() {
-    if (frontSelect.get()) {
-        System.out.println("Setting front camera");
-        cameraSelection.setString(camera2.getName());
-    } else if (backSelect.get()) {
-        System.out.println("Setting back camera");
-        cameraSelection.setString(camera1.getName());
+        cameraSelection =
+                NetworkTableInstance.getDefault().getTable("").getEntry("CameraSelection");
     }
-}
+
+    @Override
+    public void teleopPeriodic()
+    {
+        if (frontSelect.get())
+        {
+            System.out.println("Setting front camera");
+            cameraSelection.setString(camera2.getName());
+        }
+        else if (backSelect.get())
+        {
+            System.out.println("Setting back camera");
+            cameraSelection.setString(camera1.getName());
+        }
+    }
 }
