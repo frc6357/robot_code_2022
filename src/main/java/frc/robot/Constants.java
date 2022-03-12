@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -75,12 +73,15 @@ public final class Constants
         public static final double KA                = 0.217; // Volt Seconds Squared Per Meter
         public static final double KP_DRIVE_VELOCITY = 2.26;
 
-        // TODO: Data not characterized
+        // TODO: Tune the drivetrain automatic turning controller coefficients
         public static final double KP_TURN_DEGREES   = 0.01;  // Uses degrees as unit in SysID
+        public static final double KI_TURN_DEGREES   = 0.00;  // Uses degrees as unit in SysID
+        public static final double KD_TURN_DEGREES   = 0.00;  // Uses degrees as unit in SysID
 
         public static final double DEADBAND_TURN    = 0.01;
         public static final double SLEW_FILTER_RATE = 2;     // per second
 
+        // TODO: Tune the drivetrain turn rate tolerances.
         public static final double TURN_TOLERANCE      = 2;    // Degrees
         public static final double TURN_RATE_TOLERANCE = 3;    // Degrees per Second
 
@@ -161,62 +162,6 @@ public final class Constants
         public static final double TEST_TURN_3 = 50;     //Amount of degrees
         public static final double TEST_TURN_4 = 90;     //Amount of degrees
         public static final double TEST_TURN_5 = 180;    //Amount of degrees
-    }
-
-    /** Constants related to Climb */
-    public static final class ClimbConstants
-    {
-        public static final MotorType MOTOR_TYPE = MotorType.kBrushless;
-
-        public static final double ARM_MOTOR_RPM = 5000; //Guess???
-
-        //Pivot
-        public static final int PIVOT_MOTOR_TEETH_PER_REVOLUTION = 20; //Per De E
-        public static final int PIVOT_MOTOR_GEAR_RATIO           = 25;  // 2x 5:1 Gearbox
-        public static final int PIVOT_ARC_TEETH_PER_REVOLUTION   = 303; //59 teeth in a 70 degreee arc
-        // TODO: Tune PID coefficients for the pivot arm.
-        public static final double PIVOT_ARM_CONTROLLER_KP       = 0.005;
-        public static final double PIVOT_ARM_CONTROLLER_KI       = 0.0; 
-        public static final double PIVOT_ARM_CONTROLLER_KD       = 0.0; 
-
-        //Converts motor revs to degrees based on gearing
-        public static final double PIVOT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER  =
-                                            ((360.0 * PIVOT_MOTOR_TEETH_PER_REVOLUTION)
-                                            / (PIVOT_MOTOR_GEAR_RATIO * PIVOT_ARC_TEETH_PER_REVOLUTION));
-        
-
-        //Lift
-        public static final int LIFT_MOTOR_TEETH_PER_REVOLUTION = 20; // Check this!
-        public static final int LIFT_RACK_TEETH_PER_INCH        = 20; // Check this!
-        public static final int LIFT_MOTOR_GEAR_RATIO           = 9; // 9:1 gear ratio
-        // TODO: Tune PID coefficients for the rotating climb arm. Is this the extending arm controller?
-        public static final double LIFT_ARM_CONTROLLER_KP       = 0.005;
-        public static final double LIFT_ARM_CONTROLLER_KI       = 0.0;
-        public static final double LIFT_ARM_CONTROLLER_KD       = 0.0;
-
-        //Converts motor revs to degrees based on gearing
-        public static final double LIFT_MOTOR_ROTATIONS_TO_DEGREE_CONVERTER  =
-                                            ((360.0 * PIVOT_MOTOR_TEETH_PER_REVOLUTION)
-                                            / (PIVOT_MOTOR_GEAR_RATIO * PIVOT_ARC_TEETH_PER_REVOLUTION));
-
-        // TODO: Tune all time and distance constants for the complex climb arm
-        public static final double COMPLEX_FULL_TILT            = 30;
-        public static final double COMPLEX_FULL_STRAIGHTEN      = 0;
-        public static final double COMPLEX_FULL_EXTEND          = 20;
-        public static final double COMPLEX_FULL_RETRACT         = 0;
-        public static final double COMPLEX_PARTIAL_STRAIGHTEN   = 25;
-        public static final double COMPLEX_PARTIAL_EXTEND       = 5;
-        public static final long   STEP6_DELAY_MILLIS           = 1000;
-        public static final long   STEP7_DELAY_MILLIS           = 1000;
-        public static final long   STEP8_DELAY_MILLIS           = 1000;
-        public static final long   STEP9_DELAY_MILLIS           = 1000;
-        public static final long   STEP10_DELAY_MILLIS          = 1000;
-        public static final long   STEP4_DELAY_MILLIS           = 1000;
-
-        public static final double CURRENT_THRESHOLD            = 1000.0;
-
-        public static final boolean COMPLEX_UPWARD_ROTATION     = true;
-        public static final boolean COMPLEX_DOWNWARD_ROTATION    = false;
     }
 
     /**Constants related to Vision subsystem */

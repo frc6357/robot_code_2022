@@ -35,13 +35,13 @@ public class AcquireTargetCommand extends CommandBase
         this.drive = drive;
         this.vision = vision;
 
-        // TODO: Need to tune this value so as to not destroy the robot when turning
-        pidController = new PIDController(DriveConstants.KP_TURN_DEGREES, 0, 0);
+        pidController = new PIDController(DriveConstants.KP_TURN_DEGREES,
+                                          DriveConstants.KI_TURN_DEGREES, 
+                                          DriveConstants.KD_TURN_DEGREES);
 
         pidController.enableContinuousInput(-180, 180);
-        // TODO: Need to tune constraints as well to make sure we don't overshoot or undershoot
         pidController.setTolerance(DriveConstants.TURN_TOLERANCE,
-            DriveConstants.TURN_RATE_TOLERANCE);
+                                   DriveConstants.TURN_RATE_TOLERANCE);
 
         addRequirements(drive, vision);
     }

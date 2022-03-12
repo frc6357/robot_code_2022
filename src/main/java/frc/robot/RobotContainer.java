@@ -39,8 +39,6 @@ import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.AutoTools.SK22Paths.Drive1mForwardBackward;
 import frc.robot.AutoTools.SK22Paths.RunJson;
 import frc.robot.commands.AcquireTargetCommand;
-import frc.robot.commands.ClimbCommandGroup;
-import frc.robot.commands.ClimbSequence;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
 import frc.robot.commands.EjectBallCommand;
@@ -48,7 +46,6 @@ import frc.robot.commands.LoadBallVerticalCommand;
 import frc.robot.commands.ReverseVerticalTransferCommand;
 import frc.robot.commands.SetIntakePositionCommand;
 import frc.robot.commands.ShootBallsCommand;
-import frc.robot.subsystems.SK22ComplexClimb;
 import frc.robot.subsystems.SK22Drive;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
@@ -96,10 +93,8 @@ public class RobotContainer
     private Optional<SK22Intake>       intakeSubsystem       = Optional.empty();
     private Optional<SK22Launcher>     launcherSubsystem     = Optional.empty();
     private Optional<SK22Transfer>     transferSubsystem     = Optional.empty();
-    private Optional<SK22ComplexClimb> complexClimbSubsystem = Optional.empty();
     private Optional<SK22SimpleClimb>  simpleClimbSubsystem  = Optional.empty();
     private Optional<SK22Vision>       visionSubsystem       = Optional.empty();
-    private Optional<Joystick>         climbtestJoystick     = Optional.empty();
 
     // Robot External Controllers (Joysticks and Logitech Controller)
     private final FilteredJoystick driverLeftJoystick  =
@@ -142,14 +137,13 @@ public class RobotContainer
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_EJECT);
     private final JoystickButton transferLoadBallBtn   =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_LOAD);
-    private final TriggerButton  climbExtendBtn        =
-            new TriggerButton(operatorJoystick, Ports.OI_OPERATOR_EXTEND_CLIMB);
     private final JoystickButton reverseVerticalTransferBtn =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VERTICAL_TRANSFER_REVERSE);
+            
+    private final TriggerButton  climbExtendBtn        =
+            new TriggerButton(operatorJoystick, Ports.OI_OPERATOR_EXTEND_CLIMB);
     private final JoystickButton climbRetractBtn       =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_RETRACT_CLIMB);
-    private final JoystickButton climbSequenceBtn      =
-            new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_SEQUENCE_CLIMB);
 
     private final DefaultArcadeDriveCommand arcadeDrive =
             new DefaultArcadeDriveCommand(driveSubsystem, driverLeftJoystick);
@@ -194,17 +188,9 @@ public class RobotContainer
             {
                 visionSubsystem = Optional.of(new SK22Vision());
             }
-            if (subsystems.isComplexClimbPresent())
-            {
-                complexClimbSubsystem = Optional.of(new SK22ComplexClimb());
-            }
             if (subsystems.isSimpleClimbPresent())
             {
                 simpleClimbSubsystem = Optional.of(new SK22SimpleClimb());
-            }
-            if (subsystems.isClimbtestPresent())
-            {
-                climbtestJoystick = Optional.of(new Joystick(Ports.OI_CLIMBTEST_JOYSTICK));
             }
         }
         catch (IOException e)
@@ -338,50 +324,15 @@ public class RobotContainer
         }
 
         // User controls related to the climbing function.
-        if (simpleClimbSubsystem.isPresent() && complexClimbSubsystem.isPresent())
+        if (simpleClimbSubsystem.isPresent())
         {
-            SK22ComplexClimb complexClimb = complexClimbSubsystem.get();
             SK22SimpleClimb simpleClimb = simpleClimbSubsystem.get();
-            ClimbSequence climbSequence = new ClimbSequence();
 
-            // Extends the climb arms
-            climbExtendBtn.whenPressed(climbSequence.getStep1(complexClimb, simpleClimb));
+            // Extends the climb arm
+            climbExtendBtn.whenPressed(() -> simpleClimb.raiseSimpleArm());
 
-            // Retracts the climb arms
-            climbRetractBtn.whenPressed(climbSequence.getStep2(complexClimb, simpleClimb));
-
-            // Goes from one climb rung to the next highest rung
-            //climbOrchestrateBtn.whenPressed(climb::orchestra);
-
-            climbSequenceBtn
-                .whenPressed(new ClimbCommandGroup(complexClimb, simpleClimb, climbSequence));
-
-            if (climbtestJoystick.isPresent())
-            {
-                Joystick testJoystick = climbtestJoystick.get();
-                new JoystickButton(testJoystick, 1)
-                    .whenPressed(climbSequence.getStep3(complexClimb));
-                //new JoystickButton(testJoystick, 2).whenPressed(ClimbSequence.getStep4(complexClimb));
-                new JoystickButton(testJoystick, 3)
-                    .whenPressed(climbSequence.getStep5(complexClimb, simpleClimb));
-                new JoystickButton(testJoystick, 4)
-                    .whenPressed(climbSequence.getStep6(complexClimb, simpleClimb));
-                new JoystickButton(testJoystick, 5)
-                    .whenPressed(climbSequence.getStep7(simpleClimb));
-                new JoystickButton(testJoystick, 6)
-                    .whenPressed(climbSequence.getStep8(simpleClimb));
-                new JoystickButton(testJoystick, 7)
-                    .whenPressed(climbSequence.getStep9(simpleClimb));
-                new JoystickButton(testJoystick, 8)
-                    .whenPressed(climbSequence.getStep10(simpleClimb));
-                new JoystickButton(testJoystick, 9)
-                    .whenPressed(climbSequence.getStep11(complexClimb));
-                new JoystickButton(testJoystick, 10)
-                    .whenPressed(climbSequence.getStep12(complexClimb));
-                new JoystickButton(testJoystick, 11)
-                    .whenPressed(climbSequence.getStep13(complexClimb));
-
-            }
+            // Retracts the climb arm
+            climbRetractBtn.whenPressed(() -> simpleClimb.lowerSimpleArm());
         }
     }
 

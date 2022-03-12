@@ -7,13 +7,6 @@
 
 package frc.robot;
 
-// DW: Commented out after moving SK22Climb instantiation to RobotContainer.
-//import com.revrobotics.CANSparkMax;
-//import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-//import com.revrobotics.REVPhysicsSim;
-//import edu.wpi.first.math.system.plant.DCMotor;
-//import frc.robot.simulation.RobotSim;
-
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
@@ -29,7 +22,6 @@ public class Robot extends TimedRobot
 {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
-    //private RobotSim robotSimulation;
 
     /**
      * This function is run when the robot is first started up and should be used for any
@@ -43,11 +35,6 @@ public class Robot extends TimedRobot
     @Override
     public void robotInit()
     {
-        // DW: NO! We can't be making Climb a special case here. Why isn't it
-        // instantiated with all the other subsystems?
-
-        //robotContainer = new RobotContainer(climbSubsystem);
-        //robotSimulation = new RobotSim(complexBrakePivot, complexRatchetLift);
     }
 
     /**
@@ -151,12 +138,6 @@ public class Robot extends TimedRobot
     @Override
     public void simulationInit()
     {
-        // DW: Commented out for now after moving SK22Climb instantiation into RobotContainer
-        // with the other subsystems.
-
-        //super.simulationInit();
-        //REVPhysicsSim.getInstance().addSparkMax(complexBrakePivot, DCMotor.getNEO(1));
-        //REVPhysicsSim.getInstance().addSparkMax(complexRatchetLift, DCMotor.getNEO(1));
     }
 
     /**
@@ -165,12 +146,5 @@ public class Robot extends TimedRobot
     @Override
     public void simulationPeriodic()
     {
-        // Commented out for now after moving SK22Climb instantiation into RobotContainer
-        // with the other subsystems. 
-
-        //complexBrakePivot.set(-.025);
-        //complexRatchetLift.set(.25);
-        //REVPhysicsSim.getInstance().run();
-        //robotSimulation.update();
     }
 }

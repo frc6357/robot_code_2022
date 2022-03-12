@@ -134,7 +134,6 @@ public class Ports
     public static final int OI_OPERATOR_INTAKE_RETRACT    = 2;  // B Button
     public static final int OI_OPERATOR_EXTEND_CLIMB      = 3;  // Right Trigger Axis
     public static final int OI_OPERATOR_RETRACT_CLIMB     = 6;  // Right Bumper
-    public static final int OI_OPERATOR_SEQUENCE_CLIMB    = 5;  // Left Bumper
  
     public static final Port i2c = Port.kOnboard;
 }
