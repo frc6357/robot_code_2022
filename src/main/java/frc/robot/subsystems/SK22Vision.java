@@ -10,6 +10,7 @@ import java.nio.channels.DatagramChannel;
 import java.util.Optional;
 import java.util.zip.CRC32;
 
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.VisionConstants;
@@ -266,12 +267,19 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
     /**
      * Gets the distance of the robot relative to the edge of the hub.
      * 
-     * @return The distance in inches
+     * @return The distance in meters
      */
-    // TODO: Convert vision-reported distance to metres so that we use SI units throughout.
     public Optional<Double> getDistance()
     {
-        return packetDatagram.distance;
+        Optional<Double> dist = packetDatagram.distance;
+
+        // Checks if the distance variable is empty.
+        // If it is empty, it returns the empty object,
+        // else it will return the optional object with
+        // the internal data converted to meters rather
+        // than inches.
+        return dist.isEmpty()
+            ? dist : Optional.of(Units.inchesToMeters(dist.get()));
     }
 
     /**
