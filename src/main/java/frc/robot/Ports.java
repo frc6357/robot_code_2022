@@ -135,8 +135,6 @@ public class Ports
     public static final int OI_OPERATOR_EXTEND_CLIMB      = 3;  // Right Trigger Axis
     public static final int OI_OPERATOR_RETRACT_CLIMB     = 6;  // Right Bumper
     public static final int OI_OPERATOR_SEQUENCE_CLIMB    = 5;  // Left Bumper
-    // TODO: Write emergency stop command for climb
-    public static final int OI_OPERATOR_STOP_CLIMB        = 2;  // Left Trigger Axis
-
+ 
     public static final Port i2c = Port.kOnboard;
 }

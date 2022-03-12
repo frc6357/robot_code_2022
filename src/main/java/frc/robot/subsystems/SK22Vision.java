@@ -268,7 +268,7 @@ public class SK22Vision extends SKSubsystemBase implements AutoCloseable
      * 
      * @return The distance in inches
      */
-    // TODO: Check units with vivek
+    // TODO: Convert vision-reported distance to metres so that we use SI units throughout.
     public Optional<Double> getDistance()
     {
         return packetDatagram.distance;
