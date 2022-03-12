@@ -35,7 +35,7 @@ public class Ports
     // Robot Infrastructure
     //////////////////////////////
     public static final int BASE_PCM               = 2;  // CAN ID
-    public static final int CLIMB_PNEUMATIC_MODULE = 3;
+    public static final int CLIMB_PNEUMATIC_MODULE = 2;
 
     public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
 
