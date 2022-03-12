@@ -87,7 +87,6 @@ public class Ports
     public static final int SIMPLE_CLIMB_TILT_CHANNEL     = 10;
     public static final int SIMPLE_CLIMB_STRAIGHTEN_CHANNEL     = 11;
     public static final int SIMPLE_CLIMB_RAISE_CHANNEL     = 12;
-    public static final int SIMPLE_CLIMB_LOWER_CHANNEL     = 13;
 
     ///////////////////////////////
     // Additional hardware

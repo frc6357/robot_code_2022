@@ -12,8 +12,6 @@ public class SimpleClimbArm
 {
     private final Solenoid raisePiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
         PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_RAISE_CHANNEL);
-        private final Solenoid lowerPiston = new Solenoid(Ports.CLIMB_PNEUMATIC_MODULE,
-        PneumaticsModuleType.REVPH, Ports.SIMPLE_CLIMB_LOWER_CHANNEL);
 
     /**
      * Constructor for the SimpleClimbArm
@@ -23,20 +21,18 @@ public class SimpleClimbArm
     }
 
     /**
-     * Activate the solenoid required to raise the arm.
+     * Activate the solenoid to raise the arm.
      */
     public void raise()
     {
         raisePiston.set(true);
-        lowerPiston.set(false);
     }
 
     /**
-     * Activate the solenoid required to lower the arm.
+     * Deactivate the solenoid to lower the arm.
      */
     public void lower()
     {
-        lowerPiston.set(true);
         raisePiston.set(false);
     }
 
@@ -46,6 +42,5 @@ public class SimpleClimbArm
     public void neutral()
     {
         raisePiston.set(false);
-        lowerPiston.set(false);
     }
 }
