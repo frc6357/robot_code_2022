@@ -21,8 +21,10 @@ import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
 
 /**
- * A class that contains the auto that starts at Tarmac 2A, shoots the ball, grabs ball 2
- * and terminal ball, then shoots the two balls
+ * A class that contains the auto that starts at Tarmac 2A. This auto will grab ball two,
+ * shoot both balls into the hight goal then head to the terminal. The robot will then
+ * pick up the ball by the terminal and wait for the human player to feed the ball in for
+ * a set time. After that, it will go into a shooting position, then shoot both balls.
  */
 public class ThreeBallTerminal2A implements AutoPaths
 {
