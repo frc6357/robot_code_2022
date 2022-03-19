@@ -29,21 +29,22 @@
               "imageHeight": -1
             }
           },
-          "30,11": {
+          "32,6": {
             "size": [
-              4,
+              5,
               4
             ],
             "content": {
               "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Target Acquired",
               "_title": "Target Aquired",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "11,11": {
+          "0,11": {
             "size": [
-              4,
+              7,
               4
             ],
             "content": {
@@ -52,9 +53,9 @@
               "_title": "Auto Paths"
             }
           },
-          "21,11": {
+          "15,11": {
             "size": [
-              9,
+              8,
               4
             ],
             "content": {
@@ -68,65 +69,10 @@
               "Visuals/Show text": true
             }
           },
-          "15,11": {
+          "7,11": {
             "size": [
-              6,
-              3
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_title": "Front/Back",
-              "Colors/Color when true": "#7CFC00FF",
-              "Colors/Color when false": "#8B0000FF"
-            }
-          },
-          "0,4": {
-            "size": [
-              5,
+              8,
               4
-            ],
-            "content": {
-              "_type": "Boolean Box",
-              "_title": "TRANSFER CONTROL",
-              "Colors/Color when true": "#00FF00FF",
-              "Colors/Color when false": "#FF0000FF"
-            }
-          },
-          "0,0": {
-            "size": [
-              11,
-              4
-            ],
-            "content": {
-              "_type": "Basic FMS Info",
-              "_source0": "network_table:///FMSInfo",
-              "_title": "Basic FMS Info"
-            }
-          },
-          "5,4": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_title": "Intake"
-            }
-          },
-          "8,4": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_title": "Reverse"
-            }
-          },
-          "36,0": {
-            "size": [
-              2,
-              2
             ],
             "content": {
               "_type": "ComboBox Chooser",
@@ -211,17 +157,7 @@
               "_title": "Launcher RPM"
             }
           },
-          "15,14": {
-            "size": [
-              6,
-              1
-            ],
-            "content": {
-              "_type": "Text View",
-              "_title": "Front\u003dGreen Back\u003dRed"
-            }
-          },
-          "23,0": {
+          "0,0": {
             "size": [
               11,
               11
@@ -239,26 +175,6 @@
               "Y-axis/Unit": "RPM",
               "Visible data/SmartDashboard/Launcher RPM": true,
               "Visible data/SmartDashboard/Launcher Setpoint RPM": true
-            }
-          },
-          "8,6": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_title": "Gear Shift"
-            }
-          },
-          "5,6": {
-            "size": [
-              3,
-              2
-            ],
-            "content": {
-              "_type": "Text View",
-              "_title": "Slow mode"
             }
           },
           "52,0": {
@@ -309,75 +225,10 @@
               "Colors/Color when false": "#8B0000FF"
             }
           },
-          "0,8": {
+          "23,3": {
             "size": [
-              11,
-              7
-            ],
-            "content": {
-              "_type": "Grid Layout",
-              "_title": "Grid Layout",
-              "Layout/Number of columns": 5,
-              "Layout/Number of rows": 3,
-              "Layout/Label position": "HIDDEN",
-              "_children": {
-                "0,2": {
-                  "_type": "Boolean Box",
-                  "_title": "Boolean Box",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                "0,1": {
-                  "_type": "Text View",
-                  "_title": ""
-                },
-                "0,0": {
-                  "_type": "Text View",
-                  "_title": ""
-                },
-                "2,1": {
-                  "_type": "Boolean Box",
-                  "_title": "Boolean Box",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                "3,1": {
-                  "_type": "Text View",
-                  "_title": ""
-                },
-                "2,0": {
-                  "_type": "Boolean Box",
-                  "_title": "Boolean Box",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                "3,0": {
-                  "_type": "Text View",
-                  "_title": ""
-                },
-                "1,2": {
-                  "_type": "Boolean Box",
-                  "_title": "Boolean Box",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                "2,2": {
-                  "_type": "Boolean Box",
-                  "_title": "",
-                  "Colors/Color when true": "#7CFC00FF",
-                  "Colors/Color when false": "#8B0000FF"
-                },
-                "3,2": {
-                  "_type": "Text View",
-                  "_title": ""
-                }
-              }
-            }
-          },
-          "34,0": {
-            "size": [
-              2,
-              1
+              4,
+              3
             ],
             "content": {
               "_type": "Text View",
@@ -385,10 +236,10 @@
               "_title": "Intake Extended"
             }
           },
-          "34,1": {
+          "23,0": {
             "size": [
-              2,
-              1
+              4,
+              3
             ],
             "content": {
               "_type": "Text View",
@@ -396,10 +247,10 @@
               "_title": "Direction"
             }
           },
-          "34,2": {
+          "27,0": {
             "size": [
-              4,
-              4
+              10,
+              6
             ],
             "content": {
               "_type": "Boolean Box",
@@ -473,6 +324,45 @@
               "_type": "Text View",
               "_source0": "network_table:///SmartDashboard/Robot Y Accel",
               "_title": "Robot Y Accel"
+            }
+          },
+          "58,2": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Target In Frame",
+              "_title": "Target In Frame",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "52,4": {
+            "size": [
+              4,
+              4
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Target Acquired",
+              "_title": "Target Acquired",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "27,6": {
+            "size": [
+              5,
+              4
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///SmartDashboard/Target In Frame",
+              "_title": "Target In Frame",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
             }
           }
         }
@@ -670,15 +560,39 @@
               "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[3]",
               "_title": "Ungrouped/PIDController[3]"
             }
+          },
+          "8,2": {
+            "size": [
+              1,
+              2
+            ],
+            "content": {
+              "_type": "PID Controller",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PIDController[4]",
+              "_title": "Ungrouped/PIDController[4]"
+            }
+          },
+          "0,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Boolean Box",
+              "_source0": "network_table:///LiveWindow/Ungrouped/Solenoid[2,12]/Value",
+              "_title": "Ungrouped/Solenoid[2,12]/Value",
+              "Colors/Color when true": "#7CFC00FF",
+              "Colors/Color when false": "#8B0000FF"
+            }
           }
         }
       }
     }
   ],
   "windowGeometry": {
-    "x": -7.0,
+    "x": 0.0,
     "y": 0.0,
-    "width": 1377.0,
-    "height": 687.0
+    "width": 1366.0,
+    "height": 728.0
   }
 }
