@@ -8,7 +8,7 @@ import frc.robot.subsystems.SK22Vision;
 
 /**
  * Uses the vision acquisition system to put the drivetrain into the correct rotation to
- * face the target. This uses
+ * face the target. This uses a PID controller to set the speeds of the drivetrain.
  */
 public class AcquireTargetCommand extends CommandBase
 {
@@ -18,6 +18,9 @@ public class AcquireTargetCommand extends CommandBase
 
     /** Desired angle of the drivetrain */
     private double setpoint = 0.0;
+    
+    /** Whether valid hori angle has been received */
+    private boolean validSetpoint = false;
 
     /**
      * Creates a new AcquireTargetCommand and sets the
@@ -33,10 +36,18 @@ public class AcquireTargetCommand extends CommandBase
         this.drive = drive;
         this.vision = vision;
 
-        pidController = new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0);
+        // Taken from characterization
+        pidController = new PIDController(
+            DriveConstants.KP_TURN_DEGREES,
+            DriveConstants.KI_TURN_DEGREES,
+            DriveConstants.KD_TURN_DEGREES);
 
+        // Used to optimize turning
         pidController.enableContinuousInput(-180, 180);
-        pidController.setTolerance(DriveConstants.TURN_TOLERANCE,
+
+        // Taken from SysID values used to calculate PID
+        pidController.setTolerance(
+            DriveConstants.TURN_TOLERANCE,
             DriveConstants.TURN_RATE_TOLERANCE);
 
         addRequirements(drive, vision);
@@ -45,19 +56,35 @@ public class AcquireTargetCommand extends CommandBase
     @Override
     public void initialize()
     {
-        setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
+        validSetpoint = false;
         pidController.reset();
     }
 
     @Override
     public void execute()
     {
-        drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), setpoint));
+        // Calculates arcade drive values if vision has sent horizontal angle
+        if (validSetpoint)
+        {
+            drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), setpoint));
+        }
+        else
+        {
+            // Checks if the vision target has a valid angle if valid angle
+            // has not already been given
+            if (vision.isTargetInFrame())
+            {
+                // Calculates the desired final angle
+                setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
+                validSetpoint = true;
+            }
+        }
     }
 
     @Override
     public void end(boolean interrupted)
     {
+        // Turns off drivetrain motors once finished
         drive.arcadeDrive(0, 0);
     }
 

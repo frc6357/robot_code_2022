@@ -73,19 +73,16 @@ public final class Constants
         public static final double KA                = 0.217; // Volt Seconds Squared Per Meter
         public static final double KP_DRIVE_VELOCITY = 2.26;
 
-        // TODO: Tune the drivetrain automatic turning controller coefficients
-        public static final double KP_TURN_DEGREES   = 0.01;  // Uses degrees as unit in SysID
-        public static final double KI_TURN_DEGREES   = 0.00;  // Uses degrees as unit in SysID
-        public static final double KD_TURN_DEGREES   = 0.00;  // Uses degrees as unit in SysID
+        // Data taken from characterization analysis on 03/21/2022
+        // Type:mDrivetrain (Angular); Units: Degrees
+        public static final double TURN_TOLERANCE      = 5;         // Degrees
+        public static final double TURN_RATE_TOLERANCE = 705.64;    // Degrees per Second
+        public static final double KP_TURN_DEGREES   = 0.867570;
+        public static final double KI_TURN_DEGREES   = 0.000000;
+        public static final double KD_TURN_DEGREES   = 0.040101;
 
         public static final double DEADBAND_TURN    = 0.01;
         public static final double SLEW_FILTER_RATE = 2;     // per second
-
-        // TODO: Tune the drivetrain turn rate tolerances.
-        public static final double TURN_TOLERANCE      = 2;    // Degrees
-        public static final double TURN_RATE_TOLERANCE = 3;    // Degrees per Second
-
-        public static final double ACQUIRE_TARGET_TOLERANCE = 7.5; // Degrees
     }
 
     /** Constants related to the Autonomous operation mode for the Robot. */
@@ -121,7 +118,7 @@ public final class Constants
 
         public static final int LOW_SPEED_PRESET   = 3000;
         public static final int MID_SPEED_PRESET   = 3400;
-        public static final int HIGHT_SPEED_PRESET = 3600;
+        public static final int HIGH_SPEED_PRESET = 3600;
         public static final int MAX_SPEED_PRESET   = 4000;
 
         public static final double LAUNCHER_KP = 0.0003;
