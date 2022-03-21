@@ -8,7 +8,7 @@ import frc.robot.subsystems.SK22Vision;
 
 /**
  * Uses the vision acquisition system to put the drivetrain into the correct rotation to
- * face the target. This uses a PID controller to set the speeds of the drivetrain.
+ * face the target. This uses
  */
 public class AcquireTargetCommand extends CommandBase
 {
@@ -18,8 +18,6 @@ public class AcquireTargetCommand extends CommandBase
 
     /** Desired angle of the drivetrain */
     private double setpoint = 0.0;
-    
-    private boolean validSetpoint = false;
 
     /**
      * Creates a new AcquireTargetCommand and sets the
@@ -35,13 +33,11 @@ public class AcquireTargetCommand extends CommandBase
         this.drive = drive;
         this.vision = vision;
 
-        pidController = new PIDController(DriveConstants.KP_TURN_DEGREES,
-                                          DriveConstants.KI_TURN_DEGREES, 
-                                          DriveConstants.KD_TURN_DEGREES);
+        pidController = new PIDController(DriveConstants.KP_DRIVE_VELOCITY, 0, 0);
 
         pidController.enableContinuousInput(-180, 180);
         pidController.setTolerance(DriveConstants.TURN_TOLERANCE,
-                                   DriveConstants.TURN_RATE_TOLERANCE);
+            DriveConstants.TURN_RATE_TOLERANCE);
 
         addRequirements(drive, vision);
     }
@@ -49,40 +45,26 @@ public class AcquireTargetCommand extends CommandBase
     @Override
     public void initialize()
     {
-        validSetpoint = false;
+        setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
         pidController.reset();
     }
 
     @Override
     public void execute()
     {
-        if (vision.isTargetInFrame())
-        {
-            setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
-            validSetpoint = true;
-
-            drive.arcadeDrive(0, pidController.calculate(vision.getHorizontalAngle().get(), 0));
-        }
-        
-        if (validSetpoint)
-        {
-            drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), setpoint));
-        }
+        drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), setpoint));
     }
 
     @Override
     public void end(boolean interrupted)
     {
         drive.arcadeDrive(0, 0);
-        validSetpoint = false;
     }
 
     @Override
     public boolean isFinished()
     {
-        // End when the controller is at the reference or drivetrain is within tolerance
-        return ((Math.abs(drive.getHeading() - setpoint)
-                <= DriveConstants.ACQUIRE_TARGET_TOLERANCE))
-            || pidController.atSetpoint();
+        // End when the controller is at the reference.
+        return (pidController.atSetpoint());
     }
 }
