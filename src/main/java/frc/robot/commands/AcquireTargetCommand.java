@@ -42,9 +42,6 @@ public class AcquireTargetCommand extends CommandBase
             DriveConstants.KI_TURN_DEGREES,
             DriveConstants.KD_TURN_DEGREES);
 
-        // Used to optimize turning
-        pidController.enableContinuousInput(-180, 180);
-
         // Taken from SysID values used to calculate PID
         pidController.setTolerance(
             DriveConstants.TURN_TOLERANCE,
