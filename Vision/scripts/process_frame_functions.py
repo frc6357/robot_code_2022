@@ -5,8 +5,10 @@ from create_bound import *
 import math
 import Constants
 import os
+from udp_send import sendPacket
 
 def initialFrameProcessing(frame):
+
     im = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
 
     image_lower_bound = bound_percent_cv2(165, 86, 60, 0.9)
@@ -67,8 +69,8 @@ def getContours(contours, center, frame):
         else:
             continue
 
-        print(f"Contour Aspect Ratio: {contourRatio}")
-        print(f"Contour Area: {contourArea}")
+        #print(f"Contour Aspect Ratio: {contourRatio}")
+        #print(f"Contour Area: {contourArea}")
 
         if ( (contourArea >= Constants.TARGET_MIN_AREA) and (contourArea <= Constants.TARGET_MAX_AREA) ):
             if ( (contourRatio >= 0.9*Constants.TARGET_ASPECT_RATIO) and (contourRatio <= Constants.TARGET_MAX_AREA) ):
@@ -119,7 +121,15 @@ def getDistanceVert(targetHeight, mountingHeight, vertAngle):
 def twoPointCal(m, b, val):
     return (m*val)+b
 
-def main(frame):
+def sendFloat(input):
+    string = str(input)
+    decIndex = string.index('.')
+    digPreDecimal = len(string[:decIndex])
+    adjVal = 4-digPreDecimal
+    val = input * 10**adjVal
+    return {"distInt":int("{:.0f}".format(val)), "adjVal":adjVal}
+
+def main(frame, frameID):
     h, w, d = frame.shape
 
     contours = initialFrameProcessing(frame)
@@ -127,9 +137,10 @@ def main(frame):
 
     validContours, validCenter = getContours(contours, (w/2, h/2), frame)
     if (validContours == None or validCenter == None):
-        cv2.imshow("No Target Found", frame)
-        if cv2.waitKey(0) & 0xFF == ord('q'):
-            cv2.destroyAllWindows()
+        sendPacket(0,0,0,0,0)
+        #cv2.imshow("No Target Found", frame)
+        #if cv2.waitKey(0) & 0xFF == ord('q'):
+        #cv2.destroyAllWindows()
     else:
 
 
@@ -145,28 +156,28 @@ def main(frame):
         horiAngle = getHoriAngle(Cx, w)
         vertAngle = getVertAngle(Cy, h, Constants.ANGLE_OFFSET)
 
-        distanceHori = getDistanceHori(horiAngle, Constants.TARGET_WIDTH)
+        #distanceHori = getDistanceHori(horiAngle, Constants.TARGET_WIDTH)
         distanceVert = getDistanceVert(Constants.TARGET_HEIGHT, Constants.MOUNTING_HEIGHT, vertAngle)
 
-        distanceHoriCalib = twoPointCal(1.0526, -27.711, distanceHori)
+        #distanceHoriCalib = twoPointCal(1.0526, -27.711, distanceHori)
         distanceVertCalib = twoPointCal(1.0862, -1.09967, distanceVert)
-
+        retVals = sendFloat(distanceVertCalib)
+        sendPacket(retVals["distInt"], retVlas["adjVal"], horiAngle, vertAngle, frameID)
+        
         print(f"Horizontal Angle: {horiAngle} \nVertical Angle: {vertAngle} \n"
               f"distance using vertical angle: {distanceVert} \ndistance using horizontal angle: {distanceHori}")
 
-        cv2.imshow("frame", frame)
-        if cv2.waitKey(0) & 0xFF == ord('q'):
-            cv2.destroyAllWindows()
+        #cv2.imshow("frame", frame)
+        #if cv2.waitKey(0) & 0xFF == ord('q'):
+        #cv2.destroyAllWindows()
 
 if __name__ == "__main__":
-    successfulImages = "C:/Users/vivek/Desktop/Vision Test Images/Successful/"
-    testImages = "C:/Users/vivek/Desktop/Vision Test Images/Test/"
-    dir = successfulImages
-    imgDir = os.listdir(dir)
-    for img in imgDir:
-        print(img)
-        file = dir + img
-        #print(file
-        frame = cv2.imread(file)
-        main(frame)
-
+    running = True
+    cap = cv2.VideoCapture(8, cv2.CAP_V4L2)
+    cap.set(cv2.CAP_PROP_AUTO_EXPOSURE, 1)
+    cap.set(cv2.CAP_PROP_EXPOSURE, 10)
+    frameID = 0
+    while running:
+        ret, frame = cap.read()
+        frameID += 1
+        main(frame, frameID)
