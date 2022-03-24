@@ -15,8 +15,8 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
  */
 public class SK22Intake extends SKSubsystemBase
 {
-    private final DoubleSolenoid intakeMover = new DoubleSolenoid(Ports.BASE_PCM, Ports.INTAKE_PCM,
-        Ports.INTAKE_MOVER_FORWARD, Ports.INTAKE_MOVER_BACKWARD);
+    // private final DoubleSolenoid intakeMover = new DoubleSolenoid(Ports.BASE_PCM, Ports.INTAKE_PCM,
+    //     Ports.INTAKE_MOVER_FORWARD, Ports.INTAKE_MOVER_BACKWARD);
 
     private final CANSparkMax intakeMotor = new CANSparkMax(Ports.INTAKE_MOTOR, MotorType.kBrushless);
 
@@ -34,7 +34,7 @@ public class SK22Intake extends SKSubsystemBase
     public void disableIntake()
     {
         intakeMotor.set(0.0);
-        intakeMover.set(DoubleSolenoid.Value.kOff);
+        // intakeMover.set(DoubleSolenoid.Value.kOff);
     }
 
     /**
@@ -42,7 +42,7 @@ public class SK22Intake extends SKSubsystemBase
      */
     public void extendIntake()
     {
-        intakeMover.set(DoubleSolenoid.Value.kForward);
+        // intakeMover.set(DoubleSolenoid.Value.kForward);
         SmartDashboard.putString("Intake Extended", "OUT");
     }
 
@@ -51,7 +51,7 @@ public class SK22Intake extends SKSubsystemBase
      */
     public void retractIntake()
     {
-        intakeMover.set(DoubleSolenoid.Value.kReverse);
+        // intakeMover.set(DoubleSolenoid.Value.kReverse);
         SmartDashboard.putString("Intake Extended", "IN");
     }
 

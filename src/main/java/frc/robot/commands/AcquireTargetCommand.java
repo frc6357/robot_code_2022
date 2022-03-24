@@ -63,18 +63,16 @@ public class AcquireTargetCommand extends CommandBase
         // Calculates arcade drive values if vision has sent horizontal angle
         if (validSetpoint)
         {
-            drive.arcadeDrive(0, pidController.calculate(drive.getHeading(), setpoint));
+            drive.arcadeDrive(0, -pidController.calculate(drive.getHeading(), setpoint));
         }
-        else
-        {
-            // Checks if the vision target has a valid angle if valid angle
+        // Checks if the vision target has a valid angle if valid angle
             // has not already been given
-            if (vision.isTargetInFrame())
-            {
-                // Calculates the desired final angle
-                setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
-                validSetpoint = true;
-            }
+        else if (vision.isTargetInFrame())
+        {
+            // Calculates the desired final angle
+            setpoint = drive.getHeading() + vision.getHorizontalAngle().get();
+            pidController.setSetpoint(setpoint);
+            validSetpoint = true;
         }
     }
 
@@ -89,6 +87,6 @@ public class AcquireTargetCommand extends CommandBase
     public boolean isFinished()
     {
         // End when the controller is at the reference.
-        return (pidController.atSetpoint());
+        return (pidController.atSetpoint() && validSetpoint);
     }
 }

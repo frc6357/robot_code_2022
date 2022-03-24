@@ -32,7 +32,7 @@ public final class Constants
     public static final class TransferConstants
     {
         public static final int DISTANCE_THRESHOLD = 70;
-        public static final double INTAKE_MOTOR_SPEED = 0.5;
+        public static final double INTAKE_MOTOR_SPEED = 0.75;
         // Ejects the ball out of the robot
         public static final double EXIT_MOTOR_SPEED = 0.5;
         // Speed of the vertical section of the ball
@@ -76,10 +76,10 @@ public final class Constants
         // Data taken from characterization analysis on 03/21/2022
         // Type:mDrivetrain (Angular); Units: Degrees
         public static final double TURN_TOLERANCE      = 5;         // Degrees
-        public static final double TURN_RATE_TOLERANCE = 705.64;    // Degrees per Second
-        public static final double KP_TURN_DEGREES   = 0.867570;
+        public static final double TURN_RATE_TOLERANCE = 105.64;    // Degrees per Second
+        public static final double KP_TURN_DEGREES   = 0.367570;
         public static final double KI_TURN_DEGREES   = 0.000000;
-        public static final double KD_TURN_DEGREES   = 0.040101;
+        public static final double KD_TURN_DEGREES   = 0.075101;
 
         public static final double DEADBAND_TURN    = 0.01;
         public static final double SLEW_FILTER_RATE = 2;     // per second
@@ -144,7 +144,7 @@ public final class Constants
     /** Constants related to Intake */
     public static final class IntakeConstants
     {
-        public static final double INTAKE_MOTOR_SPEED = 1.0;
+        public static final double INTAKE_MOTOR_SPEED = 0.5;
     }
 
     /** Constants related to Test Mode */
