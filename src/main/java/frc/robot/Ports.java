@@ -122,15 +122,17 @@ public class Ports
     public static final int OI_DRIVER_SLOWMODE       = 4;  // Joystick Button 4
     public static final int OI_DRIVER_ACQUIRE_TARGET = 1;  // Joystick Trigger Button
     public static final int OI_DRIVER_REVERSE        = 0;  // Joystick POV number
-    public static final int OI_DRIVER_VERTICAL_TRANSFER_REVERSE = 7;
+    public static final int OI_DRIVER_VERTICAL_TRANSFER_REVERSE = 9;
     public static final int OI_DRIVER_LAUNCHER_LOW   = 10; // Joystick Button 10
     public static final int OI_DRIVER_LAUNCHER_MAX   = 12; // Joystick Button 12
     public static final int OI_DRIVER_LAUNCHER_OFF   = 11; // Joystick Button 11
+    public static final int OI_DRIVER_VISION_ON      = 7;  // Joystick Button 7
+    public static final int OI_DRIVER_VISION_OFF     = 8;  // Joystick Button 8
 
     public static final int OI_OPERATOR_TRANSFER_EJECT    = 4;  // Y button
     public static final int OI_OPERATOR_TRANSFER_LOAD     = 3;  // X button
     public static final int OI_OPERATOR_INTAKE_EXTEND     = 1;  // A Button
-    public static final int OI_OPERATOR_INTAKE_RETRACT    = 2;  // B Button
+    public static final int OI_OPERATOR_INTAKE_RETRACT    = 2;  // B Button 
     public static final int OI_OPERATOR_EXTEND_CLIMB      = 3;  // Right Trigger Axis
     public static final int OI_OPERATOR_RETRACT_CLIMB     = 6;  // Right Bumper
  

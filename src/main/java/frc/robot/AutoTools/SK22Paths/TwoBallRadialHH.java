@@ -91,7 +91,7 @@ public class TwoBallRadialHH implements AutoPaths
                 .createTrajectory(segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
             getIntakeCommand(), 
             getLauncherCommand(), 
-            new TimeDelayCommand(5000));
+            new TimeDelayCommand(6000));
 
     }
 

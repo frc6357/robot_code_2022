@@ -32,7 +32,7 @@ public final class Constants
     public static final class TransferConstants
     {
         public static final int DISTANCE_THRESHOLD = 70;
-        public static final double INTAKE_MOTOR_SPEED = 0.75;
+        public static final double INTAKE_MOTOR_SPEED = 0.625;
         // Ejects the ball out of the robot
         public static final double EXIT_MOTOR_SPEED = 0.5;
         // Speed of the vertical section of the ball
@@ -91,7 +91,7 @@ public final class Constants
         public static final double MAX_SPEED        = 2;     // Meters Per Second
         public static final double MAX_ACCELERATION = 0.50;  // Meters Per Seconds Squared
 
-        public static final double AUTO_LAUNCH_SPEED = 3300; // RPM
+        public static final double AUTO_LAUNCH_SPEED = 4050; // RPM
 
         // Reasonable baseline values for a RAMSETE follower in units of meters and seconds
         public static final double RAMSETE_B    = 2;

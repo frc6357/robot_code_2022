@@ -26,8 +26,10 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PneumaticHub;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -125,6 +127,10 @@ public class RobotContainer
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_MAX);
     private final JoystickButton driverLauncherOffBtn  =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_OFF);
+    private final JoystickButton driverEnableVision    =
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VISION_ON);    
+    private final JoystickButton driverDisableVision    =
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VISION_OFF); 
     private final Dpad           dpad                  =
             new Dpad(driverLeftJoystick, Ports.OI_DRIVER_REVERSE);
     private final DpadDownButton reverseOnBtn          = new DpadDownButton(dpad);
@@ -293,8 +299,16 @@ public class RobotContainer
         if (visionSubsystem.isPresent())
         {
             SK22Vision vision = visionSubsystem.get();
+
+            PowerDistribution phHub = new PowerDistribution(1, ModuleType.kRev);
+
             driveAcquireTargetBtn
                 .whenHeld(new AcquireTargetCommand(driveSubsystem, vision), true);
+
+            driverEnableVision
+                .whenPressed(() -> phHub.setSwitchableChannel(true));
+            driverDisableVision
+                .whenPressed(() -> phHub.setSwitchableChannel(false));
         }
 
         // User controls related to the ball launcher and transfer related things.

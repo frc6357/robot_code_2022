@@ -41,6 +41,7 @@ public class ShootBallsCommand extends CommandBase
         // Turn on the transfer exit motor.
         launcher.setExitTransferMotor(Constants.TransferConstants.VERTICAL_MOTOR_SPEED);
         // Turn on the vertical transfer motor.
+        // TODO: quick hack just for competition
         launcher.setVerticalTransferMotor(Constants.TransferConstants.LOAD_BALL_VERTICAL_SPEED);
         // Turn ont the transfer intake motor.
         transfer.setIntakeTransferMotorSpeed(Constants.TransferConstants.INTAKE_MOTOR_SPEED);

@@ -1,5 +1,5 @@
 {
-    "intake"        : false,
+    "intake"        : true,
     "transfer"      : true,
     "launcher"      : true, 
     "simpleClimb"   : true,
