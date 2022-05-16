@@ -55,9 +55,9 @@ public class DefaultTransferCommand extends CommandBase{
                 {
                     // Transfer ball to the vertical hold
                     timerType = TimerType.VERTICAL;
-                    transfer.setIsRunningTimerEnabled(true);
+                    transfer.setTimerState(true);
 
-                    transfer.setIntakeTransferMotor(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
+                    transfer.setIntakeTransferMotorSpeed(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
                     transfer.setExitTransferMotor(-Constants.TransferConstants.EXIT_MOTOR_SPEED);
                 } 
                 else if(testVerticalFull && transfer.getIsRunningTimerEnabled())
@@ -65,7 +65,7 @@ public class DefaultTransferCommand extends CommandBase{
                     // Replace above if's conditions with:
                     // transfer.getPositionThreePresence() && transfer.getIsRunningTimerEnabled()
 
-                    transfer.setIsRunningTimerEnabled(false);
+                    transfer.setTimerState(false);
                     updateTimer();
                 }
                 // If there is a ball in the vertical hold, than we dont need to do anything
@@ -74,9 +74,9 @@ public class DefaultTransferCommand extends CommandBase{
             else 
             {
                 timerType = TimerType.EJECT;
-                transfer.setIsRunningTimerEnabled(true);
+                transfer.setTimerState(true);
 
-                transfer.setIntakeTransferMotor(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
+                transfer.setIntakeTransferMotorSpeed(Constants.TransferConstants.INTAKE_MOTOR_SPEED);
                 transfer.setExitTransferMotor(Constants.TransferConstants.EXIT_MOTOR_SPEED);
             }
         }
@@ -102,15 +102,15 @@ public class DefaultTransferCommand extends CommandBase{
             else if(timerElapsed >= Constants.TransferConstants.TRANSFER_TO_VERTICAL_SHAFT_DURATION)
             {
                 timerElapsed = 0;
-                transfer.setIsRunningTimerEnabled(false);
+                transfer.setTimerState(false);
 
-                transfer.setIntakeTransferMotor(0);
+                transfer.setIntakeTransferMotorSpeed(0);
                 transfer.setExitTransferMotor(0);
             } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
             {
                 timerElapsed = 0;
 
-                transfer.setIntakeTransferMotor(0);
+                transfer.setIntakeTransferMotorSpeed(0);
                 transfer.setExitTransferMotor(0);
             }
         }
@@ -124,15 +124,15 @@ public class DefaultTransferCommand extends CommandBase{
             else if(timerElapsed >= Constants.TransferConstants.EJECT_DURATION)
             {
                 timerElapsed = 0;
-                transfer.setIsRunningTimerEnabled(false);
+                transfer.setTimerState(false);
 
-                transfer.setIntakeTransferMotor(0);
+                transfer.setIntakeTransferMotorSpeed(0);
                 transfer.setExitTransferMotor(0);
             } else if(!transfer.getIsRunningTimerEnabled() && timerElapsed > 0)
             {
                 timerElapsed = 0;
 
-                transfer.setIntakeTransferMotor(0);
+                transfer.setIntakeTransferMotorSpeed(0);
                 transfer.setExitTransferMotor(0);
             }
         }

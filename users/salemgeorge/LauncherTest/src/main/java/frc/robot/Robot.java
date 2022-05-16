@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     m_joystick = new Joystick(Constants.LauncherConstants.controller);
-
+    SmartDashboard.putNumber("Launcher Set Point", 0.0);
     launcher = new SK22Launcher();
   }
 
@@ -42,8 +42,15 @@ public class Robot extends TimedRobot {
   @Override
   public void robotPeriodic() 
   {
-
+    launcher.periodic();
   }
+
+  @Override
+  public void teleopInit()
+  {
+    launcher.reset();
+  }
+
 
   @Override
   public void teleopPeriodic() 
@@ -72,7 +79,9 @@ public class Robot extends TimedRobot {
     {
       launcher.setLauncherRPM(Constants.LauncherConstants.maxSpeedPreset);
     }
-
-    launcher.periodic();
+    else if(m_joystick.getRawButtonPressed(7)) // back button 
+    {
+      launcher.setLauncherRPM(SmartDashboard.getNumber("Lanucher Set Point", 0.0));
+    }
   }
 }

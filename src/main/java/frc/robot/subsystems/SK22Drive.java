@@ -5,7 +5,6 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
-import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -13,7 +12,7 @@ import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -49,7 +48,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     private final MotorControllerGroup rightGroup        =
             new MotorControllerGroup(rightLeader, rightFollower);
 
-    private final AHRS gyro = new AHRS(SPI.Port.kMXP);
+    private final ADIS16470_IMU gyro = new ADIS16470_IMU();
 
     private final DifferentialDrive         drive;
     private final DifferentialDriveOdometry odometry;
@@ -71,7 +70,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     public SK22Drive()
     {
         resetEncoders();
-        gyro.reset();
+        resetGyro();
 
         odometry = new DifferentialDriveOdometry(Rotation2d.fromDegrees(this.getHeading()));
         leftLeader.setNeutralMode(NeutralMode.Brake);
@@ -85,26 +84,20 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
 
         drive = new DifferentialDrive(leftGroup, rightGroup);
         drive.setDeadband(DriveConstants.DEADBAND_TURN);
-    }
 
+        SmartDashboard.putString("Direction", "Intake");
+    }
+    
     @Override
     public void periodic()
     {
         double leftEncoderDistanceMeters = leftMotorEncoder.getPositionMeters();
         double rightEncoderDistanceMeters = rightMotorEncoder.getPositionMeters();
-        double leftEncoderSpeedMeters = leftMotorEncoder.getVelocityMeters();
-        double rightEncoderSpeedMeters = rightMotorEncoder.getVelocityMeters();
         // Update the odometry in the periodic block
-        odometry.update(Rotation2d.fromDegrees(this.getHeading()), leftEncoderDistanceMeters,
+        odometry.update(Rotation2d.fromDegrees(getHeading()), leftEncoderDistanceMeters,
             rightEncoderDistanceMeters);
-
-        SmartDashboard.putNumber("Left Wheel Distance", leftEncoderDistanceMeters);
-        SmartDashboard.putNumber("Right Wheel Distance", rightEncoderDistanceMeters);
-        SmartDashboard.putNumber("Left Wheel Speed", leftEncoderSpeedMeters);
-        SmartDashboard.putNumber("Right Wheel Speed", rightEncoderSpeedMeters);
-        SmartDashboard.putNumber("Gyro Angle", this.getHeading());
     }
-
+    
     /**
      * Sets whether or not the launcher should be the "forward"
      * of the robot
@@ -114,6 +107,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     public void setBackwardsDirection(boolean reversed)
     {
         this.reversed = reversed;
+        SmartDashboard.putString("Direction", reversed ? "Launcher" : "Intake");
     }
 
     /**
@@ -249,11 +243,11 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     /**
      * Returns the heading of the robot.
      *
-     * @return the robot's heading in degrees, from -180 to 180
+     * @return yaw axis angle in degrees (CCW positive)
      */
     public double getHeading()
     {
-        return -gyro.getAngle();
+        return gyro.getAngle();
     }
 
     /**
@@ -263,7 +257,7 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
      */
     public double getTurnRate()
     {
-        return -gyro.getRate();
+        return gyro.getRate();
     }
 
     @Override
@@ -309,14 +303,15 @@ public class SK22Drive extends SKSubsystemBase implements AutoCloseable, Differe
     {
         RamseteCommand ramseteCommand = new RamseteCommand(trajectory, this::getPose,
             AutoConstants.RAMSETE_CONTROLLER, AutoConstants.SIMPLE_MOTOR_FEEDFORWARD,
-            DriveConstants.DRIVE_KINEMATICS, this::getWheelSpeeds, AutoConstants.PID_CONTROLLER,
-            AutoConstants.PID_CONTROLLER,
+            DriveConstants.DRIVE_KINEMATICS, this::getWheelSpeeds, AutoConstants.PID_CONTROLLER_LEFT,
+            AutoConstants.PID_CONTROLLER_RIGHT,
             // RamseteCommand passes volts to the callback
             this::tankDriveVolts, this);
 
         // Tell the robot where it is starting from if this is the first trajectory of a path.
-        return resetOdometry ?
-        // Run path following command, then stop at the end.
+        return resetOdometry
+            ?
+            // Run path following command, then stop at the end.
             new SequentialCommandGroup(
                 new InstantCommand(() -> this.resetOdometry(trajectory.getInitialPose()), this),
                 ramseteCommand.andThen(() -> this.tankDriveVolts(0, 0)))

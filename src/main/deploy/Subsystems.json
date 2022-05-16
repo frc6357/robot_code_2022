@@ -1,8 +1,10 @@
 {
-    "intake"    : false,
-    "transfer"  : false,
-    "launcher"  : false,
-    "climb"     : false,
-    "vision"    : false,
-    "gearshift" : false
+    "intake"        : true,
+    "transfer"      : true,
+    "launcher"      : true, 
+    "simpleClimb"   : true,
+    "complexClimb"  : false,
+    "vision"        : true,
+    "gearshift"     : false,
+    "climbtest"     : false
 }

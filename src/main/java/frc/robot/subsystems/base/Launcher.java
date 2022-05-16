@@ -1,6 +1,7 @@
 package frc.robot.subsystems.base;
 
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.math.controller.PIDController;
 
 /**
@@ -57,11 +58,19 @@ public class Launcher
   {
     double launcherRPM = getLauncherRPM();
 
-    System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
+    // System.out.println("Target: " + targetRPM + " Actual: " + launcherRPM);
 
+    SmartDashboard.putNumber("Launcher RPM", launcherRPM);
+    
     if (launcherEnabled || (targetRPM == 0.0))
     {
-      motorControllerGroup.set(controller.calculate(launcherRPM, targetRPM));
+      
+      double motorOutput = controller.calculate(launcherRPM, targetRPM);
+      if (motorOutput < 0.0)
+      {
+        motorOutput = 0.0;
+      }
+      motorControllerGroup.set(motorOutput);
     }
     else
     {
@@ -78,6 +87,26 @@ public class Launcher
   public void enableLauncher() 
   {
     launcherEnabled = true;
+  }
+
+  /**
+   * Reset the PID controller and apply new coefficients.
+   * 
+   * @param kP PID controller proportional gain
+   * @param kI PID controller integral gain
+   * @param kD PID controller derivative gain
+   */
+  public void resetController(double kP, double kI, double kD)
+  {
+    controller.setPID(kP, kI, kD);
+  }
+
+  /**
+   * Reset the PID controller for the launcher.
+   */
+  public void reset()
+  {
+    controller.reset();
   }
 
   /**

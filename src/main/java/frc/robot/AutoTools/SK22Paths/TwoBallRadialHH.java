@@ -1,12 +1,22 @@
 package frc.robot.AutoTools.SK22Paths;
 
+import java.util.Optional;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.Constants.AutoConstants;
 import frc.robot.AutoTools.AutoPaths;
 import frc.robot.AutoTools.RamseteTrajectoryMethod;
 import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.commands.DoNothingCommand;
+import frc.robot.commands.SetIntakePositionCommand;
+import frc.robot.commands.SetLauncherSpeedCommand;
+import frc.robot.commands.ShootBallsCommand;
+import frc.robot.commands.subcommands.TimeDelayCommand;
+import frc.robot.subsystems.SK22Intake;
+import frc.robot.subsystems.SK22Launcher;
+import frc.robot.subsystems.SK22Transfer;
 
 /**
  * A class that contains the auto path that starts at the outer edge of the tarmac (when
@@ -15,6 +25,28 @@ import frc.robot.commands.DoNothingCommand;
  */
 public class TwoBallRadialHH implements AutoPaths
 {
+    private Optional<SK22Intake>   intake;
+    private Optional<SK22Transfer> transfer;
+    private Optional<SK22Launcher> launcher;
+
+    /**
+     * Creates a new TwoBallRadialHH command
+     * 
+     * @param intake
+     *            The subsystem needed to get cargo
+     * @param transfer
+     *            The subsystem needed to transfer cargo from the intake to the launcher
+     * @param launcher
+     *            The subsystem needed to launch the cargo
+     */
+    public TwoBallRadialHH(Optional<SK22Intake> intake, Optional<SK22Transfer> transfer,
+        Optional<SK22Launcher> launcher)
+    {
+        this.intake = intake;
+        this.transfer = transfer;
+        this.launcher = launcher;
+    }
+
     /**
      * A function that gets the name of the auto path as defined by the Pathweaver tool
      * 
@@ -44,14 +76,42 @@ public class TwoBallRadialHH implements AutoPaths
      *            The method used to create the trajectory using Ramsete controller
      * @return The auto command
      */
-    public Command getCommand(
-        TrajectoryBuilder segmentCreator, RamseteTrajectoryMethod trajectoryCreator)
+    public Command getCommand(TrajectoryBuilder segmentCreator,
+        RamseteTrajectoryMethod trajectoryCreator)
     {
-        return new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                trajectoryCreator.createTrajectory(
-                    segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
-                new DoNothingCommand()),    // Set Up Intake
-            new DoNothingCommand());        // Launcher Shoot HH
+        return new SequentialCommandGroup(new SetLauncherSpeedCommand(launcher.get(), 0.0),
+            getParallelCommand(segmentCreator, trajectoryCreator), getShootCommand());
+    }
+
+    private Command getParallelCommand(TrajectoryBuilder segmentCreator,
+        RamseteTrajectoryMethod trajectoryCreator)
+    {
+        return new ParallelCommandGroup(
+            trajectoryCreator
+                .createTrajectory(segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
+            getIntakeCommand(), 
+            getLauncherCommand(), 
+            new TimeDelayCommand(6000));
+
+    }
+
+    private Command getIntakeCommand()
+    {
+        return (intake.isPresent() && transfer.isPresent())
+            ? new SetIntakePositionCommand(intake.get(), transfer.get(), true)
+            : new DoNothingCommand();
+    }
+
+    private Command getLauncherCommand()
+    {
+        return (launcher.isPresent())
+            ? (new SetLauncherSpeedCommand(launcher.get(), AutoConstants.AUTO_LAUNCH_SPEED))
+            : new DoNothingCommand();
+    }
+
+    private Command getShootCommand()
+    {
+        return (launcher.isPresent() && transfer.isPresent())
+            ? new ShootBallsCommand(launcher.get(), transfer.get()) : new DoNothingCommand();
     }
 }

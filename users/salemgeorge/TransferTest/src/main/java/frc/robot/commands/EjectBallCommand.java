@@ -38,7 +38,7 @@ public class EjectBallCommand extends CommandBase{
         //Sets the exist transfer motor to ejectionspeed or zero based on user input
         this.transferSubsystem.setExitTransferMotor(exitToggle? TransferConstants.BALL_EJECTION_SPEED : 0);
         //Sets the intake transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem.setIntakeTransferMotor(exitToggle? TransferConstants.BALL_EJECTION_SPEED: 0);
+        this.transferSubsystem.setIntakeTransferMotorSpeed(exitToggle? TransferConstants.BALL_EJECTION_SPEED: 0);
     }
 
     /**

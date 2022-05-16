@@ -1,147 +1,125 @@
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.VictorSPXControlMode;
-import com.ctre.phoenix.motorcontrol.can.VictorSPX;
 import com.revrobotics.CANSparkMax;
-
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.wpilibj.DigitalInput;
-import frc.robot.ColorSensor;
-import frc.robot.Constants.TransferConstants;
-import frc.robot.commands.DefaultTransferCommand;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import frc.robot.Ports;
+import frc.robot.commands.DefaultTransferCommand;
+import frc.robot.subsystems.base.SwitchSensor;
 
+/**
+ * Class controlling the ball transfer subsystem in the 2022 robot.
+ */
 public class SK22Transfer extends SKSubsystemBase
 {
-  public final String teamColor;
+    private CANSparkMax intakeTransferMotor;
 
-  private VictorSPX intakeTransferMotor;
-  private VictorSPX exitTransferMotor;
-  private CANSparkMax verticalTransferMotor;
+    protected boolean isRunningTimer = false;
 
-  protected boolean verticalFull;
-  protected boolean horizontalFull;
-  protected boolean isRunningTimer;
+    // ColorSensor  colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
+    SwitchSensor exitTransferSensor;
+    SwitchSensor verticalTransferSensor;
 
-  ColorSensor colorSensor = new ColorSensor(TransferConstants.DISTANCE_THRESHOLD);
-  DigitalInput exitTransferSensor;
-  DigitalInput verticalTransferSensor;
-  private NetworkTable transferEntry;
-  // private final I2C.Port i2c = Ports.i2cColorSensor;
-  // private ColorSensorV3 colorsensor = new ColorSensorV3(i2c);
+    // private final I2C.Port i2c = Ports.i2cColorSensor;
+    // private ColorSensorV3 colorsensor = new ColorSensorV3(i2c);
 
-  
-  /** Creates a new ExampleSubsystem. */
-  public SK22Transfer()
-  {
-      // TODO: This is JUST FOR TESTING
-      teamColor = "Red";
+    /**
+     * Constructor for the ball transfer subsystem class.
+     */
+    public SK22Transfer()
+    {
+        intakeTransferMotor = new CANSparkMax(Ports.INTAKE_TRANSFER_MOTOR, MotorType.kBrushless);
+        intakeTransferMotor.setInverted(true);
+        setDefaultCommand(new DefaultTransferCommand(this));
+    }
 
-      intakeTransferMotor = new VictorSPX(Ports.intakeTransferMotor);
-      exitTransferMotor = new VictorSPX(Ports.exitTransferMotor);
+    // set all motors, start and stop motors, queue all data
+    @Override
+    public void periodic()
+    {
+        // colorSensor.periodic();
+    }
 
-      setDefaultCommand(new DefaultTransferCommand(this));
-      
-      // verticalTransferMotor = new CANSparkMax(Ports.verticalTransferMotor, MotorType.kBrushless);
-      // exitTransferSensor = new DigitalInput(0);
-      // verticalTransferSensor = new DigitalInput(0);
+    /**
+     * Set the speed of the intake-side transfer motor.
+     * 
+     * @param speed
+     *            Motor speed in the range [-1, 1].
+     */
+    public void setIntakeTransferMotorSpeed(double speed)
+    {
+        intakeTransferMotor.set(speed);
+    }
 
-  }
-  // set all motors, start and stop motors, queue all data
-  @Override
-  public void periodic()
-  {
-    colorSensor.periodic();
-    // This method will be called once per scheduler run
-  }
 
-  public void setIntakeTransferMotor(double Speed)
-  {
-    intakeTransferMotor.set(VictorSPXControlMode.PercentOutput, Speed);
-  }
 
-  public void setExitTransferMotor(double Speed)
-  {
-    exitTransferMotor.set(VictorSPXControlMode.PercentOutput, Speed);
-  }
+    /**
+     * returns the value of the transfer intake motor
+     * @return Value of the transfer intake motor
+     */
+    public CANSparkMax getIntakeTransferMotor()
+    {
+        return intakeTransferMotor;
+    }
 
-  public void setVerticalTransferMotor(double Speed)
-  {
-    verticalTransferMotor.set(Speed);
-  }
+    /**
+     * Query the current color detected by the color sensor.
+     * 
+     * @return "Red", "Blue" or null if no ball is detected.
+     */
+    public String getColorSensor()
+    {
+        return null;
+        // return colorSensor.getColor();
+    }
 
-  public String getColorSensor()
-  {
-    return colorSensor.getColor();
-  }
+    /**
+     * Set true if the transfer timer is active
+     * 
+     * The transfer timer keeps track of how many periodic method calls have occurred
+     * since the ball has begun changing its position. For example, the ball is being
+     * transfered from intake to the vertical shaft for storage. The transfer timer will
+     * be enabled and while it is enabled, the motors required for transfering the ball to
+     * that position will be active. When the timer is over, those motors will be
+     * disabled.
+     * 
+     * @param isEnabled
+     *            Unclear what this is for
+     */
+    public void setTimerState(boolean isEnabled)
+    {
+        isRunningTimer = isEnabled;
+    }
 
-  /**
-   * States if there is a ball in the intake part of the transfer
-   * @return Whether there is a ball in position one.
-   */
-  public boolean getPositionOnePresence() {
-    return colorSensor.getBallPresence();
-  }
+    /**
+     * 
+     * @return True of the timer is enabled, False if disabled.
+     */
+    public boolean getIsRunningTimerEnabled()
+    {
+        return isRunningTimer;
+    }
 
-  /**
-   * States if there is a ball in the eject part of the transfer
-   * @return Whether there is a ball in position two.
-   */
-  public boolean getPositionTwoPresence()
-  {
-    return exitTransferSensor.get();
-  }
+    @Override
+    public void simulationPeriodic()
+    {
+        // This method will be called once per scheduler run during simulation
+    }
 
-  /**
-   * States if there is a ball in the launcher part of the transfer
-   * @return Whether there is a ball in position three.
-   */
-  public boolean getPositionThreePresence()
-  {
-    return verticalTransferSensor.get();
-  }
+    @Override
+    public void initializeTestMode()
+    {
 
-  public void setVerticalFull(boolean isFull)
-  {
-    verticalFull = isFull;
-  }
+    }
 
-  public void setHorizontalFull(boolean isFull)
-  {
-    horizontalFull = isFull;
-  }
+    @Override
+    public void testModePeriodic()
+    {
 
-  public void setIsRunningTimerEnabled(boolean isEnabled)
-  {
-    isRunningTimer = isEnabled;
-  }
+    }
 
-  public boolean getIsRunningTimerEnabled() 
-  {
-    return isRunningTimer;
-  }
+    @Override
+    public void enterTestMode()
+    {
 
-  @Override
-  public void simulationPeriodic()
-  {
-    // This method will be called once per scheduler run during simulation
-  }
-
-  @Override
-  public void initializeTestMode()
-  {
-
-  }
-
-  @Override
-  public void testModePeriodic()
-  {
-
-  }
-
-  @Override
-  public void enterTestMode()
-  {
-
-  }
+    }
 }

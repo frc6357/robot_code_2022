@@ -5,7 +5,7 @@ import frc.robot.Constants.TransferConstants;
 import frc.robot.subsystems.SK22Transfer;
 
 /**
- * Command that loads ball into the vertical chamber in the case of emergency
+ * Command that loads ball into the base of vertical shaft in the case of emergency
  */
 public class LoadBallVerticalCommand extends CommandBase
 {
@@ -13,18 +13,18 @@ public class LoadBallVerticalCommand extends CommandBase
     /**
      * Transfer subsystem for the LoadBallVertical Command
      */
-    private final SK22Transfer transferSubsystem;
+    private final SK22Transfer transfer;
+
     /**
-     * Varible that checks whether the player is turning on the robot or not
+     * A manual override command that allows the operator to transfer balls from
+     * the intake to the base of the vertical shaft of the transfer subsystem.
+     * 
+     * @param transfer The transfer subsystem on which the command operates.
      */
-    private boolean verticalToggle;
-
-    public LoadBallVerticalCommand(SK22Transfer transferSubsystem, boolean verticalToggle)
+    public LoadBallVerticalCommand(SK22Transfer transfer)
     {
-        this.transferSubsystem = transferSubsystem;
-        this.verticalToggle = verticalToggle;
-
-        addRequirements(transferSubsystem);
+        this.transfer = transfer;
+        addRequirements(transfer);
     }
 
     /**
@@ -34,18 +34,23 @@ public class LoadBallVerticalCommand extends CommandBase
     @Override
     public void initialize()
     {
-        //Sets the vertical transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem
-            .setVerticalTransferMotor(verticalToggle ? TransferConstants.BALL_EJECTION_SPEED : 0);
-        //Sets the intake transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem.setIntakeTransferMotor(
-            verticalToggle ? TransferConstants.BALL_VERTICAL_LOAD_SPEED : 0);
+        // Sets the intake transfer motor to ejectionspeed
+        transfer.setIntakeTransferMotorSpeed(TransferConstants.INTAKE_MOTOR_SPEED);
     }
 
+    /** {@inheritDoc} */
+    @Override
+    public void end(boolean interrupted)
+    {
+        // Turns off the intake transfer motor
+        transfer.setIntakeTransferMotorSpeed(0.0);
+    }
+
+    /** {@inheritDoc} */
     @Override
     public boolean isFinished()
     {
-        return true;
+        return false;
     }
 
 }

@@ -2,38 +2,36 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.TransferConstants;
+import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
 
 /**
- * A command that ejects balls through the horizontal exit in case of an emergency
+ * A command that ejects balls through the horizontal exit in
+ * case of an emergency.
  */
-
 public class EjectBallCommand extends CommandBase
 {
 
     /**
      * Transfer Subsystem for the ejectball command
      */
-    private final SK22Transfer transferSubsystem;
+    private final SK22Transfer transfer;
 
-    /**
-     * Varible that checks whether the player is turning on the robot or not
-     */
-    private boolean exitToggle;
+    private final SK22Launcher launcher;
 
     /**
      * Manual override command allowing the operator to eject any ball
      * currently in the horizontal portion of the transfer.
      * 
-     * @param transferSubsystem The transfer subsystem the command operates on.
-     * @param exitToggle If true, this command runs the motors to eject a ball. If false, the motors are stopped.
+     * @param transfer The transfer subsystem the command operates on.
+     * @param launcher The launcher subsystem the command operates on.
      */
-    public EjectBallCommand(SK22Transfer transferSubsystem, boolean exitToggle)
+    public EjectBallCommand(SK22Transfer transfer, SK22Launcher launcher)
     {
-        this.transferSubsystem = transferSubsystem;
-        this.exitToggle = exitToggle;
+        this.transfer = transfer;
+        this.launcher = launcher;
 
-        addRequirements(transferSubsystem);
+        addRequirements(transfer);
     }
 
     /**
@@ -43,21 +41,27 @@ public class EjectBallCommand extends CommandBase
     @Override
     public void initialize()
     {
-        //Sets the exist transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem
-            .setExitTransferMotor(exitToggle ? TransferConstants.BALL_EJECTION_SPEED : 0);
-        //Sets the intake transfer motor to ejectionspeed or zero based on user input
-        this.transferSubsystem
-            .setIntakeTransferMotor(exitToggle ? TransferConstants.BALL_EJECTION_SPEED : 0);
+        //Sets the exist transfer motor to ejectionspeed
+        launcher.setExitTransferMotor(-TransferConstants.BALL_EJECTION_SPEED);
+        //Sets the intake transfer motor to ejectionspeed
+        transfer.setIntakeTransferMotorSpeed(TransferConstants.BALL_EJECTION_SPEED);
+    }
+    
+    /** {@inheritDoc} */
+    @Override
+    public void end(boolean interrupted)
+    {
+        // Turns off the exit transfer motor 
+        launcher.setExitTransferMotor(0.0);
+        // Turns off the intake transfer motor
+        transfer.setIntakeTransferMotorSpeed(0.0);
     }
 
-    /**
-     * Allows the function to finish
-     */
+    /** {@inheritdoc} */
     @Override
     public boolean isFinished()
     {
-        return true;
+        return false;
     }
 
 }

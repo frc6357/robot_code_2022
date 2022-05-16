@@ -5,5 +5,12 @@ package frc.robot.subsystems.base.SuperClasses;
  */
 public enum RollerDirection
 {
-    BACKWARD, STOPPED, FORWARD
+    /** Enum representing the roller is moving backwards */
+    BACKWARD,
+    
+    /** Enum representing the roller is stopped */
+    STOPPED,
+    
+    /** Enum representing the roller is moving forwards */
+    FORWARD
 };

@@ -42,7 +42,8 @@ public class Taxi implements AutoPaths
     public Command getCommand(TrajectoryBuilder segmentCreator,
         RamseteTrajectoryMethod trajectoryCreator)
     {
-        return trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Simple Taxi"),
+        // Used to get the Simple Taxi auto path
+        return trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("Grab Ball Radial (HH)"),
             true);
     }
 }

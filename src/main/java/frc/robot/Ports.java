@@ -34,7 +34,7 @@ public class Ports
     //////////////////////////////
     // Robot Infrastructure
     //////////////////////////////
-    public static final int BASE_PCM               = 1;  // CAN ID
+    public static final int BASE_PCM               = 2;  // CAN ID
     public static final int CLIMB_PNEUMATIC_MODULE = 2;
 
     public static final PneumaticsModuleType PNEUMATICS_MODULE_TYPE = PneumaticsModuleType.REVPH;
@@ -48,39 +48,34 @@ public class Ports
     // Drivetrain Addresses
     //////////////////////////////
     public static final int FRONT_LEFT_DRIVE  = 10; // CAN ID
-    public static final int FRONT_RIGHT_DRIVE = 11; // CAN ID
-    public static final int BACK_LEFT_DRIVE   = 12; // CAN ID
+    public static final int FRONT_RIGHT_DRIVE = 12; // CAN ID
+    public static final int BACK_LEFT_DRIVE   = 11; // CAN ID
     public static final int BACK_RIGHT_DRIVE  = 13; // CAN ID
-
-    public static final int GEAR_SHIFT_HIGH = 2;
-    public static final int GEAR_SHIFT_LOW  = 3;
 
     //////////////////////////////
     // Transfer Addresses
     //////////////////////////////
-    public static final int exitTransferMotor           = 31; // Currently unknown Port
-    public static final int intakeTransferMotor         = 30; // Currently unknown Port
-    // public static final int verticalTransferMotor       = 12; // Currently unknown Port
+    public static final int INTAKE_TRANSFER_MOTOR       = 30;
 
     //////////////////////////////
     // Intake Addresses
     //////////////////////////////
-    public static final int INTAKE_MOTOR = 31; // CAN ID 
+    public static final int INTAKE_MOTOR = 40; // CAN ID 
 
-    public static final int INTAKE_MOVER_FORWARD  = 0;  // PCM Channel 
-    public static final int INTAKE_MOVER_BACKWARD = 1;  // PCM Channel 
+    public static final int INTAKE_MOVER_FORWARD  = 9;  // PCM Channel 
+    public static final int INTAKE_MOVER_BACKWARD = 8;  // PCM Channel 
 
-    public static final PneumaticsModuleType INTAKE_PCM = PneumaticsModuleType.CTREPCM;
-
-    ///////////////////////////////
-    // Ball Indexer Addresses
-    ///////////////////////////////
+    public static final PneumaticsModuleType INTAKE_PCM = PneumaticsModuleType.REVPH;
 
     ///////////////////////////////
     // Ball Launcher Addresses
     ///////////////////////////////
-    public static final int BALL_LAUNCHER_1 = 23; // CAN ID
-    public static final int BALL_LAUNCHER_2 = 24; // CAN ID
+    public static final int VERTICAL_TRANSFER_MOTOR     = 32;
+    public static final int EXIT_TRANSFER_MOTOR         = 31;
+
+    public static final int BALL_LAUNCHER_1             = 23; // CAN ID
+    public static final int BALL_LAUNCHER_2             = 24; // CAN ID
+    public static final int LAUNCHER_TRANSFER_MOTOR     = 20; // CAN ID
 
     ///////////////////////////////
     // Climb Addresses
@@ -89,16 +84,15 @@ public class Ports
     public static final int COMPLEX_RATCHET_LIFT                         = 2; // Currently unknown Port
     public static final int COMPLEX_CLIMB_RATCHET_PISTON_FORWARD_CHANNEL = 8;
     public static final int COMPLEX_CLIMB_RATCHET_PISTON_REVERSE_CHANNEL = 9;
-    public static final int SIMPLE_CLIMB_TILT_PISTON_FORWARD_CHANNEL     = 10;
-    public static final int SIMPLE_CLIMB_TILT_PISTON_REVERSE_CHANNEL     = 11;
-    public static final int SIMPLE_CLIMB_LIFT_PISTON_FORWARD_CHANNEL     = 12;
-    public static final int SIMPLE_CLIMB_LIFT_PISTON_REVERSE_CHANNEL     = 13;
+    public static final int SIMPLE_CLIMB_TILT_CHANNEL     = 10;
+    public static final int SIMPLE_CLIMB_STRAIGHTEN_CHANNEL     = 12;
+    public static final int SIMPLE_CLIMB_RAISE_CHANNEL     = 11;
 
     ///////////////////////////////
     // Additional hardware
     ///////////////////////////////
     public static final int MindSensorsCANLight = 3;  // CAN ID of LED strip controller
-
+ 
     ///////////////////////////////
     // Operator Interface
     ///////////////////////////////
@@ -112,6 +106,7 @@ public class Ports
     public static final int OI_DRIVER_LEFT_JOYSTICK  = 0;
     public static final int OI_DRIVER_RIGHT_JOYSTICK = 1;
     public static final int OI_OPERATOR_CONTROLLER   = 2;
+    public static final int OI_CLIMBTEST_JOYSTICK    = 5;
 
     // Controls set for Arcade Drive - left stick turn, right stick throttle.
     public static final int OI_DRIVER_TURN = 2;  // Z Axis for Extreme 3D Pro
@@ -127,15 +122,19 @@ public class Ports
     public static final int OI_DRIVER_SLOWMODE       = 4;  // Joystick Button 4
     public static final int OI_DRIVER_ACQUIRE_TARGET = 1;  // Joystick Trigger Button
     public static final int OI_DRIVER_REVERSE        = 0;  // Joystick POV number
+    public static final int OI_DRIVER_VERTICAL_TRANSFER_REVERSE = 9;
+    public static final int OI_DRIVER_LAUNCHER_LOW   = 10; // Joystick Button 10
+    public static final int OI_DRIVER_LAUNCHER_MAX   = 12; // Joystick Button 12
+    public static final int OI_DRIVER_LAUNCHER_OFF   = 11; // Joystick Button 11
+    public static final int OI_DRIVER_VISION_ON      = 7;  // Joystick Button 7
+    public static final int OI_DRIVER_VISION_OFF     = 8;  // Joystick Button 8
 
     public static final int OI_OPERATOR_TRANSFER_EJECT    = 4;  // Y button
     public static final int OI_OPERATOR_TRANSFER_LOAD     = 3;  // X button
     public static final int OI_OPERATOR_INTAKE_EXTEND     = 1;  // A Button
-    public static final int OI_OPERATOR_INTAKE_RETRACT    = 2;  // B Button
+    public static final int OI_OPERATOR_INTAKE_RETRACT    = 2;  // B Button 
     public static final int OI_OPERATOR_EXTEND_CLIMB      = 3;  // Right Trigger Axis
     public static final int OI_OPERATOR_RETRACT_CLIMB     = 6;  // Right Bumper
-    public static final int OI_OPERATOR_ORCHESTRATE_CLIMB = 5;  // Left Bumper
-    public static final int OI_OPERATOR_STOP_CLIMB        = 2;  // Left Trigger Axis (TODO: Write this command)
-
-    public static Port i2c = Port.kOnboard;
+ 
+    public static final Port i2c = Port.kOnboard;
 }

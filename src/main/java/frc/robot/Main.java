@@ -18,10 +18,9 @@ public final class Main
   }
 
   /**
-   * Main initialization function. Do not perform any initialization here.
-   *
-   * <p>
-   * If you change your main robot class, change the parameter type.
+   * Main entry point for the program.
+   * 
+   * @param args Unused
    */
   public static void main(String... args)
   {

@@ -52,8 +52,10 @@ def sendPacket(distance, adjVal, horiAngle, vertAngle, frameID):
 
     
     #sends bytes in datagram to device with udp_ip at udp_port
-    sock_s.sendto(bytes(bufChecksum), (udp_ip, udp_port))
-        
+    try:
+        sock_s.sendto(bytes(bufChecksum), (udp_ip, udp_port))
+    except:
+        print("can't send")
     
     #data, addr = sock_s.recvfrom(1024)
     # retrives data from the port sock_s is bound to -> local_port

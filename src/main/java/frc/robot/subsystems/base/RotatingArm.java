@@ -5,7 +5,6 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * Generic PID controlled rotating arm
@@ -41,7 +40,6 @@ public class RotatingArm
     public RotatingArm(CANSparkMax motor, RelativeEncoder encoder, double motorRotationsToDegrees,
         double kP, double kI, double kD)
     {
-
         setPoint = 0.0;
         this.motor = motor;
         this.encoder = encoder;
@@ -66,7 +64,6 @@ public class RotatingArm
 
     /**
      * Return the value of the set point.
-     * 
      * @return current arm setpoint in degrees relative to the start position.
      */
     public double getSetPointAngle()
@@ -110,16 +107,13 @@ public class RotatingArm
     {
         double position = getAngle();
 
-        // TODO: Debug only, move to SK22Climb
-        SmartDashboard.putNumber("Arm Set Point", setPoint);
-        SmartDashboard.putNumber("Arm Position", position);
-
         if (armEnabled)
         {
             motor.set(controller.calculate(position, setPoint));
         }
         else
         {
+            System.out.println("Motor not currently set");
             motor.set(0.0);
         }
     }
