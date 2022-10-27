@@ -31,7 +31,7 @@ public class SecretMIT implements AutoPaths
      */
     public String getName()
     {
-        return "MIT";
+        return "MIT Path";
     }
 
     /**
@@ -48,10 +48,10 @@ public class SecretMIT implements AutoPaths
     {
         return new SequentialCommandGroup(
             trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("M"), true),
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("M2I"), true),
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("I"), true),
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("I2T"), true),
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("T"), true),
-            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("T2"), true));
+            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("M2I"), false),
+            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("I"), false),
+            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("I2T"), false),
+            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("T"), false),
+            trajectoryCreator.createTrajectory(segmentCreator.getTrajectory("T2"), false));
     }
 }

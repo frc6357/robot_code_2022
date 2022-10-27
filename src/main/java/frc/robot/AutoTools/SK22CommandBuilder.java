@@ -18,6 +18,7 @@ import frc.robot.AutoTools.SK22Paths.FourBallTerminal1ALHHH;
 import frc.robot.AutoTools.SK22Paths.FourBallTerminal2BLHHH;
 import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial1AHHHH;
 import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial2BHHHH;
+import frc.robot.AutoTools.SK22Paths.SecretMIT;
 import frc.robot.AutoTools.SK22Paths.Taxi;
 import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal1A;
 import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal2A;
@@ -95,6 +96,7 @@ public class SK22CommandBuilder
         autoPaths.add(new FourBallTerminalRadial1AHHHH());
         autoPaths.add(new FourBallTerminalRadial2BHHHH());
         autoPaths.add(new Drive1mForwardBackward());
+        autoPaths.add(new SecretMIT());
 
     }
 
