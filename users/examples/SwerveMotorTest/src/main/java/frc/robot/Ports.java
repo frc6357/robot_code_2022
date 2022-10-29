@@ -47,13 +47,28 @@ public class Ports
 
     // Drive Controls
     public static final int OI_DRIVE_FRONT_LEFT         = 0;  // Left joystick X
-    public static final int OI_DRIVE_FRONT_RIGHT        = 2;  // Right joystick X
+    public static final int OI_DRIVE_FRONT_RIGHT        = 4;  // Right joystick X
     public static final int OI_DRIVE_BACK_LEFT          = 1;  // Left joystick Y
-    public static final int OI_DRIVE_BACK_RIGHT         = 3;  // Right joystick Y
+    public static final int OI_DRIVE_BACK_RIGHT         = 5;  // Right joystick Y
+
+    // The Y axes report inverted values - pushing the stick forward reduces
+    // the output and pulling it back increases it. This feels backwards so we
+    // define the following to allow the code to determine whether it needs to
+    // negate each joystick channel after reading it.
+    public static final Boolean NEGATE_FRONT_LEFT_DRIVE_AXIS     = false;
+    public static final Boolean NEGATE_FRONT_RIGHT_DRIVE_AXIS    = false;
+    public static final Boolean NEGATE_BACK_LEFT_DRIVE_AXIS      = true;
+    public static final Boolean NEGATE_BACK_RIGHT_DRIVE_AXIS     = true;
 
     // Turn Controls
     public static final int OI_ANGLE_FRONT_LEFT         = 0;  // Left joystick X
-    public static final int OI_ANGLE_FRONT_RIGHT        = 2;  // Right joystick X
+    public static final int OI_ANGLE_FRONT_RIGHT        = 4;  // Right joystick X
     public static final int OI_ANGLE_BACK_LEFT          = 1;  // Left joystick Y
-    public static final int OI_ANGLE_BACK_RIGHT         = 3;  // Right joystick Y
+    public static final int OI_ANGLE_BACK_RIGHT         = 5;  // Right joystick Y
+
+    // Determine which (if any) of the joystick axes should be inverted.
+    public static final Boolean NEGATE_FRONT_LEFT_ANGLE_AXIS     = false;
+    public static final Boolean NEGATE_FRONT_RIGHT_ANGLE_AXIS    = false;
+    public static final Boolean NEGATE_BACK_LEFT_ANGLE_AXIS      = false;
+    public static final Boolean NEGATE_BACK_RIGHT_ANGLE_AXIS     = false;   
 }

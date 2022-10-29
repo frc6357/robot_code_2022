@@ -53,10 +53,10 @@ public class Robot extends TimedRobot {
     // Read each of the 4 axes on the drive controller and use the values to
     // directly set the respective motor's speed. This is NOT something we 
     // would do on a "real" robot but is adequate for a simple test.
-    FLSpeed = m_DriveController.getRawAxis(Ports.OI_DRIVE_FRONT_LEFT);
-    FRSpeed = m_DriveController.getRawAxis(Ports.OI_DRIVE_FRONT_RIGHT);
-    BLSpeed = m_DriveController.getRawAxis(Ports.OI_DRIVE_BACK_LEFT);
-    BRSpeed = m_DriveController.getRawAxis(Ports.OI_DRIVE_BACK_RIGHT);
+    FLSpeed = (Ports.NEGATE_FRONT_LEFT_DRIVE_AXIS  ? -1.0 : 1.0) * m_DriveController.getRawAxis(Ports.OI_DRIVE_FRONT_LEFT);
+    FRSpeed = (Ports.NEGATE_FRONT_RIGHT_DRIVE_AXIS ? -1.0 : 1.0) * m_DriveController.getRawAxis(Ports.OI_DRIVE_FRONT_RIGHT);
+    BLSpeed = (Ports.NEGATE_BACK_LEFT_DRIVE_AXIS   ? -1.0 : 1.0) * m_DriveController.getRawAxis(Ports.OI_DRIVE_BACK_LEFT);
+    BRSpeed = (Ports.NEGATE_BACK_RIGHT_DRIVE_AXIS  ? -1.0 : 1.0) * m_DriveController.getRawAxis(Ports.OI_DRIVE_BACK_RIGHT);
     SmartDashboard.putNumber("FL Drive Speed", FLSpeed);
     SmartDashboard.putNumber("FR Drive Speed", FRSpeed);
     SmartDashboard.putNumber("BL Drive Speed", BLSpeed);
@@ -66,10 +66,10 @@ public class Robot extends TimedRobot {
     m_BackLeftDriveMotor.set(BLSpeed);
     m_BackRightDriveMotor.set(BRSpeed);
 
-    FLSpeed = m_AngleController.getRawAxis(Ports.OI_ANGLE_FRONT_LEFT);
-    FRSpeed = m_AngleController.getRawAxis(Ports.OI_ANGLE_FRONT_RIGHT);
-    BLSpeed = m_AngleController.getRawAxis(Ports.OI_ANGLE_BACK_LEFT);
-    BRSpeed = m_AngleController.getRawAxis(Ports.OI_ANGLE_BACK_RIGHT);
+    FLSpeed = (Ports.NEGATE_FRONT_LEFT_ANGLE_AXIS  ? -1.0 : 1.0) * m_AngleController.getRawAxis(Ports.OI_ANGLE_FRONT_LEFT);
+    FRSpeed = (Ports.NEGATE_FRONT_RIGHT_ANGLE_AXIS ? -1.0 : 1.0) * m_AngleController.getRawAxis(Ports.OI_ANGLE_FRONT_RIGHT);
+    BLSpeed = (Ports.NEGATE_BACK_LEFT_ANGLE_AXIS   ? -1.0 : 1.0) * m_AngleController.getRawAxis(Ports.OI_ANGLE_BACK_LEFT);
+    BRSpeed = (Ports.NEGATE_BACK_RIGHT_ANGLE_AXIS  ? -1.0 : 1.0) * m_AngleController.getRawAxis(Ports.OI_ANGLE_BACK_RIGHT);
     SmartDashboard.putNumber("FL Angle Speed", FLSpeed);
     SmartDashboard.putNumber("FR Angle Speed", FRSpeed);
     SmartDashboard.putNumber("BL Angle Speed", BLSpeed);
