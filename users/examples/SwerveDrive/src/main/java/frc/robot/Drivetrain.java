@@ -4,11 +4,12 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
-import edu.wpi.first.wpilibj.AnalogGyro;
+import edu.wpi.first.wpilibj.ADIS16470_IMU;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
@@ -22,19 +23,27 @@ public class Drivetrain {
 
   //TODO: change argument lists
   
-  private final SwerveModule m_frontLeft = new SwerveModule(1, 2, 0, 1, 2, 3);
-  private final SwerveModule m_frontRight = new SwerveModule(3, 4, 4, 5, 6, 7);
-  private final SwerveModule m_backLeft = new SwerveModule(5, 6, 8, 9, 10, 11);
-  private final SwerveModule m_backRight = new SwerveModule(7, 8, 12, 13, 14, 15);
+  private final SwerveModule m_frontLeft = new SwerveModule(Constants.FRONT_LEFT_DRIVING_CAN_ID, 
+                                                            Constants.FRONT_LEFT_TURNING_CAN_ID,
+                                                            Constants.FRONT_LEFT_CANCODER_ID);
+  private final SwerveModule m_frontRight = new SwerveModule(Constants.FRONT_RIGHT_DRIVING_CAN_ID, 
+                                                            Constants.FRONT_RIGHT_TURNING_CAN_ID,
+                                                            Constants.FRONT_RIGHT_CANCODER_ID);
+  private final SwerveModule m_backLeft = new SwerveModule(Constants.BACK_LEFT_DRIVING_CAN_ID, 
+                                                            Constants.BACK_LEFT_TURNING_CAN_ID,
+                                                            Constants.BACK_LEFT_CANCODER_ID);
+  private final SwerveModule m_backRight = new SwerveModule(Constants.BACK_RIGHT_DRIVING_CAN_ID, 
+                                                            Constants.BACK_RIGHT_TURNING_CAN_ID,
+                                                            Constants.BACK_RIGHT_CANCODER_ID);
 
-  private final AnalogGyro m_gyro = new AnalogGyro(0);
+  private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
   private final SwerveDriveKinematics m_kinematics =
       new SwerveDriveKinematics(
           m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   private final SwerveDriveOdometry m_odometry =
-      new SwerveDriveOdometry(m_kinematics, m_gyro.getRotation2d());
+      new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(m_gyro.getAngle()));
 
   public Drivetrain() {
     m_gyro.reset();
@@ -53,7 +62,7 @@ public class Drivetrain {
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, m_gyro.getRotation2d())
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
@@ -65,7 +74,7 @@ public class Drivetrain {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(
-        m_gyro.getRotation2d(),
+        Rotation2d.fromDegrees(m_gyro.getAngle()),
         m_frontLeft.getState(),
         m_frontRight.getState(),
         m_backLeft.getState(),
