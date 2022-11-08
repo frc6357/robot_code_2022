@@ -21,8 +21,6 @@ public class Drivetrain {
   private final Translation2d m_backLeftLocation = new Translation2d(-0.381, 0.381);
   private final Translation2d m_backRightLocation = new Translation2d(-0.381, -0.381);
 
-  //TODO: change argument lists
-  
   private final SwerveModule m_frontLeft = new SwerveModule(Constants.FRONT_LEFT_DRIVING_CAN_ID, 
                                                             Constants.FRONT_LEFT_TURNING_CAN_ID,
                                                             Constants.FRONT_LEFT_CANCODER_ID);

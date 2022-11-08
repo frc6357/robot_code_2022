@@ -1,23 +1,24 @@
 package frc.robot;
 
 public class Constants {
-    public static int FRONT_LEFT_TURNING_CAN_ID = 0;
-    public static int FRONT_LEFT_DRIVING_CAN_ID = 1;
-    public static int FRONT_LEFT_CANCODER_ID = 2;
 
-    public static int FRONT_RIGHT_TURNING_CAN_ID = 3;
-    public static int FRONT_RIGHT_DRIVING_CAN_ID = 4;
-    public static int FRONT_RIGHT_CANCODER_ID = 5;
+    public static int FRONT_LEFT_TURNING_CAN_ID     = 20;
+    public static int FRONT_LEFT_DRIVING_CAN_ID     = 10;
+    public static int FRONT_LEFT_CANCODER_ID        = 30;
 
-    public static int BACK_LEFT_TURNING_CAN_ID = 6;
-    public static int BACK_LEFT_DRIVING_CAN_ID = 7;
-    public static int BACK_LEFT_CANCODER_ID = 8;
+    public static int FRONT_RIGHT_TURNING_CAN_ID    = 22;
+    public static int FRONT_RIGHT_DRIVING_CAN_ID    = 12;
+    public static int FRONT_RIGHT_CANCODER_ID       = 32;
 
-    public static int BACK_RIGHT_TURNING_CAN_ID = 9;
-    public static int BACK_RIGHT_DRIVING_CAN_ID = 10;
-    public static int BACK_RIGHT_CANCODER_ID = 11;
+    public static int BACK_LEFT_TURNING_CAN_ID      = 21;
+    public static int BACK_LEFT_DRIVING_CAN_ID      = 11;
+    public static int BACK_LEFT_CANCODER_ID         = 31;
 
-    public static final double kWheelRadius = 0.0508;
+    public static int BACK_RIGHT_TURNING_CAN_ID     = 23;
+    public static int BACK_RIGHT_DRIVING_CAN_ID     = 13;
+    public static int BACK_RIGHT_CANCODER_ID        = 33;
+
+    public static final double kWheelRadius         = 0.0508;
     public static final int kDriveEncoderResolution = 4096;
 
     public final static int driveEncoderTimeSamplemS = 100;
