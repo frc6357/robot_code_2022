@@ -25,16 +25,16 @@ public class SwerveModule {
   private final WPI_CANCoder m_turningEncoder;
 
   // Gains are for example purposes only - must be determined for your own robot!
-  private final PIDController m_drivePIDController = new PIDController(1, 0, 0);
+  private final PIDController m_drivePIDController = new PIDController(Constants.DRIVING_PID_KP, Constants.DRIVING_PID_KI, Constants.DRIVING_PID_KD);
 
   
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final ProfiledPIDController m_turningPIDController =
       new ProfiledPIDController(
-          1,
-          0,
-          0,
+          Constants.TURNING_PID_KP,
+          Constants.TURNING_PID_KI,
+          Constants.TURNING_PID_KD,
           new TrapezoidProfile.Constraints(
               kModuleMaxAngularVelocity, kModuleMaxAngularAcceleration));
 
@@ -52,14 +52,16 @@ public class SwerveModule {
   public SwerveModule(
       int driveMotorCANId,
       int turningMotorCANId,
-      int turningEncoderCANId) {
+      int turningEncoderCANId,
+      double turningAngleOffset) {
     m_driveMotor = new WPI_TalonFX(driveMotorCANId);
     m_turningMotor = new WPI_TalonFX(turningMotorCANId);
 
-    m_turningEncoder = new WPI_CANCoder(turningMotorCANId);
+    m_turningEncoder = new WPI_CANCoder(turningEncoderCANId);
 
     m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180, 0);
 
+    m_turningEncoder.setPosition(turningAngleOffset);
     // START HERE, FIX m_turningPIDController.enableContinuousInput ERROR
 
     // Limit the PID Controller's input range between -pi and pi and set the input

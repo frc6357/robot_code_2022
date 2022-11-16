@@ -10,6 +10,8 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
@@ -23,16 +25,22 @@ public class Drivetrain {
 
   private final SwerveModule m_frontLeft = new SwerveModule(Constants.FRONT_LEFT_DRIVING_CAN_ID, 
                                                             Constants.FRONT_LEFT_TURNING_CAN_ID,
-                                                            Constants.FRONT_LEFT_CANCODER_ID);
+                                                            Constants.FRONT_LEFT_CANCODER_ID,
+                                                            Constants.FRONT_LEFT_TURNING_ANGLE_OFFSET);
   private final SwerveModule m_frontRight = new SwerveModule(Constants.FRONT_RIGHT_DRIVING_CAN_ID, 
                                                             Constants.FRONT_RIGHT_TURNING_CAN_ID,
-                                                            Constants.FRONT_RIGHT_CANCODER_ID);
+                                                            Constants.FRONT_RIGHT_CANCODER_ID,
+                                                            Constants.FRONT_RIGHT_TURNING_ANGLE_OFFSET);
   private final SwerveModule m_backLeft = new SwerveModule(Constants.BACK_LEFT_DRIVING_CAN_ID, 
                                                             Constants.BACK_LEFT_TURNING_CAN_ID,
-                                                            Constants.BACK_LEFT_CANCODER_ID);
+                                                            Constants.BACK_LEFT_CANCODER_ID,
+                                                            Constants.BACK_LEFT_TURNING_ANGLE_OFFSET);
   private final SwerveModule m_backRight = new SwerveModule(Constants.BACK_RIGHT_DRIVING_CAN_ID, 
                                                             Constants.BACK_RIGHT_TURNING_CAN_ID,
-                                                            Constants.BACK_RIGHT_CANCODER_ID);
+                                                            Constants.BACK_RIGHT_CANCODER_ID,
+                                                            Constants.BACK_RIGHT_TURNING_ANGLE_OFFSET);
+
+  // TODO: wrap ADIS16470_IMU class, and negate getAngle() value to match WIPILIB gyro class
 
   private final ADIS16470_IMU m_gyro = new ADIS16470_IMU();
 
@@ -57,10 +65,14 @@ public class Drivetrain {
    */
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
+
+    double gyroAngle = m_gyro.getAngle();
+    SmartDashboard.putNumber("Gyro Angle", gyroAngle);
+
     var swerveModuleStates =
         m_kinematics.toSwerveModuleStates(
             fieldRelative
-                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(m_gyro.getAngle()))
+                ? ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, Rotation2d.fromDegrees(gyroAngle))
                 : new ChassisSpeeds(xSpeed, ySpeed, rot));
     SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, kMaxSpeed);
     m_frontLeft.setDesiredState(swerveModuleStates[0]);
