@@ -10,6 +10,8 @@ import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
 import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.WPI_CANCoder;
@@ -18,7 +20,7 @@ public class SwerveModule {
   private static final double kModuleMaxAngularVelocity = Drivetrain.kMaxAngularSpeed;
   private static final double kModuleMaxAngularAcceleration =
       2 * Math.PI; // radians per second squared
-
+ 
   private final WPI_TalonFX m_driveMotor;
   private final WPI_TalonFX m_turningMotor;
 
@@ -26,6 +28,8 @@ public class SwerveModule {
 
   // Gains are for example purposes only - must be determined for your own robot!
   private final PIDController m_drivePIDController = new PIDController(Constants.DRIVING_PID_KP, Constants.DRIVING_PID_KI, Constants.DRIVING_PID_KD);
+
+  private String m_name;
 
   
 
@@ -53,7 +57,8 @@ public class SwerveModule {
       int driveMotorCANId,
       int turningMotorCANId,
       int turningEncoderCANId,
-      double turningAngleOffset) {
+      double turningAngleOffset,
+      String name) {
     m_driveMotor = new WPI_TalonFX(driveMotorCANId);
     m_turningMotor = new WPI_TalonFX(turningMotorCANId);
 
@@ -62,11 +67,12 @@ public class SwerveModule {
     m_turningEncoder.configAbsoluteSensorRange(AbsoluteSensorRange.Signed_PlusMinus180, 0);
 
     m_turningEncoder.setPosition(turningAngleOffset);
-    // START HERE, FIX m_turningPIDController.enableContinuousInput ERROR
 
     // Limit the PID Controller's input range between -pi and pi and set the input
     // to be continuous.
-    m_turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    m_turningPIDController.enableContinuousInput(-180, 180);
+
+    m_name = name;
   }
 
   /**
@@ -84,9 +90,10 @@ public class SwerveModule {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
+    double turnAngle = m_turningEncoder.getAbsolutePosition();
     // Optimize the reference state to avoid spinning further than 90 degrees
     SwerveModuleState state =
-        SwerveModuleState.optimize(desiredState, new Rotation2d(m_turningEncoder.getAbsolutePosition()));
+        SwerveModuleState.optimize(desiredState, Rotation2d.fromDegrees(turnAngle));
 
     // Calculate the drive output from the drive PID controller.
     final double driveOutput =
@@ -96,12 +103,18 @@ public class SwerveModule {
 
     // Calculate the turning motor output from the turning PID controller.
     final double turnOutput =
-        m_turningPIDController.calculate(m_turningEncoder.getAbsolutePosition(), state.angle.getRadians());
+        m_turningPIDController.calculate(m_turningEncoder.getAbsolutePosition(), state.angle.getDegrees());
 
     final double turnFeedforward =
         m_turnFeedforward.calculate(m_turningPIDController.getSetpoint().velocity);
 
     m_driveMotor.setVoltage(driveOutput + driveFeedforward);
     m_turningMotor.setVoltage(turnOutput + turnFeedforward);
+
+    SmartDashboard.putNumber(m_name + " driveOutput", driveOutput);
+    SmartDashboard.putNumber(m_name + " driveFeedforward", driveFeedforward);
+    SmartDashboard.putNumber(m_name + " turnOutput", turnOutput);
+    SmartDashboard.putNumber(m_name + " turnFeedforward", turnFeedforward);
+    SmartDashboard.putNumber(m_name + " turnAngle", turnAngle);
   }
 }

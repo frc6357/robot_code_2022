@@ -29,7 +29,7 @@ public class Constants {
     public final static double encoderDistancePerPulse = (2 * Math.PI * kWheelRadius / kDriveEncoderResolution);
     public final static double encoderMetersPerSecondScale = encoderDistancePerPulse * (1000 / driveEncoderTimeSamplemS);
 
-    public final static double TURNING_PID_KP = 0.001;
+    public final static double TURNING_PID_KP = 0.0001;
     public final static double TURNING_PID_KI = 0.0;
     public final static double TURNING_PID_KD = 0.0;
 

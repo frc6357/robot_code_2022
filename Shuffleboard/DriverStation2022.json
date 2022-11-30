@@ -159,7 +159,7 @@
           },
           "0,0": {
             "size": [
-              11,
+              12,
               11
             ],
             "content": {
@@ -172,9 +172,7 @@
               "Y-axis/Automatic bounds": true,
               "Y-axis/Upper bound": 4200.0,
               "Y-axis/Lower bound": 0.0,
-              "Y-axis/Unit": "RPM",
-              "Visible data/SmartDashboard/Launcher RPM": true,
-              "Visible data/SmartDashboard/Launcher Setpoint RPM": true
+              "Y-axis/Unit": "RPM"
             }
           },
           "52,0": {
@@ -363,6 +361,292 @@
               "_title": "Target In Frame",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "60,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Yaw",
+              "_title": "Yaw"
+            }
+          },
+          "60,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Complementary X",
+              "_title": "Complementary X"
+            }
+          },
+          "37,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Complementary Y",
+              "_title": "Complementary Y"
+            }
+          },
+          "56,3": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Filtered X Accel Angle",
+              "_title": "Filtered X Accel Angle"
+            }
+          },
+          "37,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Filtered Y Accel Angle",
+              "_title": "Filtered Y Accel Angle"
+            }
+          },
+          "56,4": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/X Accel",
+              "_title": "X Accel"
+            }
+          },
+          "37,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Y Accel",
+              "_title": "Y Accel"
+            }
+          },
+          "39,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/X Position",
+              "_title": "X Position"
+            }
+          },
+          "41,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Y Position",
+              "_title": "Y Position"
+            }
+          },
+          "43,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Pitch",
+              "_title": "Pitch"
+            }
+          },
+          "45,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Roll",
+              "_title": "Roll"
+            }
+          },
+          "47,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Global X",
+              "_title": "Global X"
+            }
+          },
+          "49,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Global Y",
+              "_title": "Global Y"
+            }
+          },
+          "56,5": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Global Z",
+              "_title": "Global Z"
+            }
+          },
+          "23,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Z Accel",
+              "_title": "Z Accel"
+            }
+          },
+          "25,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Delta Z Accel",
+              "_title": "Delta Z Accel"
+            }
+          },
+          "37,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Pre-Rotated Magnitude",
+              "_title": "Pre-Rotated Magnitude"
+            }
+          },
+          "39,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Rotated Magnitude",
+              "_title": "Rotated Magnitude"
+            }
+          },
+          "41,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Delta Magnitude",
+              "_title": "Delta Magnitude"
+            }
+          },
+          "43,6": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Det of R",
+              "_title": "Det of R"
+            }
+          },
+          "62,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Single Rotated X",
+              "_title": "Single Rotated X"
+            }
+          },
+          "64,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Single Rotated Y",
+              "_title": "Single Rotated Y"
+            }
+          },
+          "62,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Global Accel Residual",
+              "_title": "Global Accel Residual"
+            }
+          },
+          "66,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Counter",
+              "_title": "Counter"
+            }
+          },
+          "68,0": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/X Velocity",
+              "_title": "X Velocity"
+            }
+          },
+          "64,1": {
+            "size": [
+              2,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Y Velocity",
+              "_title": "Y Velocity"
             }
           }
         }
@@ -583,6 +867,229 @@
               "_title": "Ungrouped/Solenoid[2,12]/Value",
               "Colors/Color when true": "#7CFC00FF",
               "Colors/Color when false": "#8B0000FF"
+            }
+          },
+          "1,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PowerDistribution[1]/Chan0",
+              "_title": "Ungrouped/PowerDistribution[1]/Chan0"
+            }
+          },
+          "2,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PowerDistribution[1]/Chan1",
+              "_title": "Ungrouped/PowerDistribution[1]/Chan1"
+            }
+          },
+          "3,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PowerDistribution[1]/Chan2",
+              "_title": "Ungrouped/PowerDistribution[1]/Chan2"
+            }
+          },
+          "4,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PowerDistribution[1]/Chan3",
+              "_title": "Ungrouped/PowerDistribution[1]/Chan3"
+            }
+          },
+          "5,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///LiveWindow/Ungrouped/PowerDistribution[1]/Chan4",
+              "_title": "Ungrouped/PowerDistribution[1]/Chan4"
+            }
+          }
+        }
+      }
+    },
+    {
+      "title": "Tab 3",
+      "autoPopulate": false,
+      "autoPopulatePrefix": "",
+      "widgetPane": {
+        "gridSize": 128.0,
+        "showGrid": true,
+        "hgap": 16.0,
+        "vgap": 16.0,
+        "titleType": 0,
+        "tiles": {
+          "0,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Global X",
+              "_title": "SmartDashboard/Global X"
+            }
+          },
+          "1,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Global Y",
+              "_title": "SmartDashboard/Global Y"
+            }
+          },
+          "2,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Global Z",
+              "_title": "SmartDashboard/Global Z"
+            }
+          },
+          "1,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Pitch",
+              "_title": "SmartDashboard/Pitch"
+            }
+          },
+          "0,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Roll",
+              "_title": "SmartDashboard/Roll"
+            }
+          },
+          "0,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/X Accel",
+              "_title": "SmartDashboard/X Accel"
+            }
+          },
+          "1,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Y Accel",
+              "_title": "SmartDashboard/Y Accel"
+            }
+          },
+          "2,2": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Yaw",
+              "_title": "SmartDashboard/Yaw"
+            }
+          },
+          "2,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Z Accel",
+              "_title": "SmartDashboard/Z Accel"
+            }
+          },
+          "0,3": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Delta Z Accel",
+              "_title": "SmartDashboard/Delta Z Accel"
+            }
+          },
+          "7,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Single Rotated X",
+              "_title": "/SmartDashboard/Single Rotated X"
+            }
+          },
+          "8,0": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Single Rotated Y",
+              "_title": "/SmartDashboard/Single Rotated Y"
+            }
+          },
+          "4,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/X Position",
+              "_title": "/SmartDashboard/X Position"
+            }
+          },
+          "5,1": {
+            "size": [
+              1,
+              1
+            ],
+            "content": {
+              "_type": "Text View",
+              "_source0": "network_table:///SmartDashboard/Y Position",
+              "_title": "/SmartDashboard/Y Position"
             }
           }
         }

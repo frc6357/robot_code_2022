@@ -15,8 +15,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /** Represents a swerve drive style drivetrain. */
 public class Drivetrain {
-  public static final double kMaxSpeed = 3.0; // 3 meters per second
-  public static final double kMaxAngularSpeed = Math.PI; // 1/2 rotation per second
+  public static final double kMaxSpeed = 0.3; // 3 meters per second TODO: Change this back to 3
+  public static final double kMaxAngularSpeed = Math.PI/10; // 1/2 rotation per second TODO: Change this back to pi
 
   private final Translation2d m_frontLeftLocation = new Translation2d(0.381, 0.381);
   private final Translation2d m_frontRightLocation = new Translation2d(0.381, -0.381);
@@ -26,19 +26,23 @@ public class Drivetrain {
   private final SwerveModule m_frontLeft = new SwerveModule(Constants.FRONT_LEFT_DRIVING_CAN_ID, 
                                                             Constants.FRONT_LEFT_TURNING_CAN_ID,
                                                             Constants.FRONT_LEFT_CANCODER_ID,
-                                                            Constants.FRONT_LEFT_TURNING_ANGLE_OFFSET);
+                                                            Constants.FRONT_LEFT_TURNING_ANGLE_OFFSET,
+                                                            "FrontLeft");
   private final SwerveModule m_frontRight = new SwerveModule(Constants.FRONT_RIGHT_DRIVING_CAN_ID, 
                                                             Constants.FRONT_RIGHT_TURNING_CAN_ID,
                                                             Constants.FRONT_RIGHT_CANCODER_ID,
-                                                            Constants.FRONT_RIGHT_TURNING_ANGLE_OFFSET);
+                                                            Constants.FRONT_RIGHT_TURNING_ANGLE_OFFSET,
+                                                            "FrontRight");
   private final SwerveModule m_backLeft = new SwerveModule(Constants.BACK_LEFT_DRIVING_CAN_ID, 
                                                             Constants.BACK_LEFT_TURNING_CAN_ID,
                                                             Constants.BACK_LEFT_CANCODER_ID,
-                                                            Constants.BACK_LEFT_TURNING_ANGLE_OFFSET);
+                                                            Constants.BACK_LEFT_TURNING_ANGLE_OFFSET,
+                                                            "BackLeft");
   private final SwerveModule m_backRight = new SwerveModule(Constants.BACK_RIGHT_DRIVING_CAN_ID, 
                                                             Constants.BACK_RIGHT_TURNING_CAN_ID,
                                                             Constants.BACK_RIGHT_CANCODER_ID,
-                                                            Constants.BACK_RIGHT_TURNING_ANGLE_OFFSET);
+                                                            Constants.BACK_RIGHT_TURNING_ANGLE_OFFSET,
+                                                            "BackRight");
 
   // TODO: wrap ADIS16470_IMU class, and negate getAngle() value to match WIPILIB gyro class
 
@@ -49,7 +53,7 @@ public class Drivetrain {
           m_frontLeftLocation, m_frontRightLocation, m_backLeftLocation, m_backRightLocation);
 
   private final SwerveDriveOdometry m_odometry =
-      new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(m_gyro.getAngle()));
+      new SwerveDriveOdometry(m_kinematics, Rotation2d.fromDegrees(-m_gyro.getAngle()));
 
   public Drivetrain() {
     m_gyro.reset();
@@ -66,7 +70,7 @@ public class Drivetrain {
   @SuppressWarnings("ParameterName")
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative) {
 
-    double gyroAngle = m_gyro.getAngle();
+    double gyroAngle = -m_gyro.getAngle();
     SmartDashboard.putNumber("Gyro Angle", gyroAngle);
 
     var swerveModuleStates =
@@ -84,7 +88,7 @@ public class Drivetrain {
   /** Updates the field relative position of the robot. */
   public void updateOdometry() {
     m_odometry.update(
-        Rotation2d.fromDegrees(m_gyro.getAngle()),
+        Rotation2d.fromDegrees(-m_gyro.getAngle()),
         m_frontLeft.getState(),
         m_frontRight.getState(),
         m_backLeft.getState(),
