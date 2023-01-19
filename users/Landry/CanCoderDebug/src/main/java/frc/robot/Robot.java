@@ -7,8 +7,14 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
+import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoder;
 import frc.robot.Constants;
+import frc.robot.canCoderOffset;
+import com.ctre.phoenix.sensors.WPI_CANCoder;
+import com.ctre.phoenix.sensors.CANCoderConfiguration;
+import com.ctre.phoenix.sensors.SensorInitializationStrategy;;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,8 +23,11 @@ import frc.robot.Constants;
  * project.
  */
 public class Robot extends TimedRobot {
-  private Command m_autonomousCommand;
-  private CANCoder m_canCoder = new CANCoder(Constants.BACK_RIGHT_MODULE_STEER_ENCODER);
+  private Command m_autonomousCommand;  
+  private WPI_CANCoder m_canCoderBackRight = new canCoderOffset(Constants.BACK_RIGHT_MODULE_STEER_ENCODER, Constants.BACK_RIGHT_MODULE_STEER_OFFSET);
+  private WPI_CANCoder m_canCoderBackLeft = new canCoderOffset(Constants.BACK_LEFT_MODULE_STEER_ENCODER, Constants.BACK_LEFT_MODULE_STEER_OFFSET);
+  private WPI_CANCoder m_canCoderFrontRight = new canCoderOffset(Constants.FRONT_RIGHT_MODULE_STEER_ENCODER, Constants.FRONT_RIGHT_MODULE_STEER_OFFSET);
+  private WPI_CANCoder m_canCoderFrontLeft = new canCoderOffset(Constants.FRONT_LEFT_MODULE_STEER_ENCODER, Constants.FRONT_LEFT_MODULE_STEER_OFFSET);
   private RobotContainer m_robotContainer;
 
   /**
@@ -29,7 +38,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    
     m_robotContainer = new RobotContainer();
   }
 
@@ -46,8 +54,11 @@ public class Robot extends TimedRobot {
     // commands, running already-scheduled commands, removing finished or interrupted commands,
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
-    double canCoderPosition = m_canCoder.getAbsolutePosition();
-    System.out.println(canCoderPosition);
+    double canCoderAbsPositionBackRight = m_canCoderBackRight.getAbsolutePosition();
+    double canCoderAbsPositionFrontRight = m_canCoderFrontRight.getAbsolutePosition();
+    double canCoderAbsPositionBackLeft = m_canCoderBackLeft.getAbsolutePosition();
+    double canCoderAbsPositionFrontLeft = m_canCoderFrontLeft.getAbsolutePosition();
+    System.out.println("BR:" + canCoderAbsPositionBackRight + ", " + "BL:" + canCoderAbsPositionBackLeft + ", " + "FR:" + canCoderAbsPositionFrontRight + ", " + "FL:" + canCoderAbsPositionFrontLeft + ", ");
     CommandScheduler.getInstance().run();
   }
 
