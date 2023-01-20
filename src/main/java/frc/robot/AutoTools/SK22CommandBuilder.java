@@ -13,16 +13,20 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import frc.robot.AutoTools.SK22Paths.DoNothing;
 import frc.robot.AutoTools.SK22Paths.Drive1mForwardBackward;
+import frc.robot.AutoTools.SK22Paths.Drive2mForwards;
+import frc.robot.AutoTools.SK22Paths.Drive5mForwards;
 import frc.robot.AutoTools.SK22Paths.DriveSplineCanned;
 import frc.robot.AutoTools.SK22Paths.FourBallTerminal1ALHHH;
 import frc.robot.AutoTools.SK22Paths.FourBallTerminal2BLHHH;
 import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial1AHHHH;
 import frc.robot.AutoTools.SK22Paths.FourBallTerminalRadial2BHHHH;
 import frc.robot.AutoTools.SK22Paths.SecretMIT;
+import frc.robot.AutoTools.SK22Paths.Drive5mForwards;
 import frc.robot.AutoTools.SK22Paths.Taxi;
 import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal1A;
 import frc.robot.AutoTools.SK22Paths.ThreeBallTerminal2A;
 import frc.robot.AutoTools.SK22Paths.TwoBallRadialHH;
+import frc.robot.AutoTools.SK22Paths.UTurnRight;
 import frc.robot.subsystems.SK22Intake;
 import frc.robot.subsystems.SK22Launcher;
 import frc.robot.subsystems.SK22Transfer;
@@ -84,7 +88,6 @@ public class SK22CommandBuilder
             }
         }
 
-
         defaultAuto = new TwoBallRadialHH(intake, transfer, launcher);
         // Adding all the auto paths to the set
         autoPaths.add(new Taxi());
@@ -93,11 +96,13 @@ public class SK22CommandBuilder
         autoPaths.add(new ThreeBallTerminal2A(intake, transfer, launcher));
         autoPaths.add(new FourBallTerminal1ALHHH());
         autoPaths.add(new FourBallTerminal2BLHHH());
+        autoPaths.add(new Drive2mForwards());
         autoPaths.add(new FourBallTerminalRadial1AHHHH());
         autoPaths.add(new FourBallTerminalRadial2BHHHH());
         autoPaths.add(new Drive1mForwardBackward());
         autoPaths.add(new SecretMIT());
-
+        autoPaths.add(new Drive5mForwards());
+        autoPaths.add(new UTurnRight());
     }
 
     /**

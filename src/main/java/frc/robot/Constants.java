@@ -191,6 +191,7 @@ public final class Constants
 
     public static final String SPLINE_DIRECTORY       = "paths/output";
     public static final String AUTOS_FOLDER_DIRECTORY = "paths/Autos";
+    public static final String PATHPLANNER_DIRECTORY = "pathplanner";
     public static final String SUBSYSTEM              = "Subsystems.json";
 
 }

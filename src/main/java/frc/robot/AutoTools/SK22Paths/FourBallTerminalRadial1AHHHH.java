@@ -24,7 +24,7 @@ public class FourBallTerminalRadial1AHHHH implements AutoPaths
     {
         return "4T(HHHH) Tarmac 1A";
     }
-    
+
     /**
      * A function that gets the name of the auto command
      * 
@@ -44,13 +44,13 @@ public class FourBallTerminalRadial1AHHHH implements AutoPaths
      *            The method used to create the trajectory using Ramsete controller
      * @return The auto command
      */
-    public Command getCommand(
-        TrajectoryBuilder segmentCreator, RamseteTrajectoryMethod trajectoryCreator)
+    public Command getCommand(TrajectoryBuilder segmentCreator,
+        RamseteTrajectoryMethod trajectoryCreator)
     {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
-                trajectoryCreator.createTrajectory(
-                    segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
+                trajectoryCreator
+                    .createTrajectory(segmentCreator.getTrajectory("Grab Ball Radial (HH)"), true),
                 new DoNothingCommand(),     // Intake Set Up
                 new DoNothingCommand()),    // Launcher Set Up
             new DoNothingCommand(),         // Launcher Shoot HH

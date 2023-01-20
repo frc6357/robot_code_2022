@@ -36,10 +36,15 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.LauncherConstants;
 import frc.robot.AutoTools.AutoPaths;
+import frc.robot.AutoTools.SK22Paths.Drive90DegreesRightBack;
 import frc.robot.AutoTools.SK22CommandBuilder;
 import frc.robot.AutoTools.TrajectoryBuilder;
 import frc.robot.AutoTools.SK22Paths.Drive1mForwardBackward;
+import frc.robot.AutoTools.SK22Paths.Drive2mForwardBackward;
+import frc.robot.AutoTools.SK22Paths.Drive2mForwards;
+import frc.robot.AutoTools.SK22Paths.Drive5mForwards;
 import frc.robot.AutoTools.SK22Paths.RunJson;
+import frc.robot.AutoTools.SK22Paths.UTurnRight;
 import frc.robot.commands.AcquireTargetCommand;
 import frc.robot.commands.DefaultArcadeDriveCommand;
 import frc.robot.commands.DefaultTankDriveCommand;
@@ -73,11 +78,11 @@ public class RobotContainer
     /**
      * The USB Camera for the Robot.
      */
-    private UsbCamera         camera1;
-    private UsbCamera         camera2;
-    private VideoSink         server;
+    private UsbCamera camera1;
+    private UsbCamera camera2;
+    private VideoSink server;
 
-    private final SK22CommandBuilder pathBuilder;
+    private final SK22CommandBuilder   pathBuilder;
     private final TrajectoryBuilder    segmentCreator      =
             new TrajectoryBuilder(Constants.SPLINE_DIRECTORY);
     private SendableChooser<AutoPaths> autoCommandSelector = new SendableChooser<AutoPaths>();
@@ -92,11 +97,11 @@ public class RobotContainer
 
     // These are currently empty and only created in the constructor
     // based on the Subsystem.json file
-    private Optional<SK22Intake>       intakeSubsystem       = Optional.empty();
-    private Optional<SK22Launcher>     launcherSubsystem     = Optional.empty();
-    private Optional<SK22Transfer>     transferSubsystem     = Optional.empty();
-    private Optional<SK22SimpleClimb>  simpleClimbSubsystem  = Optional.empty();
-    private Optional<SK22Vision>       visionSubsystem       = Optional.empty();
+    private Optional<SK22Intake>      intakeSubsystem      = Optional.empty();
+    private Optional<SK22Launcher>    launcherSubsystem    = Optional.empty();
+    private Optional<SK22Transfer>    transferSubsystem    = Optional.empty();
+    private Optional<SK22SimpleClimb> simpleClimbSubsystem = Optional.empty();
+    private Optional<SK22Vision>      visionSubsystem      = Optional.empty();
 
     // Robot External Controllers (Joysticks and Logitech Controller)
     private final FilteredJoystick driverLeftJoystick  =
@@ -115,40 +120,40 @@ public class RobotContainer
     // chosen!!
 
     // Verified according to 2022 Controller Mapping document on 2/12/2022 
-    private final JoystickButton driveAcquireTargetBtn =
+    private final JoystickButton driveAcquireTargetBtn      =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_ACQUIRE_TARGET);
-    private final JoystickButton driveSlowBtn          =
+    private final JoystickButton driveSlowBtn               =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SLOWMODE);
-    private final JoystickButton driveShootBtn         =
+    private final JoystickButton driveShootBtn              =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_SHOOT);
-    private final JoystickButton driverLauncherLowBtn   =
+    private final JoystickButton driverLauncherLowBtn       =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_LOW);
-    private final JoystickButton driverLauncherMaxBtn   =
+    private final JoystickButton driverLauncherMaxBtn       =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_MAX);
-    private final JoystickButton driverLauncherOffBtn  =
+    private final JoystickButton driverLauncherOffBtn       =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_LAUNCHER_OFF);
-    private final JoystickButton driverEnableVision    =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VISION_ON);    
-    private final JoystickButton driverDisableVision    =
-            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VISION_OFF); 
-    private final Dpad           dpad                  =
+    private final JoystickButton driverEnableVision         =
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VISION_ON);
+    private final JoystickButton driverDisableVision        =
+            new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VISION_OFF);
+    private final Dpad           dpad                       =
             new Dpad(driverLeftJoystick, Ports.OI_DRIVER_REVERSE);
-    private final DpadDownButton reverseOnBtn          = new DpadDownButton(dpad);
-    private final DpadUpButton   reverseOffBtn         = new DpadUpButton(dpad);
-    private final JoystickButton intakeExtendBtn       =
+    private final DpadDownButton reverseOnBtn               = new DpadDownButton(dpad);
+    private final DpadUpButton   reverseOffBtn              = new DpadUpButton(dpad);
+    private final JoystickButton intakeExtendBtn            =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_EXTEND);
-    private final JoystickButton intakeRetractBtn      =
+    private final JoystickButton intakeRetractBtn           =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_INTAKE_RETRACT);
-    private final JoystickButton transferEjectBallBtn  =
+    private final JoystickButton transferEjectBallBtn       =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_EJECT);
-    private final JoystickButton transferLoadBallBtn   =
+    private final JoystickButton transferLoadBallBtn        =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_TRANSFER_LOAD);
     private final JoystickButton reverseVerticalTransferBtn =
             new JoystickButton(driverLeftJoystick, Ports.OI_DRIVER_VERTICAL_TRANSFER_REVERSE);
-            
-    private final TriggerButton  climbExtendBtn        =
+
+    private final TriggerButton  climbExtendBtn  =
             new TriggerButton(operatorJoystick, Ports.OI_OPERATOR_EXTEND_CLIMB);
-    private final JoystickButton climbRetractBtn       =
+    private final JoystickButton climbRetractBtn =
             new JoystickButton(operatorJoystick, Ports.OI_OPERATOR_RETRACT_CLIMB);
 
     private final DefaultArcadeDriveCommand arcadeDrive =
@@ -163,12 +168,12 @@ public class RobotContainer
     {
         // phCompressor.enableAnalog(0, 120);
         pneumaticHubIntake.enableCompressorDigital();
-        
+
         File deployDirectory = Filesystem.getDeployDirectory();
 
         ObjectMapper mapper = new ObjectMapper();
         JsonFactory factory = new JsonFactory();
- 
+
         try
         {
             // Looking for the Subsystems.json file in the deploy directory
@@ -204,9 +209,8 @@ public class RobotContainer
             DriverStation.reportError("Failure to read Subsystem Control File!", e.getStackTrace());
         }
 
-        pathBuilder =
-                new SK22CommandBuilder(Constants.AUTOS_FOLDER_DIRECTORY, segmentCreator,
-                    intakeSubsystem, transferSubsystem, launcherSubsystem);
+        pathBuilder = new SK22CommandBuilder(Constants.AUTOS_FOLDER_DIRECTORY, segmentCreator,
+            intakeSubsystem, transferSubsystem, launcherSubsystem);
 
         // Configure the button bindings
         configureButtonBindings();
@@ -302,13 +306,10 @@ public class RobotContainer
 
             PowerDistribution phHub = new PowerDistribution(1, ModuleType.kRev);
 
-            driveAcquireTargetBtn
-                .whenHeld(new AcquireTargetCommand(driveSubsystem, vision), true);
+            driveAcquireTargetBtn.whenHeld(new AcquireTargetCommand(driveSubsystem, vision), true);
 
-            driverEnableVision
-                .whenPressed(() -> phHub.setSwitchableChannel(true));
-            driverDisableVision
-                .whenPressed(() -> phHub.setSwitchableChannel(false));
+            driverEnableVision.whenPressed(() -> phHub.setSwitchableChannel(true));
+            driverDisableVision.whenPressed(() -> phHub.setSwitchableChannel(false));
         }
 
         // User controls related to the ball launcher and transfer related things.
@@ -326,10 +327,10 @@ public class RobotContainer
             driverLauncherOffBtn.whenPressed(() -> launcher.setLauncherRPM(0.0));
 
             // Buttons to turn on the launcher to preset rpms
-            driverLauncherLowBtn.whenPressed(
-                () -> launcher.setLauncherRPM(LauncherConstants.LOW_SPEED_PRESET));
-            driverLauncherMaxBtn.whenPressed(
-                () -> launcher.setLauncherRPM(LauncherConstants.MAX_SPEED_PRESET));
+            driverLauncherLowBtn
+                .whenPressed(() -> launcher.setLauncherRPM(LauncherConstants.LOW_SPEED_PRESET));
+            driverLauncherMaxBtn
+                .whenPressed(() -> launcher.setLauncherRPM(LauncherConstants.MAX_SPEED_PRESET));
 
             reverseVerticalTransferBtn.whenHeld(new ReverseVerticalTransferCommand(launcher), true);
 
@@ -379,6 +380,12 @@ public class RobotContainer
 
         autoCommandSelector.addOption("Run Json", new RunJson(splineCommandSelector));
         autoCommandSelector.addOption("1m forwards backwards", new Drive1mForwardBackward());
+        autoCommandSelector.addOption("2m forwards", new Drive2mForwards());
+        autoCommandSelector.addOption("U-Turn Right", new UTurnRight());
+        autoCommandSelector.addOption("2m Forwards Backward on Corner",
+            new Drive2mForwardBackward());
+        autoCommandSelector.addOption("90 Degrees Right and Back", new Drive90DegreesRightBack());
+        autoCommandSelector.addDefault("5m forwards", new Drive5mForwards());
 
         // Checking dependencies for autos before giving option to run
         // Adds a majority of autos that have multiple segments
